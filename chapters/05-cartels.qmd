@@ -66,6 +66,12 @@ title: "Cartels and Collusion"
 - Bid-rigging and geographic allocation cases (construction, public procurement; include JFTC/SAMR examples for contrast).
 :::
 
+::: {.callout-note title="Case box: South African enforcement highlights"}
+- **Bread cartel (Competition Commission v. Pioneer Foods, Tiger Brands, and Premier, Tribunal case 15/CR/Feb07).** Investigators combined mill-level cost data with Stats SA micro-CPI series for standard loaves to show synchronized 30–40 cent price jumps following coordination meetings. Break tests flagged the January 2007 spike that misaligned with wheat cost trends, supporting an estimated overcharge of 7–10%. Settlement conditions paired a R250 million administrative penalty with a R150 million consumer price relief program and a R250 million agro-processing fund targeted at small bakeries.
+- **Construction fast-track settlement (2013).** Ahead of the 2010 FIFA World Cup, 15 firms self-reported 300 rigged projects, enabling the Commission to reconstruct bid-rotation matrices from SANRAL and stadia tenders. Event windows around dawn raids showed 8–12% drops in winning bid values relative to engineers’ estimates, and the Tribunal confirmed R1.46 billion in penalties while preserving the data archive for future screening exercises in provincial procurement.
+- **Fertilizer and ammonia markets (Competition Commission v. Sasol Chemical Industries, Yara, and Omnia).** Using export-parity benchmarks and plant-level variable cost data, the Commission demonstrated that domestic ammonia and urea prices averaged 25–30% above competitive levels between 2005 and 2009 despite spare capacity. The Tribunal accepted the overcharge estimates and the settlement imposed a R250 million penalty plus ring-fenced divestitures and supply commitments that opened the market to smaller blenders in South Africa and neighboring SACU countries.
+:::
+
 ::: {.callout-note title="Code box: raid event study scaffold"}
 ```{r}
 #| label: cartel-raid-event

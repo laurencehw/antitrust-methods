@@ -41,6 +41,11 @@ title: "Monopolization and Exclusion"
 - Map licensing terms (royalty base, exclusivity, field-of-use) to potential foreclosure and implementability for rivals.
 - For refusal-to-deal/essential facilities, document indispensability and feasible access terms.
 
+### Southern African exclusion case evidence
+- **Telkom wholesale broadband (Competition Commission v. Telkom SA, 2013 settlement).** Using bitstream and IPConnect price data from 2005–2009, the Commission demonstrated that Telkom’s effective wholesale prices exceeded its retail DSL tariffs for 91% of line-speed combinations once access and backhaul costs were included, yielding a classic margin squeeze. The Tribunal-approved settlement paired a R200 million administrative penalty with mandated price cuts (down to cost-plus 8%) and functional separation of wholesale and retail reporting lines, providing a replicable margin-test template for regulated utilities.
+- **Media24 community newspapers (Competition Commission v. Media24, Tribunal case 122/CR/Dec12).** Investigators constructed four-year panel data on advertising volumes, pagination, and production costs for Forum and Gold-Net News titles in Welkom. The Tribunal relied on an avoidable-cost test showing that Forum’s ad rates sat 20–30% below incremental costs for 18 consecutive months, combined with internal documents targeting rival exit, to find predatory pricing. The remedy required cost-based pricing governance and quarterly reporting on advertising discounts.
+- **Polypropylene feedstock (Competition Commission v. Sasol Chemical Industries, 2014 CAC judgment).** The Commission benchmarked Sasol’s propylene prices against export parity and long-run incremental cost, revealing margins 41–47% above competitive levels despite surplus capacity. The Tribunal’s excessive-pricing ruling—upheld by the Competition Appeal Court—ordered R534 million in penalties and compelled publication of a transparent pricing formula, underlining how cost benchmarking can support exploitation and exclusion theories simultaneously.
+
 ::: {.callout-note title="Method box"}
 - Event/phase analysis around contract adoptions.
 - Local average treatment effects from staggered contract rollouts.

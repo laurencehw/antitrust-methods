@@ -30,6 +30,11 @@ title: "Market Definition and Competitive Landscape"
 - Tech platform self-preferencing and the role of default position evidence.
 :::
 
+### Southern African market evidence
+- **Private Healthcare Market Inquiry (Competition Commission, 2014–2019).** Tribunal-appointed panel reviewed six years of patient-level claims covering roughly 70% of the 8.8 million beneficiaries in South Africa’s private schemes, combining them with supplier cost data to test alternative geographic definitions for specialist care. The inquiry found Herfindahl indices above 4,000 in several provinces and documented limited patient switching despite tariff differentials, motivating recommendations on supply-side licensing reform and transparency.
+- **Grocery Retail Market Inquiry (2015–2019).** Investigators merged retailer loyalty data, mall lease registers, and micro-CPI data to map catchment areas for supermarkets versus spaza shops. By simulating 5% SSNIP-style shocks with actual basket-level switching elasticities, the Commission showed how long-term exclusive leases between national chains and landlords constrained entry by discounters in townships and secondary towns.
+- **Data Services Market Inquiry (2017–2019).** The Competition Commission benchmarked prepaid mobile data prices (30-day 1GB basket) against a peer group of African and BRICS comparators, documenting South African prices that were roughly 20–40% above the median even after controlling for spectrum cost proxies and GDP per capita. Subscriber-level usage data from MTN and Vodacom revealed steep price discrimination by income segment, which fed into the Tribunal-endorsed commitments to cut headline prepaid rates by 30–50% and expand zero-rated educational content.
+
 ::: {.callout-note title="Citations and comparative note"}
 - Cite market definition sources such as US Merger Guidelines SSNIP discussion [@doj_ftc_hmg_2010] and EC Notice on market definition [@ec_market_definition_2024]; add CMA cases for UK context.
 - When using surveys or switching analyses, reference standards on survey reliability (e.g., reference guides, cases admitting/excluding surveys).

@@ -13,6 +13,11 @@ title: "Regulation and Remedies"
 - Remedy design: structural divestitures, conduct restrictions, monitors, reporting.
 - Evaluating remedy effectiveness with retrospective data.
 
+### Southern African market inquiries and remedy design
+- **Private Healthcare Market Inquiry (2014–2019).** The Tribunal-appointed panel ran cost and price benchmarking across eight hospital groups using claims data representing roughly 70% of insured lives. Its recommendation for a Supply-Side Regulator for Health relies on yardstick comparisons of case-mix adjusted costs, illustrating how regulation can be sequenced after an inquiry that already harmonized disparate datasets.
+- **Data Services Market Inquiry (2017–2019).** The Commission combined international price benchmarks with operator-level profitability models to push Vodacom and MTN toward 30–50% prepaid price cuts, open-access commitments on wholesale APNs, and zero-rating requirements for public-benefit content. These outcomes show how quasi-regulatory remedies (pricing principles, monitoring trustees) can be embedded within competition settlements.
+- **Public Passenger Transport Market Inquiry (2017–2020).** Investigators fused taxi association route maps, bus tender data, and e-hailing trip-level logs to diagnose entry barriers and implicit subsidies. The resulting recommendations—fare-regulation transparency, dedicated subsidy formulas, and data-sharing standards—demonstrate how competition probes in Southern Africa often culminate in regulatory toolkits tailored to informal and formal operators alike.
+
 ::: {.callout-note title="Method box"}
 - Benchmarking models and simple productivity comparisons.
 - Simulation of remedy scenarios using cost/pass-through assumptions.

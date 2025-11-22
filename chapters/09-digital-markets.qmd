@@ -13,6 +13,11 @@ title: "Digital Markets and Platforms"
 - Data advantages and economies of scope; switching costs and lock-in.
 - Algorithmic pricing and collusion risks.
 
+### Southern African digital enforcement snapshots
+- **Online Intermediation Platforms Market Inquiry (OIPMI, 2020–2023).** The Competition Commission collected transaction-level data from e-commerce marketplaces, app stores, food delivery apps, and travel platforms. Findings highlighted Google Search’s >90% share of general search queries, food-delivery commissions clustering at 25–30%, and marketplace buy-box algorithms that favored first-party listings (e.g., Takealot Retail) over third-party sellers with identical fulfillment metrics. Final remedies require fair-ranking reports, caps on marketplace storage/fulfillment fees for SMEs, and anti-steering relief that lets restaurants promote direct-order channels inside aggregator apps.
+- **Advertising and digital news media (Media and Digital Platforms Market Inquiry, 2023–ongoing).** Building on OIPMI data, the Commission is ingesting impression-level logs from Meta, Google, and local publishers to quantify revenue imbalances in display advertising. The interim statement reports that Google commands roughly 65% of display ad spend routed through programmatic channels, while local publishers face average take-rates below 30% after demand-side/platform fees—data points that frame prospective bargaining remedies for news publishers across Southern Africa.
+- **GovChat/Meta interim relief (Competition Commission v. Meta Platforms, 2021).** The Commission used WhatsApp Business API telemetry to demonstrate GovChat’s role in reaching 8+ million South African users for public-service messaging, and it showed how Meta’s proposed off-boarding would foreclose a civic-use case despite negligible incremental infrastructure cost. Interim relief preserved access while the Tribunal weighed the exclusion case, offering a blueprint for combining platform-side telemetry with public-interest arguments in developing markets.
+
 ::: {.callout-note title="Method box"}
 - Platform price/fee pass-through; elasticity across sides.
 - Event studies on default changes or ranking tweaks.
