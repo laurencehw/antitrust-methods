@@ -1,0 +1,32 @@
+---
+title: "Innovation, Intellectual Property, and Antitrust"
+---
+
+## Learning goals
+- Assess innovation incentives in antitrust matters involving IP, SEPs/FRAND, and patent pools.
+- Evaluate pay-for-delay, reverse payments, and dynamic competition concerns.
+- Combine patent data, R&D metrics, and qualitative technical evidence.
+
+## Core topics
+- SEPs/FRAND licensing economics; hold-up vs. hold-out.
+- Pay-for-delay: economic characterization, entry timing, consumer harm.
+- Innovation measures: patent counts/citations, R&D spend, pipeline probability.
+- Interoperability and standards; access to APIs and data.
+
+::: {.callout-note title="Method box"}
+- Event studies on patent pool or settlement announcements.
+- Entry timing models for generics; hazard/survival sketches.
+- R&D response to merger or remedy using panel FE.
+:::
+
+::: {.callout-note title="Qualitative evidence"}
+- Technical expert declarations, standards body submissions, patent essentiality reviews.
+- Licensing negotiations, term sheets, audit rights.
+- Product roadmaps and engineering constraints.
+:::
+
+::: {.callout-note title="Citations and comparative note"}
+- Cite FRAND/SEP cases and guidance (e.g., EU Huawei v. ZTE, US FTC/DOJ policy statements, UK FRAND rate cases).
+- For pay-for-delay, reference US Supreme Court (Actavis) and EU pay-for-delay decisions.
+- Include patent data sources (USPTO, EPO, JPO, CNIPA) and note differences in treatment of injunctions and remedies across jurisdictions.
+:::

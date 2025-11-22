@@ -1,0 +1,20 @@
+.Rhistory
+.RData
+.Rproj.user
+.Renviron
+renv/library
+renv/python
+_book
+.quarto
+data/raw/
+data/derived/
+figures/
+*.html
+*.pdf
+*.pptx
+*.docx
+*.doc
+*.zip
+_literature/
+"notes and slides"/
+"notes and slides"

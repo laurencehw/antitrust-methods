@@ -1,0 +1,32 @@
+---
+title: "Digital Markets and Platforms"
+---
+
+## Learning goals
+- Analyze platform competition, self-preferencing, algorithmic effects, and data advantages.
+- Model indirect network effects and multi-homing; assess default position power.
+- Integrate product design evidence with empirical outcomes.
+
+## Core topics
+- Platform demand: multi-sided participation, steering, and matching efficiency.
+- Self-preferencing and ranking: click-through impacts; A/B test interpretation.
+- Data advantages and economies of scope; switching costs and lock-in.
+- Algorithmic pricing and collusion risks.
+
+::: {.callout-note title="Method box"}
+- Platform price/fee pass-through; elasticity across sides.
+- Event studies on default changes or ranking tweaks.
+- Simple two-sided logit/bargaining sketches; diversion across sides.
+:::
+
+::: {.callout-note title="Qualitative evidence"}
+- Product requirement docs and experiments; governance and content policies.
+- Partner contracts (parity/MFN, exclusivity), API access terms.
+- User research surveys on multi-homing and switching.
+:::
+
+::: {.callout-note title="Citations and comparative note"}
+- Cite platform cases and regulations: US (e.g., Epic v. Apple, DOJ Google Search/Ad Tech), EU (Google Shopping/Android, DMA), UK (CMA market investigations), and other jurisdictions (e.g., Korea KFTC app stores where relevant).
+- Reference empirical studies on defaults and ranking effects, and any A/B or natural experiment evidence from platforms.
+- Note differences in treatment of MFNs/parity and self-preferencing across jurisdictions.
+:::

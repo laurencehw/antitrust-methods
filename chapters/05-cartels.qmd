@@ -1,0 +1,113 @@
+---
+title: "Cartels and Collusion"
+---
+
+## Learning goals
+- Detect and quantify cartel behavior using screens, structural breaks, and damages models.
+- Combine empirical indicators with documentary and whistleblower evidence.
+- Estimate overcharge and pass-through with appropriate uncertainty.
+
+## Core topics
+- Screens: price variance/compression, Benford, procurement anomalies, rotation patterns.
+- Break tests and structural changes around cartel start/stop or dawn raids.
+- Damages: overcharge estimation, pass-through to intermediaries/consumers, interest.
+- Leniency and cooperation evidence; how to align with data patterns.
+- Workflow: (1) timeline and conduct map; (2) descriptive stats; (3) screens; (4) event/break tests; (5) overcharge and pass-through; (6) sensitivity and uncertainty; (7) reconciliation with documents and testimony.
+
+### Timeline and conduct map
+- Build a dated timeline from complaints, internal messages, and interviews; align suspected coordination start/stop and enforcement events (e.g., dawn raids, leniency filings).
+- Trace conduct hypotheses (bid rotation, list price coordination, geographic allocation) to specific products/customers and periods.
+- This anchors all empirical work and prevents fishing; every regression or screen should map back to a conduct hypothesis.
+
+### Descriptives and screens
+- Plot prices/quantities over time with costs; look for compression, regime shifts, and unnatural stability in volatile cost environments.
+- Procurement: rank bids over time by vendor; count rotations and clustering around “convenient” numbers; map geography to detect allocation.
+- Use screens as triage, not proof. They motivate deeper causal tests and inform which periods/firms to emphasize.
+- Document any screens in line with accepted practice [@oecd_cartel_screens_2013] and flag data limitations (e.g., missing bidders, list vs. net prices).
+
+### Event and break tests
+- If there is an enforcement or whistleblower event, run event studies around the announcement/raid. Test both price levels and spreads.
+- Structural break tests (e.g., Bai–Perron) on prices/margins can flag regime changes; pair with documents to argue plausibility.
+- In markets with cost shocks, include costs to avoid attributing cost-driven breaks to cartel conduct.
+
+### Overcharge and pass-through
+- Baseline: compare cartel period to pre/post or to a yardstick market; include FE for products/customers and cost controls.
+- Robustness: alternative functional forms, trimming outliers, placebo periods. Cluster appropriately (customer/product/firm) and consider randomization inference for small N.
+- Pass-through: regress downstream prices on upstream prices/costs with lags; compute confidence intervals. Distinguish partial vs. full pass-through when sizing harm.
+- Calibrate damages with transparency on assumptions; relate magnitudes to benchmarks from known cartels (e.g., lysine/DRAM) when persuasive.
+
+### Leniency, documents, and triangulation
+- Leniency statements and chats/emails can pinpoint start/stop dates and mechanisms (allocation rules, triggers), guiding event windows and sample selection.
+- Reconcile any “clean” quantitative results with qualitative evidence: if models show no effect where documents admit coordination, revisit data coverage, product mapping, or timing.
+- Conversely, if screens suggest collusion but evidence is weak, highlight data issues or alternative explanations (common costs, regulation).
+- Cite leniency frameworks when discussing incentives and timing [@oecd_leniency_2015]; be explicit about what is corroborated by statements vs. inferred from data.
+
+::: {.callout-note title="Method box"}
+- Event study around raid/announcement.
+- Regression-based overcharge with controls and FE; robustness to functional form.
+- Pass-through estimation using cost shifters and dynamic lags.
+:::
+
+::: {.callout-note title="Method box: screens and variance"}
+- Distribution screens for bids/prices/quantities (variance compression, spikes, Benford where appropriate).
+- Procurement rotation checks (bid ordering, geographic allocation).
+- Cost-pass-through logic as a diagnostic for coordinated pricing.
+:::
+
+::: {.callout-note title="Qualitative evidence"}
+- Bid sheets, meeting minutes, messaging apps; corroboration with timing in data.
+- Procurement narratives from buyers on rotation and cover bids.
+- Expert synthesis: building a timeline that ties conduct to measurable outcomes.
+:::
+
+::: {.callout-note title="Case box: Illustrative matters"}
+- Apple eBooks (US) — hub-and-spoke coordination and price fixing in digital distribution.
+- Lysine and DRAM cartels — classic overcharge estimation and dawn-raid event analysis.
+- Bid-rigging and geographic allocation cases (construction, public procurement; include JFTC/SAMR examples for contrast).
+:::
+
+::: {.callout-note title="Code box: raid event study scaffold"}
+```{r}
+#| label: cartel-raid-event
+#| message: false
+#| warning: false
+# df needs columns: date, price, cost, treated (0/1), firm, product
+# library(fixest)
+# df <- df |> mutate(post = date >= as.Date("YYYY-MM-DD"))
+# feols(log(price) ~ post * treated + cost + month(date) | firm + product + year(date), cluster = ~firm, data = df)
+```
+:::
+
+## Code box: simple break test on public price series
+```{r}
+#| label: cartel-break-gasoline
+#| message: false
+#| warning: false
+library(fredr)
+library(dplyr)
+library(strucchange)
+library(ggplot2)
+
+fredr_set_key(Sys.getenv("FRED_API_KEY"))
+gas <- fredr(series_id = "GASREGW", observation_start = as.Date("2015-01-01")) |>
+  rename(price = value) |>
+  mutate(week = row_number())
+
+bp <- breakpoints(price ~ week, data = gas, h = 26)
+gas$regime <- factor(cut(gas$week, c(0, bp$breakpoints, Inf)))
+
+ggplot(gas, aes(date, price, color = regime)) +
+  geom_line() +
+  labs(title = "Regular Gasoline Prices: Structural Break Illustration",
+       subtitle = "FRED series GASREGW (weekly, US average)",
+       x = NULL, y = "USD per gallon") +
+  theme_minimal()
+```
+This uses a public FRED series to illustrate break detection; replace with case data (e.g., product-level transactions) for real matters.
+
+
+::: {.callout-note title="Citations and comparative note"}
+- Cite cartel overcharge methods and benchmarks (e.g., OECD reports, reference guides) and US/EU leniency frameworks (US DOJ leniency policy; EC leniency notice).
+- When referencing case examples (e.g., lysine, auto parts, LIBOR), include case numbers and agency decisions; for bid-rigging, add JFTC/SAMR examples where relevant.
+- For screens, cite empirical papers validating specific indicators in procurement or commodities markets.
+:::

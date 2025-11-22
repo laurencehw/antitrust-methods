@@ -1,0 +1,24 @@
+---
+title: "Empirical Appendix and Templates"
+---
+
+## Purpose
+- Centralize reusable code and diagnostic patterns referenced in chapters.
+- Provide quick templates for charts and tables.
+
+## Diff-in-diff checklist
+- Parallel trends diagnostics (event plots, placebo periods).
+- Staggered adoption options (`did`, `fixest` with interaction, `sunab`).
+- Clustering choices and wild bootstrap for few clusters.
+
+## Matching and weighting
+- Propensity score and entropy balancing templates.
+- Covariate balance plots and diagnostics.
+
+## Panel FE and standard errors
+- Two-way FE patterns; heterogeneity caveats.
+- Clustered, Driscoll-Kraay, and randomization inference notes.
+
+## R helpers
+See `R/helpers.R` for packaged helpers: plotting themes, API pulls, merger simulation skeleton, and data caching.
+

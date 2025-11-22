@@ -1,0 +1,37 @@
+---
+title: "Market Definition and Competitive Landscape"
+---
+
+## Learning goals
+- Frame relevant product and geographic markets using demand evidence, diversion, and qualitative industry facts.
+- Apply and critique common screens (SSNIP logic, critical loss, diversion ratios).
+- Blend survey evidence, internal documents, and empirical estimates into a coherent narrative.
+
+## Core tools
+- Price and quantity descriptive analytics; seasonality and shocks.
+- Elasticity estimation (log-log, AIDS-lite) and diversion from switching/choice data.
+- Critical loss vs. actual loss calculations; pitfalls with margins and capacity constraints.
+- Switching matrices from customer data; shipment flows for geography.
+
+::: {.callout-note title="Method box"}
+- Quick diversion calc from transaction data.
+- Event studies for entry/exit shocks informing market scope.
+- Cross-price elasticity estimation; bootstrapping confidence intervals.
+:::
+
+::: {.callout-note title="Qualitative evidence"}
+- Product positioning from marketing decks and sales playbooks.
+- Customer interviews/surveys on substitutes and procurement processes.
+- Bids/RFP language showing substitutability and switching costs.
+:::
+
+::: {.callout-note title="Case box"}
+- Market definition debates in hospital services (narrow geography vs. insurer bargaining).
+- Tech platform self-preferencing and the role of default position evidence.
+:::
+
+::: {.callout-note title="Citations and comparative note"}
+- Cite market definition sources such as US Merger Guidelines SSNIP discussion [@doj_ftc_hmg_2010] and EC Notice on market definition [@ec_market_definition_2024]; add CMA cases for UK context.
+- When using surveys or switching analyses, reference standards on survey reliability (e.g., reference guides, cases admitting/excluding surveys).
+- Flag jurisdictional differences explicitly when SSNDQ or platform-centric approaches apply more than SSNIP (e.g., EU digital contexts).
+:::

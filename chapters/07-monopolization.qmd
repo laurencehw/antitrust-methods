@@ -1,0 +1,83 @@
+---
+title: "Monopolization and Exclusion"
+---
+
+## Learning goals
+- Analyze exclusionary conduct (predation, rebates, tying, MFNs, vertical restraints).
+- Connect theory to measurable foreclosure and consumer harm.
+- Use qualitative evidence to show strategy and intent, paired with empirical outcomes.
+
+## Core topics
+- Price-cost tests (Areeda-Turner variants), effective price with rebates/loyalty programs.
+- Foreclosure metrics: share of market foreclosed, rivals’ scale and entry conditions.
+- Tying/bundling: uptake, defaults, switching costs, interoperability constraints.
+- MFNs/parity: price dispersion effects, platform fee pass-through.
+- Workflow: (1) conduct and theory of harm; (2) market power assessment; (3) mechanism (exclusion/predation/raising rivals’ costs); (4) empirical effects; (5) countervailing efficiencies/justifications; (6) remedy fit.
+
+### Market power and mechanism
+- Establish market power with shares, entry conditions, and buyer power; pair quantitative indicators with qualitative evidence (internal “must-have” language, default importance).
+- Articulate the mechanism: exclusion via contracts (rebates/MFNs), technical defaults (self-preferencing), interoperability limits, or predation.
+- Align data to mechanism: which customers/products are targeted, and what switching or usage outcomes are predicted?
+
+### Exclusion and foreclosure
+- Measure foreclosed share (volume/value) and ability of rivals to reach minimum efficient scale; consider duration and renewal terms.
+- For rebates/loyalty, convert to effective prices and assess conditionality; check incremental volumes vs. thresholds.
+- For MFNs/parity, test effects on price dispersion and rival ability to discount; look for chilling of promotions.
+- Draw on cases like Intel rebates [@eu_intel_2017] and United Brands [@eu_united_brands_1978] to illustrate how foreclosure is argued and evidenced; contrast with US standards.
+
+### Predation and price-cost
+- Compute effective prices net of rebates/bundles; compare to variable or avoidable costs. Use period-level data and allocate costs transparently.
+- Dynamic predation stories require recoupment: model post-predation prices/quantities or barriers that allow recovery.
+- Where price-cost tests are inconclusive, use event patterns (entry/exit, share shifts) and documents on strategy/recoupment.
+- US cases like Brooke Group frame the price-cost plus recoupment test [@us_brooke_group_1993]; EU cases such as AKZO use similar cost benchmarks but differ on intent/effects emphasis [@eu_akzo_1991].
+
+### Tying, bundling, and defaults
+- Measure take-up with and without tie/bundle; examine defaults and switching frictions.
+- Test for degradation of rivals (e.g., API access, interoperability) that accompanies a tie.
+- Consider efficiencies (integration, quality) and whether less-restrictive alternatives exist.
+
+### IP and refusal to deal
+- Distinguish legitimate IP enforcement from exclusionary licensing; analyze FRAND/SEP contexts separately.
+- Map licensing terms (royalty base, exclusivity, field-of-use) to potential foreclosure and implementability for rivals.
+- For refusal-to-deal/essential facilities, document indispensability and feasible access terms.
+
+::: {.callout-note title="Method box"}
+- Event/phase analysis around contract adoptions.
+- Local average treatment effects from staggered contract rollouts.
+- Simple structural checks: margin squeeze sketches using internal cost data.
+:::
+
+::: {.callout-note title="Method box: price-cost test sketch"}
+```{r}
+#| label: monopoly-price-cost
+contracts <- data.frame(
+  customer = c("C1","C2","C3","C4"),
+  list_price = c(100, 95, 90, 92),
+  rebate = c(10, 5, 0, 8),
+  variable_cost = c(70, 70, 70, 70)
+)
+contracts$effective_price <- contracts$list_price - contracts$rebate
+contracts$margin_over_cost <- contracts$effective_price - contracts$variable_cost
+contracts
+```
+Interpretation: negative margins suggest prices below variable cost; adapt to period-level data and include allocable incremental costs where relevant.
+:::
+
+::: {.callout-note title="Qualitative evidence"}
+- Internal strategy docs and emails on exclusion goals.
+- Contract clause analysis and negotiation histories.
+- Customer interviews on switching frictions and coercion.
+:::
+
+::: {.callout-note title="Citations and comparative note"}
+- Cite Section 2/FTC Act standards and leading cases (e.g., Microsoft, Qualcomm) alongside Article 102 TFEU decisions (e.g., Intel rebates, Google Shopping/Android) for contrast.
+- For price-cost tests and rebates, reference agency guidance (e.g., EC Enforcement Priorities on exclusionary conduct) and economic literature on effective price tests.
+- Flag jurisdiction-specific burdens on effects vs. form and intent.
+:::
+
+::: {.callout-note title="Case box: Core exemplars"}
+- IBM (historic US monopolization framing) and Microsoft (tying/exclusion of browser/middleware).
+- Google Search and Ad Tech cases (US DOJ; EC Google Shopping/Android) — defaults, self-preferencing, data advantages.
+- Foreclosure and predation: United Brands (EU), Intel rebates (EU), Qualcomm (US/EU), predation tests (e.g., Brooke Group, AKZO).
+- IP vs. monopoly conduct: refusal to deal/essential facilities and licensing constraints; flag tensions between IP rights and exclusion analysis.
+:::

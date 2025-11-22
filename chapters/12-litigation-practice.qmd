@@ -1,0 +1,32 @@
+---
+title: "Litigation Practice: Evidence and Expert Work"
+---
+
+## Learning goals
+- Prepare expert reports that integrate empirical and qualitative evidence.
+- Design class certification analyses for common impact and damages.
+- Communicate uncertainty and robustness in litigation settings.
+
+## Core topics
+- Class certification: common impact frameworks, sampling, and predominance arguments.
+- Evidence management: document IDs, data provenance, reproducible code bundles.
+- Daubert readiness: validation, sensitivity analyses, alternative specifications.
+- Presentation: graphics for court, explanatory appendices, deposition prep.
+
+::: {.callout-note title="Method box"}
+- Common impact tests with clustered SEs and randomization inference.
+- Damages models: before/after, yardstick, difference-in-differences, hedonic variants.
+- Scenario/sensitivity tables for assumptions (e.g., pass-through bounds).
+:::
+
+::: {.callout-note title="Qualitative evidence"}
+- Fact witness integration: mapping testimonies to model assumptions.
+- Survey admissibility checkpoints (universe, sampling, questionnaire design, pretests).
+- Expert judgment: when to narrow claims due to data limits.
+:::
+
+::: {.callout-note title="Citations and comparative note"}
+- Cite case law on admissibility (Daubert/Kumho in US; local standards elsewhere) and notable opinions accepting/rejecting methods (e.g., class cert common impact challenges).
+- Include agency guidance where relevant (e.g., FTC/DOJ guidance on data handling, EC best practices for expert submissions).
+- When drawing on foreign cases (EU/UK/Canada/Australia/Japan/China), flag differences in evidentiary standards and expert roles.
+:::

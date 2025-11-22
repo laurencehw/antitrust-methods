@@ -1,0 +1,32 @@
+---
+title: "Antitrust and Labor Markets"
+---
+
+## Learning goals
+- Evaluate monopsony power, noncompetes, wage fixing, and no-poach agreements.
+- Use matched employer-employee data and vacancy data where available.
+- Combine worker narratives with econometric evidence.
+
+## Core topics
+- Measuring labor market concentration and labor supply elasticity.
+- Event studies around noncompete bans or no-poach disclosures.
+- Wage posting data vs. realized wages; vacancy scraping considerations.
+- Mobility and retention metrics; heterogeneity by occupation/region.
+
+::: {.callout-note title="Method box"}
+- Monopsony elasticities from quit rates and wage responses.
+- Diff-in-diff on policy shocks (e.g., state-level noncompete changes).
+- Synthetic control for single-state reforms.
+:::
+
+::: {.callout-note title="Qualitative evidence"}
+- HR policies, franchise agreements, and recruiting playbooks.
+- Worker interviews and surveys on outside options and mobility barriers.
+- Internal memos on wage-setting and coordination risks.
+:::
+
+::: {.callout-note title="Citations and comparative note"}
+- Cite key US cases and enforcement actions on wage fixing/no-poach and noncompetes; include state-level reforms (e.g., Washington franchise no-poach).
+- For comparative context, add EU/UK wage-fixing/no-poach enforcement where emerging, and any guidance from other jurisdictions.
+- Reference labor monopsony empirical papers for elasticity estimation and mobility effects.
+:::

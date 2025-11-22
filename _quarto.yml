@@ -1,0 +1,42 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Antitrust Methods: Research and Practice"
+  author: "Laurence W."
+  chapters:
+    - index.qmd
+    - chapters/00-preface.qmd
+    - chapters/01-orientation.qmd
+    - chapters/02-research-design.qmd
+    - chapters/03-market-definition.qmd
+    - chapters/04-io-toolkit.qmd
+    - chapters/05-cartels.qmd
+    - chapters/06-mergers.qmd
+    - chapters/07-monopolization.qmd
+    - chapters/08-regulation-remedies.qmd
+    - chapters/09-digital-markets.qmd
+    - chapters/10-labor-markets.qmd
+    - chapters/11-innovation-ip.qmd
+    - chapters/12-litigation-practice.qmd
+    - chapters/13-empirical-appendix.qmd
+
+bibliography: references/references.bib
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    number-sections: true
+  pdf:
+    documentclass: book
+    toc: true
+    number-sections: true
+    pdf-engine: pdflatex
+
+execute:
+  freeze: auto
+  warning: false
+  # Run code from project root so shared helpers are found
+  execute-dir: project

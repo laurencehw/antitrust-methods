@@ -1,0 +1,32 @@
+---
+title: "Regulation and Remedies"
+---
+
+## Learning goals
+- Understand regulatory tools (rate-of-return, price-cap, access pricing) and their economic underpinnings.
+- Evaluate behavioral vs. structural remedies and monitoring.
+- Apply industry-specific insights (energy, airlines, telecom).
+
+## Core topics
+- Access pricing (ECPR-style sketches), interconnection, unbundling.
+- Incentive regulation: benchmarking, yardstick competition.
+- Remedy design: structural divestitures, conduct restrictions, monitors, reporting.
+- Evaluating remedy effectiveness with retrospective data.
+
+::: {.callout-note title="Method box"}
+- Benchmarking models and simple productivity comparisons.
+- Simulation of remedy scenarios using cost/pass-through assumptions.
+- Retrospective diff-in-diff on post-remedy outcomes.
+:::
+
+::: {.callout-note title="Qualitative evidence"}
+- Implementation plans, compliance monitoring reports.
+- Regulator-stakeholder hearings; public comment synthesis.
+- Operational feasibility assessments from engineering/ops teams.
+:::
+
+::: {.callout-note title="Citations and comparative note"}
+- Cite sectoral regulators’ rules and precedent (e.g., FCC, FERC, Ofgem, Ofcom, ACER) and classic regulation texts.
+- Include remedy orders/monitor reports as sources; note differences in US vs. EU/UK approaches to behavioral vs. structural remedies.
+- Reference benchmarking/yardstick cases (e.g., energy networks) where available.
+:::

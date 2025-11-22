@@ -1,0 +1,50 @@
+---
+title: "Orientation: Antitrust and Regulation"
+---
+
+## Learning goals
+- Understand objectives of antitrust and sector regulation, and how enforcement agencies frame evidence.
+- Map economic questions to legal elements (market definition, market power, competitive effects, remedies).
+- Recognize when empirical, documentary, and expert evidence substitute or complement one another.
+
+## Core narrative
+- Brief history and institutions (DOJ/FTC, EU DG COMP, courts, regulators).
+- Typical workflow from matter intake to report/testimony.
+- How to scope data needs early: transactions, pricing, costs, contracts, internal documents.
+
+::: {.callout-note title="Method box: Integrating empirics here"}
+- Early descriptive stats and dashboards for screening.
+- Screening metrics: concentration (HHI), shares, switching patterns, entry/exit.
+- When to defer to qualitative evidence: thin data, nascent markets, highly idiosyncratic conduct.
+:::
+
+::: {.callout-note title="Qualitative evidence"}
+- Document review protocol: search terms, custodians, timelines.
+- Interviewing fact witnesses and executives; mitigating hindsight bias.
+- Summarizing evidence with chronologies and issue trees; linking to empirical priors.
+:::
+
+::: {.callout-note title="Case box: Quick tour"}
+- Microsoft (tying/exclusion), Visa/Mastercard (platforms), airline mergers (synergies vs. coordination), wage-fixing cases.
+:::
+
+::: {.callout-note title="Comparative note"}
+- Primary focus is US law and agency practice; comparative sidebars will flag EU (EC/DG COMP), UK (CMA), Japan (JFTC), China (SAMR), and other jurisdictions where standards or burdens diverge.
+:::
+
+## Code box: basic landscape plot
+```{r}
+#| label: orientation-hhi
+#| message: false
+#| warning: false
+library(fredr)
+library(dplyr)
+library(ggplot2)
+fredr_set_key(Sys.getenv("FRED_API_KEY"))
+
+hhi <- fredr(series_id = "HHMSDODNS", observation_start = as.Date("2000-01-01"))
+ggplot(hhi, aes(date, value)) +
+  geom_line(color = "#0072B2") +
+  labs(title = "US Bank Concentration (HHI)", x = NULL, y = "HHI") +
+  theme_minimal()
+```

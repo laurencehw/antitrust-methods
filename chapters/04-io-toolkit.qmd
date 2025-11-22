@@ -1,0 +1,32 @@
+---
+title: "Industrial Organization Toolkit"
+---
+
+## Learning goals
+- Use IO models to link conduct to outcomes: demand estimation, cost modeling, and equilibrium effects.
+- Understand when to use structural models vs. reduced-form evidence.
+- Highlight multi-sided platforms and bargaining settings.
+
+## Core components
+- Demand: logit/BLP-lite intuition, nested logit, price sensitivity, diversion implications.
+- Supply: marginal cost recovery, pass-through, capacity constraints.
+- Bargaining: Nash-in-Nash sketches for platforms/health care; empirical proxies when data are thin.
+- Multi-sided markets: matching buyers and sellers, indirect network effects.
+
+::: {.callout-note title="Method box"}
+- Back-of-envelope diversion and UPP/GUPPI from demand estimates.
+- Pass-through estimation (`feols` with cost shifters); interpreting elasticities.
+- Simple simulation setup for differentiated products (to be expanded in mergers chapter).
+:::
+
+::: {.callout-note title="Qualitative evidence"}
+- Contract terms (MFNs, parity clauses), platform policies, and governance docs.
+- Product design and default settings as evidence of platform steering.
+- Field interviews on switching frictions and multi-homing.
+:::
+
+::: {.callout-note title="Citations and comparative note"}
+- Cite foundational IO models and their antitrust applications (e.g., diversion/UPP notes in merger guidelines [@doj_ftc_hmg_2010; @ec_hmg_2004]).
+- Note jurisdictional differences in treatment of MFNs/parity clauses (e.g., EU/UK platform cases vs. US approach).
+- Attribute platform multi-sided modeling references (e.g., Rochet-Tirole style papers) and cite any A/B evidence or agency decisions when used.
+:::

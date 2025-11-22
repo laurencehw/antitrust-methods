@@ -1,0 +1,108 @@
+---
+title: "Mergers"
+---
+
+## Learning goals
+- Assess unilateral and coordinated effects with both descriptive and model-based tools.
+- Run and interpret UPP/GUPPI, merger simulation, and merger retrospectives.
+- Integrate efficiencies claims with evidence; design remedies.
+
+## Core topics
+- Market structure pre/post; diversion from shares and switching data.
+- UPP/GUPPI screens; thresholds and caveats.
+- Merger simulation: differentiated products logit/nested logit; calibrating margins and ownership.
+- Coordinated effects: maverick analysis, transparency, capacity and bidding dynamics.
+- Retrospectives: diff-in-diff/event studies with rivals and controls.
+- Horizontal, vertical, and mixed mergers; define “upstream” and “downstream” relative to the theory of harm and adapt analysis to industry specifics.
+- Workflow: (1) transaction and market overview; (2) shares/diversion/HHI; (3) UPP/GUPPI and margins; (4) unilateral and coordinated effects (structural or reduced form); (5) vertical/mixed theories (EDM vs. foreclosure); (6) efficiencies evidence; (7) remedies and retrospectives.
+
+### Transaction overview and market structure
+- Summarize products, geographies, overlaps, and timing; map to candidate relevant markets.
+- Compute shares/HHI and diversion using shares, switching, or survey-based measures. Flag mavericks and fringe.
+- Upstream/downstream definitions depend on the theory of harm: be explicit about the vertical chain and platform sides.
+- Ground definitions in agency guidance (US Merger Guidelines [@doj_ftc_hmg_2023; @doj_ftc_hmg_2010], EC/CMA guidance [@ec_hmg_2004; @cma_merger_assessment_2021]) and adjust for platform/digital contexts.
+
+### Unilateral effects: UPP/GUPPI and sim
+- Use UPP/GUPPI as a screen; report inputs (diversion, margins) transparently. Sensitivity to margin measurement and diversion estimates should be shown.
+- For differentiated products, simulate with logit/nested-logit or BLP-lite; emphasize calibration choices (outside share, margin sources).
+- Convey uncertainty: confidence intervals on diversion, ranges on margins, and alternative ownership assumptions.
+- For readers, tie back to case examples in your slides to show how margins and diversion were evidenced (transaction data, surveys, switching analyses).
+
+### Coordinated effects
+- Look for increased symmetry, transparency, or capacity alignment post-merger; include bidding/auction context where relevant.
+- Event studies around merger announcements can show rivals’ stock price reactions (coordination signal) but should be paired with real-world capacity/contract evidence.
+- Document maverick roles and whether the transaction removes or disciplines them.
+
+### Vertical and mixed effects
+- EDM vs. foreclosure: quantify both. vUPP and upward pricing pressure on rivals’ access should be shown alongside EDM magnitudes.
+- Identify potential raising rivals’ costs channels (input denial, degradation, parity clauses) and model likely price effects.
+- Conglomerate/mixed cases: bundling/tying risk, data advantage transfer, and cross-market leverage should be explicitly linked to facts.
+- When defining “upstream” vs. “downstream,” anchor to transaction flows and incentives; platform settings may require mapping sides rather than tiers.
+
+### Efficiencies and remedies
+- Synergy claims: require verifiable, merger-specific efficiencies with timelines and implementation costs; stress test with sensitivity tables.
+- Remedies: structural first; behavioral only if verifiable/monitorable. Link proposed remedies to modeled harms and operational feasibility.
+
+### Retrospectives
+- Where historical analogs exist, run diff-in-diff/event studies on prices/output/quality. Use rivals and unaffected markets as controls; test pre-trends.
+- For platform/vertical cases, examine participation/multi-homing effects and access terms over time.
+- Cite retrospective literature to benchmark magnitudes and methods.
+- Use well-known retrospectives (e.g., supermarket/hospital/airline cases [@ashenfelter_hosken_2010]) to set expectations on effect sizes and uncertainty.
+
+::: {.callout-note title="Method box"}
+- Simple merger sim template (see R helpers).
+- Event study around merger announcement/close; rival effects.
+- Vertical tools: vUPP, EDM, raising rivals’ costs sketches.
+:::
+
+::: {.callout-note title="Method box: UPP/GUPPI quick calc"}
+```{r}
+#| label: merger-upp-example
+upp_data <- data.frame(
+  product = c("A","B"),
+  price   = c(10, 12),
+  share   = c(0.25, 0.20),
+  margin  = c(0.35, 0.30) # as share of price
+)
+# diversion from A to B (and B to A)
+div_AB <- 0.25
+div_BA <- 0.20
+
+upp_A <- div_AB * upp_data$price[upp_data$product=="B"] * (1 - upp_data$margin[upp_data$product=="B"])
+upp_B <- div_BA * upp_data$price[upp_data$product=="A"] * (1 - upp_data$margin[upp_data$product=="A"])
+upp_A; upp_B
+```
+Interpretation: positive UPP suggests upward pricing pressure absent offsetting efficiencies; replace with case-specific diversion/margins.
+:::
+
+::: {.callout-note title="Qualitative evidence"}
+- Integration plans, synergy decks, customer feedback on alternatives.
+- Internal pricing and margin analyses; board materials on strategic rationale.
+- Remedy feasibility from operations teams and third parties.
+:::
+
+::: {.callout-note title="Code box: merger sim skeleton"}
+```{r}
+#| label: merger-sim-skeleton
+#| message: false
+#| warning: false
+# robust path in case execution dir is chapter folder
+source("../R/helpers.R")
+# products_df: product, firm, price, share, mc (or margin), group (nest)
+# sim <- run_logit_sim(products_df, merging_firms = c("FirmA","FirmB"))
+# sim$summary
+```
+:::
+
+::: {.callout-note title="Citations and comparative note"}
+- Anchor claims to current US Merger Guidelines (2023) [@doj_ftc_hmg_2023] and legacy 2010 guidance [@doj_ftc_hmg_2010]; include EC Horizontal Guidelines [@ec_hmg_2004] and CMA merger assessment guidelines for comparisons.
+- Cite empirical merger retrospective studies when presenting methods or benchmarks (e.g., airlines, hospitals).
+- For vertical mergers, cite vUPP/EDM references and any key enforcement actions (e.g., US v. AT&T/Time Warner, EC cases on input foreclosure).
+:::
+
+::: {.callout-note title="Case box: Illustrative mergers"}
+- Horizontal: airline mergers (UA/CO, DL/NW, AA/US) — retrospectives and coordinated effects; hospital mergers for local market power.
+- Vertical: AT&T/Time Warner (US), Microsoft/Activision (platform/distribution) — input foreclosure/EDM debates.
+- Mixed conglomerate/ad tech: Google/DoubleClick; media/telecom bundling examples.
+- Use class notes/slides (`notes and slides/pdf/7_Antitrust_and_Merger_Review_Economic_Analysis_and_Legal_Practice.pdf`, `notes and slides/Lecture note on merger analysis.pdf`) to populate specifics and citations.
+:::

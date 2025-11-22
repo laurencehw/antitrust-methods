@@ -1,0 +1,52 @@
+---
+title: "Research Design: Quantitative and Qualitative"
+---
+
+## Learning goals
+- Build credible research designs for antitrust questions using both quantitative and qualitative evidence.
+- Select and combine diff-in-diff, event studies, IV, matching, RDD, and panel models with case facts.
+- Design qualitative work (surveys, interviews, document analysis) that aligns with empirical tests.
+
+## Workflow
+- Scoping memo: question, theory of harm, data sources, timelines, key assumptions.
+- Data pipeline: ingestion (`data/raw`), cleaning (`data/derived`), reproducible scripts (`scripts/`, `R/`).
+- Pre-analysis plan for litigation: outcomes, treatment, controls, robustness, and disclosure of limitations.
+- Citations: attach design choices to precedent (e.g., merger retrospectives [@ashenfelter_hosken_2010], class cert common impact [@dickey_rubinfeld_2014]) and note jurisdictional applicability.
+
+::: {.callout-note title="Method box: Causal tools"}
+- Diff-in-diff and event study diagnostics (parallel trends tests, dynamic leads/lags).
+- Instrumental variables for supply/demand shocks; relevance and exclusion in antitrust contexts.
+- Panel estimators (FE, two-way FE pitfalls, staggered adoption corrections).
+- Synthetic control and matrix completion for single treated units.
+- Clustering and randomization inference; wild bootstrap for few clusters.
+:::
+
+::: {.callout-note title="Qualitative methods box"}
+- Survey design for consumer substitution and diversion; sample frames and bias checks.
+- Case studies: structured comparisons across firms/markets to triangulate conduct.
+- Coding documentary evidence: templates for internal emails, strategy docs, board materials.
+- Expert elicitation: when to use industry experts and how to document their priors.
+:::
+
+::: {.callout-note title="Debate"}
+- How much weight to give stated preference surveys vs. revealed behavior.
+- Limits of parallel trends in markets with rapid innovation or multi-sided dynamics.
+- When placebo/negative tests are persuasive in court.
+:::
+
+## Code box: diff-in-diff scaffold
+```{r}
+#| label: did-scaffold
+#| message: false
+#| warning: false
+library(fixest)
+library(did)
+
+# expected data columns: id, time, treat (0/1), outcome, controls...
+# att_gt <- att_gt(yname = "outcome", tname = "time", idname = "id",
+#                  gname = "treat_time", data = panel_data, panel = TRUE)
+# summary(att_gt)
+
+# Sun & Abraham style with fixest:
+# feols(outcome ~ i(time, treat, ref = REF_PERIOD) + controls | id + time, data = panel_data, cluster = ~id)
+```
