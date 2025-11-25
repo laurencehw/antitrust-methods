@@ -1,6 +1,4 @@
----
-title: "Orientation: Antitrust and Regulation"
----
+# Orientation: Antitrust and Regulation
 
 ## Learning goals
 - Understand objectives of antitrust and sector regulation, and how enforcement agencies frame evidence.
@@ -37,14 +35,23 @@ title: "Orientation: Antitrust and Regulation"
 #| label: orientation-hhi
 #| message: false
 #| warning: false
+#| fig-cap: "US Bank Concentration (HHI)"
+#| fig-width: 6
+#| fig-height: 4
 library(fredr)
 library(dplyr)
 library(ggplot2)
+source("../R/helpers.R")
 fredr_set_key(Sys.getenv("FRED_API_KEY"))
 
 hhi <- fredr(series_id = "HHMSDODNS", observation_start = as.Date("2000-01-01"))
 ggplot(hhi, aes(date, value)) +
-  geom_line(color = "#0072B2") +
-  labs(title = "US Bank Concentration (HHI)", x = NULL, y = "HHI") +
-  theme_minimal()
+  geom_line(color = "#0072B2", linewidth = 1) +
+  labs(
+    title = "US Bank Concentration (HHI)",
+    subtitle = "FRED series HHMSDODNS",
+    x = NULL,
+    y = "HHI Index"
+  ) +
+  theme_antitrust()
 ```

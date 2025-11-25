@@ -1,6 +1,4 @@
----
-title: "Research Design: Quantitative and Qualitative"
----
+# Research Design: Quantitative and Qualitative
 
 ## Learning goals
 - Build credible research designs for antitrust questions using both quantitative and qualitative evidence.

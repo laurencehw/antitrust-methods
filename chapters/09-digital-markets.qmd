@@ -1,6 +1,4 @@
----
-title: "Digital Markets and Platforms"
----
+# Digital Markets and Platforms
 
 ## Learning goals
 - Analyze platform competition, self-preferencing, algorithmic effects, and data advantages.

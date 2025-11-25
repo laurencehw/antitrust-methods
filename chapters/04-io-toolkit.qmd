@@ -1,6 +1,4 @@
----
-title: "Industrial Organization Toolkit"
----
+# Industrial Organization Toolkit
 
 ## Learning goals
 - Use IO models to link conduct to outcomes: demand estimation, cost modeling, and equilibrium effects.
