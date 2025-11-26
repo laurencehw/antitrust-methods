@@ -1,6 +1,4 @@
----
-title: "Mergers"
----
+# Mergers
 
 ## Learning goals
 - Assess unilateral and coordinated effects with both descriptive and model-based tools.

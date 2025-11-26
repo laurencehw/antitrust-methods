@@ -1,6 +1,4 @@
----
-title: "Preface and How to Use This Book"
----
+# Preface and How to Use This Book {.unnumbered}
 
 ## Audience and approach
 - Upper-undergraduates, early graduate students, and practitioners needing applied antitrust methods.

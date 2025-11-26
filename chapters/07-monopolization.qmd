@@ -1,6 +1,4 @@
----
-title: "Monopolization and Exclusion"
----
+# Monopolization and Exclusion
 
 ## Learning goals
 - Analyze exclusionary conduct (predation, rebates, tying, MFNs, vertical restraints).

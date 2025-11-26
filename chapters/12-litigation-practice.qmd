@@ -1,6 +1,4 @@
----
-title: "Litigation Practice: Evidence and Expert Work"
----
+# Litigation Practice: Evidence and Expert Work
 
 ## Learning goals
 - Prepare expert reports that integrate empirical and qualitative evidence.

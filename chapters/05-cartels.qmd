@@ -1,6 +1,4 @@
----
-title: "Cartels and Collusion"
----
+# Cartels and Collusion
 
 ## Learning goals
 - Detect and quantify cartel behavior using screens, structural breaks, and damages models.
@@ -89,10 +87,14 @@ title: "Cartels and Collusion"
 #| label: cartel-break-gasoline
 #| message: false
 #| warning: false
+#| fig-cap: "Structural break detection in gasoline prices"
+#| fig-width: 6
+#| fig-height: 4
 library(fredr)
 library(dplyr)
 library(strucchange)
 library(ggplot2)
+source("../R/helpers.R")
 
 fredr_set_key(Sys.getenv("FRED_API_KEY"))
 gas <- fredr(series_id = "GASREGW", observation_start = as.Date("2015-01-01")) |>
@@ -103,11 +105,17 @@ bp <- breakpoints(price ~ week, data = gas, h = 26)
 gas$regime <- factor(cut(gas$week, c(0, bp$breakpoints, Inf)))
 
 ggplot(gas, aes(date, price, color = regime)) +
-  geom_line() +
-  labs(title = "Regular Gasoline Prices: Structural Break Illustration",
-       subtitle = "FRED series GASREGW (weekly, US average)",
-       x = NULL, y = "USD per gallon") +
-  theme_minimal()
+  geom_line(linewidth = 0.8) +
+  labs(
+    title = "Regular Gasoline Prices: Structural Break Illustration",
+    subtitle = "FRED series GASREGW (weekly, US average)",
+    x = NULL,
+    y = "USD per gallon",
+    color = "Regime"
+  ) +
+  scale_color_antitrust() +
+  theme_antitrust() +
+  guides(color = guide_legend(nrow = 1))
 ```
 This uses a public FRED series to illustrate break detection; replace with case data (e.g., product-level transactions) for real matters.
 

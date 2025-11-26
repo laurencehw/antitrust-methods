@@ -1,6 +1,4 @@
----
-title: "Innovation, Intellectual Property, and Antitrust"
----
+# Innovation, Intellectual Property, and Antitrust
 
 ## Learning goals
 - Assess innovation incentives in antitrust matters involving IP, SEPs/FRAND, and patent pools.

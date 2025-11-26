@@ -1,6 +1,4 @@
----
-title: "Market Definition and Competitive Landscape"
----
+# Market Definition and Competitive Landscape
 
 ## Learning goals
 - Frame relevant product and geographic markets using demand evidence, diversion, and qualitative industry facts.

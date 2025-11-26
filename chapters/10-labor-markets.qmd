@@ -1,6 +1,4 @@
----
-title: "Antitrust and Labor Markets"
----
+# Antitrust and Labor Markets
 
 ## Learning goals
 - Evaluate monopsony power, noncompetes, wage fixing, and no-poach agreements.

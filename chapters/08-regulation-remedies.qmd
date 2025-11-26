@@ -1,6 +1,4 @@
----
-title: "Regulation and Remedies"
----
+# Regulation and Remedies
 
 ## Learning goals
 - Understand regulatory tools (rate-of-return, price-cap, access pricing) and their economic underpinnings.

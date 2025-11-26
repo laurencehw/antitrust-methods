@@ -1,6 +1,4 @@
----
-title: "Empirical Appendix and Templates"
----
+# Empirical Appendix and Templates {.unnumbered}
 
 ## Purpose
 - Centralize reusable code and diagnostic patterns referenced in chapters.
