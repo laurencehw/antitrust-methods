@@ -11,6 +11,7 @@ renv/staging
 
 # Quarto output and cache
 _book/
+!_book/*.pdf
 .quarto/
 /.quarto/
 _freeze/
