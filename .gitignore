@@ -1,20 +1,47 @@
+# R/RStudio
 .Rhistory
 .RData
 .Rproj.user
 .Renviron
+
+# renv
 renv/library
 renv/python
-_book
-.quarto
+renv/staging
+
+# Quarto output and cache
+_book/
+.quarto/
+/.quarto/
+_freeze/
+**/*.quarto_ipynb
+*_files/
+
+# Data directories (large/sensitive)
 data/raw/
 data/derived/
 figures/
+
+# Document outputs
 *.html
 *.pdf
 *.pptx
 *.docx
 *.doc
 *.zip
+
+# External materials
 _literature/
-"notes and slides"/
+notes and slides/
 "notes and slides"
+
+# Claude Code local settings
+.claude/
+
+# Auto-generated summary files
+API_KEYS_SETUP.md
+BIBLIOGRAPHY_UPDATE_SUMMARY.md
+DATA_COLLECTION_SUMMARY.md
+DATA_INTEGRATION_GUIDE.md
+CITATION_QUICK_REFERENCE.md
+visualization-roadmap.md

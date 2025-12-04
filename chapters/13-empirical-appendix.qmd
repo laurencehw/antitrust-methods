@@ -3,22 +3,693 @@ title: "Empirical Appendix and Templates"
 ---
 
 ## Purpose
-- Centralize reusable code and diagnostic patterns referenced in chapters.
-- Provide quick templates for charts and tables.
+This appendix is the shared workspace for reusable diagnostics, qualitative protocols, and data inventories referenced throughout the book. Treat it as the "operations manual" for the course: every code chunk or template lives here so you can drop it into chapter-specific notebooks, expert reports, or litigation memos without rewriting boilerplate.
 
-## Diff-in-diff checklist
-- Parallel trends diagnostics (event plots, placebo periods).
-- Staggered adoption options (`did`, `fixest` with interaction, `sunab`).
-- Clustering choices and wild bootstrap for few clusters.
+## How to use this appendix
+1. **Start here during scoping.** Clone the chronology, data inventory, and interview templates before diving into a matter so legal, economic, and qualitative teams stay synchronized.
+2. **Customize but keep provenance.** When you adapt a template, note the source so future readers can trace assumptions.
+3. **Feed updates back in.** If a later chapter develops a better diagnostic, link it here to avoid divergence.
 
-## Matching and weighting
-- Propensity score and entropy balancing templates.
-- Covariate balance plots and diagnostics.
+## Key resources for quick reference
 
-## Panel FE and standard errors
-- Two-way FE patterns; heterogeneity caveats.
-- Clustered, Driscoll-Kraay, and randomization inference notes.
+| Chapter focus | Key resources |
+| --- | --- |
+| Orientation & institutions | Agency websites: [DOJ Antitrust](https://www.justice.gov/atr), [FTC](https://www.ftc.gov/), [EC Competition](https://ec.europa.eu/competition/), [CMA](https://www.gov.uk/cma) |
+| Research design & methods | [Causal Inference: The Mixtape](https://mixtape.scunning.com/), Angrist & Pischke papers |
+| Cartels & collusion | [OECD Cartel Guidance](https://www.oecd.org/daf/competition/cartels/) |
+| Mergers | US/EU/UK Merger Guidelines (see references) |
+| Digital markets | [EU DMA](https://ec.europa.eu/dma), CMA Digital Markets Unit |
+| Labor markets | [BLS data](https://www.bls.gov/), [Census LEHD](https://lehd.ces.census.gov/) |
 
-## R helpers
-See `R/helpers.R` for packaged helpers: plotting themes, API pulls, merger simulation skeleton, and data caching.
+Use this table alongside external references such as [@ashenfelter_hosken_2010] and agency guidelines.
+
+## Case chronology template
+When building mixed-method narratives, start with a matrix that ties events to evidence and hypotheses. Duplicate the scaffold below into your project notebook:
+
+| Date | Event / document | Evidence type | Hypothesis link | Follow-ups |
+| --- | --- | --- | --- | --- |
+| 2018-04-12 | Board memo re: “price discipline” | Document (custodian: CFO) | Supports coordinated effects theory | Interview CFO; pull bid data |
+| 2019-02-01 | Customer interview (retailer) | Qualitative | Tests diversion/USP claims | Quantify share of wallet |
+| 2021-09-30 | Price spike (SKU 124) | Quantitative (transaction DB) | Flags potential capacity withholding | Overlay maintenance logs |
+
+**Tips:** capture custodian names, bates ranges, or dataset pointers, then push the table into a `gt` or `quarto` table for reports.
+
+## Data inventory worksheet
+Pair the chronology with a tabular schema inventory so you know what can feed the quantitative chapters. Customize the tibble below inside your R session.
+
+```{r}
+#| label: data-inventory-template
+#| message: false
+#| warning: false
+library(tibble)
+library(dplyr)
+
+data_inventory <- tribble(
+  ~system, ~owner, ~grain, ~fields, ~coverage, ~notes,
+  "CRM / Salesforce", "US Sales Ops", "Customer-month", "price, quantity, discounts, churn", "2016-01 to 2024-06", "Great for diversion estimates; use OECD cartel screening guidance",
+  "Claims data", "SA Health Plan", "Claim-line", "procedure, tariff, provider, patient segment", "2014-01 to 2023-12", "Use for South African retrospectives",
+  "Bid tracker", "EU Procurement", "Bid-event", "participants, bids, award, lot size", "2018-01 to present", "Supports cartel screens"
+) |>
+  arrange(system)
+
+data_inventory
+```
+
+Document locating instructions (sharepoint links, API keys) and legal restrictions. Store sanitized metadata in `data/README.md` so others can reproduce.
+
+## Survey and interview kit
+Follow established qualitative research standards to keep qualitative work rigorous:
+- **Screeners:** Define decision-maker roles, procurement thresholds, and geographic balance; record quotas in a simple CSV.
+- **Question bank:** Map each question to a legal element (market definition, competitive effects, efficiencies). Rotate order to reduce priming.
+- **Documentation:** Save audio or transcripts, then code responses using the lexicon below. Always log interviewer, location, and consent status.
+
+## Document coding lexicon
+Standardize qualitative tagging so it can be merged with quantitative variables:
+- **Conduct codes:** `capacity_discipline`, `most_favored`, `exclusive`, `discount_pass_through`.
+- **Market context:** `entry_barrier_data`, `supply_chain_shock`, `public_interest_sa`.
+- **Procedural:** `remedy_negotiation`, `leniency_proffer`, `public_hearing`.
+
+Maintain the lexicon as a YAML or CSV in `data/derived`.
+
+## Flagship data assets (by jurisdiction)
+
+### United States
+- **HSR and merger retrospectives:** Derive pre/post comparisons referencing [FTC](https://www.ftc.gov/) and [DOJ](https://www.justice.gov/atr) reports.
+- **Healthcare claims (CMS, FAIR Health):** Price and quantity data for hospital mergers and labor monopsony cases.
+- **Public procurement / ABM data:** Use [USAspending.gov](https://www.usaspending.gov/), OCC data, or [BLS](https://www.bls.gov/) Occupational Employment and Wage Statistics for wage-fixing analyses.
+
+### European Union & United Kingdom
+- **Case team data rooms:** DG COMP uploads (pricing, cost, user logs).
+- **Eurostat + Ofcom datasets:** Demand-side metrics for telecom, digital platforms, or broadcasting.
+- **CMA survey repositories:** Useful for designing conjoint or diversion studies.
+
+### South Africa & SADC focus
+- **Competition Commission data requests:** Transactional extracts from retailers, healthcare groups, or digital platforms; cross-check with public data from Stats SA.
+- **National Treasury tender portal:** Procurement and supplier concentration data for cartel screens.
+- **Sector inquiries:** Grocery retail, digital platforms, and transport datasets—log file formats and confidentiality riders here so later chapters can reference them.
+
+### Cross-jurisdiction validation
+- Build a blended index (e.g., inflation-adjusted revenue) to harmonize multi-region cases.
+- Track currency conversions and PPP adjustments in the inventory template.
+
+## Reusable diagnostics
+
+### Diff-in-diff and event studies
+- Run parallel-trend visuals, dynamic leads/lags, and placebo periods (`did::att_gt`, `fixest::sunab`). Reference @cunningham_2021 for intuition and cite @ashenfelter_hosken_2010 for merger retrospectives. For staggered treatment timing, see @callaway_santanna_2021.
+- For South African matters with staggered regulatory actions, consider matrix-completion methods from recent econometrics literature [@athey_imbens_2017].
+
+### Matching and weighting
+- Propensity score, entropy balancing, and synthetic controls should include balance plots (standardized differences, variance ratios) [@abadie_diamond_hainmueller_2010].
+- Store reusable plotting code in `R/helpers.R` (`plot_balance()`). For general guidance on matching methods, see @angrist_pischke_2009.
+
+### Panel FE and inference choices
+- Two-way FE with staggered treatment: document estimator choice and weights; cite the relevant methodological literature.
+- For few clusters (ports, mines), use wild bootstrap or randomization inference.
+
+### Qualitative + quantitative integration
+- Align interview findings with econometric outputs using issue trees. For example, code “capacity discipline” documents and test against utilization regressions.
+- Use the chronology template to surface inconsistencies quickly.
+
+## Code scaffolds
+
+### Data dictionary generator
+```{r}
+#| label: data-dictionary
+#| message: false
+library(readr)
+library(purrr)
+
+generate_dictionary <- function(path) {
+  sample <- readr::read_csv(path, n_max = 1000, show_col_types = FALSE)
+  purrr::map_dfr(names(sample), \(nm) {
+    tibble::tibble(
+      variable = nm,
+      type = class(sample[[nm]])[1],
+      sample_values = paste(head(unique(sample[[nm]]), 3), collapse = "; "),
+      notes = ""
+    )
+  })
+}
+
+# Example usage (uncomment when data available):
+# dict <- generate_dictionary("data/raw/claims_sample.csv")
+# dict
+```
+
+### Survey weighting stub
+```{r}
+#| label: survey-weighting
+#| eval: false
+library(survey)
+
+design <- svydesign(
+  ids = ~1,
+  strata = ~region,
+  weights = ~weight,
+  data = survey_responses
+)
+
+svymean(~switch_intent, design)
+```
+
+### Chronology visualization
+```{r}
+#| label: chronology-viz
+#| message: false
+#| warning: false
+library(ggplot2)
+library(lubridate)
+
+chronology <- tibble::tribble(
+  ~date, ~category, ~label,
+  ymd("2018-04-12"), "Document", "Board memo",
+  ymd("2019-02-01"), "Interview", "Retailer A",
+  ymd("2021-09-30"), "Data", "SKU 124 spike"
+)
+
+ggplot(chronology, aes(x = date, y = category, color = category)) +
+  geom_point(size = 3) +
+  geom_text(aes(label = label), hjust = -0.1, size = 3) +
+  labs(title = "Chronology overview", x = NULL, y = NULL) +
+  theme_classic() +
+  theme(legend.position = "none")
+```
+
+## Diagnostic Gallery
+
+This section provides reusable diagnostic visualizations that apply across chapters. Use these templates to validate identification assumptions, assess robustness, and communicate uncertainty in expert reports.
+
+### Pre-trends and parallel trends checks
+Essential for difference-in-differences designs (mergers, labor, remedies).
+
+```{r}
+#| label: diagnostic-pretrends
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 7
+library(dplyr)
+library(ggplot2)
+library(fixest)
+library(patchwork)
+
+# Simulated panel data with treatment in period 10
+# Replace with your actual panel data
+set.seed(123)
+periods <- 20
+n_units <- 50
+
+panel <- expand.grid(
+  unit = 1:n_units,
+  period = 1:periods
+) |>
+  mutate(
+    treated = ifelse(unit <= n_units/2, 1, 0),
+    post = ifelse(period >= 10, 1, 0),
+    # Pre-trends: parallel before period 10
+    outcome = 100 + 2 * period + 5 * treated +
+              10 * treated * post +
+              rnorm(n(), 0, 3)
+  )
+
+# Plot 1: Raw trends by group
+p1 <- panel |>
+  group_by(period, treated) |>
+  summarise(mean_outcome = mean(outcome), .groups = "drop") |>
+  mutate(group = ifelse(treated == 1, "Treatment", "Control")) |>
+  ggplot(aes(x = period, y = mean_outcome, color = group, linetype = group)) +
+  geom_vline(xintercept = 10, linetype = "dashed", color = "gray40") +
+  geom_line(linewidth = 1.2) +
+  annotate("text", x = 10, y = max(panel$outcome) * 0.95,
+          label = "Treatment\nperiod", hjust = -0.1, size = 3.5) +
+  scale_color_manual(values = c("Treatment" = "#D55E00",
+                                 "Control" = "#0072B2")) +
+  labs(
+    title = "Pre-Trends Check: Raw Outcome Trends",
+    subtitle = "Parallel trends before period 10 support DiD identification",
+    x = "Period",
+    y = "Outcome",
+    color = NULL,
+    linetype = NULL
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    legend.position = "bottom",
+    plot.title.position = "plot"
+  )
+
+# Event study with leads and lags
+event_study <- feols(
+  outcome ~ i(period, treated, ref = 9) | unit + period,
+  data = panel
+)
+
+# Extract coefficients
+coef_data <- tibble(
+  period = as.numeric(gsub("period::", "", names(coef(event_study)))),
+  estimate = coef(event_study),
+  se = se(event_study)
+) |>
+  mutate(
+    ci_lower = estimate - 1.96 * se,
+    ci_upper = estimate + 1.96 * se,
+    rel_period = period - 10
+  )
+
+# Plot 2: Event study coefficients
+p2 <- ggplot(coef_data, aes(x = rel_period, y = estimate)) +
+  geom_hline(yintercept = 0, linetype = "solid", color = "gray40") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40") +
+  geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper),
+             alpha = 0.2, fill = "#0072B2") +
+  geom_line(color = "#0072B2", linewidth = 1) +
+  geom_point(color = "#0072B2", size = 2.5) +
+  annotate("rect", xmin = -Inf, xmax = -1, ymin = -Inf, ymax = Inf,
+          fill = "green", alpha = 0.05) +
+  annotate("text", x = -5, y = max(coef_data$ci_upper) * 0.9,
+          label = "Pre-period\n(should be ≈0)", size = 3, hjust = 0.5) +
+  labs(
+    title = "Event Study Coefficients (Leads and Lags)",
+    subtitle = "Pre-period estimates near zero validate parallel trends assumption",
+    x = "Periods relative to treatment (0 = treatment period)",
+    y = "Treatment Effect Estimate",
+    caption = "Reference period: -1. Shaded region shows 95% confidence interval."
+  ) +
+  theme_classic(base_size = 12) +
+  theme(plot.title.position = "plot")
+
+# Combine plots
+p1 / p2
+
+# Statistical test for pre-trends
+pre_period_coefs <- coef_data |>
+  filter(rel_period < 0, rel_period != -1)
+
+cat("\nPre-trends test:\n")
+cat(paste0("Number of pre-period coefficients: ", nrow(pre_period_coefs), "\n"))
+cat(paste0("Mean pre-period coefficient: ",
+          round(mean(pre_period_coefs$estimate), 3), "\n"))
+cat(paste0("Joint F-test p-value: [run wald_test on event_study model]\n"))
+```
+
+**Interpretation:**
+- **Pre-trends near zero**: Validates parallel trends assumption
+- **Post-treatment divergence**: Confirms treatment effect
+- **Confidence intervals**: Should include zero in pre-period
+- **Use this**: Mergers (Ch. 06), remedies (Ch. 08), labor (Ch. 10)
+
+### Balance plots for matching/weighting
+Show covariate balance before and after matching or weighting.
+
+```{r}
+#| label: diagnostic-balance
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 8
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+
+# Simulated covariate data (treatment and control groups)
+set.seed(234)
+n <- 200
+
+covariates <- tibble(
+  id = 1:n,
+  treated = sample(c(0, 1), n, replace = TRUE),
+  firm_size = rnorm(n, mean = 100 + 20 * treated, sd = 30),
+  market_share = rnorm(n, mean = 0.15 + 0.05 * treated, sd = 0.08),
+  years_operating = rnorm(n, mean = 15 + 5 * treated, sd = 7),
+  revenue_growth = rnorm(n, mean = 0.10 + 0.03 * treated, sd = 0.12)
+)
+
+# Calculate standardized mean differences
+calc_smd <- function(var, group) {
+  mean_1 <- mean(var[group == 1])
+  mean_0 <- mean(var[group == 0])
+  sd_pool <- sqrt((var(var[group == 1]) + var(var[group == 0])) / 2)
+  (mean_1 - mean_0) / sd_pool
+}
+
+balance_before <- covariates |>
+  summarise(across(c(firm_size, market_share, years_operating, revenue_growth),
+                  ~calc_smd(.x, treated),
+                  .names = "{.col}")) |>
+  pivot_longer(everything(), names_to = "variable", values_to = "smd") |>
+  mutate(timing = "Before matching")
+
+# Simulate "after matching" with reduced imbalance
+# In practice, replace this with actual matched/weighted sample
+balance_after <- balance_before |>
+  mutate(
+    smd = smd * 0.2,  # Matching reduces imbalance by 80%
+    timing = "After matching"
+  )
+
+variable_levels <- c(
+  "Firm size (employees)",
+  "Market share",
+  "Years operating",
+  "Revenue growth"
+)
+
+balance_combined <- bind_rows(balance_before, balance_after) |>
+  mutate(
+    variable = recode(
+      variable,
+      "firm_size" = "Firm size (employees)",
+      "market_share" = "Market share",
+      "years_operating" = "Years operating",
+      "revenue_growth" = "Revenue growth"
+    ),
+    variable = factor(variable, levels = variable_levels),
+    timing = factor(timing, levels = c("Before matching", "After matching"))
+  )
+
+annotation_label <- tibble(
+  abs_smd = 0.1,
+  variable = variable_levels[1],
+  label = "0.1 threshold\n(acceptable)"
+)
+
+# Love plot
+ggplot(balance_combined, aes(x = abs(smd), y = variable,
+                              color = timing, shape = timing)) +
+  geom_vline(xintercept = 0.1, linetype = "dashed",
+            color = "darkgreen", linewidth = 0.8) +
+  geom_vline(xintercept = 0, linetype = "solid", color = "gray40") +
+  geom_point(size = 3) +
+  geom_text(
+    data = annotation_label,
+    aes(x = abs_smd, y = variable, label = label),
+    inherit.aes = FALSE,
+    hjust = -0.1,
+    size = 3
+  ) +
+  scale_color_manual(values = c("Before matching" = "#D55E00",
+                                 "After matching" = "#0072B2")) +
+  scale_shape_manual(values = c("Before matching" = 16,
+                                "After matching" = 17)) +
+  scale_x_continuous(limits = c(0, max(abs(balance_combined$smd)) * 1.1)) +
+  labs(
+    title = "Covariate Balance: Love Plot",
+    subtitle = "Standardized mean differences before and after matching",
+    x = "Absolute Standardized Mean Difference",
+    y = NULL,
+    color = "Timing",
+    shape = "Timing",
+    caption = "SMD < 0.1 indicates acceptable balance (Austin, 2009)."
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    legend.position = "bottom",
+    plot.title.position = "plot"
+  )
+
+# Summary table
+cat("\nBalance summary:\n")
+balance_combined |>
+  select(variable, timing, smd) |>
+  pivot_wider(names_from = timing, values_from = smd) |>
+  mutate(improvement = abs(`Before matching`) - abs(`After matching`)) |>
+  print()
+```
+
+**Interpretation:**
+- **SMD < 0.1**: Acceptable balance (Austin, 2009)
+- **Matching improves balance**: Lines should move toward zero
+- **Use this**: Merger retrospectives, labor market studies, remedy evaluations
+
+### Regression specification curve
+Show robustness across multiple reasonable specifications.
+
+```{r}
+#| label: diagnostic-spec-curve
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 8
+library(dplyr)
+library(ggplot2)
+library(fixest)
+
+# Simulated data for multiple specifications
+set.seed(345)
+panel_spec <- expand.grid(
+  firm = 1:100,
+  period = 1:20
+) |>
+  mutate(
+    treatment = ifelse(firm <= 50 & period >= 10, 1, 0),
+    control1 = rnorm(n()),
+    control2 = rnorm(n()),
+    control3 = rnorm(n()),
+    outcome = 50 + 5 * treatment + 2 * control1 + 1 * control2 +
+              0.5 * control3 + rnorm(n(), 0, 3)
+  )
+
+# Run multiple specifications
+specs <- list(
+  "No controls" = feols(outcome ~ treatment | firm + period, panel_spec),
+  "+ Control 1" = feols(outcome ~ treatment + control1 | firm + period, panel_spec),
+  "+ Controls 1-2" = feols(outcome ~ treatment + control1 + control2 | firm + period, panel_spec),
+  "+ All controls" = feols(outcome ~ treatment + control1 + control2 + control3 | firm + period, panel_spec),
+  "No FE" = lm(outcome ~ treatment + control1 + control2 + control3, panel_spec),
+  "Firm FE only" = feols(outcome ~ treatment + control1 + control2 + control3 | firm, panel_spec),
+  "Period FE only" = feols(outcome ~ treatment + control1 + control2 + control3 | period, panel_spec)
+)
+
+# Extract coefficients
+spec_results <- tibble(
+  specification = names(specs),
+  estimate = sapply(specs, function(m) {
+    coefs <- coef(m)
+    coefs[grepl("treatment", names(coefs))][1]
+  }),
+  se = sapply(specs, function(m) {
+    ses <- se(m)
+    ses[grepl("treatment", names(ses))][1]
+  })
+) |>
+  mutate(
+    ci_lower = estimate - 1.96 * se,
+    ci_upper = estimate + 1.96 * se,
+    spec_num = row_number(),
+    specification = factor(specification, levels = specification)
+  )
+
+# Specification curve plot
+ggplot(spec_results, aes(x = spec_num, y = estimate)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
+  geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper),
+             alpha = 0.2, fill = "#0072B2") +
+  geom_line(color = "#0072B2", linewidth = 1.2) +
+  geom_point(color = "#0072B2", size = 3) +
+  scale_x_continuous(
+    breaks = spec_results$spec_num,
+    labels = spec_results$specification
+  ) +
+  labs(
+    title = "Specification Curve: Treatment Effect Robustness",
+    subtitle = "Estimate remains positive and significant across specifications",
+    x = NULL,
+    y = "Treatment Effect Estimate",
+    caption = "Each point represents a different model specification. Shaded area = 95% CI."
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title.position = "plot"
+  )
+
+# Summary statistics
+cat("\nSpecification curve summary:\n")
+cat(paste0("Range of estimates: ",
+          round(min(spec_results$estimate), 2), " to ",
+          round(max(spec_results$estimate), 2), "\n"))
+cat(paste0("All specifications significant? ",
+          ifelse(all(spec_results$ci_lower > 0), "Yes", "No"), "\n"))
+cat(paste0("Median estimate: ", round(median(spec_results$estimate), 2), "\n"))
+```
+
+**Interpretation:**
+- **Stable across specs**: Effect robust to model choices
+- **All CIs exclude zero**: Consistent significance
+- **Use this**: Expert reports, Daubert challenges, sensitivity analysis
+
+### Residual diagnostics
+Check model assumptions and identify influential observations.
+
+```{r}
+#| label: diagnostic-residuals
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 9
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+
+# Fit model (use your actual model)
+model_data <- panel_spec |>
+  filter(period >= 10)
+
+model <- feols(outcome ~ treatment + control1 + control2 | firm + period,
+              data = model_data)
+
+# Get residuals and fitted values
+diagnostics <- model_data |>
+  mutate(
+    fitted = fitted(model),
+    residual = resid(model),
+    standardized_residual = residual / sd(residual)
+  )
+
+# Plot 1: Residuals vs. fitted
+p1 <- ggplot(diagnostics, aes(x = fitted, y = residual)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
+  geom_point(alpha = 0.5, color = "#0072B2") +
+  geom_smooth(method = "loess", se = FALSE, color = "#D55E00") +
+  labs(
+    title = "Residuals vs. Fitted Values",
+    subtitle = "Should show no pattern (validates linearity assumption)",
+    x = "Fitted Values",
+    y = "Residuals"
+  ) +
+  theme_classic(base_size = 11)
+
+# Plot 2: Q-Q plot for normality
+p2 <- ggplot(diagnostics, aes(sample = standardized_residual)) +
+  stat_qq(color = "#0072B2", alpha = 0.6) +
+  stat_qq_line(color = "#D55E00", linewidth = 1) +
+  labs(
+    title = "Q-Q Plot: Residual Normality",
+    subtitle = "Points should follow line for normal distribution",
+    x = "Theoretical Quantiles",
+    y = "Sample Quantiles"
+  ) +
+  theme_classic(base_size = 11)
+
+# Plot 3: Scale-location plot
+p3 <- ggplot(diagnostics, aes(x = fitted, y = sqrt(abs(standardized_residual)))) +
+  geom_point(alpha = 0.5, color = "#0072B2") +
+  geom_smooth(method = "loess", se = FALSE, color = "#D55E00") +
+  labs(
+    title = "Scale-Location Plot",
+    subtitle = "Should show horizontal line (validates homoscedasticity)",
+    x = "Fitted Values",
+    y = "√|Standardized Residuals|"
+  ) +
+  theme_classic(base_size = 11)
+
+# Plot 4: Histogram of residuals
+p4 <- ggplot(diagnostics, aes(x = residual)) +
+  geom_histogram(bins = 30, fill = "#0072B2", alpha = 0.8, color = "white") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "#D55E00") +
+  labs(
+    title = "Distribution of Residuals",
+    subtitle = "Should be approximately normal, centered at zero",
+    x = "Residuals",
+    y = "Count"
+  ) +
+  theme_classic(base_size = 11)
+
+# Combine plots
+(p1 | p2) / (p3 | p4) + plot_annotation(
+  title = "Residual Diagnostic Plots",
+  caption = "Check for violations of regression assumptions"
+)
+```
+
+**What to look for:**
+- **Residuals vs. Fitted**: No pattern (confirms linearity)
+- **Q-Q Plot**: Points follow line (confirms normality)
+- **Scale-Location**: Horizontal line (confirms homoscedasticity)
+- **Histogram**: Bell-shaped, centered at zero
+
+### Power analysis visualization
+Show statistical power across different sample sizes and effect sizes.
+
+```{r}
+#| label: diagnostic-power
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 7
+library(dplyr)
+library(ggplot2)
+library(pwr)
+
+# Calculate power for different scenarios
+sample_sizes <- seq(50, 500, by = 25)
+effect_sizes <- c(0.2, 0.5, 0.8)  # Small, medium, large (Cohen's d)
+
+power_grid <- expand.grid(
+  n = sample_sizes,
+  effect_size = effect_sizes
+) |>
+  mutate(
+    power = pwr.t.test(n = n, d = effect_size, sig.level = 0.05,
+                      type = "two.sample")$power,
+    effect_label = case_when(
+      effect_size == 0.2 ~ "Small effect (d = 0.2)",
+      effect_size == 0.5 ~ "Medium effect (d = 0.5)",
+      effect_size == 0.8 ~ "Large effect (d = 0.8)"
+    )
+  )
+
+# Power curve
+ggplot(power_grid, aes(x = n, y = power, color = effect_label)) +
+  geom_hline(yintercept = 0.80, linetype = "dashed",
+            color = "darkgreen", linewidth = 0.8) +
+  annotate("text", x = max(sample_sizes) * 0.7, y = 0.80,
+          label = "80% power threshold", hjust = 0, vjust = -0.5,
+          size = 3, color = "darkgreen") +
+  geom_line(linewidth = 1.2) +
+  geom_point(data = filter(power_grid, power >= 0.79, power <= 0.81),
+            size = 3) +
+  scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) +
+  scale_color_manual(values = c(
+    "Small effect (d = 0.2)" = "#D55E00",
+    "Medium effect (d = 0.5)" = "#0072B2",
+    "Large effect (d = 0.8)" = "#009E73"
+  )) +
+  labs(
+    title = "Statistical Power Analysis",
+    subtitle = "Sample size requirements for 80% power at α = 0.05",
+    x = "Sample Size (per group)",
+    y = "Statistical Power",
+    color = "Effect Size",
+    caption = "Points indicate minimum sample size for 80% power."
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    legend.position = "bottom",
+    plot.title.position = "plot"
+  )
+
+# Summary table
+power_summary <- power_grid |>
+  filter(power >= 0.79, power <= 0.81) |>
+  group_by(effect_label) |>
+  slice_min(n, n = 1) |>
+  ungroup() |>
+  select(effect_label, n_required = n, power)
+
+cat("\nMinimum sample size for 80% power:\n")
+print(power_summary, n = Inf)
+```
+
+**Use this for:**
+- Study design and sample size planning
+- Explaining null results (underpowered?)
+- Justifying sample selection in expert reports
+
+## Additional references
+- **FTC resources:** See [ftc.gov](https://www.ftc.gov/) for expert guidance and econometric standards.
+- **Causal Inference: The Mixtape** ([mixtape.scunning.com](https://mixtape.scunning.com/)) for causal estimators and diagnostics.
+- **OECD cartel guidance:** See [oecd.org/competition](https://www.oecd.org/daf/competition/) for screening methodologies.
+
+Return to this appendix whenever a chapter references "see appendix template" so the workflow stays consistent across teams and jurisdictions.
 

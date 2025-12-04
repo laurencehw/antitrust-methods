@@ -3,15 +3,145 @@ title: "Digital Markets and Platforms"
 ---
 
 ## Learning goals
-- Analyze platform competition, self-preferencing, algorithmic effects, and data advantages.
-- Model indirect network effects and multi-homing; assess default position power.
-- Integrate product design evidence with empirical outcomes.
+Digital markets combine traditional IO concepts with product design, governance, and behavioral nudges. Drawing on DMA/Digital Markets Unit briefings and recent enforcement actions, this chapter helps you:
+
+- Analyze multi-sided participation, indirect network effects, and multi-homing incentives.
+- Quantify self-preferencing, ranking changes, and default effects on user/merchant behavior.
+- Evaluate data advantages, access restrictions, and algorithmic pricing risks.
+- Integrate product requirement documents (PRDs), API policies, and telemetry with econometric evidence for global enforcement settings.
+
+Expect to combine telemetry, clickstream data, partner contracts, and qualitative product documentation with econometric tests and simulation scaffolds.
 
 ## Core topics
-- Platform demand: multi-sided participation, steering, and matching efficiency.
-- Self-preferencing and ranking: click-through impacts; A/B test interpretation.
-- Data advantages and economies of scope; switching costs and lock-in.
-- Algorithmic pricing and collusion risks.
+- Platform demand and multi-homing: participation elasticities, steering, matching efficiency.
+- Self-preferencing and ranking: click-through impacts, A/B test interpretation, fairness metrics.
+- Data advantages and economies of scope; switching costs, lock-in, and interoperability.
+- Algorithmic pricing and tacit collusion risk.
+- Workflow for platform cases: market definition, theory of harm, mechanism measurement, effects, and remedies (choice screens, access mandates, data portability, separation).
+
+## Platform workflow overview
+
+1. **Define sides and metrics.** Identify user, merchant, advertiser, developer, courier, or publisher sides. Track MAU/DAU, GMV, multi-homing rates, engagement depth, and conversion metrics.  
+2. **Map fees and monetization.** Build ladders for commissions, subscriptions, ad loads, and data monetization; compute pass-through and elasticity. For two-sided market theory, see @rochet_tirole_2003 and @armstrong_2006.  
+3. **Theory of harm.** Common mechanisms include self-preferencing, default tying, MFN/parity clauses, data leveraging, interoperability restrictions, algorithmic ranking biases, and algorithmic collusion.  
+4. **Mechanism measurement.** Quantify ranking impacts, default effects, fee changes, and data advantages; document multi-homing constraints and API access terms.  
+5. **Effects & remedies.** Measure partner churn, user switching, price/fee changes, and innovation impacts. Propose remedies (choice screens, fair-ranking reports, API access rules, data portability, structural separation) tied to measured harms.
+
+## Participation, multi-homing, and network effects
+
+- **Participation curves:** Model each side's activity as a function of fees, quality, and participation on the other side. Use logit, linear, or Poisson models with cross-side terms [@evans_schmalensee_2007; @hagiu_wright_2015].  
+- **Multi-homing rates:** Estimate the share of users or merchants active on rival platforms. OIPMI surveys and EU DMA filings include methodologies you can reuse [@parker_van_alstyne_2005].  
+- **Match quality:** Track conversion rates, completion times, or satisfaction metrics per platform side to show how conduct affects outcomes.  
+- **Elasticities:** Two-sided elasticities inform fee caps and remedy design (e.g., how merchant participation responds to lower commissions or improved ranking fairness).
+
+### Two-sided demand scaffold
+```{r}
+#| label: digital-two-sided
+#| message: false
+#| warning: false
+library(dplyr)
+library(fixest)
+
+# Synthetic example; replace with platform telemetry
+panel <- expand.grid(platform = c("Alpha","Beta"), period = 2018:2023) |>
+  mutate(
+    fees_users = runif(n(), 0, 4),
+    fees_merchants = runif(n(), 15, 30),
+    quality = runif(n(), 0.5, 1),
+    users = exp(5 - 0.25 * fees_users + 0.4 * quality + rnorm(n(), 0, 0.2)),
+    merchants = exp(4 - 0.12 * fees_merchants + 0.3 * users / 1e5 + rnorm(n(), 0, 0.2))
+  )
+
+user_model <- feols(log(users) ~ fees_users + quality + log(merchants) | platform + period, data = panel)
+merchant_model <- feols(log(merchants) ~ fees_merchants + log(users) | platform + period, data = panel)
+summary(user_model)
+summary(merchant_model)
+```
+Replace the synthetic `panel` with sanitized telemetry (monthly active users/merchants) or aggregated OIPMI data stored in `data/examples/digital-two-sided.csv`. Document the estimated cross-side elasticities in your memo.
+
+## Ranking, self-preferencing, and defaults
+
+### Ranking impact visualization
+```{r}
+#| label: digital-ranking
+#| message: false
+#| warning: false
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+ranking <- tibble::tribble(
+  ~slot, ~first_party_ctr, ~third_party_ctr,
+  1, 0.16, 0.08,
+  2, 0.13, 0.06,
+  3, 0.11, 0.05,
+  4, 0.08, 0.04,
+  5, 0.06, 0.03
+) |>
+  pivot_longer(-slot, names_to = "listing", values_to = "ctr")
+
+ggplot(ranking, aes(slot, ctr, color = listing)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_color_manual(values = c("#1b9e77", "#d95f02"), labels = c("First-party", "Third-party")) +
+  labs(
+    title = "Conversion by ranking slot",
+    subtitle = "Illustrative data; use OIPMI or platform A/B metrics when available",
+    x = "Slot (1 = top)",
+    y = "Conversion rate",
+    color = NULL
+  ) +
+  theme_classic(base_size = 11) +
+  theme(legend.position = "bottom")
+```
+Populate the tibble with actual ranking data (e.g., OIPMI buy-box audits, CMA Amazon Marketplace analysis) or maintain sanitized values in `data/examples/digital-ranking.csv`. The CMA's market studies are publicly available at [gov.uk/cma](https://www.gov.uk/government/organisations/competition-and-markets-authority).
+
+### Default-choice event study scaffold
+```{r}
+#| label: digital-default-event
+#| message: false
+#| warning: false
+#| eval: false
+library(fixest)
+
+# df requires: device_id, week, default_event (event date), share_rival
+# event_model <- feols(share_rival ~ i(week, default_event, ref = -1) | device_id + week, data = df)
+# etable(event_model)
+```
+Use telemetry from choice screens (EU Android choice screen, DMA compliance reports) or partner-provided logs. If live data are unavailable, build synthetic event panels mirroring DMA summary stats (store in `data/examples/digital-default.csv`).
+
+## Southern African digital enforcement snapshots
+- **Online Intermediation Platforms Market Inquiry (OIPMI, 2020–2023).** Transaction-level data from marketplaces, app stores, delivery apps, and travel platforms revealed Google Search’s >90% share, 25–30% delivery commissions, and buy-box algorithms favoring first-party listings. Remedies require fair-ranking reports, SME fee caps, and anti-steering rights inside aggregator apps.  
+- **Media and Digital Platforms Inquiry (2023–ongoing).** Impression-level logs from Meta, Google, and local publishers show Google capturing ~65% of programmatic display spend, while local publishers net <30% after fees, framing bargaining remedies for news publishers.  
+- **GovChat/Meta interim relief (2021).** WhatsApp Business API telemetry demonstrated GovChat’s public-service reach (>8 million users) and negligible incremental cost; interim relief preserved access while exclusion claims proceeded, blending platform data with public-interest considerations.
+
+## Methodologies
+
+::: {.callout-note title="Method box"}
+- Platform fee/price pass-through across sides.  
+- Event studies on ranking/default changes; DMA/DMA-style interventions.  
+- Two-sided logit or bargaining sketches to test fee caps and interoperability remedies.
+:::
+
+::: {.callout-note title="Qualitative evidence"}
+- Product requirement documents, experiment summaries, and governance memos.  
+- Partner contracts (parity/MFN, exclusivity), API access terms, data-sharing policies.  
+- User research/surveys capturing multi-homing, switching costs, and friction sources.
+:::
+
+::: {.callout-note title="Citations and comparative note"}
+- US cases (Epic v. Apple, DOJ Google Search and Ad Tech, FTC Amazon Marketplace), EU/DMA (Google Shopping/Android, DMA obligations), UK (CMA digital market studies), KFTC/JFTC app store cases, SAMR digital enforcement.  
+- Empirical studies on defaults, ranking effects, and multi-homing (e.g., Luca et al., 2016, "Does Google Content Degrade Google Search?," Harvard Business School Working Paper; Edelman & Lai, 2016, "Design of Search Engine Services," *Journal of Economics & Management Strategy* 25(1): 187-218).  
+- Flag differences in parity/MFN treatment and remedy preferences (EU fair-ranking obligations vs. US injunctive relief).
+:::
+
+## Visualizations and data sourcing
+- **Default impact chart (Roadmap 9.1):** Source DMA compliance reports (available at [ec.europa.eu/dma](https://ec.europa.eu/)), CMA choice-screen experiments, or sanitized telemetry. If unavailable, simulate from DMA summary stats.  
+- **Multi-homing Sankey (Roadmap 9.2):** Use OIPMI survey microdata or replicate with local surveys; store in `data/examples/digital-sankey.csv` until live data arrive.  
+- **Ranking change event analysis (Roadmap 9.3):** Combine OIPMI buy-box audits or platform-provided logs with the ranking scaffold above.  
+- **Fee ladder diagrams:** Pull commission schedules from OIPMI appendices or global public filings (App Store, Play Store, Amazon Marketplace).
+
+Document each dataset in `data/README.md` with provenance, confidentiality notes, and instructions for swapping synthetic vs. production data. When we "fill with real data," replace the synthetic CSVs, re-render figures, and cache sanitized outputs for publication builds.
 
 ### Southern African digital enforcement snapshots
 - **Online Intermediation Platforms Market Inquiry (OIPMI, 2020–2023).** The Competition Commission collected transaction-level data from e-commerce marketplaces, app stores, food delivery apps, and travel platforms. Findings highlighted Google Search’s >90% share of general search queries, food-delivery commissions clustering at 25–30%, and marketplace buy-box algorithms that favored first-party listings (e.g., Takealot Retail) over third-party sellers with identical fulfillment metrics. Final remedies require fair-ranking reports, caps on marketplace storage/fulfillment fees for SMEs, and anti-steering relief that lets restaurants promote direct-order channels inside aggregator apps.
@@ -31,7 +161,418 @@ title: "Digital Markets and Platforms"
 :::
 
 ::: {.callout-note title="Citations and comparative note"}
-- Cite platform cases and regulations: US (e.g., Epic v. Apple, DOJ Google Search/Ad Tech), EU (Google Shopping/Android, DMA), UK (CMA market investigations), and other jurisdictions (e.g., Korea KFTC app stores where relevant).
+- Cite platform cases and regulations: US (e.g., Epic v. Apple, DOJ Google Search/Ad Tech), EU (Google Shopping/Android, [DMA](https://ec.europa.eu/info/strategy/priorities-2019-2024/europe-fit-digital-age/digital-markets-act-ensuring-fair-and-open-digital-markets_en)), UK ([CMA market investigations](https://www.gov.uk/cma-cases)), and other jurisdictions (e.g., Korea KFTC app stores where relevant).
 - Reference empirical studies on defaults and ranking effects, and any A/B or natural experiment evidence from platforms.
 - Note differences in treatment of MFNs/parity and self-preferencing across jurisdictions.
 :::
+
+## Enhanced Visualizations
+
+### Multi-homing Sankey diagram
+Multi-homing patterns reveal competitive constraints and switching costs. A Sankey diagram shows how users flow across platforms, helping visualize whether platforms compete head-to-head or serve distinct niches.
+
+```{r}
+#| label: digital-multihoming-sankey
+#| message: false
+#| warning: false
+#| fig-width: 12
+#| fig-height: 8
+library(dplyr)
+library(ggplot2)
+library(ggalluvial)
+
+# Simulated multi-homing survey data
+# Replace with OIPMI survey data or DMA compliance reports
+set.seed(234)
+n_users <- 1000
+
+multihoming <- tibble(
+  user_id = 1:n_users,
+  platform_a = sample(c("Active", "Inactive"), n_users, replace = TRUE,
+                     prob = c(0.7, 0.3)),
+  platform_b = sample(c("Active", "Inactive"), n_users, replace = TRUE,
+                     prob = c(0.5, 0.5)),
+  platform_c = sample(c("Active", "Inactive"), n_users, replace = TRUE,
+                     prob = c(0.3, 0.7))
+) |>
+  mutate(
+    pattern = case_when(
+      platform_a == "Active" & platform_b == "Active" & platform_c == "Active" ~ "All three",
+      platform_a == "Active" & platform_b == "Active" ~ "A + B",
+      platform_a == "Active" & platform_c == "Active" ~ "A + C",
+      platform_b == "Active" & platform_c == "Active" ~ "B + C",
+      platform_a == "Active" ~ "A only",
+      platform_b == "Active" ~ "B only",
+      platform_c == "Active" ~ "C only",
+      TRUE ~ "None"
+    )
+  )
+
+# Aggregate flows
+flows <- multihoming |>
+  count(pattern) |>
+  mutate(
+    pct = n / sum(n),
+    pattern = factor(pattern,
+                    levels = c("A only", "B only", "C only",
+                              "A + B", "A + C", "B + C", "All three", "None"))
+  ) |>
+  arrange(pattern)
+
+# Bar chart showing multi-homing patterns
+p1 <- ggplot(flows, aes(x = pattern, y = pct, fill = pattern)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = scales::percent(pct, accuracy = 0.1)),
+            vjust = -0.5, size = 3.5) +
+  scale_y_continuous(labels = scales::percent_format(),
+                     expand = expansion(mult = c(0, 0.1))) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Multi-homing Patterns Across Platforms",
+    subtitle = "User activity across Platform A, B, and C",
+    x = NULL,
+    y = "Share of Users",
+    caption = "Illustrative data. Replace with OIPMI survey or DMA compliance reports."
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none",
+    plot.title.position = "plot"
+  )
+
+p1
+
+# Summary statistics
+cat("\nMulti-homing summary:\n")
+cat(paste0("Single-homing (one platform only): ",
+          scales::percent(sum(flows$pct[flows$pattern %in%
+                              c("A only", "B only", "C only")]),
+                         accuracy = 0.1), "\n"))
+cat(paste0("Multi-homing (2+ platforms): ",
+          scales::percent(sum(flows$pct[grepl("\\+|three", flows$pattern)]),
+                         accuracy = 0.1), "\n"))
+```
+
+**Interpretation:**
+- **High single-homing**: Suggests strong lock-in, switching costs, or network effects. Platforms may have market power.
+- **High multi-homing**: Indicates competitive pressure; users actively compare options. But check if multi-homing is symmetric or if one platform dominates usage.
+- **Asymmetric patterns**: If Platform A appears in most combinations, it may be a "must-have" platform with gatekeeping power.
+
+**Data sources:**
+- OIPMI survey microdata (South Africa)
+- DMA compliance reports (EU)
+- CMA market studies (UK)
+- Platform-provided telemetry (subject to confidentiality)
+
+### Choice screen / default effect visualization
+Quantify how defaults affect market shares using difference-in-differences or event studies around choice screen implementations.
+
+```{r}
+#| label: digital-default-impact
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 7
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+
+# Simulated data: Android choice screen impact (EU DMA context)
+# Replace with actual DMA compliance data or CMA experiments
+set.seed(345)
+weeks <- -24:24
+countries <- c("Control (no choice screen)", "Treatment (choice screen)")
+
+default_data <- expand.grid(
+  week = weeks,
+  country = countries
+) |>
+  mutate(
+    # Pre-intervention: both countries similar
+    # Post-intervention: treatment shows rival gain
+    rival_share = case_when(
+      country == "Control (no choice screen)" ~ 0.05 + 0.0005 * week + rnorm(n(), 0, 0.01),
+      week < 0 ~ 0.05 + 0.0005 * week + rnorm(n(), 0, 0.01),
+      TRUE ~ 0.05 + 0.0005 * week + 0.08 + rnorm(n(), 0, 0.01)
+    ),
+    rival_share = pmax(0.01, pmin(0.25, rival_share))
+  )
+
+# Time series plot
+p1 <- ggplot(default_data, aes(x = week, y = rival_share,
+                                color = country, linetype = country)) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40",
+             linewidth = 1) +
+  stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
+  annotate("text", x = 0, y = 0.22, label = "Choice screen\nintroduced",
+           hjust = -0.1, size = 3.5, fontface = "italic") +
+  scale_color_manual(values = c("Control (no choice screen)" = "#999999",
+                                 "Treatment (choice screen)" = "#0072B2")) +
+  scale_linetype_manual(values = c("Control (no choice screen)" = "dashed",
+                                   "Treatment (choice screen)" = "solid")) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(
+    title = "Impact of Choice Screen on Rival Search Engine Share",
+    subtitle = "Difference-in-Differences: Treatment vs. Control Countries",
+    x = "Weeks relative to choice screen introduction",
+    y = "Rival search engine share",
+    color = NULL,
+    linetype = NULL
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    legend.position = "bottom",
+    plot.title.position = "plot"
+  )
+
+# Coefficient plot (event study coefficients)
+# Simulated DiD estimates
+did_coefs <- tibble(
+  week = weeks[weeks != -1]  # reference period
+) |>
+  mutate(
+    estimate = 0.08 * as.numeric(week >= 0) + rnorm(n(), 0, 0.01),
+    ci_lower = estimate - 1.96 * 0.01,
+    ci_upper = estimate + 1.96 * 0.01
+  )
+
+p2 <- ggplot(did_coefs, aes(x = week, y = estimate)) +
+  geom_hline(yintercept = 0, linetype = "solid", color = "gray40") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40",
+             linewidth = 1) +
+  geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper),
+              alpha = 0.2, fill = "#0072B2") +
+  geom_line(color = "#0072B2", linewidth = 1) +
+  geom_point(color = "#0072B2", size = 2) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(
+    title = "Event Study Coefficients",
+    subtitle = "Treatment effect by week (relative to week -1)",
+    x = "Weeks relative to choice screen",
+    y = "Effect on rival share (percentage points)",
+    caption = "Illustrative data. Replace with DMA compliance reports or CMA experiments."
+  ) +
+  theme_classic(base_size = 12) +
+  theme(plot.title.position = "plot")
+
+# Combined plot
+p1 / p2
+
+# Summary statistics
+pre_treatment <- mean(default_data$rival_share[
+  default_data$country == "Treatment (choice screen)" & default_data$week < 0])
+post_treatment <- mean(default_data$rival_share[
+  default_data$country == "Treatment (choice screen)" & default_data$week >= 0])
+effect <- post_treatment - pre_treatment
+
+cat("\nChoice screen impact summary:\n")
+cat(paste0("Pre-intervention rival share: ",
+          scales::percent(pre_treatment, accuracy = 0.1), "\n"))
+cat(paste0("Post-intervention rival share: ",
+          scales::percent(post_treatment, accuracy = 0.1), "\n"))
+cat(paste0("Estimated treatment effect: ",
+          scales::percent(effect, accuracy = 0.1),
+          " (", round(effect / pre_treatment * 100, 0), "% increase)\n"))
+```
+
+**How to use this analysis:**
+- **Pre-trends**: Check parallel trends before intervention to validate DiD assumptions.
+- **Treatment effect**: Quantify how much rival share increased after choice screen.
+- **Heterogeneity**: Analyze by device type, user demographics, or country.
+- **Persistence**: Track whether effects sustain over time or decay.
+
+**DMA context:**
+The EU Digital Markets Act requires designated gatekeepers to offer choice screens for browsers, search engines, and other services. This analysis framework can evaluate compliance and effectiveness.
+
+### Platform fee structure visualization
+Commission and fee structures are critical evidence in platform cases. Show how fees vary by seller tier, product category, or fulfillment method.
+
+```{r}
+#| label: digital-fee-structure
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 7
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+
+# Fee structures from major platforms (public sources)
+# App Store, Play Store, Amazon Marketplace, food delivery
+fees <- tibble::tribble(
+  ~platform,            ~category,          ~base_commission, ~fulfillment_fee, ~payment_fee,
+  "App Store",          "Apps",             0.30,             0.00,              0.00,
+  "App Store",          "Apps (< $1M)",     0.15,             0.00,              0.00,
+  "Play Store",         "Apps",             0.30,             0.00,              0.00,
+  "Play Store",         "Apps (< $1M)",     0.15,             0.00,              0.00,
+  "Amazon Marketplace", "FBM (self-fulfill)", 0.15,          0.00,              0.03,
+  "Amazon Marketplace", "FBA (Amazon fulfill)", 0.15,        0.20,              0.03,
+  "Food Delivery A",    "Restaurant",       0.28,             0.00,              0.02,
+  "Food Delivery B",    "Restaurant",       0.32,             0.00,              0.02
+) |>
+  mutate(
+    total_fee = base_commission + fulfillment_fee + payment_fee,
+    total_fee_pct = scales::percent(total_fee, accuracy = 0.1)
+  )
+
+# Stacked bar chart
+fees_long <- fees |>
+  pivot_longer(cols = c(base_commission, fulfillment_fee, payment_fee),
+               names_to = "fee_type", values_to = "rate") |>
+  mutate(
+    fee_type = factor(fee_type,
+                     levels = c("payment_fee", "fulfillment_fee", "base_commission"),
+                     labels = c("Payment Processing", "Fulfillment", "Base Commission"))
+  )
+
+ggplot(fees_long, aes(x = paste(platform, category, sep = "\n"),
+                      y = rate, fill = fee_type)) +
+  geom_col(width = 0.7) +
+  geom_text(data = fees,
+            aes(x = paste(platform, category, sep = "\n"),
+                y = total_fee, label = total_fee_pct, fill = NULL),
+            vjust = -0.5, size = 3.5, fontface = "bold") +
+  scale_y_continuous(labels = scales::percent_format(),
+                     expand = expansion(mult = c(0, 0.1))) +
+  scale_fill_manual(
+    values = c("Base Commission" = "#D55E00",
+               "Fulfillment" = "#0072B2",
+               "Payment Processing" = "#009E73")
+  ) +
+  labs(
+    title = "Platform Fee Structures by Category",
+    subtitle = "Total take rate shown at top of each bar",
+    x = NULL,
+    y = "Fee Rate",
+    fill = "Fee Component",
+    caption = "Data from public platform documentation (2024). FBM = Fulfilled by Merchant; FBA = Fulfilled by Amazon."
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 9),
+    legend.position = "bottom",
+    plot.title.position = "plot"
+  )
+
+# Summary table
+cat("\nFee structure summary:\n")
+fees |>
+  select(platform, category, total_fee) |>
+  mutate(total_fee = scales::percent(total_fee, accuracy = 0.1)) |>
+  print(n = Inf)
+```
+
+**Key insights:**
+- **App stores**: 30% standard (15% for small developers under $1M revenue).
+- **E-commerce marketplaces**: 15-18% base + 15-25% fulfillment (if using platform logistics).
+- **Food delivery**: 28-32% commission + 2-3% payment processing.
+- **Bundling**: Platforms often bundle services (payment, fulfillment, advertising) making switching costly.
+
+**Competitive assessment:**
+- Compare fees across platforms to evaluate competitive pressure.
+- Assess whether high fees reflect service value or market power.
+- Evaluate whether fee structures create barriers to multi-homing.
+
+### Market share evolution for digital platforms
+Track platform market share over time to identify tipping points and competitive dynamics.
+
+```{r}
+#| label: digital-market-evolution
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 7
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+
+# Market share evolution from public sources and regulatory filings
+# Illustrative data for search engines, social media, or e-commerce
+market_evolution <- tibble::tribble(
+  ~date,         ~platform,      ~share,
+  "2015-01-01",  "Platform A",   0.88,
+  "2016-01-01",  "Platform A",   0.90,
+  "2017-01-01",  "Platform A",   0.91,
+  "2018-01-01",  "Platform A",   0.92,
+  "2019-01-01",  "Platform A",   0.91,
+  "2020-01-01",  "Platform A",   0.90,
+  "2021-01-01",  "Platform A",   0.89,
+  "2022-01-01",  "Platform A",   0.88,
+  "2023-01-01",  "Platform A",   0.87,
+  "2015-01-01",  "Platform B",   0.08,
+  "2016-01-01",  "Platform B",   0.07,
+  "2017-01-01",  "Platform B",   0.06,
+  "2018-01-01",  "Platform B",   0.05,
+  "2019-01-01",  "Platform B",   0.06,
+  "2020-01-01",  "Platform B",   0.07,
+  "2021-01-01",  "Platform B",   0.08,
+  "2022-01-01",  "Platform B",   0.09,
+  "2023-01-01",  "Platform B",   0.10,
+  "2015-01-01",  "Others",       0.04,
+  "2016-01-01",  "Others",       0.03,
+  "2017-01-01",  "Others",       0.03,
+  "2018-01-01",  "Others",       0.03,
+  "2019-01-01",  "Others",       0.03,
+  "2020-01-01",  "Others",       0.03,
+  "2021-01-01",  "Others",       0.03,
+  "2022-01-01",  "Others",       0.03,
+  "2023-01-01",  "Others",       0.03
+) |>
+  mutate(date = as.Date(date))
+
+# Area chart
+ggplot(market_evolution, aes(x = date, y = share, fill = platform)) +
+  geom_area(alpha = 0.8) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
+  scale_fill_manual(
+    values = c("Platform A" = "#0072B2",
+               "Platform B" = "#009E73",
+               "Others" = "#999999")
+  ) +
+  labs(
+    title = "Digital Platform Market Share Evolution",
+    subtitle = "Example: Search engine market shares 2015-2023",
+    x = NULL,
+    y = "Market Share",
+    fill = "Platform",
+    caption = "Illustrative data. Replace with StatCounter, SimilarWeb, or regulatory filings."
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    legend.position = "bottom",
+    plot.title.position = "plot"
+  )
+
+# Summary statistics
+cat("\nMarket concentration trends:\n")
+cat(paste0("2015 HHI: ", round(sum((market_evolution$share[
+  market_evolution$date == "2015-01-01"] * 100)^2), 0), "\n"))
+cat(paste0("2023 HHI: ", round(sum((market_evolution$share[
+  market_evolution$date == "2023-01-01"] * 100)^2), 0), "\n"))
+cat(paste0("\nPlatform A share trend: ",
+          scales::percent(market_evolution$share[
+            market_evolution$date == "2015-01-01" &
+            market_evolution$platform == "Platform A"], accuracy = 0.1),
+          " (2015) → ",
+          scales::percent(market_evolution$share[
+            market_evolution$date == "2023-01-01" &
+            market_evolution$platform == "Platform A"], accuracy = 0.1),
+          " (2023)\n"))
+```
+
+**Data sources:**
+- **StatCounter**: Global browser, OS, search engine stats
+- **SimilarWeb**: Website and app traffic data
+- **Sensor Tower / App Annie**: Mobile app market intelligence
+- **Regulatory filings**: EC, CMA, FTC, DMA compliance reports
+- **OIPMI**: South African platform market shares
+
+**Use cases:**
+- Demonstrate sustained dominance or competitive entry
+- Identify tipping points or competitive interventions
+- Support market definition and dominance assessments
+
+## Looking ahead
+Store all digital platform analyses in `data/derived/digital/` with clear provenance notes. When DMA compliance data become available, replace synthetic Sankey flows and choice-screen impacts with actual telemetry. Document API access restrictions and data-sharing agreements in `data/README.md`. Cross-reference these visualizations with Chapter 12 (litigation practice) for expert report templates and Chapter 13 (empirical appendix) for diagnostic checklists.

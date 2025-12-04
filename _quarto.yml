@@ -4,7 +4,7 @@ project:
 
 book:
   title: "Antitrust Methods: Research and Practice"
-  author: "Laurence W."
+  author: "Laurence Wilse-Samson"
   chapters:
     - index.qmd
     - chapters/00-preface.qmd
@@ -33,7 +33,18 @@ format:
     documentclass: book
     toc: true
     number-sections: true
-    pdf-engine: pdflatex
+    pdf-engine: xelatex
+    classoption: openany
+    include-in-header:
+      text: |
+        \usepackage{fancyhdr}
+        \usepackage{fvextra}
+        \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+        \pagestyle{fancy}
+        \fancyhf{}
+        \fancyhead[LE]{\thepage\quad\small\nouppercase{\leftmark}}
+        \fancyhead[RO]{\small\nouppercase{\rightmark}\quad\thepage}
+        \renewcommand{\headrulewidth}{0.4pt}
 
 execute:
   freeze: auto

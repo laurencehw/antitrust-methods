@@ -3,15 +3,19 @@ title: "Innovation, Intellectual Property, and Antitrust"
 ---
 
 ## Learning goals
-- Assess innovation incentives in antitrust matters involving IP, SEPs/FRAND, and patent pools.
-- Evaluate pay-for-delay, reverse payments, and dynamic competition concerns.
-- Combine patent data, R&D metrics, and qualitative technical evidence.
+Innovation cases require translating R&D pipelines, patent portfolios, and technical standards into competition narratives. This chapter shows how to:
+
+- Evaluate SEPs/FRAND licensing, patent pools, and interoperability disputes.
+- Analyze pay-for-delay/reverse-payment settlements and innovation-reducing mergers.
+- Combine patent data (counts, citations, claim breadth), R&D metrics, and technical evidence (roadmaps, standards submissions).
+- Integrate qualitative expert testimony with econometric and event-study evidence.
 
 ## Core topics
 - SEPs/FRAND licensing economics; hold-up vs. hold-out.
 - Pay-for-delay: economic characterization, entry timing, consumer harm.
 - Innovation measures: patent counts/citations, R&D spend, pipeline probability.
 - Interoperability and standards; access to APIs and data.
+- Remedy design: FRAND commitments, compulsory licensing, data/technology access, behavioral constraints on reverse payments.
 
 ::: {.callout-note title="Method box"}
 - Event studies on patent pool or settlement announcements.
@@ -30,3 +34,600 @@ title: "Innovation, Intellectual Property, and Antitrust"
 - For pay-for-delay, reference US Supreme Court (Actavis) and EU pay-for-delay decisions.
 - Include patent data sources (USPTO, EPO, JPO, CNIPA) and note differences in treatment of injunctions and remedies across jurisdictions.
 :::
+
+## SEPs, FRAND, and standard setting
+
+### Market power and hold-up vs. hold-out
+Standard-essential patents (SEPs) can confer significant bargaining leverage once a standard is adopted. Distinguish:
+
+- **Hold-up:** SEP holder extracts supra-FRAND royalties by threatening injunctions after firms are locked into the standard [@lemley_shapiro_2007].  
+- **Hold-out:** Implementers delay or underpay royalties despite benefiting from the standard.
+
+For economic analysis of patent holdup and royalty stacking, see @shapiro_2001 and @farrell_hayes_shapiro_sullivan_2007.
+
+Evidence sources:
+
+- Standards body submissions (ETSI, IEEE, 3GPP) and FRAND commitments.  
+- Essentiality assessments (self-declared vs. independent).  
+- Licensing histories, audit trails, and comparable agreements.
+
+### Royalty stack analysis
+```{r}
+#| label: innovation-royalty-stack
+#| message: false
+#| warning: false
+library(dplyr)
+library(ggplot2)
+
+stack <- tibble::tribble(
+  ~component, ~royalty_percent,
+  "Baseband", 1.5,
+  "Display", 0.8,
+  "Camera", 0.5,
+  "OS/API", 0.7,
+  "Other SEPs", 1.0
+)
+
+ggplot(stack, aes(x = "", y = royalty_percent, fill = component)) +
+  geom_col(width = 0.5) +
+  coord_polar("y") +
+  labs(
+    title = "Illustrative royalty stack",
+    subtitle = "Replace with FRAND negotiation data when available",
+    y = "Royalty (% of device price)",
+    x = NULL,
+    fill = NULL
+  ) +
+  theme_void()
+```
+Replace the illustrative stack with licensing data (often produced during litigation) or sanitized aggregates from public FRAND rate determinations. Cite FRAND rate determinations (e.g., UK Unwired Planet, Optis) for benchmarking, which are available through court records.
+
+### Event study for injunction announcements
+```{r}
+#| label: innovation-frand-event
+#| message: false
+#| warning: false
+#| eval: false
+library(tidyquant)
+library(dplyr)
+library(ggplot2)
+
+# Use tidyquant to pull SEP-holder and implementer stocks; measure CAR around injunction or settlement announcements
+# event_date <- as.Date("2021-08-27")
+# tickers <- c("QCOM","AAPL","SSNLF","SPY")
+# prices <- tq_get(tickers, from = event_date - 120, to = event_date + 60) |> ...
+```
+Use `tidyquant` with actual ticker lists; cite the docket (e.g., “Optis v. Apple FRAND decision”) in the narrative.
+
+## Pay-for-delay and reverse payments
+
+### Entry timing and hazard models
+Reverse-payment settlements can delay generic entry and harm consumers [@us_actavis_2013]. Analyze:
+
+- **Payment size:** Compare settlement payment to expected litigation costs and projected profits [@edlin_hemphill_2012].  
+- **Entry timing:** Use survival models or diff-in-diff to estimate delay relative to counterfactuals.  
+- **Price effects:** Simulate price paths with and without generic entry [@scott_morton_2000; @hemphill_sampat_2012].
+
+```{r}
+#| label: innovation-pay-delay
+#| message: false
+#| warning: false
+library(survival)
+
+# synthetic example
+data <- tibble::tribble(
+  ~drug, ~entry_year, ~settlement, ~status,
+  "DrugA", 2020, 1, 1,
+  "DrugB", 2018, 0, 1,
+  "DrugC", 2022, 1, 0
+)
+
+# survival::survfit(Surv(entry_year, status) ~ settlement, data = data)
+```
+Replace with real pay-for-delay cases (Actavis-style) or EU decisions (Servier, Lundbeck). Use FDA Orange Book, EMA data, or South African SAMRC filings for entry timelines.
+
+### Diff-in-diff for price effects
+```{r}
+#| label: innovation-pay-delay-did
+#| message: false
+#| warning: false
+library(fixest)
+
+# panel columns: market, year, treated (1 if affected by settlement), price_index
+# did_model <- feols(price_index ~ treated | market + year, data = panel)
+# summary(did_model)
+```
+Data sources: IQVIA (if available), CMS reimbursement data, Stats SA medicine price data, or public price registries.
+
+## Innovation effects of mergers or conduct
+
+- **Patent/R&D panels:** Compile patent counts (PatentsView, EPO PATSTAT), citation-weighted measures, and R&D spending to evaluate innovation incentives pre/post merger or remedy.  
+- **Pipeline probability models:** For pharmaceuticals, use clinical trial progression rates.  
+- **Product roadmaps:** Qualitative review of technical plans to confirm or rebut innovation harm narratives.
+
+### Panel FE scaffold
+```{r}
+#| label: innovation-rd-panel
+#| message: false
+#| warning: false
+library(fixest)
+
+# panel columns: firm, year, rd_spend, merger_dummy, controls
+# rd_model <- feols(log(rd_spend) ~ merger_dummy + controls | firm + year, data = panel)
+# summary(rd_model)
+```
+
+## Interoperability and data access
+
+Analyze API access restrictions, data sharing, and interoperability constraints:
+
+- **API logs:** Compare response times, rate limits, and feature parity between internal and external developers.  
+- **Data portability metrics:** Evaluate export completeness, frequency, and latency.  
+- **Technical documentation:** PRDs and engineering tickets often show intent to foreclose or degrade rivals.
+
+## Southern African innovation/IP examples
+- **Telkom vs. Internet Solutions (broadband IP).** Access to APIs and OSS/BSS systems under FRAND-like commitments; margin squeeze tests combined with technical audits.  
+- **Vodacom Zero-Rating commitments (data services inquiry).** Interoperability obligations for educational content, showing how innovation incentives can align with public-interest remedies.  
+- **Pharma patent settlements (Competition Commission investigations into ARV markets).** Settlement analysis combining SAMRC price data, patent landscapes, and clinical trial timelines to assess delay and innovation impact.
+
+## Enhanced Visualizations
+
+### Enhanced royalty stack waterfall
+A more detailed royalty stack showing how cumulative royalties build up across different technology components. This helps demonstrate potential royalty stack concerns in FRAND disputes.
+
+```{r}
+#| label: innovation-royalty-waterfall
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 7
+library(dplyr)
+library(ggplot2)
+
+# Royalty components for a smartphone
+# Replace with actual FRAND rate determinations or licensing data
+royalty_components <- tibble::tribble(
+  ~component,          ~holder_type,    ~royalty_pct,
+  "Device price",      "Base",          100.00,
+  "Cellular (5G)",     "SEP",           -2.50,
+  "WiFi/Bluetooth",    "SEP",           -1.20,
+  "Audio codecs",      "SEP",           -0.80,
+  "Video codecs",      "SEP",           -1.50,
+  "Display tech",      "Patent pool",   -0.90,
+  "Camera tech",       "Non-SEP",       -0.60,
+  "Software/OS",       "License",       -1.80,
+  "Other SEPs",        "SEP",           -1.50,
+  "Net to manufacturer", "Result",      89.20
+) |>
+  mutate(
+    component = factor(component, levels = component),
+    cumulative = cumsum(royalty_pct),
+    start = lag(cumulative, default = 100),
+    end = cumulative,
+    type = case_when(
+      component %in% c("Device price", "Net to manufacturer") ~ "total",
+      royalty_pct < 0 ~ "royalty",
+      TRUE ~ "neutral"
+    )
+  )
+
+# Waterfall plot
+ggplot(royalty_components) +
+  geom_rect(aes(xmin = as.numeric(component) - 0.4,
+                xmax = as.numeric(component) + 0.4,
+                ymin = start, ymax = end, fill = holder_type),
+            color = "black", linewidth = 0.5) +
+  geom_text(aes(x = as.numeric(component),
+                y = (start + end) / 2,
+                label = ifelse(type == "royalty",
+                              paste0(abs(royalty_pct), "%"),
+                              paste0(royalty_pct, "%"))),
+            size = 3, fontface = "bold") +
+  geom_segment(data = filter(royalty_components, !type %in% c("total")),
+               aes(x = as.numeric(component) + 0.4,
+                   xend = as.numeric(component) + 1 - 0.4,
+                   y = end, yend = end),
+               linetype = "dashed", color = "gray50") +
+  scale_fill_manual(
+    values = c(
+      "Base" = "#0072B2",
+      "SEP" = "#D55E00",
+      "Patent pool" = "#009E73",
+      "Non-SEP" = "#F0E442",
+      "License" = "#CC79A7",
+      "Result" = "#0072B2"
+    ),
+    breaks = c("SEP", "Patent pool", "Non-SEP", "License")
+  ) +
+  scale_x_continuous(
+    breaks = seq_along(royalty_components$component),
+    labels = royalty_components$component
+  ) +
+  scale_y_continuous(labels = scales::dollar_format(suffix = "%", prefix = "")) +
+  labs(
+    title = "Royalty Stack Waterfall: Smartphone Example",
+    subtitle = "Cumulative royalty burden on device manufacturer",
+    x = NULL,
+    y = "% of Device Price",
+    fill = "Royalty Type",
+    caption = "Illustrative data. Replace with FRAND rate determinations or licensing disclosures."
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom",
+    plot.title.position = "plot"
+  )
+
+# Summary statistics
+total_royalties <- 100 - royalty_components$royalty_pct[
+  royalty_components$component == "Net to manufacturer"]
+
+cat("\nRoyalty stack summary:\n")
+cat(paste0("Total royalty burden: ", round(total_royalties, 1), "%\n"))
+cat(paste0("SEP royalties: ",
+          round(sum(abs(royalty_components$royalty_pct[
+            royalty_components$holder_type == "SEP"])), 1), "%\n"))
+cat(paste0("Net to manufacturer: ",
+          round(royalty_components$royalty_pct[
+            royalty_components$component == "Net to manufacturer"], 1), "%\n"))
+```
+
+**Key concerns:**
+- **Royalty stacking**: Multiple SEP holders each claiming a "reasonable" royalty can collectively make manufacturing unprofitable.
+- **Double marginalization**: Each layer adds its markup, raising final prices.
+- **Hold-up**: Once committed to a standard, manufacturers face switching costs that weaken bargaining position.
+
+**Benchmarking:**
+Compare against FRAND rate determinations:
+- UK Unwired Planet v. Huawei (2017)
+- UK Optis v. Apple (2023)
+- US Ericsson v. Samsung arbitration
+
+### Generic entry survival curve
+Analyze the timing of generic pharmaceutical entry, with and without reverse payment settlements. Survival analysis shows whether settlements delay entry.
+
+```{r}
+#| label: innovation-entry-survival
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 7
+library(dplyr)
+library(ggplot2)
+library(survival)
+
+# Simulated generic entry data
+# Replace with FDA Orange Book data or European/South African equivalents
+set.seed(456)
+n_drugs <- 60
+
+entry_data <- tibble(
+  drug_id = 1:n_drugs,
+  settlement = sample(c("No settlement", "Reverse payment settlement"),
+                     n_drugs, replace = TRUE, prob = c(0.6, 0.4)),
+  months_to_entry = case_when(
+    settlement == "No settlement" ~ rexp(n_drugs, rate = 1/36),
+    TRUE ~ rexp(n_drugs, rate = 1/56)  # Delayed entry with settlement
+  ),
+  entered = sample(c(1, 0), n_drugs, replace = TRUE, prob = c(0.85, 0.15))
+) |>
+  mutate(months_to_entry = pmin(months_to_entry, 120))  # Cap at 10 years
+
+# Kaplan-Meier survival curve
+surv_object <- Surv(time = entry_data$months_to_entry,
+                   event = entry_data$entered)
+surv_fit <- survfit(surv_object ~ settlement, data = entry_data)
+
+# Plot survival curve (requires survminer for ggsurvplot)
+if (!requireNamespace("survminer", quietly = TRUE)) {
+  message("Install the 'survminer' package to render the Kaplan-Meier plot.")
+} else {
+  survminer::ggsurvplot(
+    surv_fit,
+    data = entry_data,
+    palette = c("#0072B2", "#D55E00"),
+    conf.int = TRUE,
+    risk.table = TRUE,
+    risk.table.height = 0.25,
+    xlab = "Months from patent grant",
+    ylab = "Probability no generic entry",
+    title = "Generic Entry Timing: Impact of Reverse Payment Settlements",
+    subtitle = "Kaplan-Meier survival curves by settlement status",
+    legend.title = "Settlement Type",
+    legend.labs = c("No settlement", "Reverse payment settlement"),
+    ggtheme = theme_classic(base_size = 12),
+    font.main = c(14, "bold"),
+    font.subtitle = c(11, "plain"),
+    font.caption = c(9, "plain"),
+    caption = "Illustrative data. Replace with FDA Orange Book or EMA data."
+  )
+}
+
+# Log-rank test
+surv_diff <- survdiff(surv_object ~ settlement, data = entry_data)
+cat("\nLog-rank test for difference in survival curves:\n")
+cat(paste0("Chi-squared = ", round(surv_diff$chisq, 2), "\n"))
+cat(paste0("p-value = ", format.pval(1 - pchisq(surv_diff$chisq,
+                                               df = length(surv_diff$n) - 1),
+                                     digits = 3), "\n"))
+
+# Median survival times
+cat("\nMedian time to generic entry:\n")
+print(summary(surv_fit)$table[, c("median", "0.95LCL", "0.95UCL")])
+```
+
+**Interpretation:**
+- **Separation of curves**: If settlement drugs show consistently lower entry hazard, this suggests anticompetitive delay.
+- **Median delay**: Calculate months of delay attributable to settlements.
+- **Consumer harm**: Combine with price differentials (branded vs. generic) to estimate consumer losses.
+
+**Data sources:**
+- **FDA Orange Book**: [fda.gov/drugs/drug-approvals-and-databases/orange-book-data-files](https://www.fda.gov/drugs/drug-approvals-and-databases/orange-book-data-files)
+- **EMA**: European Medicines Agency public assessment reports
+- **SAHPRA**: South African Health Products Regulatory Authority
+- **FTC settlements**: Public records of reverse payment cases
+
+### Patent citation network
+Visualize how key patents cite each other to show technological relationships and potential blocking positions.
+
+```{r}
+#| label: innovation-patent-network
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 9
+#| fig-format: png
+library(dplyr)
+library(igraph)
+library(ggraph)
+
+# Simulated patent citation network
+# Replace with PatentsView or EPO PATSTAT data
+set.seed(567)
+n_patents <- 30
+
+# Create citation edges
+citations <- tibble(
+  from_patent = sample(paste0("Patent_", 1:n_patents), 50, replace = TRUE),
+  to_patent = sample(paste0("Patent_", 1:n_patents), 50, replace = TRUE)
+) |>
+  filter(from_patent != to_patent) |>
+  distinct()
+
+# Create patent metadata
+patents <- tibble(
+  patent_id = paste0("Patent_", 1:n_patents),
+  holder = sample(c("Firm A", "Firm B", "Firm C", "Firm D", "University"),
+                 n_patents, replace = TRUE, prob = c(0.3, 0.25, 0.2, 0.15, 0.1)),
+  essential = sample(c("SEP", "Non-SEP"), n_patents, replace = TRUE,
+                    prob = c(0.3, 0.7))
+)
+
+# Create network
+g <- graph_from_data_frame(citations, directed = TRUE, vertices = patents)
+
+# Calculate centrality measures
+V(g)$in_degree <- degree(g, mode = "in")
+V(g)$out_degree <- degree(g, mode = "out")
+V(g)$betweenness <- betweenness(g)
+
+# Plot network
+ggraph(g, layout = "fr") +
+  geom_edge_link(arrow = arrow(length = unit(2, 'mm'), type = "closed"),
+                 end_cap = circle(3, 'mm'),
+                 alpha = 0.3, color = "gray50") +
+  geom_node_point(aes(size = in_degree, color = holder,
+                     shape = essential), alpha = 0.8) +
+  geom_node_text(
+    aes(label = ifelse(in_degree > 3, name, "")),
+    repel = TRUE,
+    size = 2.5,
+    family = "Arial"
+  ) +
+  scale_size_continuous(range = c(3, 10)) +
+  scale_color_brewer(palette = "Set2") +
+  scale_shape_manual(values = c("SEP" = 17, "Non-SEP" = 19)) +
+  labs(
+    title = "Patent Citation Network",
+    subtitle = "Node size = citation count (in-degree); arrows show citations",
+    color = "Patent Holder",
+    shape = "Patent Type",
+    size = "Citations Received",
+    caption = "Illustrative data. Replace with PatentsView or EPO PATSTAT data."
+  ) +
+  theme_graph(base_size = 12) +
+  theme(
+    text = element_text(family = "Arial"),
+    legend.position = "bottom",
+    plot.title = element_text(size = 14, face = "bold")
+  )
+
+# Summary statistics
+cat("\nPatent network summary:\n")
+cat(paste0("Total patents: ", n_patents, "\n"))
+cat(paste0("Total citations: ", nrow(citations), "\n"))
+cat(paste0("SEP patents: ", sum(V(g)$essential == "SEP"), "\n"))
+cat("\nTop 5 most-cited patents:\n")
+patents |>
+  left_join(tibble(patent_id = V(g)$name, in_degree = V(g)$in_degree),
+           by = "patent_id") |>
+  arrange(desc(in_degree)) |>
+  select(patent_id, holder, essential, in_degree) |>
+  head(5) |>
+  print()
+```
+
+**Key insights:**
+- **Central patents**: High betweenness centrality indicates "bottleneck" patents that many others depend on.
+- **Patent thickets**: Dense clusters suggest overlapping IP that may impede innovation.
+- **Holder concentration**: If one firm controls many central patents, it may have market power.
+
+### R&D spending event study around merger
+Evaluate whether mergers affect innovation incentives by tracking R&D spending before and after the transaction.
+
+```{r}
+#| label: innovation-rd-event
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 7
+library(dplyr)
+library(ggplot2)
+library(fixest)
+
+# Simulated panel data: R&D spending around merger
+# Replace with Compustat, Orbis, or financial statement data
+set.seed(678)
+quarters <- -12:12
+firms <- c("Merged firms", "Non-merged rivals", "Industry average")
+
+rd_panel <- expand.grid(
+  quarter = quarters,
+  firm_group = firms
+) |>
+  mutate(
+    # Pre-merger: all firms follow similar trends
+    # Post-merger: merged firms reduce R&D relative to others
+    rd_index = case_when(
+      firm_group == "Merged firms" & quarter < 0 ~ 100 + 2 * quarter + rnorm(n(), 0, 3),
+      firm_group == "Merged firms" & quarter >= 0 ~ 100 + 2 * quarter - 8 + rnorm(n(), 0, 3),
+      firm_group == "Non-merged rivals" ~ 100 + 2 * quarter + rnorm(n(), 0, 3),
+      TRUE ~ 100 + 2 * quarter + rnorm(n(), 0, 2)
+    )
+  )
+
+# Time series plot
+ggplot(rd_panel, aes(x = quarter, y = rd_index,
+                    color = firm_group, linetype = firm_group)) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40",
+             linewidth = 1) +
+  stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
+  annotate("text", x = 0, y = max(rd_panel$rd_index) * 0.95,
+          label = "Merger\ncompletes", hjust = -0.1, size = 3.5,
+          fontface = "italic") +
+  scale_color_manual(values = c("Merged firms" = "#D55E00",
+                                 "Non-merged rivals" = "#0072B2",
+                                 "Industry average" = "#999999")) +
+  scale_linetype_manual(values = c("Merged firms" = "solid",
+                                   "Non-merged rivals" = "solid",
+                                   "Industry average" = "dashed")) +
+  labs(
+    title = "R&D Spending Around Merger Event",
+    subtitle = "Indexed to 100 at merger announcement (quarter 0)",
+    x = "Quarters relative to merger completion",
+    y = "R&D Spending Index",
+    color = NULL,
+    linetype = NULL,
+    caption = "Illustrative data. Replace with Compustat or company financial statements."
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    legend.position = "bottom",
+    plot.title.position = "plot"
+  )
+
+# Diff-in-diff estimate
+rd_panel_did <- rd_panel |>
+  mutate(
+    post = ifelse(quarter >= 0, 1, 0),
+    treated = ifelse(firm_group == "Merged firms", 1, 0)
+  )
+
+did_model <- feols(rd_index ~ treated:post | firm_group + quarter,
+                  data = rd_panel_did)
+
+cat("\nDifference-in-differences estimate:\n")
+summary(did_model)
+```
+
+**Interpretation:**
+- **Pre-trends**: Parallel trends before merger support DiD identification.
+- **Treatment effect**: Negative coefficient suggests merger reduced R&D.
+- **Innovation harm**: Combine with patent output, clinical trials, or product launches to assess real-world impact.
+
+**Alternative specifications:**
+- Event study with leads/lags
+- Synthetic control for single-firm mergers
+- Stacked DiD for multiple mergers
+
+### Clinical trial pipeline visualization (pharmaceuticals)
+Track clinical trial progress for pharmaceutical innovation assessments.
+
+```{r}
+#| label: innovation-clinical-pipeline
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 7
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+
+# Simulated clinical trial pipeline
+# Replace with clinicaltrials.gov data or EMA/SAHPRA records
+pipeline <- tibble::tribble(
+  ~phase,       ~firm_a, ~firm_b, ~firm_c,
+  "Preclinical", 45,      38,      52,
+  "Phase I",     28,      22,      31,
+  "Phase II",    15,      12,      18,
+  "Phase III",   6,       5,       8,
+  "Approved",    3,       2,       4
+) |>
+  mutate(phase = factor(phase, levels = phase)) |>
+  pivot_longer(cols = -phase, names_to = "firm", values_to = "count")
+
+# Funnel chart
+ggplot(pipeline, aes(x = phase, y = count, fill = firm, group = firm)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.7) +
+  geom_text(aes(label = count), position = position_dodge(width = 0.8),
+           vjust = -0.5, size = 3.5) +
+  scale_fill_manual(values = c("firm_a" = "#0072B2",
+                                "firm_b" = "#009E73",
+                                "firm_c" = "#D55E00")) +
+  labs(
+    title = "Clinical Trial Pipeline Comparison",
+    subtitle = "Number of compounds by development stage",
+    x = "Development Stage",
+    y = "Number of Compounds",
+    fill = "Company",
+    caption = "Illustrative data. Replace with clinicaltrials.gov or regulatory filings."
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    legend.position = "bottom",
+    plot.title.position = "plot"
+  )
+
+# Success rates
+pipeline_wide <- pipeline |>
+  pivot_wider(names_from = phase, values_from = count)
+
+cat("\nPipeline success rates (illustrative):\n")
+cat("Phase I to Phase II: ~50-60%\n")
+cat("Phase II to Phase III: ~30-40%\n")
+cat("Phase III to Approval: ~60-70%\n")
+cat("\nUse these rates to model expected future approvals and consumer harm from delays.\n")
+```
+
+**Applications:**
+- **Merger review**: Compare pipeline depth before/after transaction.
+- **Pay-for-delay**: Estimate lost innovation from delayed generic competition.
+- **Market foreclosure**: Show whether conduct reduces rivals' pipeline.
+
+**Data sources:**
+- **ClinicalTrials.gov**: US clinical trial registry
+- **EU Clinical Trials Register**: European trials
+- **WHO ICTRP**: International registry
+- **Company pipelines**: Annual reports and R&D presentations
+
+## Visualizations and data sourcing
+- **Royalty stack (Roadmap 11.1):** Use licensing disclosures from litigation or FRAND rate decisions. If unavailable, maintain illustrative stack in `data/examples/royalty_stack.csv`.
+- **Entry timing survival curves (Roadmap 11.2):** [FDA Orange Book](https://www.fda.gov/drugs/drug-approvals-and-databases/orange-book-data-files), EMA, SAHPRA, or competition-inquiry appendices.
+- **FRAND injunction event plots (Roadmap 11.3):** `tidyquant` stock data; ensure tickers are mapped to key SEP holders and implementers.
+- **Patent pipeline ridge plot:** Pull [PatentsView](https://patentsview.org/) or [EPO PATSTAT](https://www.epo.org/searching-for-patents/business/patstat.html) data; store sanitized extracts and scripts in `data/derived/innovation/`.
+
+Document data provenance and confidentiality in `data/README.md`, noting which visuals can ship publicly and which require synthetic placeholders until case data is approved for release.
+
+## Looking ahead
+Archive all innovation analyses in `data/derived/innovation/` with clear metadata. When PatentsView bulk downloads or FDA Orange Book data become available, replace synthetic patent networks and entry curves with actual data. Cross-reference R&D event studies with Chapter 06 (mergers) and Chapter 08 (remedies) for remedy design templates. Document technical expert declarations and standards body submissions in case chronologies for litigation support.
