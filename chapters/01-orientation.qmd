@@ -1,6 +1,4 @@
----
-title: "Orientation: Antitrust and Regulation"
----
+# Orientation: Antitrust and Regulation
 
 ## Learning goals
 This opening chapter orients you to the institutional settings where economists, researchers, and lawyers work side by side. By the end you should be able to articulate how competition authorities define their objectives, how they translate statutes or guidelines into investigative hypotheses, and how evidentiary burdens shift between agencies and courts. You will also learn how to map economic questions—market definition, market power, theory of harm, efficiencies, and remedy selection—onto the specific legal elements regulators must prove or rebut.
@@ -105,11 +103,13 @@ Track concentration trends using FRED data as a baseline for cross-jurisdictiona
 #| message: false
 #| warning: false
 #| echo: false
-#| fig-width: 10
+#| fig-cap: "US Bank Concentration (HHI)"
+#| fig-width: 8
 #| fig-height: 5
 library(fredr)
 library(dplyr)
 library(ggplot2)
+source("../R/helpers.R")
 fredr_set_key(Sys.getenv("FRED_API_KEY"))
 
 hhi <- fredr(series_id = "HHMSDODNS", observation_start = as.Date("2000-01-01"))
@@ -118,8 +118,11 @@ hhi <- fredr(series_id = "HHMSDODNS", observation_start = as.Date("2000-01-01"))
 # hhi <- bind_rows(hhi, local_hhi)
 ggplot(hhi, aes(date, value)) +
   geom_line(color = "#0072B2", linewidth = 1) +
-  labs(title = "US Bank Concentration (HHI)", 
-       x = NULL, y = "HHI",
-       caption = "Source: FRED series HHMSDODNS") +
-  theme_classic(base_size = 12)
+  labs(
+    title = "US Bank Concentration (HHI)",
+    subtitle = "FRED series HHMSDODNS",
+    x = NULL,
+    y = "HHI Index"
+  ) +
+  theme_antitrust()
 ```

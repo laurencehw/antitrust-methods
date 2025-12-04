@@ -2,14 +2,79 @@
 
 library(ggplot2)
 
-theme_antitrust <- function() {
-  theme_minimal(base_size = 12) +
+#' Antitrust book theme with PDF-friendly settings
+#' 
+#' Larger text sizes and cleaner legend positioning for readable PDF output.
+#' Use with ggplot2: + theme_antitrust()
+theme_antitrust <- function(base_size = 14) {
+  theme_minimal(base_size = base_size) +
     theme(
+      # Title and text sizing for PDF clarity
+      plot.title = element_text(size = rel(1.2), face = "bold", margin = margin(b = 10)),
+      plot.subtitle = element_text(size = rel(0.9), color = "gray40", margin = margin(b = 15)),
       plot.title.position = "plot",
+      plot.caption = element_text(size = rel(0.7), color = "gray50", hjust = 0),
+      
+      # Axis text larger for PDF legibility
+      axis.title = element_text(size = rel(0.9), face = "bold"),
+      axis.text = element_text(size = rel(0.85)),
+      axis.title.y = element_text(margin = margin(r = 10)),
+      axis.title.x = element_text(margin = margin(t = 10)),
+      
+      # Legend: bottom placement prevents overlap with plot area
+      legend.position = "bottom",
+      legend.box = "horizontal",
+      legend.title = element_text(size = rel(0.85), face = "bold"),
+      legend.text = element_text(size = rel(0.8)),
+      legend.key.size = unit(0.8, "lines"),
+      legend.margin = margin(t = 10),
+      legend.spacing.x = unit(0.5, "cm"),
+      
+      # Clean grid
       panel.grid.minor = element_blank(),
-      panel.grid.major.x = element_line(color = "#e9e9e9"),
-      panel.grid.major.y = element_line(color = "#e9e9e9")
+      panel.grid.major.x = element_line(color = "#e0e0e0", linewidth = 0.3),
+      panel.grid.major.y = element_line(color = "#e0e0e0", linewidth = 0.3),
+      
+      # Add some padding
+      plot.margin = margin(15, 15, 15, 15)
     )
+}
+
+#' Simplified theme variant for busy plots
+#' 
+#' More minimal styling when plots have many elements
+theme_antitrust_minimal <- function(base_size = 14) {
+  theme_antitrust(base_size) +
+    theme(
+      panel.grid.major.x = element_blank(),
+      legend.position = "bottom",
+      legend.direction = "horizontal"
+    )
+}
+
+#' Color palette for antitrust figures
+#' 
+#' Colorblind-friendly palette with good contrast for PDF
+antitrust_colors <- c(
+
+  "blue"   = "#0072B2",
+  "orange" = "#E69F00",
+  "green"  = "#009E73",
+  "red"    = "#D55E00",
+  "purple" = "#CC79A7",
+  "cyan"   = "#56B4E9",
+  "gray"   = "#999999"
+)
+
+#' Scale for discrete colors
+scale_color_antitrust <- function(...) {
+
+  scale_color_manual(values = unname(antitrust_colors), ...)
+}
+
+#' Scale for fills
+scale_fill_antitrust <- function(...) {
+  scale_fill_manual(values = unname(antitrust_colors), ...)
 }
 
 # Quick FRED pull with caching to data/raw.

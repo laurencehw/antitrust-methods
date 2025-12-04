@@ -1,6 +1,4 @@
----
-title: "Industrial Organization Toolkit"
----
+# Industrial Organization Toolkit
 
 ## Learning goals
 This chapter bridges descriptive evidence and full-blown merger simulations. You will learn when to deploy lightweight demand or supply models, how to explain their assumptions to agencies and courts, and how to integrate qualitative evidence (contracts, governance documents, interviews) so the results feel grounded.

@@ -1,6 +1,4 @@
----
-title: "Regulation and Remedies"
----
+# Regulation and Remedies
 
 ## Learning goals
 Antitrust analysis often ends with a liability finding, but policy work begins there. This chapter explains how to translate theories of harm into durable remedies and how to design regulatory frameworks when competition alone cannot discipline pricing or access. You will learn to:

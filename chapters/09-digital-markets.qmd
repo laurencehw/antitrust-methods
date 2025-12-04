@@ -1,6 +1,4 @@
----
-title: "Digital Markets and Platforms"
----
+# Digital Markets and Platforms
 
 ## Learning goals
 Digital markets combine traditional IO concepts with product design, governance, and behavioral nudges. Drawing on DMA/Digital Markets Unit briefings and recent enforcement actions, this chapter helps you:

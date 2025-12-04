@@ -1,6 +1,4 @@
----
-title: "Empirical Appendix and Templates"
----
+# Empirical Appendix and Templates {.unnumbered}
 
 ## Purpose
 This appendix is the shared workspace for reusable diagnostics, qualitative protocols, and data inventories referenced throughout the book. Treat it as the "operations manual" for the course: every code chunk or template lives here so you can drop it into chapter-specific notebooks, expert reports, or litigation memos without rewriting boilerplate.

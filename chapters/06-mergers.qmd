@@ -1,6 +1,4 @@
----
-title: "Mergers"
----
+# Mergers
 
 ## Learning goals
 Merger reviews synthesize everything covered so far: market definition, IO modeling, qualitative evidence, and remedies. This chapter provides a practical workflow for assessing unilateral, coordinated, vertical, and public-interest effects across US, EU/UK, and South African jurisdictions, drawing on agency guidance [@doj_ftc_hmg_2023; @ec_hmg_2004; @cma_merger_assessment_2021].

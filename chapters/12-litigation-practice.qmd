@@ -1,6 +1,4 @@
----
-title: "Litigation Practice: Evidence and Expert Work"
----
+# Litigation Practice: Evidence and Expert Work
 
 ## Learning goals
 This chapter translates all prior analytics into courtroom-ready workflows. Drawing on agency guidance (US DOJ/FTC, EC best practices) and established expert practice standards, we focus on:

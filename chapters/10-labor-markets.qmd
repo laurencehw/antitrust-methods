@@ -1,6 +1,4 @@
----
-title: "Antitrust and Labor Markets"
----
+# Antitrust and Labor Markets
 
 ## Learning goals
 Labor cases now sit alongside mergers and cartels in agency priorities. This chapter blends empirical tools from recent academic research on labor market power with practical guidance on using BLS and Census data. You will learn to:

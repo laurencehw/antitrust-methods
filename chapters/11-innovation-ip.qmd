@@ -1,6 +1,4 @@
----
-title: "Innovation, Intellectual Property, and Antitrust"
----
+# Innovation, Intellectual Property, and Antitrust
 
 ## Learning goals
 Innovation cases require translating R&D pipelines, patent portfolios, and technical standards into competition narratives. This chapter shows how to:

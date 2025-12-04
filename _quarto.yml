@@ -29,12 +29,21 @@ format:
     theme: cosmo
     toc: true
     number-sections: true
+    code-overflow: scroll
   pdf:
     documentclass: book
     toc: true
     number-sections: true
     pdf-engine: xelatex
     classoption: openany
+    code-overflow: wrap
+    code-block-bg: "#f8f8f8"
+    code-block-border-left: "#31BAE9"
+    geometry:
+      - top=1in
+      - bottom=1in
+      - left=1.25in
+      - right=1.25in
     include-in-header:
       text: |
         \usepackage{fancyhdr}
@@ -45,9 +54,27 @@ format:
         \fancyhead[LE]{\thepage\quad\small\nouppercase{\leftmark}}
         \fancyhead[RO]{\small\nouppercase{\rightmark}\quad\thepage}
         \renewcommand{\headrulewidth}{0.4pt}
+    fig-width: 6
+    fig-height: 4
+    fig-dpi: 150
 
 execute:
   freeze: auto
   warning: false
   # Run code from project root so shared helpers are found
   execute-dir: project
+
+# Knitr options for code output formatting
+knitr:
+  opts_chunk:
+    # Wrap long lines in code output
+    tidy: true
+    tidy.opts:
+      width.cutoff: 60
+    # Keep output readable
+    R.options:
+      width: 70
+    # Default figure settings
+    fig.align: "center"
+    out.width: "90%"
+    comment: "#>"

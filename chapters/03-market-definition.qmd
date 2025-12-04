@@ -1,6 +1,4 @@
----
-title: "Market Definition and Competitive Landscape"
----
+# Market Definition and Competitive Landscape
 
 ## Learning goals
 Market definition is no longer a rote SSNIP ritual, but agencies and courts still expect a disciplined articulation of product and geographic boundaries before debating competitive effects. This chapter shows you how to frame those boundaries with data and qualitative evidence, evaluate SSNIP/SSNDQ logic, and communicate results across DOJ/FTC, DG COMP, CMA, SAMR, and Competition Tribunal South Africa processes.
