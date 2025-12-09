@@ -170,11 +170,12 @@ Document each dataset in `data/README.md` with provenance, confidentiality notes
 Multi-homing patterns reveal competitive constraints and switching costs. A Sankey diagram shows how users flow across platforms, helping visualize whether platforms compete head-to-head or serve distinct niches.
 
 ```{r}
-#| label: digital-multihoming-sankey
+#| label: digital-multihoming-plot
 #| message: false
 #| warning: false
-#| fig-width: 12
-#| fig-height: 8
+#| echo: false
+#| fig-width: 10
+#| fig-height: 6
 library(dplyr)
 library(ggplot2)
 library(ggalluvial)
@@ -253,25 +254,27 @@ cat(paste0("Multi-homing (2+ platforms): ",
 ```
 
 **Interpretation:**
-- **High single-homing**: Suggests strong lock-in, switching costs, or network effects. Platforms may have market power.
-- **High multi-homing**: Indicates competitive pressure; users actively compare options. But check if multi-homing is symmetric or if one platform dominates usage.
-- **Asymmetric patterns**: If Platform A appears in most combinations, it may be a "must-have" platform with gatekeeping power.
+-   **High single-homing**: Suggests strong lock-in, switching costs, or network effects. Platforms may have market power.
+-   **High multi-homing**: Indicates competitive pressure; users actively compare options. But check if multi-homing is symmetric or if one platform dominates usage.
+-   **Asymmetric patterns**: If Platform A appears in most combinations, it may be a "must-have" platform with gatekeeping power.
 
 **Data sources:**
-- OIPMI survey microdata (South Africa)
-- DMA compliance reports (EU)
-- CMA market studies (UK)
-- Platform-provided telemetry (subject to confidentiality)
+-   OIPMI survey microdata (South Africa)
+-   DMA compliance reports (EU)
+-   CMA market studies (UK)
+-   Platform-provided telemetry (subject to confidentiality)
 
 ### Choice screen / default effect visualization
 Quantify how defaults affect market shares using difference-in-differences or event studies around choice screen implementations.
 
 ```{r}
-#| label: digital-default-impact
+#| label: digital-default-plot
 #| message: false
 #| warning: false
-#| fig-width: 11
-#| fig-height: 7
+#| echo: false
+#| fig-width: 10
+#| fig-height: 5
+library(fixest)
 library(dplyr)
 library(ggplot2)
 library(patchwork)
@@ -365,13 +368,11 @@ post_treatment <- mean(default_data$rival_share[
 effect <- post_treatment - pre_treatment
 
 cat("\nChoice screen impact summary:\n")
-cat(paste0("Pre-intervention rival share: ",
-          scales::percent(pre_treatment, accuracy = 0.1), "\n"))
-cat(paste0("Post-intervention rival share: ",
-          scales::percent(post_treatment, accuracy = 0.1), "\n"))
-cat(paste0("Estimated treatment effect: ",
-          scales::percent(effect, accuracy = 0.1),
-          " (", round(effect / pre_treatment * 100, 0), "% increase)\n"))
+tibble::tibble(
+  metric = c("Pre-treatment share", "Post-treatment share", "Treatment Effect"),
+  value = c(pre_treatment, post_treatment, effect)
+) |>
+  knitr::kable(digits = 3, caption = "Impact of Choice Screen")
 ```
 
 **How to use this analysis:**

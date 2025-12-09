@@ -125,11 +125,12 @@ Combine vacancy data (Indeed, Burning Glass, Pnet) with payroll data to evaluate
 A geographic visualization of labor market concentration helps identify regions and occupations with potential monopsony concerns. This example uses synthetic data but can be adapted for BLS QCEW, Census LEHD, or Stats SA QLFS data.
 
 ```{r}
-#| label: labor-hhi-choropleth
+#| label: labor-hhi-static-map
 #| message: false
 #| warning: false
-#| fig-width: 12
-#| fig-height: 8
+#| echo: false
+#| fig-width: 10
+#| fig-height: 6
 library(dplyr)
 library(ggplot2)
 library(maps)
@@ -313,7 +314,7 @@ labor_occ |>
     .groups = "drop"
   ) |>
   arrange(desc(avg_hhi)) |>
-  print(n = Inf)
+  knitr::kable(digits = 0, caption = "Occupations with Highest Concentration")
 ```
 
 **Key insights:**

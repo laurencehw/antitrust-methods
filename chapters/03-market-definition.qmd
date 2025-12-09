@@ -34,10 +34,14 @@ Use these specific diagnostics to anchor your analysis:
 - **Switching matrices, flows, and gravity models.** Summarize customer-level churn or shipment adjacency to motivate geographic splits.
 
 ### Critical-loss worksheet
+We can calculate critical loss thresholds for various hypothetical segments (e.g., Commercial, Government, SMB) to test if a price increase would be profitable.
 ```{r}
 #| label: critical-loss-table
+#| echo: false
 #| message: false
 #| warning: false
+#| fig-width: 8
+#| fig-height: 5
 library(dplyr)
 library(ggplot2)
 
@@ -51,7 +55,7 @@ cl_threshold <- critical_loss(margin, price_increase)
 
 observed <- tibble::tribble(
   ~segment, ~observed_share_loss,
-  "Commercial group", 0.08,
+  "Commercial group", 0.08, # Hypothetical segments
   "Government", 0.03,
   "SMB", 0.12
 ) |>
@@ -60,7 +64,7 @@ observed <- tibble::tribble(
     passes_test = observed_share_loss > critical_loss
   )
 
-observed
+knitr::kable(observed, caption="Illustrative Critical Loss by Customer Segment")
 ```
 
 ### Critical-loss vs. actual-loss curve
@@ -138,7 +142,7 @@ cl_table <- tibble::tribble(
 p1
 
 cat("\nCritical loss decision table:\n")
-print(cl_table, n = Inf)
+knitr::kable(cl_table, digits=3, caption="Critical Loss Decision Table")
 ```
 
 **How to use this chart:** For a given margin estimate (horizontal axis), find the critical loss threshold (the curve). If your observed or estimated actual loss (from switching data, surveys, or diversion ratios) falls *above* the curve, customers switch too readily for a hypothetical monopolist to profitably raise prices by 5-10%, suggesting the candidate market is too narrow and should be expanded. Conversely, if actual loss is *below* the curve, the market definition may be defensible.
@@ -153,8 +157,8 @@ This heatmap visualizes carrier concentration on specific routes, helping identi
 #| message: false
 #| warning: false
 #| cache: true
-#| fig-width: 10
-#| fig-height: 8
+#| fig-width: 9
+#| fig-height: 7
 library(nycflights13)
 library(dplyr)
 library(tidyr)
@@ -182,11 +186,11 @@ route_hhi <- route_shares |>
   ) |>
   arrange(desc(hhi))
 
-# Select top 30 routes by volume for visualization clarity
+# Select top 20 routes by volume for visualization clarity
 top_routes <- route_shares |>
   group_by(route) |>
   summarize(total = sum(flights)) |>
-  slice_max(total, n = 30) |>
+  slice_max(total, n = 20) |>
   pull(route)
 
 # Filter to top routes and add HHI
@@ -216,7 +220,7 @@ p_heatmap <- ggplot(route_shares_top, aes(x = carrier, y = route_labeled, fill =
   ) +
   labs(
     title = "Airline Route Concentration: NYC Area (2013)",
-    subtitle = "Top 30 routes by volume. HHI values indicate market concentration (>2,500 = highly concentrated)",
+    subtitle = "Top 20 routes by volume. HHI values indicate market concentration (>2,500 = highly concentrated)",
     x = "Carrier",
     y = "Route (Origin-Destination) [HHI]",
     fill = "Market\nShare",
@@ -246,7 +250,8 @@ route_hhi |>
     )
   ) |>
   select(route, hhi, n_carriers, total_flights, concentration) |>
-  print(n = Inf)
+  head(10) |>
+  knitr::kable(caption = "Top Route Concentration Stats")
 ```
 
 **Interpretation:** Routes with HHI > 2,500 (US DOJ/FTC threshold for "highly concentrated") may warrant closer scrutiny. The visualization shows that many NYC routes are served by only 1-2 carriers with dominant shares, which could support narrow route-level market definitions in merger analysis. In practice, you would supplement this with pricing data, switching patterns, and qualitative evidence about entry barriers.
@@ -338,7 +343,7 @@ cat("\nRegional self-sufficiency (intra-regional shipments as % of total):\n")
 self_sufficiency |>
   mutate(self_sufficiency = scales::percent(self_sufficiency, accuracy = 1)) |>
   arrange(desc(self_sufficiency)) |>
-  print(n = Inf)
+  knitr::kable(self_sufficiency, digits=2, caption="Regional Self-Sufficiency Scores")
 ```
 
 **How to use this analysis:**

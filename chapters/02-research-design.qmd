@@ -27,7 +27,7 @@ This approach prioritizes:
 2.  **Transparency:** Presenting raw data visuals (like the event study plots below) before showing regression tables.
 3.  **Falsification:** Rigorously testing "placebos" (e.g., testing for effects before the merger happened, showing no effects in a time period where the treatment is not expected to have an effect) to prove the design is valid.
 
-### Core Methods ("The Mixtape")
+### Core Causal Toolkit
 While the toolkit is vast, antitrust practitioners lean heavily on a few workhorses:
 -   **Difference-in-Differences (DiD):** The gold standard for retrospective merger analysis.
 -   **Synthetic Control:** Crucial for "N=1" cases (e.g., a single national merger) where no single control unit exists.
@@ -40,9 +40,12 @@ A critical development in recent years is the realization that the standard Two-
 Modern estimators like Callaway & Sant'Anna or Sun & Abraham (implemented in R packages `did` and `fixest`) explicitly handle this heterogeneity. In litigation, relying on "old" TWFE without robustness checks is now a vulnerability.
 
 ::: {.callout-tip title="Getting Up to Speed"}
-For a practical guide to these methods, we rely on **"Causal Inference: The Mixtape"** (Cunningham, 2021). It bridges the gap between textbook theory and coding reality.
--   **Start here:** [mixtape.scunning.com](https://mixtape.scunning.com/) (Chapters on DAGs and DiD).
--   **Context:** To understand how these methods displaced earlier approaches, see Angrist & Pischke (2010), "The Credibility Revolution in Empirical Economics" ([AEA link](https://www.aeaweb.org/articles?id=10.1257/jep.24.2.3)).
+For a practical guide to these methods, we recommend three complementary resources:
+1.  **"Causal Inference: The Mixtape"** [@cunningham_2021]: Excellent for intuition and history. [mixtape.scunning.com](https://mixtape.scunning.com/)
+2.  **"The Effect"** [@huntington_klein_2021]: A highly accessible introduction to design-based thinking. [theeffectbook.net](https://theeffectbook.net/)
+3.  **"Causal Inference for the Brave and True"** [@alves_2022]: Covers intermediate topics including machine-learning approaches to interference. [matheusfacure.github.io/python-causality-handbook](https://matheusfacure.github.io/python-causality-handbook/)
+
+For the academic foundations, see Angrist & Pischke (2010), "The Credibility Revolution in Empirical Economics" ([AEA link](https://www.aeaweb.org/articles?id=10.1257/jep.24.2.3)).
 :::
 
 ::: {.callout-note title="Method box: Causal tools"}
@@ -73,7 +76,10 @@ This figure uses publicly available equity data to demonstrate how to structure 
 #| label: research-design-merger-event
 #| message: false
 #| warning: false
+#| echo: false
 #| cache: true
+#| fig-width: 9
+#| fig-height: 5
 library(tidyquant)
 library(dplyr)
 library(ggplot2)
@@ -126,10 +132,10 @@ Document every decision from scoping memo to estimation so later chapters can la
 
 ## Code box: diff-in-diff scaffold
 ```{r}
-#| label: did-scaffold
-#| message: false
-#| warning: false
-library(fixest)
+#| label: did-code-example
+#| eval: false
+# In a typical DD setup:
+# library(fixest)
 library(did)
 
 # expected columns:

@@ -88,8 +88,10 @@ Upward Pricing Pressure (UPP) is a quick screen to assess whether a merger creat
 ### Basic UPP calculation
 ```{r}
 #| label: upp-guppi-basic
+#| echo: false
 #| message: false
 library(dplyr)
+library(ggplot2)
 
 upp <- function(diversion, margin, efficiency = 0) {
   (diversion * margin) - efficiency
@@ -236,12 +238,13 @@ Tie the efficiency term to documented synergies or cost savings (procurement eco
 Pass-through analysis estimates how much of a cost change flows through to consumer prices. This is critical for cartel damages (upstream overcharge → downstream harm), merger analysis (will cost savings benefit consumers?), and vertical restraints. This example uses real FRED data for gasoline prices.
 
 ```{r}
-#| label: io-pass-through
+#| label: cost-pass-through
 #| message: false
 #| warning: false
+#| echo: false
 #| cache: true
-#| fig-width: 10
-#| fig-height: 6
+#| fig-width: 9
+#| fig-height: 5
 library(fredr)
 library(dplyr)
 library(tidyr)
@@ -336,7 +339,7 @@ pass_summary <- tibble::tibble(
 )
 
 cat("\nPass-through analysis summary:\n")
-print(pass_summary, n = Inf)
+knitr::kable(pass_summary, digits=3, caption="Pass-Through Analysis Results")
 ```
 
 **Interpretation:**

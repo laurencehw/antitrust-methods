@@ -4,10 +4,11 @@ Working directory for a Quarto book that turns lecture notes and slides into a p
 
 ## Structure
 - `chapters/`: Chapter `.qmd` files (see `_quarto.yml` for order).
+- `program/R/`: Shared R helpers (themes, API helpers).
+- `program/scripts/`: One-off scripts or pipelines.
+- `planning/`: Project planning and documentation.
 - `data/raw`: Downloaded source data (ignored).
 - `data/derived`: Clean/processed data (ignored).
-- `R/`: Shared R helpers (themes, API helpers).
-- `scripts/`: One-off scripts or pipelines.
 - `figures/`: Generated figures (ignored; referenced from chapters).
 - `_literature/`: Existing readings and references (kept separate from git).
 - `references/`: `references.bib` for citations (papers, cases, agency materials) and optional CSL style.
@@ -19,6 +20,6 @@ Working directory for a Quarto book that turns lecture notes and slides into a p
 
 ## Next steps
 - Drop your existing notes/slides into the relevant chapter files and replace placeholders.
-- Add real data pulls and figures to each chapter using the helper functions in `R/helpers.R`.
+- Add real data pulls and figures to each chapter using the helper functions in `program/R/helpers.R`.
 - Keep case boxes and method boxes tight and actionable; pair empirical strategies with qualitative evidence guidance.
 - Populate `references/references.bib` (papers, books, cases, agency decisions); set `csl:` in `_quarto.yml` if you prefer a specific style.

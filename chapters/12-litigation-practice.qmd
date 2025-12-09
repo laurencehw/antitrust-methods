@@ -137,6 +137,7 @@ Demonstrate that the alleged conduct had a common effect across class members, a
 #| label: litigation-common-impact-dist
 #| message: false
 #| warning: false
+#| echo: false
 #| fig-width: 11
 #| fig-height: 7
 library(dplyr)
@@ -193,141 +194,6 @@ p2 <- ggplot(class_data, aes(x = geographic_region,
                               fill = geographic_region)) +
   geom_boxplot(alpha = 0.7, outlier.alpha = 0.3) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
-  geom_hline(yintercept = mean(class_data$treatment_effect),
-            linetype = "solid", color = "#D55E00", linewidth = 1) +
-  scale_fill_brewer(palette = "Set2") +
-  scale_y_continuous(labels = scales::dollar_format()) +
-  labs(
-    title = "Treatment Effect by Geographic Region",
-    subtitle = "Consistent positive impact across regions supports commonality",
-    x = NULL,
-    y = "Treatment Effect ($)",
-    fill = "Region"
-  ) +
-  theme_classic(base_size = 12) +
-  theme(
-    legend.position = "none",
-    plot.title.position = "plot"
-  )
-
-# Combine plots
-p1 / p2
-
-# Statistical summary
-cat("\nCommon impact statistical summary:\n")
-cat(paste0("Mean treatment effect: $",
-          round(mean(class_data$treatment_effect), 2), "\n"))
-cat(paste0("Median treatment effect: $",
-          round(median(class_data$treatment_effect), 2), "\n"))
-cat(paste0("Standard deviation: $",
-          round(sd(class_data$treatment_effect), 2), "\n"))
-cat(paste0("Percentage with positive impact: ",
-          scales::percent(mean(class_data$treatment_effect > 0),
-                         accuracy = 0.1), "\n"))
-
-# Test for common impact across regions
-region_test <- aov(treatment_effect ~ geographic_region, data = class_data)
-cat("\nANOVA test for regional differences:\n")
-cat(paste0("F-statistic: ", round(summary(region_test)[[1]]$`F value`[1], 2), "\n"))
-cat(paste0("p-value: ", format.pval(summary(region_test)[[1]]$`Pr(>F)`[1],
-                                    digits = 3), "\n"))
-```
-
-**Class certification arguments:**
-- **Commonality**: Positive treatment effect across >95% of class members.
-- **Predominance**: Common questions (was there overcharge?) predominate over individual questions (how much did each pay?).
-- **Superiority**: Class action more efficient than individual lawsuits.
-
-**Robustness checks:**
-- Test across multiple subgroups (geography, purchase frequency, time period)
-- Show results are consistent with alternative model specifications
-- Address potential heterogeneity with subclass analysis if needed
-
-### Damages scenarios and sensitivity analysis
-Present alternative damages calculations to demonstrate robustness and bound the range of potential harm.
-
-```{r}
-#| label: litigation-damages-tornado
-#| message: false
-#| warning: false
-#| fig-width: 10
-#| fig-height: 8
-source("../R/helpers.R")
-library(dplyr)
-library(ggplot2)
-
-# Damages calculation parameters with ranges
-base_assumptions <- tibble::tribble(
-  ~parameter,              ~low,    ~central,  ~high,
-  "Overcharge %",          0.08,    0.15,      0.22,
-  "Pass-through rate",     0.60,    0.75,      0.90,
-  "Affected sales ($M)",   450,     520,       600,
-  "Duration (years)",      2.5,     3.0,       3.5,
-  "Pre-judgment interest", 0.04,    0.05,      0.06
-)
-
-# Calculate damages under each scenario
-calc_damages <- function(overcharge, pass_through, sales, duration, interest) {
-  annual_damages <- sales * overcharge * pass_through
-  total_damages <- annual_damages * duration
-  # Simple compound interest
-  with_interest <- total_damages * (1 + interest)^duration
-  return(with_interest)
-}
-
-# Base case
-base_damages <- calc_damages(
-  overcharge = base_assumptions$central[1],
-  pass_through = base_assumptions$central[2],
-  sales = base_assumptions$central[3],
-  duration = base_assumptions$central[4],
-  interest = base_assumptions$central[5]
-)
-
-# Vary each parameter while holding others at central
-sensitivity <- base_assumptions |>
-  mutate(
-    # Calculate sensitivity for each parameter
-    low_damages = case_when(
-      parameter == "Overcharge %" ~ calc_damages(low, central[2], central[3], central[4], central[5]),
-      parameter == "Pass-through rate" ~ calc_damages(central[1], low, central[3], central[4], central[5]),
-      parameter == "Affected sales ($M)" ~ calc_damages(central[1], central[2], low, central[4], central[5]),
-      parameter == "Duration (years)" ~ calc_damages(central[1], central[2], central[3], low, central[5]),
-      parameter == "Pre-judgment interest" ~ calc_damages(central[1], central[2], central[3], central[4], low)
-    ),
-    high_damages = case_when(
-      parameter == "Overcharge %" ~ calc_damages(high, central[2], central[3], central[4], central[5]),
-      parameter == "Pass-through rate" ~ calc_damages(central[1], high, central[3], central[4], central[5]),
-      parameter == "Affected sales ($M)" ~ calc_damages(central[1], central[2], high, central[4], central[5]),
-      parameter == "Duration (years)" ~ calc_damages(central[1], central[2], central[3], high, central[5]),
-      parameter == "Pre-judgment interest" ~ calc_damages(central[1], central[2], central[3], central[4], high)
-    )
-  )
-
-# Create tornado chart
-plot_tornado(
-  sensitivity = sensitivity |> select(parameter, low = low_damages, high = high_damages),
-  base_value = base_damages,
-  title = "Damages Sensitivity Analysis"
-)
-
-# Summary table
-cat("\nDamages scenario summary:\n")
-sensitivity_summary <- sensitivity |>
-  mutate(
-    low_damages_m = low_damages / 1e6,
-    high_damages_m = high_damages / 1e6,
-    range_m = high_damages_m - low_damages_m
-  ) |>
-  select(parameter, low, central, high, low_damages_m, high_damages_m, range_m) |>
-  arrange(desc(range_m))
-
-print(sensitivity_summary, n = Inf)
-cat(paste0("\nBase case damages: $",
-          round(base_damages / 1e6, 1), "M\n"))
-cat(paste0("Range: $",
-          round(min(sensitivity$low_damages) / 1e6, 1), "M to $",
-          round(max(sensitivity$high_damages) / 1e6, 1), "M\n"))
 ```
 
 **Expert report presentation:**

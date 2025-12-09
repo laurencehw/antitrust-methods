@@ -35,7 +35,8 @@ format:
     toc: true
     number-sections: true
     pdf-engine: xelatex
-    classoption: openany
+    classoption: [openany, oneside]
+    fontfamily: mathpazo
     code-overflow: wrap
     code-block-bg: "#f8f8f8"
     code-block-border-left: "#31BAE9"
@@ -68,7 +69,7 @@ execute:
 knitr:
   opts_chunk:
     # Wrap long lines in code output
-    tidy: true
+    tidy: false
     tidy.opts:
       width.cutoff: 60
     # Keep output readable

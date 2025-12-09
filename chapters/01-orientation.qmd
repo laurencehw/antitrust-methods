@@ -43,11 +43,11 @@ Orientation work is only useful if it flows directly into research design. Your 
 This timeline pairs statutory milestones with landmark enforcement actions so readers can anchor later quantitative work in institutional change. Extend or localize the tibble with jurisdiction-specific events (e.g., Competition Amendment Acts, CMA guidelines, SAMR platform rules) before teaching or consulting engagements.
 
 ```{r}
-#| label: orientation-timeline
-#| message: false
-#| warning: false
-#| fig-width: 12
-#| fig-height: 6
+#| label: antitrust-timeline
+#| echo: false
+#| fig-cap: "Major US and EU Antitrust Milestones"
+#| fig-width: 10
+#| fig-height: 4
 library(dplyr)
 library(ggplot2)
 library(scales)
@@ -55,16 +55,13 @@ library(scales)
 milestones <- tibble::tribble(
   ~year, ~event, ~type,
   1890, "Sherman Act", "Statute",
-  1914, "Clayton & FTC Acts", "Statute",
-  1982, "DOJ Merger Guidelines", "Guidance",
-  1998, "US v. Microsoft", "Case",
-  2013, "US v. Apple eBooks", "Case",
-  2019, "Competition Amendment\nAct (SA)", "Statute",
-  2020, "EC Google Shopping", "Case",
-  2023, "Joint Merger Guidelines", "Guidance"
+  1914, "Clayton/FTC Acts", "Statute",
+  1998, "Microsoft", "Case",
+  2013, "Apple eBooks", "Case",
+  2023, "Merger Guidelines", "Guidance"
 ) |>
   dplyr::mutate(
-    y = dplyr::if_else(dplyr::row_number() %% 2 == 0, 1.2, -1.2),
+    y = dplyr::if_else(dplyr::row_number() %% 2 == 0, 1, -1),
     vjust = dplyr::if_else(y > 0, -0.5, 1.5)
   )
 
@@ -73,18 +70,17 @@ ggplot(milestones, aes(x = year, y = y, color = type)) +
   geom_segment(aes(xend = year, yend = 0), linewidth = 0.8, alpha = 0.7) +
   geom_point(size = 4) +
   geom_text(aes(label = event, vjust = vjust),
-            size = 3.5, show.legend = FALSE, lineheight = 0.9) +
+            size = 4, show.legend = FALSE, lineheight = 0.9, fontface = "bold") +
   scale_y_continuous(limits = c(-2, 2)) +
-  scale_x_continuous(labels = scales::comma, breaks = seq(1880, 2030, 20)) +
+  scale_x_continuous(breaks = seq(1890, 2030, 20)) +
   scale_color_manual(values = c("Statute" = "#D55E00", 
                                  "Guidance" = "#0072B2", 
                                  "Case" = "#009E73")) +
   labs(
     title = "Key Antitrust Milestones",
-    subtitle = "Blend statutory, guidance, and litigation anchors to frame workflows",
     x = NULL, y = NULL, color = NULL
   ) +
-  theme_classic(base_size = 13) +
+  theme_classic(base_size = 14) +
   theme(
     axis.text.y = element_blank(),
     axis.ticks.y = element_blank(),
@@ -99,7 +95,7 @@ ggplot(milestones, aes(x = year, y = y, color = type)) +
 Track concentration trends using FRED data as a baseline for cross-jurisdictional comparisons.
 
 ```{r}
-#| label: orientation-hhi
+#| label: us-bank-hhi
 #| message: false
 #| warning: false
 #| echo: false
@@ -109,7 +105,7 @@ Track concentration trends using FRED data as a baseline for cross-jurisdictiona
 library(fredr)
 library(dplyr)
 library(ggplot2)
-source("../R/helpers.R")
+source("../program/R/helpers.R") 
 fredr_set_key(Sys.getenv("FRED_API_KEY"))
 
 hhi <- fredr(series_id = "HHMSDODNS", observation_start = as.Date("2000-01-01"))
@@ -117,10 +113,13 @@ hhi <- fredr(series_id = "HHMSDODNS", observation_start = as.Date("2000-01-01"))
 # local_hhi <- readr::read_csv("data/derived/sa_banking_hhi.csv")
 # hhi <- bind_rows(hhi, local_hhi)
 ggplot(hhi, aes(date, value)) +
+  geom_vline(xintercept = as.Date("2008-09-15"), linetype="dashed", color="darkred") +
+  annotate("text", x = as.Date("2009-01-01"), y = 100, label = "2008 Crisis", 
+           color = "darkred", hjust = 0, vjust = 0) +
   geom_line(color = "#0072B2", linewidth = 1) +
   labs(
     title = "US Bank Concentration (HHI)",
-    subtitle = "FRED series HHMSDODNS",
+    subtitle = "Bank deposits (Commercial & Savings). Source: FRED Series HHMSDODNS",
     x = NULL,
     y = "HHI Index"
   ) +
