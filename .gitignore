@@ -17,6 +17,11 @@ _book/
 _freeze/
 **/*.quarto_ipynb
 *_files/
+chapters/*_cache/
+
+# Windows artifacts
+nul
+Thumbs.db
 
 # Data directories (large/sensitive)
 data/raw/
