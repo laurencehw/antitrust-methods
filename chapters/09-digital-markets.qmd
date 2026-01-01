@@ -19,11 +19,44 @@ Expect to combine telemetry, clickstream data, partner contracts, and qualitativ
 
 ## Platform workflow overview
 
-1. **Define sides and metrics.** Identify user, merchant, advertiser, developer, courier, or publisher sides. Track MAU/DAU, GMV, multi-homing rates, engagement depth, and conversion metrics.  
-2. **Map fees and monetization.** Build ladders for commissions, subscriptions, ad loads, and data monetization; compute pass-through and elasticity. For two-sided market theory, see @rochet_tirole_2003 and @armstrong_2006.  
-3. **Theory of harm.** Common mechanisms include self-preferencing, default tying, MFN/parity clauses, data leveraging, interoperability restrictions, algorithmic ranking biases, and algorithmic collusion.  
-4. **Mechanism measurement.** Quantify ranking impacts, default effects, fee changes, and data advantages; document multi-homing constraints and API access terms.  
+1. **Define sides and metrics.** Identify user, merchant, advertiser, developer, courier, or publisher sides. Track MAU/DAU, GMV, multi-homing rates, engagement depth, and conversion metrics.
+2. **Map fees and monetization.** Build ladders for commissions, subscriptions, ad loads, and data monetization; compute pass-through and elasticity. For two-sided market theory, see @rochet_tirole_2003 and @armstrong_2006.
+3. **Theory of harm.** Common mechanisms include self-preferencing, default tying, MFN/parity clauses, data leveraging, interoperability restrictions, algorithmic ranking biases, and algorithmic collusion.
+4. **Mechanism measurement.** Quantify ranking impacts, default effects, fee changes, and data advantages; document multi-homing constraints and API access terms.
 5. **Effects & remedies.** Measure partner churn, user switching, price/fee changes, and innovation impacts. Propose remedies (choice screens, fair-ranking reports, API access rules, data portability, structural separation) tied to measured harms.
+
+## Theory-to-metric mapping
+
+The table below maps common platform theories of harm to measurable metrics and appropriate empirical tests. Use this as a checklist when scoping digital market investigations.
+
+| Theory of Harm | Key Metric | Empirical Test | Data Sources |
+|:---------------|:-----------|:---------------|:-------------|
+| **Self-preferencing** | Downstream traffic share; CTR by listing type | Diff-in-Diff around algorithm changes; A/B test analysis | Platform telemetry, OIPMI audits, CMA studies |
+| **Ranking manipulation** | Position-adjusted CTR; conversion by slot | Regression of outcomes on ranking position × first-party indicator | Clickstream logs, buy-box audits |
+| **Default tying** | Rival market share pre/post choice screen | Event study around remedy implementation | DMA compliance reports, browser/search share data |
+| **Foreclosure (input denial)** | API latency; error rates; access denial frequency | Regression of 3rd-party performance on access restrictions | API logs, developer complaints, uptime monitoring |
+| **Foreclosure (raising rivals' costs)** | Fee differential; cost-to-serve by channel | Comparison of platform vs. direct channel costs | Fee schedules, merchant P&L data |
+| **Data leverage** | Copycat product launch timing; feature matching | Survival analysis of 3rd-party products post-data access | Product launch dates, feature audits, internal documents |
+| **MFN/parity clauses** | Price dispersion across platforms | Variance analysis; price comparison pre/post MFN removal | Price scraping, platform listings, DMA studies |
+| **Algorithmic collusion** | Price correlation; response times; convergence patterns | Granger causality; structural break tests; simulation | Transaction-level pricing data, algorithm audits |
+| **Switching costs/lock-in** | Multi-homing rates; churn by tenure | Duration models; switching cost estimation | Survey data, telemetry, DMA surveys |
+| **Network effects exploitation** | Participation elasticity; tipping point dynamics | Two-sided demand estimation; natural experiments | Platform growth data, entry/exit events |
+
+**How to use this table:**
+
+1. **Scoping phase:** Identify which theories of harm are plausible given the market context and available complaints.
+2. **Data requests:** Use the "Data Sources" column to structure information requests to platforms and third parties.
+3. **Analysis design:** Match empirical tests to available data; prioritize tests with strongest identification.
+4. **Triangulation:** Combine quantitative evidence with qualitative sources (internal documents, partner interviews, PRDs).
+
+::: {.callout-note title="Adapting to zero-price markets"}
+When users pay with attention rather than money, adapt metrics accordingly:
+
+- Replace `fees_users` with **ad load** (ads per session, ad-to-content ratio)
+- Use **time spent** or **engagement depth** as the "price" users pay
+- Apply SSNDQ framework: would a hypothetical monopolist profitably degrade **quality** by 5-10%?
+- Track quality metrics: load times, relevance scores, content diversity, privacy erosion
+:::
 
 ## Participation, multi-homing, and network effects
 
