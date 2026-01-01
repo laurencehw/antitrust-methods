@@ -1,7 +1,7 @@
 # Mergers
 
 ## Learning goals
-Merger reviews synthesize everything covered so far: market definition, IO modeling, qualitative evidence, and remedies. This chapter provides a practical workflow for assessing unilateral, coordinated, vertical, and public-interest effects across US, EU/UK, and South African jurisdictions, drawing on agency guidance [@doj_ftc_hmg_2023; @ec_hmg_2004; @cma_merger_assessment_2021].
+Merger reviews synthesize everything covered so far: market definition, IO modeling, qualitative evidence, and remedies. This chapter provides a practical workflow for assessing unilateral, coordinated, vertical, and public-interest effects across US, EU/UK, and South African jurisdictions, drawing on agency guidance (DOJ/FTC Merger Guidelines, 2023; EC Horizontal Guidelines, 2004; CMA Merger Assessment Guidelines, 2021).
 
 By the end you should be able to:
 
@@ -23,14 +23,14 @@ By the end you should be able to:
 - Summarize products, geographies, overlaps, and timing; map to candidate relevant markets.
 - Compute shares/HHI and diversion using shares, switching, or survey-based measures. Flag mavericks and fringe.
 - Upstream/downstream definitions depend on the theory of harm: be explicit about the vertical chain and platform sides.
-- Ground definitions in agency guidance (US Merger Guidelines [@doj_ftc_hmg_2023; @doj_ftc_hmg_2010], EC/CMA guidance [@ec_hmg_2004; @cma_merger_assessment_2021]) and adjust for platform/digital contexts.
+- Ground definitions in agency guidance (US Merger Guidelines 2023 and 2010, EC/CMA guidance) and adjust for platform/digital contexts.
 
 **Practical tips:** keep a data inventory (chapter 13 template) noting which datasets inform shares (transaction data, Nielsen panels, loyalty cards). Align product labels with the IO models you plan to run later so you avoid remapping midstream.
 
 ### Unilateral effects: UPP/GUPPI and sim
-- Use UPP/GUPPI as a screen [@farrell_shapiro_2010_merger; @jaffe_weyl_2013]; report inputs (diversion, margins) transparently. Sensitivity to margin measurement and diversion estimates should be shown.
-- For differentiated products, simulate with logit/nested-logit or BLP-lite [@nevo_2000; @berry_levinsohn_pakes_1995]; emphasize calibration choices (outside share, margin sources).
-- Convey uncertainty: confidence intervals on diversion, ranges on margins, and alternative ownership assumptions [@weinberg_hosken_2013].
+- Use UPP/GUPPI as a screen (Farrell and Shapiro, 2010; Jaffe and Weyl, 2013); report inputs (diversion, margins) transparently. Sensitivity to margin measurement and diversion estimates should be shown.
+- For differentiated products, simulate with logit/nested-logit or BLP-lite (Nevo, 2000; Berry, Levinsohn, and Pakes, 1995); emphasize calibration choices (outside share, margin sources).
+- Convey uncertainty: confidence intervals on diversion, ranges on margins, and alternative ownership assumptions (Weinberg and Hosken, 2013).
 - For readers, tie back to case examples in your slides to show how margins and diversion were evidenced (transaction data, surveys, switching analyses).
 
 #### Simple UPP/GUPPI calculation
@@ -353,9 +353,9 @@ Combine quantitative screens with qualitative evidence: internal documents refer
 Tie efficiencies to data. For example, if parties cite procurement savings, request SKU-level cost projections and simulate whether those savings offset UPP. For behavioral remedies, document monitoring costs and fallback options (trustees, data rooms) referenced in CMA/DG COMP practice.
 
 ### Retrospectives
-- Where historical analogs exist, run diff-in-diff/event studies on prices/output/quality. Use rivals and unaffected markets as controls; test pre-trends [@ashenfelter_hosken_2010; @miller_weinberg_2017].
+- Where historical analogs exist, run diff-in-diff/event studies on prices/output/quality. Use rivals and unaffected markets as controls; test pre-trends (Ashenfelter and Hosken, 2010; Miller and Weinberg, 2017).
 - For platform/vertical cases, examine participation/multi-homing effects and access terms over time.
-- Cite retrospective literature to benchmark magnitudes and methods [@weinberg_hosken_2013].
+- Cite retrospective literature to benchmark magnitudes and methods (Weinberg and Hosken, 2013).
 - Use well-known retrospectives (e.g., supermarket/hospital/airline cases) to set expectations on effect sizes and uncertainty.
 
 #### Stock-event diagnostic
@@ -408,7 +408,7 @@ source("../program/R/helpers.R")
 {% hint style="info" %}
 **Citations and comparative note**
 
-- Anchor claims to current US Merger Guidelines (2023) [@doj_ftc_hmg_2023] and legacy 2010 guidance [@doj_ftc_hmg_2010]; include EC Horizontal Guidelines [@ec_hmg_2004] and CMA merger assessment guidelines for comparisons.
+- Anchor claims to current US Merger Guidelines (2023) and legacy 2010 guidance; include EC Horizontal Guidelines and CMA merger assessment guidelines for comparisons.
 - Cite empirical merger retrospective studies when presenting methods or benchmarks (e.g., airlines, hospitals).
 - For vertical mergers, cite vUPP/EDM references and any key enforcement actions (e.g., US v. AT&T/Time Warner, EC cases on input foreclosure).
 {% endhint %}

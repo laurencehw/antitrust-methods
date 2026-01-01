@@ -8,7 +8,7 @@ By the end of the chapter you should be able to:
 - Frame relevant product and geographic markets using demand evidence, diversion ratios, and qualitative industry facts.
 - Apply and critique SSNIP/SSNDQ reasoning, critical-loss vs. actual-loss tests, and switching-matrix screens.
 - Integrate survey evidence, internal documents, and econometrics into narratives tuned to the burden of proof in each jurisdiction.
-- Reference key precedents (e.g., [@doj_ftc_hmg_2010], [@ec_market_definition_2024], [@cma_merger_assessment_2021]) and literature when defending methodological choices.
+- Reference key precedents (e.g., DOJ/FTC Merger Guidelines (2010), EC Market Definition Notice (2024), CMA Merger Guidelines (2021)) and literature when defending methodological choices.
 
 ## Why market definition still matters
 Even in unilateral-effects cases where agencies focus on margins, diversion, and price effects directly, courts often ask, “what is the market?” The answer shapes presumptions (HHI thresholds, dominance), jurisdictional hooks (public-interest test vs. consumer welfare), and remedy feasibility. Practitioners should treat market definition as an evidence-integration exercise: describe customer substitution paths, quantify them when possible, and tie those findings to the legal standard at issue (e.g., “reasonable interchangeability” in US case law vs. “sufficiently interchangeable” in EC practice). Keep records of how you screened candidate markets so future teams can expand or narrow scope without re-litigating data prep.
@@ -178,7 +178,7 @@ A lively debate centers on whether formal market definition remains essential in
 {% hint style="info" %}
 **Citations and comparative note**
 
-- Cite market definition sources such as US Merger Guidelines SSNIP discussion [@doj_ftc_hmg_2010] and EC Notice on market definition [@ec_market_definition_2024]; add CMA cases for UK context.
+- Cite market definition sources such as US Merger Guidelines SSNIP discussion (DOJ/FTC, 2010) and EC Notice on market definition (2024); add CMA cases for UK context.
 - When using surveys or switching analyses, reference standards on survey reliability (e.g., reference guides, cases admitting/excluding surveys).
 - Flag jurisdictional differences explicitly when SSNDQ or platform-centric approaches apply more than SSNIP (e.g., EU digital contexts).
 {% endhint %}

@@ -25,12 +25,12 @@ Document every known communication, meeting, or enforcement action in a single t
 ## Descriptives and screens
 Start with `ggplot2` dashboards that overlay prices with cost indices, demand proxies, and competitor prices. Flag regimes where prices remain static despite volatile costs or where margins converge across firms.
 
-- **Variance/dispersion screens:** Check price spreads, standard deviations, and coefficents of variation across firms or regions [@abrantes_mello_2010].  
-- **Procurement rotation:** Rank bids chronologically to flag turn-taking, convenient price endings, or geographic allocations [@porter_zona_1993; @conley_decarolis_2016].  
-- **Digit/Benford checks:** Use sparingly and only when invoice conventions support the assumptions.  
-- **Correlation screens:** High correlations in supposedly independent bids can justify deeper probes [@harrington_2008].
+- **Variance/dispersion screens:** Check price spreads, standard deviations, and coefficents of variation across firms or regions (Abrantes-Metz et al., 2006).
+- **Procurement rotation:** Rank bids chronologically to flag turn-taking, convenient price endings, or geographic allocations (Porter and Zona, 1993; Conley and Decarolis, 2016).
+- **Digit/Benford checks:** Use sparingly and only when invoice conventions support the assumptions.
+- **Correlation screens:** High correlations in supposedly independent bids can justify deeper probes (Harrington, 2008).
 
-Document screen logic following OECD guidance on cartel screens [@oecd_cartel_screens_2013] and note data limitations (missing bidders, net vs. list prices).
+Document screen logic following OECD guidance on cartel screens (OECD, 2013) and note data limitations (missing bidders, net vs. list prices).
 
 ### Bid-rotation analysis
 Using cement procurement data to identify potential bid rotation patterns.
@@ -279,7 +279,7 @@ Leniency statements, chats, and board minutes pin down conduct mechanisms (rotat
 - Set regression windows and sample selections.  
 - Validate that estimated start/stop dates match qualitative evidence.  
 - Explain residuals—if econometrics show little effect where documents admit coordination, revisit product mapping or data coverage.  
-- Clarify what is fact (documented) vs. inference (econometric patterns), citing [@oecd_leniency_2015] or agency policies.
+- Clarify what is fact (documented) vs. inference (econometric patterns), citing OECD leniency guidance (2015) or agency policies.
 
 {% hint style="info" %}
 **Method box: econometric toolkit**

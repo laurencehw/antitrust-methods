@@ -72,7 +72,7 @@ library(fixest)
 # elasticity_model <- feols(log(wage) ~ log(employment) + controls | firm + occupation + period, data = panel)
 # summary(elasticity_model)
 ```
-Use matched employer-employee data (LEHD, SSA, UI wage records) or firm-level HR exports. Elasticities below 2–3 indicate meaningful monopsony power [@manning_2003; @ashenfelter_farber_ransom_2010]. For policy implications, see @naidu_posner_weyl_2018.
+Use matched employer-employee data (LEHD, SSA, UI wage records) or firm-level HR exports. Elasticities below 2–3 indicate meaningful monopsony power (Manning, 2003; Ashenfelter, Farber, and Ransom, 2010). For policy implications, see Naidu, Posner, and Weyl (2018).
 
 ## Noncompetes, no-poach, and wage fixing
 

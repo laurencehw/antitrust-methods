@@ -62,8 +62,8 @@ When users pay with attention rather than money, adapt metrics accordingly:
 
 ## Participation, multi-homing, and network effects
 
-- **Participation curves:** Model each side's activity as a function of fees, quality, and participation on the other side. Use logit, linear, or Poisson models with cross-side terms [@evans_schmalensee_2007; @hagiu_wright_2015].  
-- **Multi-homing rates:** Estimate the share of users or merchants active on rival platforms. OIPMI surveys and EU DMA filings include methodologies you can reuse [@parker_van_alstyne_2005].  
+- **Participation curves:** Model each side's activity as a function of fees, quality, and participation on the other side. Use logit, linear, or Poisson models with cross-side terms (Evans and Schmalensee, 2007; Hagiu and Wright, 2015).
+- **Multi-homing rates:** Estimate the share of users or merchants active on rival platforms. OIPMI surveys and EU DMA filings include methodologies you can reuse (Parker and Van Alstyne, 2005).  
 - **Match quality:** Track conversion rates, completion times, or satisfaction metrics per platform side to show how conduct affects outcomes.  
 - **Elasticities:** Two-sided elasticities inform fee caps and remedy design (e.g., how merchant participation responds to lower commissions or improved ranking fairness).
 
