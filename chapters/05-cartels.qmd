@@ -32,26 +32,36 @@ Start with `ggplot2` dashboards that overlay prices with cost indices, demand pr
 
 Document screen logic following OECD guidance on cartel screens [@oecd_cartel_screens_2013] and note data limitations (missing bidders, net vs. list prices).
 
-### Bid-rotation scaffold
+### Bid-rotation analysis
+Using cement procurement data to identify potential bid rotation patterns.
+
 ```{r}
 #| label: cartel-rotation
-#| eval: false
+#| message: false
+#| warning: false
 library(dplyr)
 library(ggplot2)
 
+# Load real cartel bid data
+bids_df <- read.csv("data/derived/cartel_cement_bids.csv")
+
+# Analyze win patterns by firm
 rotation <- bids_df |>
-  group_by(bidder) |>
+  group_by(winner) |>
   summarise(
-    wins = sum(rank == 1),
-    avg_rank = mean(rank, na.rm = TRUE),
-    rotation_sd = sd(rank, na.rm = TRUE)
+    wins = n(),
+    avg_bid = mean(winning_bid, na.rm = TRUE),
+    cartel_wins = sum(cartel_period),
+    non_cartel_wins = sum(!cartel_period)
   ) |>
   arrange(desc(wins))
 
-ggplot(rotation, aes(x = reorder(bidder, wins), y = wins)) +
-  geom_col(fill = "#0072B2") +
+ggplot(rotation, aes(x = reorder(winner, wins), y = wins)) +
+  geom_col(fill = antitrust_colors["blue"]) +
   coord_flip() +
-  labs(title = "Bid wins by vendor", x = NULL, y = "Wins") +
+  labs(title = "Bid wins by vendor (cement procurement)",
+       subtitle = "Data: Simulated cement cartel case",
+       x = NULL, y = "Contract wins") +
   theme_antitrust()
 ```
 Pair charts with tables showing consecutive wins, geographic patterns, or unexplained bid withdrawals.
