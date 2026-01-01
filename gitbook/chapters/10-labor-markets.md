@@ -1,0 +1,383 @@
+# Antitrust and Labor Markets
+
+## Learning goals
+Labor cases now sit alongside mergers and cartels in agency priorities. This chapter blends empirical tools from recent academic research on labor market power with practical guidance on using BLS and Census data. You will learn to:
+
+- Measure labor market power (concentration, labor supply elasticity, pass-through).
+- Evaluate no-poach, wage-fixing, and noncompete agreements using econometrics and qualitative evidence.
+- Integrate matched employer-employee data, vacancy data, and worker narratives.
+- Design remedies (noncompete bans, pay-transparency orders, notice requirements) and evaluate their effects.
+
+## Core topics
+- Labor concentration (HHI, Herfindahl-Hirschman Index for labor markets) and labor supply elasticity estimates.
+- Event studies and diff-in-diff around policy shocks (noncompete bans, wage disclosure laws, franchise no-poach settlements).
+- Wage-posting vs. realized wage analysis; vacancy scraping; platform data for gig markets.
+- Mobility, retention, and heterogeneity by occupation, region, and worker demographics.
+- Qualitative evidence from HR documents, franchise agreements, and worker testimony.
+
+{% hint style="info" %}
+**Method box**
+
+**Monopsony elasticities:** Estimate labor supply elasticity using quits, recruitment response, or equilibrium wage-setting models (e.g., inverse labor supply).  
+**Policy diff-in-diff:** Evaluate wage or mobility effects after noncompete bans or franchise no-poach settlements.  
+**Synthetic control:** Single-state reforms (e.g., Washington franchise no-poach settlement) can be assessed via synthetic control or staggered diff-in-diff.
+{% endhint %}
+
+{% hint style="info" %}
+**Qualitative evidence**
+
+**HR policies & agreements:** Franchise agreements, noncompete clauses, wage-fixing communications.  
+**Worker interviews/surveys:** Capture outside options, relocation constraints, switching costs, discrimination concerns.  
+**Internal memos:** Evidence of wage suppression strategy, benchmarking against collusive agreements, or fear of poaching.
+{% endhint %}
+
+{% hint style="info" %}
+**Citations and comparative note**
+
+Reference US DOJ/FTC criminal wage-fixing cases, state AG settlements, the FTC's proposed noncompete ban (see [ftc.gov](https://www.ftc.gov/)), and international enforcement (e.g., Portugal's wage-fixing fines, Japan's OTA cases). Cite key empirical papers from recent labor economics literature. Highlight differences where EU/UK enforcement is nascent but evolving (e.g., CMA's focus on noncompetes shorter than 3 months, EC guidelines on HR collusion).
+{% endhint %}
+
+## Measuring labor market power
+
+### Concentration indices
+Compute HHI or concentration ratios for labor markets defined by occupation × geography (e.g., SOC × commuting zone). Use BLS QCEW, Census LODES/LEHD Origin-Destination Employment Statistics, or Stats SA labour force microdata. For empirical evidence on labor market concentration, see @azar_marinescu_steinbaum_2020 and @benmelech_bergman_kim_2020.
+
+```r
+library(dplyr)
+source("../program/R/helpers.R")
+
+employment <- tibble::tribble(
+  ~employer, ~occupation, ~region, ~employment,
+  "FirmA", "RN", "Gauteng", 1200,
+  "FirmB", "RN", "Gauteng", 800,
+  "FirmC", "RN", "Gauteng", 500,
+  "FirmD", "RN", "Gauteng", 300
+)
+
+hhi <- employment |>
+  group_by(occupation, region) |>
+  mutate(share = employment / sum(employment)) |>
+  summarise(hhi = sum((share * 100)^2))
+hhi
+```
+Replace synthetic data with QCEW/LEHD or Stats SA microdata aggregated to protect confidentiality. Document any weighting or commuting zone definitions in `data/README.md`.
+
+### Labor supply elasticity
+Estimate inverse labor supply using panel data on wages and employment:
+
+```r
+library(fixest)
+
+# panel columns: firm, occupation, period, wage, employment, controls
+# elasticity_model <- feols(log(wage) ~ log(employment) + controls | firm + occupation + period, data = panel)
+# summary(elasticity_model)
+```
+Use matched employer-employee data (LEHD, SSA, UI wage records) or firm-level HR exports. Elasticities below 2–3 indicate meaningful monopsony power [@manning_2003; @ashenfelter_farber_ransom_2010]. For policy implications, see @naidu_posner_weyl_2018.
+
+## Noncompetes, no-poach, and wage fixing
+
+### Policy shock diff-in-diff
+```r
+library(dplyr)
+library(fixest)
+
+panel <- expand.grid(state = c("WA","OR","ID","MT"), year = 2014:2022) |>
+  mutate(
+    treated = if_else(state == "WA" & year >= 2019, 1, 0),
+    wage = 25 + 0.5 * (year - 2014) - 1.2 * treated + rnorm(n(), 0, 0.5),
+    controls = runif(n())
+  )
+
+did_model <- feols(wage ~ treated | state + year, data = panel)
+summary(did_model)
+```
+Substitute actual wage data (BLS Occupational Employment and Wage Statistics, CPS microdata, Stats SA QLFS) when available. Additional controls might include occupation mix, unemployment rates, or cost-of-living indices.
+
+### Franchise no-poach analysis
+- **Contract review:** Extract no-poach clauses, duration, and scope from franchise agreements (fast-food, fitness, healthcare).  
+- **Transaction data:** Use payroll or scheduling data to track cross-franchise transfers before/after clause removal.  
+- **Event study:** Evaluate hiring and wage patterns after the no-poach ban (Washington fast-food settlements, South African retail franchise commitments). For empirical evidence on franchise no-poach agreements, see @krueger_ashenfelter_2018. See also @doj_hr_guidance_2016 for enforcement guidance.
+
+## Wage posting vs. realized wages
+
+Combine vacancy data (Indeed, Burning Glass, Pnet) with payroll data to evaluate pass-through and wage compression:
+
+- **Posting premium vs. realized wage:** Compare posted wages to actual accepted wages; measure dispersion and adjustments post-policy.  
+- **Vacancy response:** Study vacancy duration and volume changes after noncompete bans or wage transparency laws.  
+- **Platform/gig economy:** Leverage public APIs (Uber, Deliveroo) or FOIA responses for driver payout distributions.
+
+## Mobility and retention analytics
+
+- **Mobility matrices:** Use LEHD/LODES or internal HR data to compute transition probabilities between firms/regions.  
+- **Retention KPIs:** Track tenure, quit rates, and rehire rates; evaluate changes post-remedy.  
+- **Heterogeneity:** Segment results by occupation, gender, race, and visa status to show differential effects and public-interest considerations.
+
+## Southern African enforcement snapshots
+- **Healthcare wage-fixing (Competition Commission v. Netcare & Mediclinic investigations).** HR data and negotiation emails showed coordinated caps on agency nurse rates during pandemic surges; the Commission paired payroll analysis with worker interviews to craft remedial guidelines.
+- **Pick n Pay/Shoprite labour practices inquiries.** Investigation combined rostering data, supplier development agreements, and union testimony to assess whether exclusive supply terms suppressed independent retailer wages.
+- **Gig platforms (Competition Commission inquiry into e-hailing, 2023).** Telemetry from Bolt, Uber, and local entrants showed driver multi-homing constraints and commission escalators; regulators required transparency dashboards and alternative commission tiers for high-volume drivers.
+
+## Visualizations
+
+### Labor market concentration choropleth
+A geographic visualization of labor market concentration helps identify regions and occupations with potential monopsony concerns. This example uses synthetic data but can be adapted for BLS QCEW, Census LEHD, or Stats SA QLFS data.
+
+```r
+library(dplyr)
+library(ggplot2)
+library(maps)
+library(viridis)
+
+# Simulated labor market HHI data by state/province and occupation
+# Replace with BLS QCEW or Census LEHD data aggregated to commuting zones
+set.seed(456)
+us_states <- map_data("state")
+
+# Create synthetic HHI data for states (illustrative)
+labor_hhi <- tibble(
+  region = unique(us_states$region),
+  hhi = runif(length(unique(us_states$region)), 800, 4500),
+  occupation = "Registered Nurses"
+) |>
+  mutate(
+    concentration_level = case_when(
+      hhi < 1500 ~ "Unconcentrated",
+      hhi < 2500 ~ "Moderately concentrated",
+      TRUE ~ "Highly concentrated"
+    ),
+    concentration_level = factor(
+      concentration_level,
+      levels = c("Unconcentrated", "Moderately concentrated",
+                 "Highly concentrated")
+    )
+  )
+
+# Join with map data
+us_map <- us_states |>
+  left_join(labor_hhi, by = "region")
+
+# Choropleth map
+ggplot(us_map, aes(x = long, y = lat, group = group, fill = hhi)) +
+  geom_polygon(color = "white", linewidth = 0.2) +
+  scale_fill_viridis_c(
+    option = "plasma",
+    direction = -1,
+    breaks = c(1500, 2500, 3500),
+    labels = c("1,500\n(Unconcentrated)",
+               "2,500\n(Moderate)",
+               "3,500\n(High)")
+  ) +
+  labs(
+    title = "Labor Market Concentration by State",
+    subtitle = "HHI for Registered Nurses (Illustrative Data)",
+    fill = "HHI",
+    caption = "Replace with BLS QCEW/LEHD data. Commuting zones provide more granular analysis than states."
+  ) +
+  theme_void(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+    legend.position = "right"
+  ) +
+  coord_map()
+
+# Summary statistics by concentration level
+cat("\nConcentration distribution:\n")
+labor_summary <- labor_hhi |>
+  group_by(concentration_level) |>
+  summarise(
+    count = n(),
+    mean_hhi = mean(hhi),
+    median_hhi = median(hhi),
+    .groups = "drop"
+  )
+print(labor_summary, n = Inf)
+```
+
+**Interpretation:**
+- **HHI < 1,500**: Competitive labor markets; multiple employers compete for workers.
+- **HHI 1,500-2,500**: Moderately concentrated; potential monopsony concerns.
+- **HHI > 2,500**: Highly concentrated; significant monopsony power likely.
+
+**How to construct this with real data:**
+
+1. **BLS QCEW (US)**: Quarterly Census of Employment and Wages provides establishment counts and employment by industry and county. Calculate HHI for relevant occupation × commuting zone.
+
+2. **Census LEHD (US)**: Longitudinal Employer-Household Dynamics provides origin-destination employment data. More granular than QCEW.
+
+3. **Stats SA QLFS (South Africa)**: Quarterly Labour Force Survey can be aggregated by occupation × metro/district.
+
+**Code template for BLS QCEW:**
+```r
+library(blsAPI)
+library(dplyr)
+
+# Fetch QCEW data (requires BLS API key)
+# series_id format: ENUxxxxxxxxxxxx (area × industry × datatype)
+# Calculate HHI from establishment-level employment shares
+
+# Example workflow:
+# 1. Get employment by establishment size class and county
+# 2. For each occupation × commuting zone:
+#    a. Sum employment by firm
+#    b. Calculate market shares
+#    c. HHI = sum((share × 100)^2)
+# 3. Join to shapefile for choropleth
+```
+
+### Labor concentration dashboard by occupation
+Compare HHI across multiple occupations to identify which labor markets face greatest concentration:
+
+```r
+library(dplyr)
+library(ggplot2)
+library(forcats)
+
+# Simulated HHI data across occupations and regions
+# Replace with actual QCEW/LEHD/QLFS data
+set.seed(789)
+occupations <- c("Registered Nurses", "Software Engineers",
+                "Truck Drivers", "Retail Workers",
+                "Fast Food Workers", "Warehouse Workers")
+regions <- c("Urban", "Suburban", "Rural")
+
+labor_occ <- expand.grid(
+  occupation = occupations,
+  region = regions
+) |>
+  mutate(
+    hhi = case_when(
+      region == "Rural" ~ runif(n(), 2200, 4500),
+      region == "Suburban" ~ runif(n(), 1400, 2800),
+      region == "Urban" ~ runif(n(), 800, 2200)
+    ),
+    concentration = case_when(
+      hhi < 1500 ~ "Unconcentrated",
+      hhi < 2500 ~ "Moderately concentrated",
+      TRUE ~ "Highly concentrated"
+    )
+  )
+
+# Grouped bar chart
+ggplot(labor_occ, aes(x = fct_reorder(occupation, hhi, .desc = FALSE),
+                      y = hhi, fill = region)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.7) +
+  geom_hline(yintercept = 1500, linetype = "dashed",
+             color = "gray40", linewidth = 0.8) +
+  geom_hline(yintercept = 2500, linetype = "dashed",
+             color = "gray40", linewidth = 0.8) +
+  annotate("text", x = 6.5, y = 1500, label = "1,500 threshold",
+           hjust = 0, vjust = -0.5, size = 3) +
+  annotate("text", x = 6.5, y = 2500, label = "2,500 threshold",
+           hjust = 0, vjust = -0.5, size = 3) +
+  scale_fill_manual(values = c("Urban" = "#0072B2",
+                                "Suburban" = "#009E73",
+                                "Rural" = "#D55E00")) +
+  coord_flip() +
+  labs(
+    title = "Labor Market Concentration by Occupation and Region",
+    subtitle = "Rural areas show systematically higher concentration",
+    x = NULL,
+    y = "HHI",
+    fill = "Region Type",
+    caption = "Illustrative data. Replace with QCEW/LEHD aggregated to commuting zones."
+  ) +
+  theme_antitrust() +
+  theme(
+    plot.title.position = "plot",
+    legend.position = "bottom"
+  )
+
+# Summary table: occupations with highest average HHI
+cat("\nHighest concentration occupations (average across regions):\n")
+labor_occ |>
+  group_by(occupation) |>
+  summarise(
+    avg_hhi = mean(hhi),
+    high_conc_regions = sum(hhi > 2500),
+    .groups = "drop"
+  ) |>
+  arrange(desc(avg_hhi)) |>
+  knitr::kable(digits = 0, caption = "Occupations with Highest Concentration")
+```
+
+**Key insights:**
+- **Rural areas** typically show higher concentration due to fewer employers.
+- **Low-skill occupations** (fast food, warehouse) often face more concentration than high-skill occupations with remote work options.
+- **Healthcare occupations** show mixed patterns depending on Certificate of Need laws and hospital consolidation.
+
+### Wage impact visualization
+Combine concentration data with wage outcomes to show the relationship between HHI and wage suppression:
+
+```r
+library(dplyr)
+library(ggplot2)
+
+# Simulated data showing HHI vs. wage gap
+# Replace with actual QCEW/OES wage data matched to HHI calculations
+set.seed(890)
+wage_impact <- tibble(
+  market = paste("Market", 1:50),
+  hhi = runif(50, 800, 4500),
+  wage_gap = -0.0003 * hhi + rnorm(50, 5, 3)  # Negative relationship
+) |>
+  mutate(
+    concentration = case_when(
+      hhi < 1500 ~ "Unconcentrated",
+      hhi < 2500 ~ "Moderately concentrated",
+      TRUE ~ "Highly concentrated"
+    )
+  )
+
+# Scatter plot with regression line
+ggplot(wage_impact, aes(x = hhi, y = wage_gap)) +
+  geom_point(aes(color = concentration), size = 3, alpha = 0.7) +
+  geom_smooth(method = "lm", se = TRUE, color = "#D55E00",
+              linewidth = 1.2, alpha = 0.2) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
+  scale_color_manual(
+    values = c(
+      "Unconcentrated" = "#0072B2",
+      "Moderately concentrated" = "#009E73",
+      "Highly concentrated" = "#D55E00"
+    )
+  ) +
+  labs(
+    title = "Labor Market Concentration and Wage Suppression",
+    subtitle = "Higher HHI associated with lower wages relative to competitive benchmark",
+    x = "Labor Market HHI",
+    y = "Wage gap (% below competitive wage)",
+    color = "Concentration Level",
+    caption = "Illustrative data. Replace with matched QCEW/OES data.\nCompetitive benchmark from low-HHI markets or structural estimates."
+  ) +
+  theme_antitrust() +
+  theme(
+    plot.title.position = "plot",
+    legend.position = "bottom"
+  )
+
+# Regression summary
+wage_model <- lm(wage_gap ~ hhi, data = wage_impact)
+cat("\nRegression: Wage gap ~ HHI\n")
+summary(wage_model)
+```
+
+**How to use these visualizations:**
+- **Enforcement priorities**: Focus investigations on high-HHI markets.
+- **Remedy design**: Target no-poach bans or wage disclosure rules at concentrated markets.
+- **Policy evaluation**: Use choropleth before/after policy changes to assess geographic impacts.
+- **Public interest**: Highlight disparate impacts on rural communities or specific demographics.
+
+**Data sources for production:**
+- **BLS QCEW**: [bls.gov/cew](https://www.bls.gov/cew/)
+- **Census LEHD**: [lehd.ces.census.gov](https://lehd.ces.census.gov/)
+- **BLS OES**: [bls.gov/oes](https://www.bls.gov/oes/) (for wage data)
+- **Stats SA QLFS**: [statssa.gov.za](http://www.statssa.gov.za/)
+- **Commuting zone definitions**: USDA ERS or Census Geography
+
+## Visualizations and data sourcing
+- **Labor HHI choropleths (Roadmap 10.1):** Source [BLS QCEW](https://www.bls.gov/cew/) (US), Stats SA, or EU Labour Force Survey; for publication, provide a template script plus sanitized shapefiles.  
+- **Noncompete diff-in-diff plots (Roadmap 10.2):** Use state-level CPS microdata, WA Dept. of Labor wage records, or Stats SA sectoral wages; fallback to synthetic data until approvals land.  
+- **Mobility transition matrices (Roadmap 10.3):** Build from [LEHD/LODES](https://lehd.ces.census.gov/) or anonymized HR exports; include aggregated gig-platform transitions.
+
+Document each dataset in `data/README.md` and tag whether it is public, sanitized, or confidential. When ready to "fill with real data," replace the synthetic CSVs in `data/examples/` with actual extracts, rerun the figures, and cache redacted outputs for broader distribution.

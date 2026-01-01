@@ -1,0 +1,27 @@
+{
+  "title": "Antitrust Methods: Research and Practice",
+  "author": "Laurence Wilse-Samson",
+  "description": "A practitioner-focused text on antitrust research methods",
+  "language": "en",
+  "gitbook": ">=3.0.0",
+  "plugins": [
+    "katex",
+    "hints"
+  ],
+  "pluginsConfig": {
+    "katex": {
+      "delimiters": [
+        {
+          "left": "$$",
+          "right": "$$",
+          "display": true
+        },
+        {
+          "left": "$",
+          "right": "$",
+          "display": false
+        }
+      ]
+    }
+  }
+}
