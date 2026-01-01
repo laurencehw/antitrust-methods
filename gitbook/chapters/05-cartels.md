@@ -32,27 +32,106 @@ Start with `ggplot2` dashboards that overlay prices with cost indices, demand pr
 
 Document screen logic following OECD guidance on cartel screens [@oecd_cartel_screens_2013] and note data limitations (missing bidders, net vs. list prices).
 
-### Bid-rotation scaffold
+### Bid-rotation analysis
+Using cement procurement data to identify potential bid rotation patterns.
+
 ```r
 library(dplyr)
 library(ggplot2)
 
+# Load real cartel bid data
+bids_df <- read.csv("data/derived/cartel_cement_bids.csv")
+
+# Analyze win patterns by firm
 rotation <- bids_df |>
-  group_by(bidder) |>
+  group_by(winner) |>
   summarise(
-    wins = sum(rank == 1),
-    avg_rank = mean(rank, na.rm = TRUE),
-    rotation_sd = sd(rank, na.rm = TRUE)
+    wins = n(),
+    avg_bid = mean(winning_bid, na.rm = TRUE),
+    cartel_wins = sum(cartel_period),
+    non_cartel_wins = sum(!cartel_period)
   ) |>
   arrange(desc(wins))
 
-ggplot(rotation, aes(x = reorder(bidder, wins), y = wins)) +
-  geom_col(fill = "#0072B2") +
+ggplot(rotation, aes(x = reorder(winner, wins), y = wins)) +
+  geom_col(fill = antitrust_colors["blue"]) +
   coord_flip() +
-  labs(title = "Bid wins by vendor", x = NULL, y = "Wins") +
+  labs(title = "Bid wins by vendor (cement procurement)",
+       subtitle = "Data: Simulated cement cartel case",
+       x = NULL, y = "Contract wins") +
   theme_antitrust()
 ```
 Pair charts with tables showing consecutive wins, geographic patterns, or unexplained bid withdrawals.
+
+### Transition matrix for rotation detection
+While bar charts show win counts, a **transition matrix** reveals systematic rotation by showing which firm wins after another firm won the previous contract. Systematic rotation produces off-diagonal clustering; competitive bidding produces diagonal concentration (repeat wins).
+
+```r
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+source("../program/R/helpers.R")
+
+# Load real cartel bid data
+bids_df <- read.csv("data/derived/cartel_cement_bids.csv")
+
+# Create lagged winner variable for transition analysis
+transitions <- bids_df |>
+  arrange(tender_id) |>
+  mutate(
+    prev_winner = lag(winner),
+    period = if_else(cartel_period, "Cartel period", "Competitive period")
+  ) |>
+  filter(!is.na(prev_winner))
+
+# Compute transition matrix for cartel period
+cartel_transitions <- transitions |>
+  filter(period == "Cartel period") |>
+  count(prev_winner, winner, name = "count") |>
+  group_by(prev_winner) |>
+  mutate(prob = count / sum(count)) |>
+  ungroup()
+
+# Heatmap visualization
+ggplot(cartel_transitions, aes(x = winner, y = prev_winner, fill = prob)) +
+  geom_tile(color = "white", linewidth = 0.5) +
+  geom_text(aes(label = scales::percent(prob, accuracy = 1)),
+            color = "white", fontface = "bold", size = 3.5) +
+  scale_fill_gradient(low = "#56B4E9", high = "#D55E00",
+                      labels = scales::percent_format()) +
+  labs(
+    title = "Bid Rotation Transition Matrix (Cartel Period)",
+    subtitle = "Probability of Firm Y winning given Firm X won previous tender",
+    x = "Winner at time t",
+    y = "Winner at time t-1",
+    fill = "Transition\nprobability",
+    caption = "Off-diagonal clustering indicates systematic rotation; diagonal dominance suggests repeat wins."
+  ) +
+  theme_antitrust() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "right",
+    panel.grid = element_blank()
+  )
+
+# Rotation index: ratio of off-diagonal to diagonal transitions
+diag_prob <- cartel_transitions |>
+  filter(prev_winner == winner) |>
+  summarise(diag = sum(prob * count) / sum(count)) |>
+  pull(diag)
+
+cat("\nRotation diagnostics:\n")
+cat(paste0("Diagonal (repeat win) share: ", scales::percent(diag_prob, accuracy = 0.1), "\n"))
+cat(paste0("Off-diagonal (rotation) share: ", scales::percent(1 - diag_prob, accuracy = 0.1), "\n"))
+cat("Note: Competitive markets typically show >50% diagonal; rotation schemes show <30%.\n")
+```
+
+**How to interpret the transition matrix:**
+
+- **Diagonal cells** show the probability of a firm winning consecutive contracts. In competitive markets, efficient firms often win repeatedly (high diagonal values).
+- **Off-diagonal patterns** reveal rotation. If Firm A→B→C→D→A appears consistently, you'll see elevated probabilities in a cyclical off-diagonal pattern.
+- **Uniform off-diagonal** suggests random or structured rotation with no repeat wins allowed.
+- **Asymmetric off-diagonal** may indicate a hub-and-spoke arrangement where one firm coordinates others.
 
 ### Bid-rotation network graph
 Network graphs help visualize suspected coordination patterns by showing which bidders consistently "yield" to others. This is particularly useful for identifying systematic rotation schemes or hub-and-spoke arrangements.

@@ -71,9 +71,6 @@ ggplot(utilities, aes(x = opex_per_unit, y = quality_score, label = entity)) +
   ) +
   theme_antitrust()
 ```
-
-![Figure 1](../figures/08-regulation-remedies_fig01.png)
-
 Replace the illustrative tibble with regulator filings (e.g., NERSA, Ofgem, FERC Form 1), which are typically publicly available from regulatory agencies.
 
 ## Remedy design after antitrust findings

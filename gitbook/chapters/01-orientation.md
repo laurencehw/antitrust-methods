@@ -94,9 +94,6 @@ ggplot(milestones, aes(x = year, y = y, color = type)) +
   )
 ```
 
-![Figure 1](../figures/01-orientation_fig01.png)
-
-
 ### HHI trend example
 Track concentration trends using FRED data as a baseline for cross-jurisdictional comparisons.
 

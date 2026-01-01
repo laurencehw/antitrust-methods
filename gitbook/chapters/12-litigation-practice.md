@@ -207,9 +207,6 @@ p2 <- ggplot(class_data, aes(x = geographic_region,
 )
 ```
 
-![Figure 1](../figures/12-litigation-practice_fig01.png)
-
-
 **Expert report presentation:**
 - Present central estimate prominently
 - Show sensitivity ranges transparently
