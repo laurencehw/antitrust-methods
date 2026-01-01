@@ -243,6 +243,37 @@ rotation_metrics <- bids |>
 
 cat("\nRotation metrics by bidder:\n")
 print(rotation_metrics, n = Inf)
+
+# Centrality metrics to identify hub firms
+cat("\n--- NETWORK CENTRALITY ANALYSIS ---\n")
+
+# Eigenvector centrality: identifies influential nodes
+eigen_scores <- eigen_centrality(g)$vector
+cat("\nEigenvector centrality (hub influence):\n")
+print(sort(eigen_scores, decreasing = TRUE))
+
+# In-degree: who receives the most "yielding" from others
+in_deg <- degree(g, mode = "in")
+cat("\nIn-degree (frequency of winning when others yield):\n")
+print(sort(in_deg, decreasing = TRUE))
+
+# Out-degree: who yields most often to others
+out_deg <- degree(g, mode = "out")
+cat("\nOut-degree (frequency of yielding to others):\n")
+print(sort(out_deg, decreasing = TRUE))
+
+# Betweenness: who bridges different parts of the network
+between_scores <- betweenness(g, directed = TRUE)
+cat("\nBetweenness centrality (coordination role):\n")
+print(sort(between_scores, decreasing = TRUE))
+
+# Summary interpretation
+cat("\n--- INTERPRETATION ---\n")
+hub_firm <- names(which.max(eigen_scores))
+cat(paste0("Likely hub/ringleader: ", hub_firm,
+           " (highest eigenvector centrality)\n"))
+cat("High eigenvector + high in-degree = receives wins from many firms\n")
+cat("High betweenness = potential coordinator bridging subgroups\n")
 ```
 
 **How to interpret this graph:**
@@ -285,6 +316,104 @@ Pick a counterfactual that matches data availability:
 - **Synthetic controls:** Helpful for single-market cartels; combine unaffected markets into a donor pool.
 
 Robustness: alternative functional forms (log vs. level), trimming outliers, placebo periods, heteroskedasticity checks, and randomization inference when N is small. For pass-through, regress downstream prices on upstream costs with lags to quantify harm on intermediaries vs. end-users.
+
+### Placebo tests for causal validation
+
+Placebo tests strengthen causal claims by showing that the estimated effect disappears when applied to situations where no effect should exist. Two common approaches:
+
+1. **Product placebo**: Run the same regression on a product NOT involved in the cartel. If you find a similar "effect," your identification is suspect.
+2. **Timing placebo**: Use a fake raid/leniency date. If structural breaks appear at arbitrary dates, the true break may be spurious.
+
+```{r}
+#| label: cartel-placebo-test
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 5
+library(dplyr)
+library(fixest)
+library(ggplot2)
+source("../program/R/helpers.R")
+
+# Simulate panel data for cartel and control products
+set.seed(456)
+n_periods <- 60
+raid_date <- 36  # Raid occurs at period 36
+
+panel <- expand.grid(
+ period = 1:n_periods,
+ product = c("Cement (cartel)", "Gravel (control)")
+) |>
+ mutate(
+   post_raid = period >= raid_date,
+   cartel_product = product == "Cement (cartel)",
+   cost = 50 + cumsum(rnorm(n(), 0, 1)),  # Common cost shock
+   # Cartel product has elevated prices pre-raid, drops after
+   price = case_when(
+     cartel_product & !post_raid ~ 100 + 0.8 * cost + 15 + rnorm(n(), 0, 3),
+     cartel_product & post_raid ~ 100 + 0.8 * cost + rnorm(n(), 0, 3),
+     TRUE ~ 95 + 0.85 * cost + rnorm(n(), 0, 3)  # Control product
+   )
+ )
+
+# Main regression: cartel product
+main_model <- feols(
+ log(price) ~ post_raid + cost | product,
+ data = filter(panel, cartel_product),
+ cluster = ~product
+)
+
+# Placebo 1: Control product (should show NO effect)
+placebo_product <- feols(
+ log(price) ~ post_raid + cost | product,
+ data = filter(panel, !cartel_product),
+ cluster = ~product
+)
+
+# Placebo 2: Fake raid date (period 20 instead of 36)
+panel_fake <- panel |>
+ mutate(post_fake_raid = period >= 20)
+
+placebo_timing <- feols(
+ log(price) ~ post_fake_raid + cost | product,
+ data = filter(panel_fake, cartel_product),
+ cluster = ~product
+)
+
+# Display results
+cat("=== MAIN RESULT: Cartel Product ===\n")
+cat(paste0("Post-raid effect: ", round(coef(main_model)["post_raidTRUE"], 4),
+          " (expect negative = price drop)\n\n"))
+
+cat("=== PLACEBO 1: Control Product ===\n")
+cat(paste0("Post-raid effect: ", round(coef(placebo_product)["post_raidTRUE"], 4),
+          " (should be ~0 if identification valid)\n\n"))
+
+cat("=== PLACEBO 2: Fake Raid Date ===\n")
+cat(paste0("Post-fake-raid effect: ", round(coef(placebo_timing)["post_fake_raidTRUE"], 4),
+          " (should be ~0 if true break is at raid date)\n"))
+
+# Visualization
+ggplot(panel, aes(x = period, y = price, color = product)) +
+ geom_vline(xintercept = raid_date, linetype = "dashed", color = "darkred", linewidth = 1) +
+ geom_line(linewidth = 0.8, alpha = 0.8) +
+ annotate("text", x = raid_date + 1, y = max(panel$price) - 5,
+          label = "Raid date", color = "darkred", hjust = 0, fontface = "italic") +
+ scale_color_manual(values = c("Cement (cartel)" = "#D55E00", "Gravel (control)" = "#0072B2")) +
+ labs(
+   title = "Placebo Test: Cartel vs. Control Product",
+   subtitle = "Control product shows no structural break at raid date",
+   x = "Period", y = "Price", color = NULL
+ ) +
+ theme_antitrust() +
+ theme(legend.position = "bottom")
+```
+
+**Interpreting placebo results:**
+
+- **Product placebo fails** (control shows effect): Consider whether the "control" product is actually affected, or whether your specification captures market-wide shocks rather than cartel conduct.
+- **Timing placebo fails** (fake date shows effect): Your data may have multiple structural breaks, or the cartel period definition is imprecise. Cross-check with documentary evidence.
+- **Both placebos pass**: Strengthens the causal interpretation that the raid/leniency event caused the observed price change.
 
 ## Leniency, documents, and triangulation
 Leniency statements, chats, and board minutes pin down conduct mechanisms (rotation order, price floors, trigger strategies). Use them to:

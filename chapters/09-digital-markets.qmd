@@ -91,6 +91,113 @@ summary(merchant_model)
 ```
 Replace the synthetic `panel` with sanitized telemetry (monthly active users/merchants) or aggregated OIPMI data stored in `data/examples/digital-two-sided.csv`. Document the estimated cross-side elasticities in your memo.
 
+### Zero-price demand model (attention markets)
+
+When users pay with attention rather than money, standard fee-based demand models need adaptation. Replace monetary fees with **attention costs**: ad load, time spent, or quality degradation metrics. This aligns with the SSNDQ (Small but Significant Non-transitory Decrease in Quality) framework used by competition authorities.
+
+```{r}
+#| label: digital-zero-price
+#| message: false
+#| warning: false
+library(dplyr)
+library(fixest)
+source("../program/R/helpers.R")
+
+# Zero-price platform: users "pay" with attention (ad exposure)
+# Synthetic example; replace with platform telemetry
+set.seed(789)
+attention_panel <- expand.grid(
+  platform = c("Alpha", "Beta"),
+  period = 2018:2023
+) |>
+  mutate(
+    # Attention costs (ads per session, data collection intensity)
+    ad_load = runif(n(), 3, 12),        # Ads per session
+    data_collection = runif(n(), 0, 1), # Privacy cost index (0-1)
+
+    # Quality metrics
+    load_time_ms = runif(n(), 500, 3000),   # Page load time
+    relevance_score = runif(n(), 0.5, 0.95), # Content relevance
+
+    # User engagement (dependent variable)
+    # Users respond negatively to ads/data collection, positively to quality
+    daily_active_users = exp(
+      12 - 0.08 * ad_load - 0.5 * data_collection -
+      0.0003 * load_time_ms + 2 * relevance_score +
+      rnorm(n(), 0, 0.15)
+    ),
+
+    # Advertiser side responds to user base
+    advertiser_spend = exp(
+      8 + 0.6 * log(daily_active_users) + 0.1 * ad_load +
+      rnorm(n(), 0, 0.1)
+    )
+  )
+
+# User-side model: attention cost elasticity
+user_model <- feols(
+  log(daily_active_users) ~ ad_load + data_collection +
+    load_time_ms + relevance_score | platform + period,
+  data = attention_panel
+)
+
+# Advertiser-side model: cross-side effects
+advertiser_model <- feols(
+  log(advertiser_spend) ~ log(daily_active_users) + ad_load | platform + period,
+  data = attention_panel
+)
+
+cat("=== ZERO-PRICE DEMAND MODEL ===\n\n")
+cat("User-side (attention cost) elasticities:\n")
+cat(paste0("  Ad load effect: ", round(coef(user_model)["ad_load"], 4),
+           " (1 more ad/session → ",
+           round(coef(user_model)["ad_load"] * 100, 1), "% DAU change)\n"))
+cat(paste0("  Data collection effect: ", round(coef(user_model)["data_collection"], 4),
+           " (privacy cost)\n"))
+cat(paste0("  Load time effect: ", round(coef(user_model)["load_time_ms"], 6),
+           " (per ms)\n"))
+cat(paste0("  Relevance effect: ", round(coef(user_model)["relevance_score"], 4),
+           " (quality boost)\n\n"))
+
+cat("Advertiser-side elasticities:\n")
+cat(paste0("  User base elasticity: ", round(coef(advertiser_model)["log(daily_active_users)"], 3),
+           " (cross-side network effect)\n"))
+cat(paste0("  Ad inventory value: ", round(coef(advertiser_model)["ad_load"], 4),
+           " (more slots → more spend)\n"))
+
+# SSNDQ analysis: what if quality degrades 5-10%?
+cat("\n=== SSNDQ SIMULATION ===\n")
+baseline_dau <- mean(attention_panel$daily_active_users)
+# 10% quality degradation = 10% more ads + 10% worse relevance
+degraded_dau <- baseline_dau * exp(
+  coef(user_model)["ad_load"] * 0.8 +      # 10% more ads (e.g., 8 → 8.8)
+  coef(user_model)["relevance_score"] * -0.08  # 10% worse relevance
+)
+dau_loss <- (baseline_dau - degraded_dau) / baseline_dau
+
+cat(paste0("Baseline DAU: ", format(round(baseline_dau), big.mark = ","), "\n"))
+cat(paste0("After 10% quality degradation: ", format(round(degraded_dau), big.mark = ","), "\n"))
+cat(paste0("Predicted user loss: ", scales::percent(dau_loss, accuracy = 0.1), "\n"))
+cat(paste0("Would monopolist profit? Depends on ad revenue vs. user loss tradeoff.\n"))
+```
+
+**Key adaptations for zero-price markets:**
+
+| Traditional Market | Zero-Price Market | Measurement |
+|:-------------------|:------------------|:------------|
+| Price | Ad load (ads/session) | Platform telemetry |
+| Price | Time cost (session duration) | Engagement metrics |
+| Price | Privacy cost (data collection) | Privacy policy scoring |
+| Quality | Relevance, load time, UX | A/B tests, user surveys |
+| Quantity | DAU, MAU, sessions | Platform analytics |
+
+**SSNDQ framework application:**
+
+1. Define quality metrics relevant to users (speed, relevance, privacy, content diversity)
+2. Estimate user sensitivity to each quality dimension
+3. Simulate: would a hypothetical monopolist profitably degrade quality by 5-10%?
+4. If users wouldn't switch despite degradation → market power concern
+
 ## Ranking, self-preferencing, and defaults
 
 ### Ranking impact visualization
