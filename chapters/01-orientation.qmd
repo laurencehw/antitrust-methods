@@ -80,7 +80,7 @@ ggplot(milestones, aes(x = year, y = y, color = type)) +
     title = "Key Antitrust Milestones",
     x = NULL, y = NULL, color = NULL
   ) +
-  theme_classic(base_size = 14) +
+  theme_antitrust() +
   theme(
     axis.text.y = element_blank(),
     axis.ticks.y = element_blank(),

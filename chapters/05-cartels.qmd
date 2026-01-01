@@ -52,7 +52,7 @@ ggplot(rotation, aes(x = reorder(bidder, wins), y = wins)) +
   geom_col(fill = "#0072B2") +
   coord_flip() +
   labs(title = "Bid wins by vendor", x = NULL, y = "Wins") +
-  theme_classic()
+  theme_antitrust()
 ```
 Pair charts with tables showing consecutive wins, geographic patterns, or unexplained bid withdrawals.
 
@@ -254,7 +254,7 @@ library(fredr)
 library(dplyr)
 library(strucchange)
 library(ggplot2)
-source("../R/helpers.R")
+source("../program/R/helpers.R")
 
 fredr_set_key(Sys.getenv("FRED_API_KEY"))
 gas <- fredr(series_id = "GASREGW", observation_start = as.Date("2015-01-01")) |>
@@ -273,7 +273,7 @@ ggplot(gas, aes(date, price, color = regime)) +
     y = "USD per gallon",
     color = "Regime"
   ) +
-  scale_color_antitrust() +
+  scale_color_viridis_d() +
   theme_antitrust() +
   guides(color = guide_legend(nrow = 1))
 ```

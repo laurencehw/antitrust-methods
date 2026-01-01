@@ -185,7 +185,7 @@ p1 <- ggplot(class_data, aes(x = treatment_effect)) +
     y = "Number of Class Members",
     caption = "Illustrative data. Replace with actual class member damages calculations."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(plot.title.position = "plot")
 
 # Plot 2: Treatment effect by subgroup
@@ -194,6 +194,26 @@ p2 <- ggplot(class_data, aes(x = geographic_region,
                               fill = geographic_region)) +
   geom_boxplot(alpha = 0.7, outlier.alpha = 0.3) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Treatment Effect by Geographic Region",
+    subtitle = "Effect is positive across all subgroups (common impact)",
+    x = NULL,
+    y = "Treatment Effect ($)"
+  ) +
+  theme_antitrust() +
+  theme(
+    legend.position = "none",
+    plot.title.position = "plot"
+  )
+
+# Combine plots
+(p1 | p2) + plot_annotation(
+  title = "Common Impact Analysis for Class Certification",
+  subtitle = "Demonstrating that conduct had common effect across class members",
+  caption = "Illustrative data. Replace with actual class member impact calculations."
+)
 ```
 
 **Expert report presentation:**
@@ -338,7 +358,7 @@ Track expert work product and key milestones for case management.
 #| warning: false
 #| fig-width: 12
 #| fig-height: 7
-source("../R/helpers.R")
+source("../program/R/helpers.R")
 library(dplyr)
 
 # Expert engagement timeline
@@ -432,7 +452,7 @@ p1 <- ggplot(individual_damages, aes(x = damages)) +
     x = "Individual Damages ($)",
     y = "Number of Class Members"
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(plot.title.position = "plot")
 
 # Plot 2: Lorenz curve (cumulative damages)
@@ -452,7 +472,7 @@ p2 <- ggplot(individual_damages,
     x = "Cumulative % of Class Members (ranked by damages)",
     y = "Cumulative % of Total Damages"
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(plot.title.position = "plot")
 
 # Plot 3: Damages by category
@@ -481,7 +501,7 @@ p3 <- ggplot(damages_summary, aes(x = damages_category,
     x = "Individual Damages Range",
     y = "% of Class Members"
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(
     legend.position = "none",
     plot.title.position = "plot"

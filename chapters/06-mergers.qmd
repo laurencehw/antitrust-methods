@@ -58,7 +58,7 @@ Highlight the evidence sources for diversion (switching matrices, conjoint surve
 #| label: merger-sim-skeleton
 #| message: false
 #| warning: false
-source("../R/helpers.R")
+source("../program/R/helpers.R")
 # products_df columns: product, firm, price, share, mc or margin, nest
 # sim <- run_logit_sim(products_df, merging_firms = c("FirmA","FirmB"))
 # sim$summary # contains post-merger price deltas, elasticities, diversion matrices
@@ -128,7 +128,7 @@ ggplot(cars, aes(rel_day, car, color = symbol)) +
   labs(title = "Cumulative abnormal returns around merger announcement",
        subtitle = "Illustrative airline example (event ±20 trading days)",
        x = "Event time (days)", y = "CAR", color = NULL) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(legend.position = "bottom")
 ```
 Use CAR patterns as suggestive evidence of coordination or efficiency expectations, but always pair with operational data (capacity, contracts).
@@ -160,7 +160,7 @@ See the UPP/GUPPI example above. Expand the template with case-specific diversio
 #| message: false
 #| warning: false
 # robust path in case execution dir is chapter folder
-source("../R/helpers.R")
+source("../program/R/helpers.R")
 # products_df: product, firm, price, share, mc (or margin), group (nest)
 # sim <- run_logit_sim(products_df, merging_firms = c("FirmA","FirmB"))
 # sim$summary
@@ -246,7 +246,7 @@ p1 <- ggplot(market_combined, aes(x = reorder(firm, share), y = share,
     y = "Market Share",
     fill = NULL
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(
     legend.position = "bottom",
     plot.title.position = "plot"
@@ -290,7 +290,7 @@ p2 <- ggplot(hhi_data, aes(x = scenario, y = hhi, fill = scenario)) +
     y = "HHI",
     fill = NULL
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(
     legend.position = "none",
     plot.title.position = "plot"
@@ -316,7 +316,7 @@ p3 <- ggplot(market_post_sorted, aes(x = seq_along(firm), y = cumulative_share))
     x = NULL,
     y = "Cumulative Share"
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(
     plot.title.position = "plot",
     axis.text.x = element_text(angle = 45, hjust = 1)
@@ -430,7 +430,7 @@ ggplot(sim_components) +
     caption = "Components from differentiated products logit simulation.
     Replace with actual model outputs."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     axis.text.x = element_text(angle = 30, hjust = 1),
     legend.position = "bottom",

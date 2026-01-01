@@ -44,6 +44,7 @@ We can calculate critical loss thresholds for various hypothetical segments (e.g
 #| fig-height: 5
 library(dplyr)
 library(ggplot2)
+source("../program/R/helpers.R")
 
 critical_loss <- function(margin, price_increase) {
   price_increase / (price_increase + margin)
@@ -119,7 +120,7 @@ p1 <- ggplot(cl_curves, aes(x = margin, y = critical_loss, color = price_increas
     color = "Price increase",
     shape = "Actual loss from data"
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     legend.position = "bottom",
     legend.box = "vertical",
@@ -226,7 +227,7 @@ p_heatmap <- ggplot(route_shares_top, aes(x = carrier, y = route_labeled, fill =
     fill = "Market\nShare",
     caption = "Source: nycflights13 package. HHI = Herfindahl-Hirschman Index."
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(
     axis.text.y = element_text(size = 8),
     axis.text.x = element_text(angle = 45, hjust = 1),
@@ -328,7 +329,7 @@ p_flows <- ggplot(flow_data, aes(x = destination, y = origin, fill = shipments))
     fill = "Shipments\n(units)",
     caption = "Illustrative data. In practice, use Census Commodity Flow Survey, BEA data, or proprietary shipping records."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     plot.title.position = "plot",
     panel.grid = element_blank(),
@@ -343,7 +344,7 @@ cat("\nRegional self-sufficiency (intra-regional shipments as % of total):\n")
 self_sufficiency |>
   mutate(self_sufficiency = scales::percent(self_sufficiency, accuracy = 1)) |>
   arrange(desc(self_sufficiency)) |>
-  knitr::kable(self_sufficiency, digits=2, caption="Regional Self-Sufficiency Scores")
+  knitr::kable(digits=2, caption="Regional Self-Sufficiency Scores")
 ```
 
 **How to use this analysis:**
@@ -440,7 +441,7 @@ p_diversion <- diversion_matrix |>
     fill = NULL,
     caption = "Source: Simulated switching data. In practice: loyalty panels, surveys, or choice experiments."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     plot.title.position = "plot",
     legend.position = "top"

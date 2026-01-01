@@ -105,6 +105,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(patchwork)
+source("../program/R/helpers.R")
 
 rebates <- tibble::tribble(
   ~tier, ~volume, ~list_price, ~rebate,
@@ -173,7 +174,7 @@ p_waterfall <- effective_price_data |>
     y = "Price per unit",
     caption = "Scenario: $100 list price, 10% retroactive rebate at 95% volume share.\nRival with $75 incremental cost cannot profitably compete for marginal units."
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(
     legend.position = "none",
     plot.caption = element_text(hjust = 0, size = 9, color = "gray40"),
@@ -218,7 +219,7 @@ p_evolution <- ggplot(share_evolution, aes(x = quarter, y = market_share,
     y = "Market share (%)",
     color = "Firm"
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(legend.position = "bottom")
 
 # Combine panels
@@ -337,7 +338,7 @@ p_event <- ggplot(event_coefs, aes(x = rel_period, y = estimate)) +
     y = "Effect on rival share (pp)",
     caption = "Shaded area = 95% confidence interval. No pre-trend in periods -11 to -1; sharp decline post-adoption."
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(plot.caption = element_text(hjust = 0, size = 9, color = "gray40"))
 
 # Customer-level treatment timing
@@ -361,7 +362,7 @@ p_timing <- panel_contracts |>
     x = "Period",
     y = "Rival market share (%)"
   ) +
-  theme_classic(base_size = 11)
+  theme_antitrust()
 
 p_event / p_timing +
   plot_annotation(
@@ -517,7 +518,7 @@ p_bundle <- tying_data |>
     x = "Quarter",
     y = "Bundle penetration (%)"
   ) +
-  theme_classic(base_size = 11)
+  theme_antitrust()
 
 # Panel 2: Market share evolution (stacked area)
 share_long <- tying_data |>
@@ -543,7 +544,7 @@ p_shares <- ggplot(share_long, aes(x = quarter, y = share, fill = firm)) +
     y = "Market share (%)",
     fill = "Firm"
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(legend.position = "bottom")
 
 # Panel 3: Correlation between bundle penetration and rival share loss
@@ -567,7 +568,7 @@ p_correlation <- ggplot(correlation_data, aes(x = bundle_penetration, y = rival_
     x = "Bundle penetration (%)",
     y = "Rival A market share (%)"
   ) +
-  theme_classic(base_size = 11)
+  theme_antitrust()
 
 # Combine panels
 p_bundle / (p_shares | p_correlation) +
@@ -678,7 +679,7 @@ p_dispersion <- price_dispersion |>
     y = "Price dispersion (CV)",
     caption = "Each point = one hotel; boxes show distribution across hotels"
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(legend.position = "none",
         plot.caption = element_text(hjust = 0, size = 9, color = "gray40"))
 
@@ -700,7 +701,7 @@ p_platform_prices <- mfn_data |>
     y = "Average price ($)",
     fill = "Period"
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(legend.position = "bottom")
 
 # Panel 3: Fee pass-through test
@@ -741,7 +742,7 @@ p_passthrough <- fee_passthrough |>
     x = NULL,
     y = "Mean price gap ($)"
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(legend.position = "none")
 
 # Combine panels
@@ -828,7 +829,7 @@ p_margin <- margin_squeeze_data |>
     y = "Rival margin ($)",
     color = "Status"
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(legend.position = "bottom")
 
 # Panel 2: Price waterfall showing squeeze mechanism
@@ -867,7 +868,7 @@ p_waterfall_margin <- waterfall_data |>
     x = NULL,
     y = "Price per customer ($)"
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(legend.position = "none")
 
 # Panel 3: Comparison of wholesale pricing (internal vs. external)
@@ -894,7 +895,7 @@ p_wholesale_compare <- margin_squeeze_data |>
     y = "Wholesale price ($)",
     color = "Transfer price type"
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(legend.position = "bottom")
 
 # Combine panels
@@ -961,7 +962,7 @@ contracts_data |>
     y = "Annual volume (units)",
     fill = "Status"
   ) +
-  theme_classic()
+  theme_antitrust()
 ```
 
 Interpretation: If the foreclosed share (here 58%) exceeds the threshold needed for rivals to reach minimum efficient scale, and contracts are long-duration with staggered renewals, foreclosure concerns are substantial.

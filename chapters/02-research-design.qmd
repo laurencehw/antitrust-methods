@@ -83,6 +83,7 @@ This figure uses publicly available equity data to demonstrate how to structure 
 library(tidyquant)
 library(dplyr)
 library(ggplot2)
+source("../program/R/helpers.R")
 
 event_date <- as.Date("2013-02-14") # American Airlines/US Airways announcement
 tickers <- c("AAL", "DAL", "LUV", "SPY") # SPY proxy for market return
@@ -123,7 +124,7 @@ ggplot(cars, aes(x = rel_day, y = car, color = symbol)) +
     y = "Cumulative abnormal return",
     color = NULL
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(legend.position = "bottom")
 ```
 

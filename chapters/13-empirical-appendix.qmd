@@ -41,6 +41,7 @@ Pair the chronology with a tabular schema inventory so you know what can feed th
 #| warning: false
 library(tibble)
 library(dplyr)
+source("../program/R/helpers.R")
 
 data_inventory <- tribble(
   ~system, ~owner, ~grain, ~fields, ~coverage, ~notes,
@@ -169,7 +170,7 @@ ggplot(chronology, aes(x = date, y = category, color = category)) +
   geom_point(size = 3) +
   geom_text(aes(label = label), hjust = -0.1, size = 3) +
   labs(title = "Chronology overview", x = NULL, y = NULL) +
-  theme_classic() +
+  theme_antitrust() +
   theme(legend.position = "none")
 ```
 
@@ -230,7 +231,7 @@ p1 <- panel |>
     color = NULL,
     linetype = NULL
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     legend.position = "bottom",
     plot.title.position = "plot"
@@ -273,7 +274,7 @@ p2 <- ggplot(coef_data, aes(x = rel_period, y = estimate)) +
     y = "Treatment Effect Estimate",
     caption = "Reference period: -1. Shaded region shows 95% confidence interval."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(plot.title.position = "plot")
 
 # Combine plots
@@ -399,7 +400,7 @@ ggplot(balance_combined, aes(x = abs(smd), y = variable,
     shape = "Timing",
     caption = "SMD < 0.1 indicates acceptable balance (Austin, 2009)."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     legend.position = "bottom",
     plot.title.position = "plot"
@@ -495,7 +496,7 @@ ggplot(spec_results, aes(x = spec_num, y = estimate)) +
     y = "Treatment Effect Estimate",
     caption = "Each point represents a different model specification. Shaded area = 95% CI."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
     plot.title.position = "plot"
@@ -555,7 +556,7 @@ p1 <- ggplot(diagnostics, aes(x = fitted, y = residual)) +
     x = "Fitted Values",
     y = "Residuals"
   ) +
-  theme_classic(base_size = 11)
+  theme_antitrust()
 
 # Plot 2: Q-Q plot for normality
 p2 <- ggplot(diagnostics, aes(sample = standardized_residual)) +
@@ -567,7 +568,7 @@ p2 <- ggplot(diagnostics, aes(sample = standardized_residual)) +
     x = "Theoretical Quantiles",
     y = "Sample Quantiles"
   ) +
-  theme_classic(base_size = 11)
+  theme_antitrust()
 
 # Plot 3: Scale-location plot
 p3 <- ggplot(diagnostics, aes(x = fitted, y = sqrt(abs(standardized_residual)))) +
@@ -579,7 +580,7 @@ p3 <- ggplot(diagnostics, aes(x = fitted, y = sqrt(abs(standardized_residual))))
     x = "Fitted Values",
     y = "√|Standardized Residuals|"
   ) +
-  theme_classic(base_size = 11)
+  theme_antitrust()
 
 # Plot 4: Histogram of residuals
 p4 <- ggplot(diagnostics, aes(x = residual)) +
@@ -591,7 +592,7 @@ p4 <- ggplot(diagnostics, aes(x = residual)) +
     x = "Residuals",
     y = "Count"
   ) +
-  theme_classic(base_size = 11)
+  theme_antitrust()
 
 # Combine plots
 (p1 | p2) / (p3 | p4) + plot_annotation(
@@ -661,7 +662,7 @@ ggplot(power_grid, aes(x = n, y = power, color = effect_label)) +
     color = "Effect Size",
     caption = "Points indicate minimum sample size for 80% power."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     legend.position = "bottom",
     plot.title.position = "plot"

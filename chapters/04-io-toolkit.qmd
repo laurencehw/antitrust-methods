@@ -60,6 +60,7 @@ In modern practice, these approaches reinforce each other. You might use a **red
 #| message: false
 #| warning: false
 library(tidyverse)
+source("../program/R/helpers.R")
 
 products <- tribble(
   ~product, ~price, ~share, ~feature_score,
@@ -194,7 +195,7 @@ ggplot(sensitivity) +
                     ", Margin = ", round(base_margin, 2),
                     ", Efficiency = ", round(base_efficiency, 2))
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     plot.title.position = "plot",
     panel.grid.major.y = element_blank()
@@ -293,7 +294,7 @@ p1 <- ggplot(pass_long, aes(x = date, y = index, color = series)) +
     y = "Index (Jan 2015 = 100)",
     color = NULL
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     legend.position = "bottom",
     plot.title.position = "plot"
@@ -317,7 +318,7 @@ p2 <- ggplot(pass_df, aes(x = ppi_index, y = cpi_index)) +
     x = "Producer Price Index",
     y = "Consumer Price Index"
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(plot.title.position = "plot")
 
 # Combined plot

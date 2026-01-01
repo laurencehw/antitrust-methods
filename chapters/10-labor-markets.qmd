@@ -41,6 +41,7 @@ Compute HHI or concentration ratios for labor markets defined by occupation × g
 #| message: false
 #| warning: false
 library(dplyr)
+source("../program/R/helpers.R")
 
 employment <- tibble::tribble(
   ~employer, ~occupation, ~region, ~employment,
@@ -298,7 +299,7 @@ ggplot(labor_occ, aes(x = fct_reorder(occupation, hhi, .desc = FALSE),
     fill = "Region Type",
     caption = "Illustrative data. Replace with QCEW/LEHD aggregated to commuting zones."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     plot.title.position = "plot",
     legend.position = "bottom"
@@ -371,7 +372,7 @@ ggplot(wage_impact, aes(x = hhi, y = wage_gap)) +
     color = "Concentration Level",
     caption = "Illustrative data. Replace with matched QCEW/OES data.\nCompetitive benchmark from low-HHI markets or structural estimates."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     plot.title.position = "plot",
     legend.position = "bottom"

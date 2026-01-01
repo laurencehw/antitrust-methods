@@ -39,6 +39,7 @@ Expect to combine telemetry, clickstream data, partner contracts, and qualitativ
 #| warning: false
 library(dplyr)
 library(fixest)
+source("../program/R/helpers.R")
 
 # Synthetic example; replace with platform telemetry
 panel <- expand.grid(platform = c("Alpha","Beta"), period = 2018:2023) |>
@@ -89,7 +90,7 @@ ggplot(ranking, aes(slot, ctr, color = listing)) +
     y = "Conversion rate",
     color = NULL
   ) +
-  theme_classic(base_size = 11) +
+  theme_antitrust() +
   theme(legend.position = "bottom")
 ```
 Populate the tibble with actual ranking data (e.g., OIPMI buy-box audits, CMA Amazon Marketplace analysis) or maintain sanitized values in `data/examples/digital-ranking.csv`. The CMA's market studies are publicly available at [gov.uk/cma](https://www.gov.uk/government/organisations/competition-and-markets-authority).
@@ -233,7 +234,7 @@ p1 <- ggplot(flows, aes(x = pattern, y = pct, fill = pattern)) +
     y = "Share of Users",
     caption = "Illustrative data. Replace with OIPMI survey or DMA compliance reports."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position = "none",
@@ -321,7 +322,7 @@ p1 <- ggplot(default_data, aes(x = week, y = rival_share,
     color = NULL,
     linetype = NULL
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     legend.position = "bottom",
     plot.title.position = "plot"
@@ -354,7 +355,7 @@ p2 <- ggplot(did_coefs, aes(x = week, y = estimate)) +
     y = "Effect on rival share (percentage points)",
     caption = "Illustrative data. Replace with DMA compliance reports or CMA experiments."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(plot.title.position = "plot")
 
 # Combined plot
@@ -447,7 +448,7 @@ ggplot(fees_long, aes(x = paste(platform, category, sep = "\n"),
     fill = "Fee Component",
     caption = "Data from public platform documentation (2024). FBM = Fulfilled by Merchant; FBA = Fulfilled by Amazon."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1, size = 9),
     legend.position = "bottom",
@@ -538,7 +539,7 @@ ggplot(market_evolution, aes(x = date, y = share, fill = platform)) +
     fill = "Platform",
     caption = "Illustrative data. Replace with StatCounter, SimilarWeb, or regulatory filings."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     legend.position = "bottom",
     plot.title.position = "plot"

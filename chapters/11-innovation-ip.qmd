@@ -56,6 +56,7 @@ Evidence sources:
 #| warning: false
 library(dplyr)
 library(ggplot2)
+source("../program/R/helpers.R")
 
 stack <- tibble::tribble(
   ~component, ~royalty_percent,
@@ -250,7 +251,7 @@ ggplot(royalty_components) +
     fill = "Royalty Type",
     caption = "Illustrative data. Replace with FRAND rate determinations or licensing disclosures."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position = "bottom",
@@ -334,7 +335,7 @@ if (!requireNamespace("survminer", quietly = TRUE)) {
     subtitle = "Kaplan-Meier survival curves by settlement status",
     legend.title = "Settlement Type",
     legend.labs = c("No settlement", "Reverse payment settlement"),
-    ggtheme = theme_classic(base_size = 12),
+    ggtheme = theme_antitrust(),
     font.main = c(14, "bold"),
     font.subtitle = c(11, "plain"),
     font.caption = c(9, "plain"),
@@ -519,7 +520,7 @@ ggplot(rd_panel, aes(x = quarter, y = rd_index,
     linetype = NULL,
     caption = "Illustrative data. Replace with Compustat or company financial statements."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     legend.position = "bottom",
     plot.title.position = "plot"
@@ -591,7 +592,7 @@ ggplot(pipeline, aes(x = phase, y = count, fill = firm, group = firm)) +
     fill = "Company",
     caption = "Illustrative data. Replace with clinicaltrials.gov or regulatory filings."
   ) +
-  theme_classic(base_size = 12) +
+  theme_antitrust() +
   theme(
     legend.position = "bottom",
     plot.title.position = "plot"
