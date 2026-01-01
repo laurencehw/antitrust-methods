@@ -28,7 +28,11 @@ Labor cases now sit alongside mergers and cartels in agency priorities. This cha
 :::
 
 ::: {.callout-note title="Citations and comparative note"}
-Reference US DOJ/FTC criminal wage-fixing cases, state AG settlements, the FTC's proposed noncompete ban (see [ftc.gov](https://www.ftc.gov/)), and international enforcement (e.g., Portugal's wage-fixing fines, Japan's OTA cases). Cite key empirical papers from recent labor economics literature. Highlight differences where EU/UK enforcement is nascent but evolving (e.g., CMA's focus on noncompetes shorter than 3 months, EC guidelines on HR collusion).
+Reference US DOJ/FTC criminal wage-fixing cases, state AG settlements, the FTC's 2024 noncompete ban (finalized April 2024 but later enjoined by federal court in August 2024; see [ftc.gov](https://www.ftc.gov/)), and international enforcement (e.g., Portugal's wage-fixing fines, Japan's OTA cases). Cite key empirical papers from recent labor economics literature. Highlight differences where EU/UK enforcement is nascent but evolving (e.g., CMA's focus on noncompetes shorter than 3 months, EC guidelines on HR collusion).
+:::
+
+::: {.callout-important title="Statutory labor exemption"}
+**Labor antitrust enforcement targets employer conduct, not worker organizing.** The Clayton Act (Section 6, 1914) declares that "the labor of a human being is not a commodity or article of commerce" and exempts legitimate labor union activities from antitrust. The Norris-LaGuardia Act (1932) further shields collective bargaining, strikes, and boycotts. Thus, while employers agreeing to fix wages or not poach workers violates antitrust, workers collectively bargaining for higher wages through unions does not. The exemption covers union organizing, collective bargaining, and coordinated labor action—but not agreements between unions and employers designed to harm competition in product markets (*Connell Construction v. Plumbers Local 100*, 1975).
 :::
 
 ## Measuring labor market power
@@ -150,8 +154,8 @@ labor_hhi <- tibble(
 ) |>
   mutate(
     concentration_level = case_when(
-      hhi < 1500 ~ "Unconcentrated",
-      hhi < 2500 ~ "Moderately concentrated",
+      hhi < 1000 ~ "Unconcentrated",
+      hhi < 1800 ~ "Moderately concentrated",
       TRUE ~ "Highly concentrated"
     ),
     concentration_level = factor(
@@ -171,10 +175,10 @@ ggplot(us_map, aes(x = long, y = lat, group = group, fill = hhi)) +
   scale_fill_viridis_c(
     option = "plasma",
     direction = -1,
-    breaks = c(1500, 2500, 3500),
-    labels = c("1,500\n(Unconcentrated)",
-               "2,500\n(Moderate)",
-               "3,500\n(High)")
+    breaks = c(1000, 1800, 3000),
+    labels = c("1,000\n(Unconcentrated)",
+               "1,800\n(Presumption)",
+               "3,000\n(High)")
   ) +
   labs(
     title = "Labor Market Concentration by State",
@@ -204,9 +208,9 @@ print(labor_summary, n = Inf)
 ```
 
 **Interpretation:**
-- **HHI < 1,500**: Competitive labor markets; multiple employers compete for workers.
-- **HHI 1,500-2,500**: Moderately concentrated; potential monopsony concerns.
-- **HHI > 2,500**: Highly concentrated; significant monopsony power likely.
+- **HHI < 1,000**: Competitive labor markets; multiple employers compete for workers.
+- **HHI 1,000-1,800**: Moderately concentrated; potential monopsony concerns.
+- **HHI > 1,800**: Highly concentrated; structural presumption applies (2023 Merger Guidelines).
 
 **How to construct this with real data:**
 
@@ -269,8 +273,8 @@ labor_occ <- expand.grid(
       region == "Urban" ~ runif(n(), 800, 2200)
     ),
     concentration = case_when(
-      hhi < 1500 ~ "Unconcentrated",
-      hhi < 2500 ~ "Moderately concentrated",
+      hhi < 1000 ~ "Unconcentrated",
+      hhi < 1800 ~ "Moderately concentrated",
       TRUE ~ "Highly concentrated"
     )
   )
@@ -279,13 +283,13 @@ labor_occ <- expand.grid(
 ggplot(labor_occ, aes(x = fct_reorder(occupation, hhi, .desc = FALSE),
                       y = hhi, fill = region)) +
   geom_col(position = position_dodge(width = 0.8), width = 0.7) +
-  geom_hline(yintercept = 1500, linetype = "dashed",
+  geom_hline(yintercept = 1000, linetype = "dashed",
              color = "gray40", linewidth = 0.8) +
-  geom_hline(yintercept = 2500, linetype = "dashed",
+  geom_hline(yintercept = 1800, linetype = "dashed",
              color = "gray40", linewidth = 0.8) +
-  annotate("text", x = 6.5, y = 1500, label = "1,500 threshold",
+  annotate("text", x = 6.5, y = 1000, label = "1,000 threshold",
            hjust = 0, vjust = -0.5, size = 3) +
-  annotate("text", x = 6.5, y = 2500, label = "2,500 threshold",
+  annotate("text", x = 6.5, y = 1800, label = "1,800 (2023 Guidelines)",
            hjust = 0, vjust = -0.5, size = 3) +
   scale_fill_manual(values = c("Urban" = "#0072B2",
                                 "Suburban" = "#009E73",
@@ -311,7 +315,7 @@ labor_occ |>
   group_by(occupation) |>
   summarise(
     avg_hhi = mean(hhi),
-    high_conc_regions = sum(hhi > 2500),
+    high_conc_regions = sum(hhi > 1800),
     .groups = "drop"
   ) |>
   arrange(desc(avg_hhi)) |>
@@ -345,8 +349,8 @@ wage_impact <- tibble(
 ) |>
   mutate(
     concentration = case_when(
-      hhi < 1500 ~ "Unconcentrated",
-      hhi < 2500 ~ "Moderately concentrated",
+      hhi < 1000 ~ "Unconcentrated",
+      hhi < 1800 ~ "Moderately concentrated",
       TRUE ~ "Highly concentrated"
     )
   )
@@ -398,8 +402,8 @@ summary(wage_model)
 - **Commuting zone definitions**: USDA ERS or Census Geography
 
 ## Visualizations and data sourcing
-- **Labor HHI choropleths (Roadmap 10.1):** Source [BLS QCEW](https://www.bls.gov/cew/) (US), Stats SA, or EU Labour Force Survey; for publication, provide a template script plus sanitized shapefiles.  
-- **Noncompete diff-in-diff plots (Roadmap 10.2):** Use state-level CPS microdata, WA Dept. of Labor wage records, or Stats SA sectoral wages; fallback to synthetic data until approvals land.  
-- **Mobility transition matrices (Roadmap 10.3):** Build from [LEHD/LODES](https://lehd.ces.census.gov/) or anonymized HR exports; include aggregated gig-platform transitions.
+- **Labor HHI choropleths:** Source [BLS QCEW](https://www.bls.gov/cew/) (US), Stats SA, or EU Labour Force Survey; for publication, provide a template script plus sanitized shapefiles.
+- **Noncompete diff-in-diff plots:** Use state-level CPS microdata, WA Dept. of Labor wage records, or Stats SA sectoral wages; fallback to synthetic data until approvals land.
+- **Mobility transition matrices:** Build from [LEHD/LODES](https://lehd.ces.census.gov/) or anonymized HR exports; include aggregated gig-platform transitions.
 
 Document each dataset in `data/README.md` and tag whether it is public, sanitized, or confidential. When ready to "fill with real data," replace the synthetic CSVs in `data/examples/` with actual extracts, rerun the figures, and cache redacted outputs for broader distribution.

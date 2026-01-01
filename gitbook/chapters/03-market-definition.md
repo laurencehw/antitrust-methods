@@ -78,9 +78,9 @@ This heatmap visualizes carrier concentration on specific routes, helping identi
 
 ![Airline Route Concentration: NYC Area](../images/nyc-route-heatmap-1.png)
 
-*Top 20 routes by volume. HHI values indicate market concentration (>2,500 = highly concentrated). Source: nycflights13 package.*
+*Top 20 routes by volume. HHI values indicate market concentration (>1,800 = highly concentrated per 2023 Guidelines). Source: nycflights13 package.*
 
-**Interpretation:** Routes with HHI > 2,500 (US DOJ/FTC threshold for "highly concentrated") may warrant closer scrutiny. The visualization shows that many NYC routes are served by only 1-2 carriers with dominant shares, which could support narrow route-level market definitions in merger analysis. In practice, you would supplement this with pricing data, switching patterns, and qualitative evidence about entry barriers.
+**Interpretation:** Routes with HHI > 1,800 (2023 US DOJ/FTC threshold for "highly concentrated") may warrant closer scrutiny. The visualization shows that many NYC routes are served by only 1-2 carriers with dominant shares, which could support narrow route-level market definitions in merger analysis. In practice, you would supplement this with pricing data, switching patterns, and qualitative evidence about entry barriers.
 
 Replace `nycflights13` with live data (slot allocation, loyalty records, booking data, or Stats SA shipment records) when presenting evidence in actual matters.
 

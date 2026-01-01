@@ -174,9 +174,9 @@ Show how individual class member damages aggregate to total class damages, impor
 - Prepare for de minimis exclusion arguments
 
 ## Visualizations and data plan
-- **Common impact distribution plot (Roadmap 12.1):** Use class-member residuals or individual damages estimates; store sanitized dataset in `data/examples/common-impact.csv`.
-- **Scenario/sensitivity tornado charts (Roadmap 12.2):** Build from `litigation-sensitivity` scaffold.
-- **Evidence provenance diagram (Roadmap 12.3):** Use `DiagrammeR` or `ggplot2` to map data sources to opinions; data from evidence map spreadsheet.
+- **Common impact distribution plot:** Use class-member residuals or individual damages estimates; store sanitized dataset in `data/examples/common-impact.csv`.
+- **Scenario/sensitivity tornado charts:** Build from `litigation-sensitivity` scaffold.
+- **Evidence provenance diagram:** Use `DiagrammeR` or `ggplot2` to map data sources to opinions; data from evidence map spreadsheet.
 
 ## Checklist for "fill with real data"
 

@@ -37,7 +37,9 @@ By the end you should be able to:
 ```r
 library(dplyr)
 upp <- function(diversion, price, margin, efficiency = 0) {
-  diversion * price * (1 - margin) - efficiency
+  # UPP = diverted profit - efficiencies
+  # margin = (P-C)/P, so price * margin = P - C = profit per unit
+  diversion * price * margin - efficiency
 }
 
 inputs <- tibble::tribble(
@@ -80,9 +82,9 @@ s0 <- 1 - sum(products$share)  # Outside good share = 0.25
 products <- products |>
   mutate(
     delta = log(share) - log(s0),
-    # Calibrate alpha (price sensitivity) from FOC: margin = 1 / (alpha * (1 - s_j))
-    # Rearranging: alpha = 1 / (margin * (1 - s_j))
-    alpha_implied = 1 / (margin * (1 - share))
+    # Calibrate alpha (price sensitivity) from FOC: margin = 1 / (alpha * price * (1 - s_j))
+    # Rearranging: alpha = 1 / (margin * price * (1 - s_j))
+    alpha_implied = 1 / (margin * price * (1 - share))
   )
 
 # Use average alpha for simulation
@@ -503,25 +505,25 @@ hhi_data <- tibble::tribble(
   mutate(
     scenario = factor(scenario, levels = c("Pre-merger", "Post-merger")),
     concern_level = case_when(
-      hhi < 1500 ~ "Unconcentrated",
-      hhi < 2500 ~ "Moderately concentrated",
+      hhi < 1000 ~ "Unconcentrated",
+      hhi < 1800 ~ "Moderately concentrated",
       TRUE ~ "Highly concentrated"
     )
   )
 
 p2 <- ggplot(hhi_data, aes(x = scenario, y = hhi, fill = scenario)) +
   geom_col(width = 0.6) +
-  geom_hline(yintercept = 1500, linetype = "dashed", color = "gray40",
+  geom_hline(yintercept = 1000, linetype = "dashed", color = "gray40",
              linewidth = 0.8) +
-  geom_hline(yintercept = 2500, linetype = "dashed", color = "gray40",
+  geom_hline(yintercept = 1800, linetype = "dashed", color = "gray40",
              linewidth = 0.8) +
-  annotate("text", x = 2.5, y = 1500, label = "1,500 threshold",
+  annotate("text", x = 2.5, y = 1000, label = "1,000 threshold",
            hjust = 0, vjust = -0.5, size = 3) +
-  annotate("text", x = 2.5, y = 2500, label = "2,500 threshold",
+  annotate("text", x = 2.5, y = 1800, label = "1,800 threshold",
            hjust = 0, vjust = -0.5, size = 3) +
-  annotate("rect", xmin = -Inf, xmax = Inf, ymin = 1500, ymax = 2500,
+  annotate("rect", xmin = -Inf, xmax = Inf, ymin = 1000, ymax = 1800,
            fill = "yellow", alpha = 0.05) +
-  annotate("rect", xmin = -Inf, xmax = Inf, ymin = 2500, ymax = Inf,
+  annotate("rect", xmin = -Inf, xmax = Inf, ymin = 1800, ymax = Inf,
            fill = "red", alpha = 0.05) +
   scale_fill_manual(values = c("Pre-merger" = "#0072B2",
                                 "Post-merger" = "#D55E00")) +
@@ -570,9 +572,9 @@ p3 <- ggplot(market_post_sorted, aes(x = seq_along(firm), y = cumulative_share))
   subtitle = paste0("Pre-merger HHI: ", round(hhi_pre, 0),
                    " | Post-merger HHI: ", round(hhi_post, 0),
                    " | Δ HHI: ", round(delta_hhi, 0)),
-  caption = "US Merger Guidelines (2023): Moderately concentrated if HHI > 1,500;
-  Highly concentrated if HHI > 2,500. Mergers with Δ HHI > 100-200 in concentrated
-  markets may warrant scrutiny."
+  caption = "US Merger Guidelines (2023): Moderately concentrated if HHI > 1,000;
+  Highly concentrated if HHI > 1,800. Mergers with Δ HHI > 100 in concentrated
+  markets create a structural presumption of illegality."
 )
 
 # Summary table
@@ -587,8 +589,8 @@ cat(paste0("\nCombined entity share: ",
 </details>
 
 **Interpretation:**
-- **HHI thresholds**: The 2023 US Merger Guidelines use 1,500 and 2,500 as thresholds. Markets above 2,500 are "highly concentrated."
-- **Delta HHI**: Changes above 100-200 in concentrated markets may trigger enhanced scrutiny.
+- **HHI thresholds**: The 2023 US Merger Guidelines use 1,000 and 1,800 as thresholds. Markets above 1,800 are "highly concentrated."
+- **Delta HHI**: Changes above 100 in concentrated markets create a structural presumption of illegality.
 - **Combined entity**: The merged firm's share and rank indicate potential unilateral effects concerns.
 - **Concentration curve**: Shows how quickly the top firms accumulate market share.
 

@@ -65,19 +65,31 @@ stack <- tibble::tribble(
   "Camera", 0.5,
   "OS/API", 0.7,
   "Other SEPs", 1.0
-)
+) |>
+  mutate(
+    component = factor(component, levels = rev(component)),
+    end = cumsum(royalty_percent),
+    start = lag(end, default = 0)
+  )
 
-ggplot(stack, aes(x = "", y = royalty_percent, fill = component)) +
-  geom_col(width = 0.5) +
-  coord_polar("y") +
+# Stacked horizontal bar showing how royalties accumulate
+ggplot(stack, aes(xmin = start, xmax = end, ymin = 0, ymax = 1, fill = component)) +
+  geom_rect(color = "white", linewidth = 0.5) +
+  geom_text(aes(x = (start + end) / 2, y = 0.5,
+                label = paste0(component, "\n", royalty_percent, "%")),
+            size = 3, color = "white", fontface = "bold") +
+  scale_fill_manual(values = antitrust_colors) +
   labs(
     title = "Illustrative royalty stack",
-    subtitle = "Replace with FRAND negotiation data when available",
-    y = "Royalty (% of device price)",
-    x = NULL,
-    fill = NULL
+    subtitle = paste0("Total cumulative royalty: ", sum(stack$royalty_percent),
+                      "% of device price"),
+    x = "Cumulative royalty (%)",
+    y = NULL
   ) +
-  theme_void()
+  theme_antitrust() +
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.position = "none")
 ```
 Replace the illustrative stack with licensing data (often produced during litigation) or sanitized aggregates from public FRAND rate determinations. Cite FRAND rate determinations (e.g., UK Unwired Planet, Optis) for benchmarking, which are available through court records.
 
@@ -621,9 +633,9 @@ cat("\nUse these rates to model expected future approvals and consumer harm from
 - **Company pipelines**: Annual reports and R&D presentations
 
 ## Visualizations and data sourcing
-- **Royalty stack (Roadmap 11.1):** Use licensing disclosures from litigation or FRAND rate decisions. If unavailable, maintain illustrative stack in `data/examples/royalty_stack.csv`.
-- **Entry timing survival curves (Roadmap 11.2):** [FDA Orange Book](https://www.fda.gov/drugs/drug-approvals-and-databases/orange-book-data-files), EMA, SAHPRA, or competition-inquiry appendices.
-- **FRAND injunction event plots (Roadmap 11.3):** `tidyquant` stock data; ensure tickers are mapped to key SEP holders and implementers.
+- **Royalty stack:** Use licensing disclosures from litigation or FRAND rate decisions. If unavailable, maintain illustrative stack in `data/examples/royalty_stack.csv`.
+- **Entry timing survival curves:** [FDA Orange Book](https://www.fda.gov/drugs/drug-approvals-and-databases/orange-book-data-files), EMA, SAHPRA, or competition-inquiry appendices.
+- **FRAND injunction event plots:** `tidyquant` stock data; ensure tickers are mapped to key SEP holders and implementers.
 - **Patent pipeline ridge plot:** Pull [PatentsView](https://patentsview.org/) or [EPO PATSTAT](https://www.epo.org/searching-for-patents/business/patstat.html) data; store sanitized extracts and scripts in `data/derived/innovation/`.
 
 Document data provenance and confidentiality in `data/README.md`, noting which visuals can ship publicly and which require synthetic placeholders until case data is approved for release.

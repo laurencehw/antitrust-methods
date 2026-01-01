@@ -245,9 +245,9 @@ Track clinical trial progress for pharmaceutical innovation assessments.
 - **Company pipelines**: Annual reports and R&D presentations
 
 ## Visualizations and data sourcing
-- **Royalty stack (Roadmap 11.1):** Use licensing disclosures from litigation or FRAND rate decisions. If unavailable, maintain illustrative stack in `data/examples/royalty_stack.csv`.
-- **Entry timing survival curves (Roadmap 11.2):** [FDA Orange Book](https://www.fda.gov/drugs/drug-approvals-and-databases/orange-book-data-files), EMA, SAHPRA, or competition-inquiry appendices.
-- **FRAND injunction event plots (Roadmap 11.3):** `tidyquant` stock data; ensure tickers are mapped to key SEP holders and implementers.
+- **Royalty stack:** Use licensing disclosures from litigation or FRAND rate decisions. If unavailable, maintain illustrative stack in `data/examples/royalty_stack.csv`.
+- **Entry timing survival curves:** [FDA Orange Book](https://www.fda.gov/drugs/drug-approvals-and-databases/orange-book-data-files), EMA, SAHPRA, or competition-inquiry appendices.
+- **FRAND injunction event plots:** `tidyquant` stock data; ensure tickers are mapped to key SEP holders and implementers.
 - **Patent pipeline ridge plot:** Pull [PatentsView](https://patentsview.org/) or [EPO PATSTAT](https://www.epo.org/searching-for-patents/business/patstat.html) data; store sanitized extracts and scripts in `data/derived/innovation/`.
 
 Document data provenance and confidentiality in `data/README.md`, noting which visuals can ship publicly and which require synthetic placeholders until case data is approved for release.

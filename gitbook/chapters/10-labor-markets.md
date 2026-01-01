@@ -34,7 +34,13 @@ Labor cases now sit alongside mergers and cartels in agency priorities. This cha
 {% hint style="info" %}
 **Citations and comparative note**
 
-Reference US DOJ/FTC criminal wage-fixing cases, state AG settlements, the FTC's proposed noncompete ban (see [ftc.gov](https://www.ftc.gov/)), and international enforcement (e.g., Portugal's wage-fixing fines, Japan's OTA cases). Cite key empirical papers from recent labor economics literature. Highlight differences where EU/UK enforcement is nascent but evolving (e.g., CMA's focus on noncompetes shorter than 3 months, EC guidelines on HR collusion).
+Reference US DOJ/FTC criminal wage-fixing cases, state AG settlements, the FTC's 2024 noncompete ban (finalized April 2024 but later enjoined by federal court in August 2024; see [ftc.gov](https://www.ftc.gov/)), and international enforcement (e.g., Portugal's wage-fixing fines, Japan's OTA cases). Cite key empirical papers from recent labor economics literature. Highlight differences where EU/UK enforcement is nascent but evolving (e.g., CMA's focus on noncompetes shorter than 3 months, EC guidelines on HR collusion).
+{% endhint %}
+
+{% hint style="warning" %}
+**Statutory labor exemption**
+
+**Labor antitrust enforcement targets employer conduct, not worker organizing.** The Clayton Act (Section 6, 1914) declares that "the labor of a human being is not a commodity or article of commerce" and exempts legitimate labor union activities from antitrust. The Norris-LaGuardia Act (1932) further shields collective bargaining, strikes, and boycotts. Thus, while employers agreeing to fix wages or not poach workers violates antitrust, workers collectively bargaining for higher wages through unions does not. The exemption covers union organizing, collective bargaining, and coordinated labor action—but not agreements between unions and employers designed to harm competition in product markets (*Connell Construction v. Plumbers Local 100*, 1975).
 {% endhint %}
 
 ## Measuring labor market power
@@ -126,10 +132,10 @@ A geographic visualization of labor market concentration helps identify regions 
 
 *HHI for Registered Nurses by state. Darker colors indicate higher concentration (greater monopsony concern).*
 
-**Interpretation:**
-- **HHI < 1,500**: Competitive labor markets; multiple employers compete for workers.
-- **HHI 1,500-2,500**: Moderately concentrated; potential monopsony concerns.
-- **HHI > 2,500**: Highly concentrated; significant monopsony power likely.
+**Interpretation (2023 Guidelines thresholds):**
+- **HHI < 1,000**: Unconcentrated labor markets; multiple employers compete for workers.
+- **HHI 1,000-1,800**: Moderately concentrated; potential monopsony concerns.
+- **HHI > 1,800**: Highly concentrated; significant monopsony power likely.
 
 **How to construct this with real data:**
 
@@ -190,8 +196,8 @@ Combine concentration data with wage outcomes to show the relationship between H
 - **Commuting zone definitions**: USDA ERS or Census Geography
 
 ## Visualizations and data sourcing
-- **Labor HHI choropleths (Roadmap 10.1):** Source [BLS QCEW](https://www.bls.gov/cew/) (US), Stats SA, or EU Labour Force Survey; for publication, provide a template script plus sanitized shapefiles.  
-- **Noncompete diff-in-diff plots (Roadmap 10.2):** Use state-level CPS microdata, WA Dept. of Labor wage records, or Stats SA sectoral wages; fallback to synthetic data until approvals land.  
-- **Mobility transition matrices (Roadmap 10.3):** Build from [LEHD/LODES](https://lehd.ces.census.gov/) or anonymized HR exports; include aggregated gig-platform transitions.
+- **Labor HHI choropleths:** Source [BLS QCEW](https://www.bls.gov/cew/) (US), Stats SA, or EU Labour Force Survey; for publication, provide a template script plus sanitized shapefiles.
+- **Noncompete diff-in-diff plots:** Use state-level CPS microdata, WA Dept. of Labor wage records, or Stats SA sectoral wages; fallback to synthetic data until approvals land.
+- **Mobility transition matrices:** Build from [LEHD/LODES](https://lehd.ces.census.gov/) or anonymized HR exports; include aggregated gig-platform transitions.
 
 Document each dataset in `data/README.md` and tag whether it is public, sanitized, or confidential. When ready to "fill with real data," replace the synthetic CSVs in `data/examples/` with actual extracts, rerun the figures, and cache redacted outputs for broader distribution.

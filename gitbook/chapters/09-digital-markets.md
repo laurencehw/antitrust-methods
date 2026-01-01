@@ -214,11 +214,6 @@ library(fixest)
 ```
 Use telemetry from choice screens (EU Android choice screen, DMA compliance reports) or partner-provided logs. If live data are unavailable, build synthetic event panels mirroring DMA summary stats (store in `data/examples/digital-default.csv`).
 
-## Southern African digital enforcement snapshots
-- **Online Intermediation Platforms Market Inquiry (OIPMI, 2020–2023).** Transaction-level data from marketplaces, app stores, delivery apps, and travel platforms revealed Google Search’s >90% share, 25–30% delivery commissions, and buy-box algorithms favoring first-party listings. Remedies require fair-ranking reports, SME fee caps, and anti-steering rights inside aggregator apps.  
-- **Media and Digital Platforms Inquiry (2023–ongoing).** Impression-level logs from Meta, Google, and local publishers show Google capturing ~65% of programmatic display spend, while local publishers net <30% after fees, framing bargaining remedies for news publishers.  
-- **GovChat/Meta interim relief (2021).** WhatsApp Business API telemetry demonstrated GovChat’s public-service reach (>8 million users) and negligible incremental cost; interim relief preserved access while exclusion claims proceeded, blending platform data with public-interest considerations.
-
 ## Methodologies
 
 {% hint style="info" %}
@@ -246,9 +241,9 @@ Use telemetry from choice screens (EU Android choice screen, DMA compliance repo
 {% endhint %}
 
 ## Visualizations and data sourcing
-- **Default impact chart (Roadmap 9.1):** Source DMA compliance reports (available at [ec.europa.eu/dma](https://ec.europa.eu/)), CMA choice-screen experiments, or sanitized telemetry. If unavailable, simulate from DMA summary stats.  
-- **Multi-homing Sankey (Roadmap 9.2):** Use OIPMI survey microdata or replicate with local surveys; store in `data/examples/digital-sankey.csv` until live data arrive.  
-- **Ranking change event analysis (Roadmap 9.3):** Combine OIPMI buy-box audits or platform-provided logs with the ranking scaffold above.  
+- **Default impact chart:** Source DMA compliance reports (available at [ec.europa.eu/dma](https://ec.europa.eu/)), CMA choice-screen experiments, or sanitized telemetry. If unavailable, simulate from DMA summary stats.
+- **Multi-homing Sankey:** Use OIPMI survey microdata or replicate with local surveys; store in `data/examples/digital-sankey.csv` until live data arrive.
+- **Ranking change event analysis:** Combine OIPMI buy-box audits or platform-provided logs with the ranking scaffold above.
 - **Fee ladder diagrams:** Pull commission schedules from OIPMI appendices or global public filings (App Store, Play Store, Amazon Marketplace).
 
 Document each dataset in `data/README.md` with provenance, confidentiality notes, and instructions for swapping synthetic vs. production data. When we "fill with real data," replace the synthetic CSVs, re-render figures, and cache sanitized outputs for publication builds.

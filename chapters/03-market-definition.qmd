@@ -221,7 +221,7 @@ p_heatmap <- ggplot(route_shares_top, aes(x = carrier, y = route_labeled, fill =
   ) +
   labs(
     title = "Airline Route Concentration: NYC Area (2013)",
-    subtitle = "Top 20 routes by volume. HHI values indicate market concentration (>2,500 = highly concentrated)",
+    subtitle = "Top 20 routes by volume. HHI > 1,800 triggers structural presumption (2023 Guidelines)",
     x = "Carrier",
     y = "Route (Origin-Destination) [HHI]",
     fill = "Market\nShare",
@@ -245,8 +245,8 @@ route_hhi |>
   mutate(
     hhi = round(hhi),
     concentration = case_when(
-      hhi >= 2500 ~ "Highly concentrated",
-      hhi >= 1500 ~ "Moderately concentrated",
+      hhi >= 1800 ~ "Highly concentrated (structural presumption)",
+      hhi >= 1000 ~ "Moderately concentrated",
       TRUE ~ "Unconcentrated"
     )
   ) |>
@@ -255,7 +255,7 @@ route_hhi |>
   knitr::kable(caption = "Top Route Concentration Stats")
 ```
 
-**Interpretation:** Routes with HHI > 2,500 (US DOJ/FTC threshold for "highly concentrated") may warrant closer scrutiny. The visualization shows that many NYC routes are served by only 1-2 carriers with dominant shares, which could support narrow route-level market definitions in merger analysis. In practice, you would supplement this with pricing data, switching patterns, and qualitative evidence about entry barriers.
+**Interpretation:** Routes with HHI > 1,800 (2023 US Merger Guidelines structural presumption threshold) may warrant closer scrutiny. The visualization shows that many NYC routes are served by only 1-2 carriers with dominant shares, which could support narrow route-level market definitions in merger analysis. In practice, you would supplement this with pricing data, switching patterns, and qualitative evidence about entry barriers.
 
 Replace `nycflights13` with live data (slot allocation, loyalty records, booking data, or Stats SA shipment records) when presenting evidence in actual matters.
 

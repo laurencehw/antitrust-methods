@@ -275,6 +275,8 @@ Refusal to deal claims arise when a vertically integrated dominant firm denies r
 
 In *Bronner* (1998), the European Court of Justice held that a newspaper distribution network was not indispensable because the rival could develop its own network, even if at higher cost. By contrast, in *IMS Health* (2004), the court found that a unique brick structure for regional health data was indispensable, and refusal to license it eliminated competition in a derivative market.
 
+**US approach—*Verizon v. Trinko* (2004):** The US Supreme Court sharply limited the essential facilities doctrine, holding that antitrust law generally does not require firms to share their infrastructure with rivals. In *Trinko*, the Court found no antitrust duty to deal where telecommunications regulations already mandated access, and emphasized that forced sharing may reduce incentives to invest in infrastructure. After *Trinko*, US plaintiffs face a high bar: refusal to deal claims typically require evidence of a prior profitable dealing relationship that was terminated for anticompetitive reasons (citing *Aspen Skiing*).
+
 #### Margin squeeze analysis
 
 A margin squeeze occurs when a vertically integrated firm sets its wholesale access price so high—or its retail price so low—that an equally efficient downstream rival cannot profitably compete. The following visualization demonstrates the margin squeeze test using wholesale and retail pricing data.
