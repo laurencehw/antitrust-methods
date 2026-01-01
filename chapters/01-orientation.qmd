@@ -65,45 +65,87 @@ Orientation work is only useful if it flows directly into research design. Your 
 ## Visualizations
 
 ### Agency and case timeline
-This timeline pairs statutory milestones with landmark enforcement actions so readers can anchor later quantitative work in institutional change. Extend or localize the tibble with jurisdiction-specific events (e.g., Competition Amendment Acts, CMA guidelines, SAMR platform rules) before teaching or consulting engagements.
+This timeline pairs statutory milestones with landmark enforcement actions so readers can anchor later quantitative work in institutional change. We include US, EU, and South African milestones to reflect the multi-jurisdictional focus of this book.
 
 ```{r}
 #| label: antitrust-timeline
 #| echo: false
-#| fig-cap: "Major US and EU Antitrust Milestones"
-#| fig-width: 10
-#| fig-height: 4
+#| fig-cap: "Antitrust Milestones: US, EU, and South Africa"
+#| fig-width: 12
+#| fig-height: 6
 library(dplyr)
 library(ggplot2)
 library(scales)
 
+# Expanded timeline with multi-jurisdictional coverage
 milestones <- tibble::tribble(
-  ~year, ~event, ~type,
-  1890, "Sherman Act", "Statute",
-  1914, "Clayton/FTC Acts", "Statute",
-  1998, "Microsoft", "Case",
-  2013, "Apple eBooks", "Case",
-  2023, "Merger Guidelines", "Guidance"
+  ~year, ~event, ~type, ~jurisdiction,
+  # US Statutes
+  1890, "Sherman Act", "Statute", "US",
+  1914, "Clayton/FTC Acts", "Statute", "US",
+  1976, "HSR Act", "Statute", "US",
+  # EU Milestones
+  1957, "Treaty of Rome\n(Art. 85/86)", "Statute", "EU",
+  2004, "EUMR Modernization", "Guidance", "EU",
+  # South Africa
+  1998, "Competition Act 89", "Statute", "SA",
+  2019, "SA Amendment Act", "Statute", "SA",
+  # Key Cases
+  2001, "US v. Microsoft", "Case", "US",
+  2004, "EU v. Microsoft", "Case", "EU",
+  2017, "EU v. Google\nShopping", "Case", "EU",
+  2024, "US v. Google\nSearch", "Case", "US",
+  # Guidelines
+  2010, "US Horizontal\nMerger Guidelines", "Guidance", "US",
+  2023, "US Merger\nGuidelines", "Guidance", "US"
 ) |>
+  dplyr::arrange(year) |>
   dplyr::mutate(
-    y = dplyr::if_else(dplyr::row_number() %% 2 == 0, 1, -1),
-    vjust = dplyr::if_else(y > 0, -0.5, 1.5)
+    # Stagger labels to avoid overlap: alternate above/below, then by jurisdiction
+    y = dplyr::case_when(
+      jurisdiction == "US" & dplyr::row_number() %% 2 == 1 ~ 1.2,
+      jurisdiction == "US" ~ -1.2,
+      jurisdiction == "EU" & dplyr::row_number() %% 2 == 1 ~ 0.8,
+      jurisdiction == "EU" ~ -0.8,
+      TRUE ~ dplyr::if_else(dplyr::row_number() %% 2 == 0, 1.5, -1.5)
+    ),
+    vjust = dplyr::if_else(y > 0, -0.3, 1.3)
   )
 
-ggplot(milestones, aes(x = year, y = y, color = type)) +
-  geom_hline(yintercept = 0, color = "gray70", linewidth = 0.8) +
-  geom_segment(aes(xend = year, yend = 0), linewidth = 0.8, alpha = 0.7) +
-  geom_point(size = 4) +
-  geom_text(aes(label = event, vjust = vjust),
-            size = 4, show.legend = FALSE, lineheight = 0.9, fontface = "bold") +
-  scale_y_continuous(limits = c(-2, 2)) +
-  scale_x_continuous(breaks = seq(1890, 2030, 20)) +
-  scale_color_manual(values = c("Statute" = "#D55E00", 
-                                 "Guidance" = "#0072B2", 
-                                 "Case" = "#009E73")) +
+# Color palette by jurisdiction
+jurisdiction_colors <- c(
+  "US" = "#0072B2",   # Blue
+  "EU" = "#D55E00",   # Orange
+  "SA" = "#009E73"    # Green
+)
+
+# Shape by type
+type_shapes <- c(
+  "Statute" = 15,    # Square
+  "Guidance" = 17,   # Triangle
+  "Case" = 16        # Circle
+)
+
+ggplot(milestones, aes(x = year, y = y)) +
+  # Timeline spine
+  geom_hline(yintercept = 0, color = "gray70", linewidth = 1) +
+  # Vertical connectors
+  geom_segment(aes(xend = year, yend = 0, color = jurisdiction),
+               linewidth = 0.6, alpha = 0.7) +
+  # Points
+  geom_point(aes(color = jurisdiction, shape = type), size = 4) +
+  # Labels
+  geom_text(aes(label = event, vjust = vjust, color = jurisdiction),
+            size = 3, show.legend = FALSE, lineheight = 0.85, fontface = "bold") +
+  # Scales
+  scale_y_continuous(limits = c(-2.5, 2.5)) +
+  scale_x_continuous(breaks = seq(1890, 2030, 20), limits = c(1885, 2030)) +
+  scale_color_manual(values = jurisdiction_colors, name = "Jurisdiction") +
+  scale_shape_manual(values = type_shapes, name = "Type") +
   labs(
-    title = "Key Antitrust Milestones",
-    x = NULL, y = NULL, color = NULL
+    title = "Key Antitrust Milestones Across Jurisdictions",
+    subtitle = "Statutes, landmark cases, and agency guidance (1890–2024)",
+    x = NULL, y = NULL
   ) +
   theme_antitrust() +
   theme(
@@ -111,10 +153,20 @@ ggplot(milestones, aes(x = year, y = y, color = type)) +
     axis.ticks.y = element_blank(),
     axis.line.y = element_blank(),
     panel.grid.major.x = element_line(color = "gray90", linewidth = 0.3),
-    legend.position = "top",
-    plot.title = element_text(face = "bold")
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    plot.title = element_text(face = "bold"),
+    plot.subtitle = element_text(size = 10, color = "gray40")
+  ) +
+  guides(
+    color = guide_legend(order = 1, override.aes = list(size = 4)),
+    shape = guide_legend(order = 2, override.aes = list(size = 4))
   )
 ```
+
+::: {.callout-note title="Timeline interpretation"}
+The timeline shows convergence in competition enforcement approaches: South Africa's 1998 Competition Act drew heavily on EU precedent, while the 2023 US Merger Guidelines moved closer to EU-style structural presumptions. Note how major cases (Microsoft, Google) often span jurisdictions with related but distinct theories of harm.
+:::
 
 ### HHI trend example
 Track concentration trends using FRED data as a baseline for cross-jurisdictional comparisons.

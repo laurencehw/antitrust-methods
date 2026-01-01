@@ -209,10 +209,136 @@ Before presenting results, show calibration diagnostics: how well the model repr
 
 ### Coordinated effects
 - Look for increased symmetry, transparency, or capacity alignment post-merger; include bidding/auction context where relevant.
-- Event studies around merger announcements can show rivals’ stock price reactions (coordination signal) but should be paired with real-world capacity/contract evidence.
+- Event studies around merger announcements can show rivals' stock price reactions (coordination signal) but should be paired with real-world capacity/contract evidence.
 - Document maverick roles and whether the transaction removes or disciplines them.
 
-Useful evidence: internal documents describing “price umbrella” logic, third-party contracts showing increased transparency, and supply/demand data indicating higher capacity utilization or inventory visibility. Build a maverick profile (pricing aggressiveness, innovation track record) to show whether elimination meaningfully raises coordination risk.
+Useful evidence: internal documents describing "price umbrella" logic, third-party contracts showing increased transparency, and supply/demand data indicating higher capacity utilization or inventory visibility. Build a maverick profile (pricing aggressiveness, innovation track record) to show whether elimination meaningfully raises coordination risk.
+
+#### Detecting mavericks: quantitative screen
+A "maverick" is a firm whose pricing or capacity behavior disrupts tacit coordination. Quantitative screens can identify mavericks by measuring pricing volatility, capacity utilization patterns, and deviations from industry norms. The coefficient of variation (CV) in prices is a useful starting metric.
+
+```r
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
+source("../program/R/helpers.R")
+
+# Simulated pricing data for 4 firms over 36 months
+# Replace with actual transaction data, Nielsen panels, or industry pricing indices
+set.seed(42)
+
+pricing_data <- expand.grid(
+  firm = c("Industry Avg", "Firm A (Target)", "Firm B", "Firm C"),
+  month = seq.Date(as.Date("2022-01-01"), as.Date("2024-12-01"), by = "month")
+) |>
+  as_tibble() |>
+  mutate(
+    base_price = 100 + as.numeric(month - min(month)) / 30 * 5,
+    price = case_when(
+      # Target firm: aggressive pricing, high volatility
+      firm == "Firm A (Target)" ~ base_price * (1 + rnorm(n(), -0.05, 0.08)),
+      firm == "Industry Avg" ~ base_price * (1 + rnorm(n(), 0, 0.02)),
+      firm == "Firm B" ~ base_price * (1 + rnorm(n(), 0.02, 0.03)),
+      firm == "Firm C" ~ base_price * (1 + rnorm(n(), 0.08, 0.025))
+    ),
+    capacity_util = case_when(
+      firm == "Firm A (Target)" ~ pmin(1, rnorm(n(), 0.92, 0.05)),
+      firm == "Industry Avg" ~ rnorm(n(), 0.78, 0.04),
+      firm == "Firm B" ~ rnorm(n(), 0.75, 0.05),
+      firm == "Firm C" ~ rnorm(n(), 0.72, 0.06)
+    )
+  )
+
+# Calculate coefficient of variation by firm
+maverick_metrics <- pricing_data |>
+  group_by(firm) |>
+  summarize(
+    mean_price = mean(price),
+    sd_price = sd(price),
+    cv_price = sd_price / mean_price * 100,
+    mean_capacity = mean(capacity_util) * 100,
+    price_vs_industry = mean(price) / mean(pricing_data$price[pricing_data$firm == "Industry Avg"]) - 1,
+    .groups = "drop"
+  ) |>
+  mutate(
+    maverick_score = cv_price * (1 - price_vs_industry) * (mean_capacity / 80),
+    maverick_flag = maverick_score > quantile(maverick_score, 0.75)
+  )
+
+# Print summary
+cat("Maverick Detection Metrics:\n")
+cat("Higher CV + Lower prices + Higher capacity = Maverick signal\n\n")
+print(maverick_metrics)
+
+# Plot 1: Price time series
+p1 <- ggplot(pricing_data, aes(x = month, y = price, color = firm)) +
+  geom_line(aes(linewidth = firm == "Firm A (Target)"), alpha = 0.8) +
+  scale_linewidth_manual(values = c("TRUE" = 1.2, "FALSE" = 0.6), guide = "none") +
+  scale_color_manual(
+    values = c("Industry Avg" = "#999999", "Firm A (Target)" = "#D55E00",
+               "Firm B" = "#0072B2", "Firm C" = "#009E73")
+  ) +
+  labs(title = "Price Trends by Firm",
+       subtitle = "Target firm (orange) shows higher volatility and lower average price",
+       x = NULL, y = "Price Index", color = NULL) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+
+# Plot 2: Price volatility (CV) comparison
+p2 <- maverick_metrics |>
+  mutate(highlight = firm == "Firm A (Target)") |>
+  ggplot(aes(x = reorder(firm, cv_price), y = cv_price, fill = highlight)) +
+  geom_col(width = 0.7) +
+  geom_hline(yintercept = 5, linetype = "dashed", color = "gray40") +
+  coord_flip() +
+  scale_fill_manual(values = c("TRUE" = "#D55E00", "FALSE" = "#0072B2"), guide = "none") +
+  labs(title = "Price Volatility (Coefficient of Variation)",
+       subtitle = "Mavericks typically show CV > industry average",
+       x = NULL, y = "CV (%)") +
+  theme_antitrust()
+
+# Plot 3: Capacity utilization distribution
+p3 <- pricing_data |>
+  ggplot(aes(x = capacity_util * 100, fill = firm)) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    values = c("Industry Avg" = "#999999", "Firm A (Target)" = "#D55E00",
+               "Firm B" = "#0072B2", "Firm C" = "#009E73")
+  ) +
+  labs(title = "Capacity Utilization Distribution",
+       subtitle = "Mavericks often run higher capacity, undercutting on price",
+       x = "Capacity Utilization (%)", y = "Density", fill = NULL) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+
+# Combine
+(p1) / (p2 | p3) + plot_annotation(
+  title = "Maverick Detection Dashboard",
+  subtitle = "Identifying disruptive competitors in coordinated effects analysis",
+  caption = "Synthetic data for illustration. Replace with actual pricing and capacity data."
+)
+```
+
+**Interpreting maverick screens:**
+
+1. **Coefficient of Variation (CV)**: Mavericks typically show CV 1.5–3× the industry average. High volatility signals frequent promotions, aggressive price responses, or willingness to sacrifice short-term margins.
+
+2. **Price positioning**: Mavericks often price 5–15% below industry average while maintaining or expanding volume. Calculate:
+
+$$
+\text{Price Gap} = \frac{P_{\text{firm}} - P_{\text{industry}}}{P_{\text{industry}}}
+$$
+
+3. **Capacity utilization**: Firms running >85% capacity utilization despite lower prices may be pursuing volume-based strategies that disrupt coordination.
+
+4. **Innovation/entry record**: Document the target's history of new product launches, geographic expansion, or entry into adjacent markets—qualitative factors that amplify quantitative signals.
+
+{% hint style="info" %}
+**Practitioner tip**
+
+Combine quantitative screens with qualitative evidence: internal documents referencing the target as a "disruptor" or "price leader," customer testimony about switching patterns, and board materials discussing competitive responses to the target. Courts and agencies look for convergence across evidence types.
+{% endhint %}
 
 ### Vertical and mixed effects
 - EDM vs. foreclosure: quantify both. vUPP and upward pricing pressure on rivals’ access should be shown alongside EDM magnitudes.
