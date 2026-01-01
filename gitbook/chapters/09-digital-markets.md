@@ -87,6 +87,9 @@ ggplot(ranking, aes(slot, ctr, color = listing)) +
   theme_antitrust() +
   theme(legend.position = "bottom")
 ```
+
+![Figure 1](../figures/09-digital-markets_fig01.png)
+
 Populate the tibble with actual ranking data (e.g., OIPMI buy-box audits, CMA Amazon Marketplace analysis) or maintain sanitized values in `data/examples/digital-ranking.csv`. The CMA's market studies are publicly available at [gov.uk/cma](https://www.gov.uk/government/organisations/competition-and-markets-authority).
 
 ### Default-choice event study scaffold

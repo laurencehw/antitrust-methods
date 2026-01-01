@@ -122,6 +122,9 @@ ggplot(cars, aes(rel_day, car, color = symbol)) +
   theme_antitrust() +
   theme(legend.position = "bottom")
 ```
+
+![Figure 1](../figures/06-mergers_fig01.png)
+
 Use CAR patterns as suggestive evidence of coordination or efficiency expectations, but always pair with operational data (capacity, contracts).
 
 ### Southern African merger evidence

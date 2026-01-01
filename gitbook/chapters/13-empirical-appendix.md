@@ -164,6 +164,9 @@ ggplot(chronology, aes(x = date, y = category, color = category)) +
   theme(legend.position = "none")
 ```
 
+![Figure 1](../figures/13-empirical-appendix_fig01.png)
+
+
 ## Diagnostic Gallery
 
 This section provides reusable diagnostic visualizations that apply across chapters. Use these templates to validate identification assumptions, assess robustness, and communicate uncertainty in expert reports.
@@ -275,6 +278,9 @@ cat(paste0("Mean pre-period coefficient: ",
           round(mean(pre_period_coefs$estimate), 3), "\n"))
 cat(paste0("Joint F-test p-value: [run wald_test on event_study model]\n"))
 ```
+
+![Figure 2](../figures/13-empirical-appendix_fig04.png)
+
 
 **Interpretation:**
 - **Pre-trends near zero**: Validates parallel trends assumption
