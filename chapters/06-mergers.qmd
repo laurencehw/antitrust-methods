@@ -65,7 +65,7 @@ This example demonstrates merger simulation using a 3-product differentiated mar
 library(dplyr)
 library(tidyr)
 library(ggplot2)
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 
 # Toy market: 3 products, 2 firms (Firm A owns products 1 & 2, Firm B owns product 3)
 # After merger: Combined firm owns all three products
@@ -234,7 +234,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(patchwork)
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 
 # Simulated pricing data for 4 firms over 36 months
 # Replace with actual transaction data, Nielsen panels, or industry pricing indices
@@ -458,7 +458,7 @@ See the UPP/GUPPI example above. Expand the template with case-specific diversio
 #| message: false
 #| warning: false
 # robust path in case execution dir is chapter folder
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 # products_df: product, firm, price, share, mc (or margin), group (nest)
 # sim <- run_logit_sim(products_df, merging_firms = c("FirmA","FirmB"))
 # sim$summary

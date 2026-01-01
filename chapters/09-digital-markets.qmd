@@ -72,7 +72,7 @@ When users pay with attention rather than money, adapt metrics accordingly:
 #| warning: false
 library(dplyr)
 library(fixest)
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 
 # Synthetic example; replace with platform telemetry
 panel <- expand.grid(platform = c("Alpha","Beta"), period = 2018:2023) |>
@@ -101,7 +101,7 @@ When users pay with attention rather than money, standard fee-based demand model
 #| warning: false
 library(dplyr)
 library(fixest)
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 
 # Zero-price platform: users "pay" with attention (ad exposure)
 # Synthetic example; replace with platform telemetry

@@ -152,7 +152,7 @@ A timeline visualization helps communicate key milestones, deadlines, and compli
 #| warning: false
 #| fig-width: 12
 #| fig-height: 7
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 library(dplyr)
 library(ggplot2)
 library(lubridate)

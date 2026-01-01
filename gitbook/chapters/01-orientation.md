@@ -77,78 +77,7 @@ Orientation work is only useful if it flows directly into research design. Your 
 ### Agency and case timeline
 This timeline pairs statutory milestones with landmark enforcement actions so readers can anchor later quantitative work in institutional change. We include US, EU, and South African milestones to reflect the multi-jurisdictional focus of this book.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(scales)
-
-# Expanded timeline with multi-jurisdictional coverage
-milestones <- tibble::tribble(
-  ~year, ~event, ~type, ~jurisdiction,
-  # US Statutes
-  1890, "Sherman Act", "Statute", "US",
-  1914, "Clayton/FTC Acts", "Statute", "US",
-  1976, "HSR Act", "Statute", "US",
-  # EU Milestones
-  1957, "Treaty of Rome\n(Art. 85/86)", "Statute", "EU",
-  2004, "EUMR Modernization", "Guidance", "EU",
-  # South Africa
-  1998, "Competition Act 89", "Statute", "SA",
-  2019, "SA Amendment Act", "Statute", "SA",
-  # Key Cases
-  2001, "US v. Microsoft", "Case", "US",
-  2004, "EU v. Microsoft", "Case", "EU",
-  2017, "EU v. Google\nShopping", "Case", "EU",
-  2024, "US v. Google\nSearch", "Case", "US",
-  # Guidelines
-  2010, "US Horizontal\nMerger Guidelines", "Guidance", "US",
-  2023, "US Merger\nGuidelines", "Guidance", "US"
-) |>
-  dplyr::arrange(year) |>
-  dplyr::mutate(
-    # Stagger labels to avoid overlap
-    y = dplyr::case_when(
-      jurisdiction == "US" & dplyr::row_number() %% 2 == 1 ~ 1.2,
-      jurisdiction == "US" ~ -1.2,
-      jurisdiction == "EU" & dplyr::row_number() %% 2 == 1 ~ 0.8,
-      jurisdiction == "EU" ~ -0.8,
-      TRUE ~ dplyr::if_else(dplyr::row_number() %% 2 == 0, 1.5, -1.5)
-    ),
-    vjust = dplyr::if_else(y > 0, -0.3, 1.3)
-  )
-
-# Color by jurisdiction, shape by type
-jurisdiction_colors <- c("US" = "#0072B2", "EU" = "#D55E00", "SA" = "#009E73")
-type_shapes <- c("Statute" = 15, "Guidance" = 17, "Case" = 16)
-
-ggplot(milestones, aes(x = year, y = y)) +
-  geom_hline(yintercept = 0, color = "gray70", linewidth = 1) +
-  geom_segment(aes(xend = year, yend = 0, color = jurisdiction),
-               linewidth = 0.6, alpha = 0.7) +
-  geom_point(aes(color = jurisdiction, shape = type), size = 4) +
-  geom_text(aes(label = event, vjust = vjust, color = jurisdiction),
-            size = 3, show.legend = FALSE, lineheight = 0.85, fontface = "bold") +
-  scale_y_continuous(limits = c(-2.5, 2.5)) +
-  scale_x_continuous(breaks = seq(1890, 2030, 20), limits = c(1885, 2030)) +
-  scale_color_manual(values = jurisdiction_colors, name = "Jurisdiction") +
-  scale_shape_manual(values = type_shapes, name = "Type") +
-  labs(
-    title = "Key Antitrust Milestones Across Jurisdictions",
-    subtitle = "Statutes, landmark cases, and agency guidance (1890–2024)",
-    x = NULL, y = NULL
-  ) +
-  theme_antitrust() +
-  theme(
-    axis.text.y = element_blank(),
-    axis.ticks.y = element_blank(),
-    axis.line.y = element_blank(),
-    panel.grid.major.x = element_line(color = "gray90", linewidth = 0.3),
-    legend.position = "bottom",
-    legend.box = "horizontal",
-    plot.title = element_text(face = "bold"),
-    plot.subtitle = element_text(size = 10, color = "gray40")
-  )
-```
+![Antitrust Timeline: Key Milestones Across Jurisdictions](../images/orientation-timeline-1.png)
 
 {% hint style="info" %}
 **Timeline interpretation**
@@ -159,27 +88,6 @@ The timeline shows convergence in competition enforcement approaches: South Afri
 ### HHI trend example
 Track concentration trends using FRED data as a baseline for cross-jurisdictional comparisons.
 
-```r
-library(fredr)
-library(dplyr)
-library(ggplot2)
-source("../program/R/helpers.R") 
-fredr_set_key(Sys.getenv("FRED_API_KEY"))
+![US Bank Concentration (HHI)](../images/orientation-hhi-1.png)
 
-hhi <- fredr(series_id = "HHMSDODNS", observation_start = as.Date("2000-01-01"))
-# placeholder for integrating local data:
-# local_hhi <- readr::read_csv("data/derived/sa_banking_hhi.csv")
-# hhi <- bind_rows(hhi, local_hhi)
-ggplot(hhi, aes(date, value)) +
-  geom_vline(xintercept = as.Date("2008-09-15"), linetype="dashed", color="darkred") +
-  annotate("text", x = as.Date("2009-01-01"), y = 100, label = "2008 Crisis", 
-           color = "darkred", hjust = 0, vjust = 0) +
-  geom_line(color = "#0072B2", linewidth = 1) +
-  labs(
-    title = "US Bank Concentration (HHI)",
-    subtitle = "Bank deposits (Commercial & Savings). Source: FRED Series HHMSDODNS",
-    x = NULL,
-    y = "HHI Index"
-  ) +
-  theme_antitrust()
-```
+*Source: FRED Series HHMSDODNS. Bank deposits (Commercial & Savings).*

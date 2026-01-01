@@ -60,7 +60,7 @@ In modern practice, these approaches reinforce each other. You might use a **red
 #| message: false
 #| warning: false
 library(tidyverse)
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 
 products <- tribble(
   ~product, ~price, ~share, ~feature_score,

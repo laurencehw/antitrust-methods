@@ -105,7 +105,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(patchwork)
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 
 rebates <- tibble::tribble(
   ~tier, ~volume, ~list_price, ~rebate,

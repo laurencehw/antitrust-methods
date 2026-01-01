@@ -56,7 +56,7 @@ Evidence sources:
 #| warning: false
 library(dplyr)
 library(ggplot2)
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 
 stack <- tibble::tribble(
   ~component, ~royalty_percent,

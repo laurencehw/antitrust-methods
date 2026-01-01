@@ -76,6 +76,7 @@ This timeline pairs statutory milestones with landmark enforcement actions so re
 library(dplyr)
 library(ggplot2)
 library(scales)
+source("program/R/helpers.R")
 
 # Expanded timeline with multi-jurisdictional coverage
 milestones <- tibble::tribble(
@@ -182,7 +183,7 @@ Track concentration trends using FRED data as a baseline for cross-jurisdictiona
 library(fredr)
 library(dplyr)
 library(ggplot2)
-source("../program/R/helpers.R") 
+source("program/R/helpers.R") 
 fredr_set_key(Sys.getenv("FRED_API_KEY"))
 
 hhi <- fredr(series_id = "HHMSDODNS", observation_start = as.Date("2000-01-01"))

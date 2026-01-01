@@ -358,7 +358,7 @@ Track expert work product and key milestones for case management.
 #| warning: false
 #| fig-width: 12
 #| fig-height: 7
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 library(dplyr)
 
 # Expert engagement timeline

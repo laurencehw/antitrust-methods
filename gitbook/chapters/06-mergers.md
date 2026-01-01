@@ -359,42 +359,11 @@ Tie efficiencies to data. For example, if parties cite procurement savings, requ
 - Use well-known retrospectives (e.g., supermarket/hospital/airline cases) to set expectations on effect sizes and uncertainty.
 
 #### Stock-event diagnostic
-```r
-library(tidyquant)
-library(dplyr)
-library(ggplot2)
 
-event_date <- as.Date("2013-02-14") # substitute deal date
-tickers <- c("AAL", "DAL", "LUV", "SPY")
+![Cumulative Abnormal Returns Around Merger Announcement](../images/merger-stock-event-1.png)
 
-prices <- tq_get(
-  tickers,
-  from = event_date - lubridate::days(120),
-  to   = event_date + lubridate::days(60)
-) |>
-  group_by(symbol) |>
-  arrange(date) |>
-  mutate(ret = log(adjusted) - log(lag(adjusted))) |>
-  ungroup()
+*Illustrative airline example showing cumulative abnormal returns (CAR) in the ±20 trading days around the merger announcement.*
 
-market <- prices |> filter(symbol == "SPY") |> transmute(date, mkt_ret = ret)
-cars <- prices |> filter(symbol != "SPY") |>
-  left_join(market, by = "date") |>
-  mutate(abnormal = ret - mkt_ret, rel_day = as.integer(date - event_date)) |>
-  filter(between(rel_day, -20, 20)) |>
-  group_by(symbol) |>
-  arrange(rel_day) |>
-  mutate(car = cumsum(abnormal))
-
-ggplot(cars, aes(rel_day, car, color = symbol)) +
-  geom_hline(yintercept = 0, linewidth = 0.3, color = "gray70") +
-  geom_line(linewidth = 0.9) +
-  labs(title = "Cumulative abnormal returns around merger announcement",
-       subtitle = "Illustrative airline example (event ±20 trading days)",
-       x = "Event time (days)", y = "CAR", color = NULL) +
-  theme_antitrust() +
-  theme(legend.position = "bottom")
-```
 Use CAR patterns as suggestive evidence of coordination or efficiency expectations, but always pair with operational data (capacity, contracts).
 
 ### Southern African merger evidence
@@ -456,6 +425,11 @@ source("../program/R/helpers.R")
 
 ### Market shares and HHI dashboard
 This dashboard provides a comprehensive view of market structure before and after the merger, combining share distributions, HHI calculations, and competitive thresholds.
+
+![Market Structure Dashboard](../images/merger-hhi-dashboard-1.png)
+
+<details>
+<summary>View R code</summary>
 
 ```r
 library(dplyr)
@@ -610,6 +584,7 @@ cat(paste0("\nCombined entity share: ",
            scales::percent(market_post$share[market_post$firm == "Firm A+B"],
                           accuracy = 0.1), "\n"))
 ```
+</details>
 
 **Interpretation:**
 - **HHI thresholds**: The 2023 US Merger Guidelines use 1,500 and 2,500 as thresholds. Markets above 2,500 are "highly concentrated."
@@ -622,99 +597,7 @@ Replace simulated data with actual transaction volumes, Nielsen scanner data, or
 ### Merger simulation waterfall
 A waterfall chart decomposes the predicted post-merger price change into its component parts: diversion, margin, efficiencies, and second-order effects. This helps communicate which parameters drive the result.
 
-```r
-library(dplyr)
-library(ggplot2)
-
-# Simulation components (from a differentiated products model)
-# Replace with actual simulation outputs
-sim_components <- tibble::tribble(
-  ~component,              ~value,     ~description,
-  "Base price",            10.00,      "Pre-merger price",
-  "First-order UPP",       +0.80,      "Diversion × Margin effect",
-  "Internalization",       +0.35,      "Portfolio reoptimization",
-  "Efficiency offset",     -0.25,      "Verified cost synergies",
-  "Competitive response",  -0.15,      "Rival price reactions",
-  "Post-merger price",     10.75,      "Predicted equilibrium"
-) |>
-  mutate(
-    component = factor(component, levels = component),
-    cumulative = cumsum(value),
-    start = lag(cumulative, default = 0),
-    end = cumulative,
-    type = case_when(
-      component %in% c("Base price", "Post-merger price") ~ "total",
-      value > 0 ~ "increase",
-      value < 0 ~ "decrease",
-      TRUE ~ "neutral"
-    )
-  )
-
-# Waterfall plot
-ggplot(sim_components) +
-  geom_rect(aes(xmin = as.numeric(component) - 0.4,
-                xmax = as.numeric(component) + 0.4,
-                ymin = start, ymax = end, fill = type),
-            color = "black", linewidth = 0.5) +
-  geom_text(aes(x = as.numeric(component),
-                y = (start + end) / 2,
-                label = scales::dollar(value, accuracy = 0.01)),
-            size = 3.5, fontface = "bold") +
-  geom_segment(data = filter(sim_components, !type %in% c("total")),
-               aes(x = as.numeric(component) + 0.4,
-                   xend = as.numeric(component) + 1 - 0.4,
-                   y = end, yend = end),
-               linetype = "dashed", color = "gray50") +
-  scale_fill_manual(
-    values = c(
-      "total" = "#0072B2",
-      "increase" = "#D55E00",
-      "decrease" = "#009E73",
-      "neutral" = "#999999"
-    ),
-    labels = c(
-      "total" = "Price level",
-      "increase" = "Price increase",
-      "decrease" = "Price decrease",
-      "neutral" = "Neutral"
-    )
-  ) +
-  scale_x_continuous(
-    breaks = seq_along(sim_components$component),
-    labels = sim_components$component
-  ) +
-  scale_y_continuous(labels = scales::dollar_format()) +
-  labs(
-    title = "Merger Simulation Waterfall: Price Effect Decomposition",
-    subtitle = "Breaking down predicted price change into component effects",
-    x = NULL,
-    y = "Price ($)",
-    fill = "Effect type",
-    caption = "Components from differentiated products logit simulation.
-    Replace with actual model outputs."
-  ) +
-  theme_antitrust() +
-  theme(
-    axis.text.x = element_text(angle = 30, hjust = 1),
-    legend.position = "bottom",
-    plot.title.position = "plot"
-  )
-
-# Summary statistics
-cat("\nSimulation summary:\n")
-cat(paste0("Pre-merger price: ",
-           scales::dollar(sim_components$value[1], accuracy = 0.01), "\n"))
-cat(paste0("Post-merger price: ",
-           scales::dollar(sim_components$end[nrow(sim_components)],
-                         accuracy = 0.01), "\n"))
-cat(paste0("Price increase: ",
-           scales::dollar(sim_components$end[nrow(sim_components)] -
-                         sim_components$value[1], accuracy = 0.01),
-           " (",
-           scales::percent((sim_components$end[nrow(sim_components)] /
-                           sim_components$value[1]) - 1, accuracy = 0.1),
-           ")\n"))
-```
+![Merger Simulation Waterfall: Price Effect Decomposition](../images/merger-sim-waterfall-1.png)
 
 **How to use this waterfall:**
 - **First-order UPP**: Direct pricing pressure from internalizing diversion.

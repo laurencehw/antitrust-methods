@@ -44,7 +44,7 @@ We can calculate critical loss thresholds for various hypothetical segments (e.g
 #| fig-height: 5
 library(dplyr)
 library(ggplot2)
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 
 critical_loss <- function(margin, price_increase) {
   price_increase / (price_increase + margin)

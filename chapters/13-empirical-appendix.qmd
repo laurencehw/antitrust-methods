@@ -41,7 +41,7 @@ Pair the chronology with a tabular schema inventory so you know what can feed th
 #| warning: false
 library(tibble)
 library(dplyr)
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 
 data_inventory <- tribble(
   ~system, ~owner, ~grain, ~fields, ~coverage, ~notes,

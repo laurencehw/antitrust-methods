@@ -41,7 +41,7 @@ Compute HHI or concentration ratios for labor markets defined by occupation × g
 #| message: false
 #| warning: false
 library(dplyr)
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 
 employment <- tibble::tribble(
   ~employer, ~occupation, ~region, ~employment,

@@ -78,7 +78,7 @@ While bar charts show win counts, a **transition matrix** reveals systematic rot
 library(dplyr)
 library(tidyr)
 library(ggplot2)
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 
 # Load real cartel bid data
 bids_df <- read.csv("data/derived/cartel_cement_bids.csv")
@@ -333,7 +333,7 @@ Placebo tests strengthen causal claims by showing that the estimated effect disa
 library(dplyr)
 library(fixest)
 library(ggplot2)
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 
 # Simulate panel data for cartel and control products
 set.seed(456)
@@ -468,7 +468,7 @@ library(fredr)
 library(dplyr)
 library(strucchange)
 library(ggplot2)
-source("../program/R/helpers.R")
+source("program/R/helpers.R")
 
 fredr_set_key(Sys.getenv("FRED_API_KEY"))
 gas <- fredr(series_id = "GASREGW", observation_start = as.Date("2015-01-01")) |>
