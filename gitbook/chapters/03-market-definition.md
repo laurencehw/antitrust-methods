@@ -65,75 +65,9 @@ knitr::kable(observed, caption="Illustrative Critical Loss by Customer Segment")
 ### Critical-loss vs. actual-loss curve
 This visualization compares the theoretical critical loss threshold to observed share losses across different margin assumptions. It helps communicate whether a candidate market "passes" the SSNIP test.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(patchwork)
+![Critical Loss vs. Actual Loss Test](../images/critical-loss-curve-1.png)
 
-# Generate critical loss curves for different price increases
-margins <- seq(0.05, 0.60, by = 0.01)
-price_increases <- c(0.05, 0.10, 0.15)
-
-cl_curves <- expand.grid(
-  margin = margins,
-  price_increase = price_increases
-) |>
-  mutate(
-    critical_loss = price_increase / (price_increase + margin),
-    price_increase_label = paste0(price_increase * 100, "% SSNIP")
-  )
-
-# Observed actual loss from customer switching data (illustrative)
-# In practice, these come from loyalty data, surveys, or econometric diversion estimates
-actual_loss_examples <- tibble::tribble(
-  ~margin, ~actual_loss, ~scenario,
-  0.20, 0.12, "Observed switching (loyalty data)",
-  0.30, 0.08, "Survey-based diversion",
-  0.40, 0.06, "Econometric estimate"
-)
-
-# Main plot: critical loss curves
-p1 <- ggplot(cl_curves, aes(x = margin, y = critical_loss, color = price_increase_label)) +
-  geom_line(linewidth = 1.2) +
-  geom_point(data = actual_loss_examples,
-             aes(x = margin, y = actual_loss, shape = scenario),
-             color = "black", size = 3, inherit.aes = FALSE) +
-  scale_x_continuous(labels = scales::percent_format()) +
-  scale_y_continuous(labels = scales::percent_format(), limits = c(0, 0.30)) +
-  scale_color_manual(values = c("#0072B2", "#D55E00", "#009E73")) +
-  labs(
-    title = "Critical Loss vs. Actual Loss Test",
-    subtitle = "Points above the curve suggest the candidate market fails SSNIP (too much switching)",
-    x = "Margin (Price - MC) / Price",
-    y = "Share loss threshold",
-    color = "Price increase",
-    shape = "Actual loss from data"
-  ) +
-  theme_antitrust() +
-  theme(
-    legend.position = "bottom",
-    legend.box = "vertical",
-    plot.title.position = "plot"
-  ) +
-  guides(color = guide_legend(order = 1), shape = guide_legend(order = 2))
-
-# Companion table showing specific calculations
-cl_table <- tibble::tribble(
-  ~margin, ~price_increase, ~critical_loss, ~actual_loss, ~interpretation,
-  0.25, 0.05, 0.167, 0.08, "Market likely too narrow (actual < critical)",
-  0.25, 0.10, 0.286, 0.12, "Market likely too narrow (actual < critical)",
-  0.40, 0.05, 0.111, 0.15, "Market likely too broad (actual > critical)"
-) |>
-  mutate(
-    across(c(margin, price_increase, critical_loss, actual_loss),
-           ~scales::percent(., accuracy = 0.1))
-  )
-
-p1
-
-cat("\nCritical loss decision table:\n")
-knitr::kable(cl_table, digits=3, caption="Critical Loss Decision Table")
-```
+*Points above the curve suggest the candidate market fails SSNIP (too much switching).*
 
 **How to use this chart:** For a given margin estimate (horizontal axis), find the critical loss threshold (the curve). If your observed or estimated actual loss (from switching data, surveys, or diversion ratios) falls *above* the curve, customers switch too readily for a hypothetical monopolist to profitably raise prices by 5-10%, suggesting the candidate market is too narrow and should be expanded. Conversely, if actual loss is *below* the curve, the market definition may be defensible.
 
@@ -142,101 +76,9 @@ Swap `margin` and `price_increase` with matter-specific values. For theoretical 
 ### Route-share heatmap: NYC airline concentration
 This heatmap visualizes carrier concentration on specific routes, helping identify whether route-by-route markets are appropriate or whether broader origin-destination-pairs should be considered. High concentration (dark colors) on specific routes may signal competitive concerns.
 
-```r
-library(nycflights13)
-library(dplyr)
-library(tidyr)
-library(ggplot2)
+![Airline Route Concentration: NYC Area](../images/nyc-route-heatmap-1.png)
 
-# Calculate route-level shares and HHI
-route_shares <- flights |>
-  filter(origin %in% c("JFK", "LGA", "EWR")) |>
-  mutate(route = paste(origin, dest, sep = "-")) |>
-  count(route, carrier, name = "flights") |>
-  group_by(route) |>
-  mutate(
-    share = flights / sum(flights),
-    total_flights = sum(flights)
-  ) |>
-  ungroup()
-
-# Calculate HHI for each route
-route_hhi <- route_shares |>
-  group_by(route) |>
-  summarize(
-    hhi = sum((share * 100)^2),
-    total_flights = first(total_flights),
-    n_carriers = n()
-  ) |>
-  arrange(desc(hhi))
-
-# Select top 20 routes by volume for visualization clarity
-top_routes <- route_shares |>
-  group_by(route) |>
-  summarize(total = sum(flights)) |>
-  slice_max(total, n = 20) |>
-  pull(route)
-
-# Filter to top routes and add HHI
-route_shares_top <- route_shares |>
-  filter(route %in% top_routes) |>
-  left_join(route_hhi |> select(route, hhi), by = "route") |>
-  mutate(
-    route_labeled = paste0(route, " (HHI: ", round(hhi), ")")
-  ) |>
-  arrange(desc(hhi))
-
-# Create ordered factor for proper sorting
-route_shares_top <- route_shares_top |>
-  mutate(route_labeled = factor(route_labeled,
-                                 levels = unique(route_labeled[order(hhi, decreasing = TRUE)])))
-
-# Heatmap
-p_heatmap <- ggplot(route_shares_top, aes(x = carrier, y = route_labeled, fill = share)) +
-  geom_tile(color = "white", linewidth = 0.5) +
-  geom_text(aes(label = ifelse(share >= 0.05, scales::percent(share, accuracy = 1), "")),
-            size = 2.5, color = "white") +
-  scale_fill_viridis_c(
-    labels = scales::percent_format(),
-    option = "plasma",
-    begin = 0.1,
-    end = 0.9
-  ) +
-  labs(
-    title = "Airline Route Concentration: NYC Area (2013)",
-    subtitle = "Top 20 routes by volume. HHI values indicate market concentration (>2,500 = highly concentrated)",
-    x = "Carrier",
-    y = "Route (Origin-Destination) [HHI]",
-    fill = "Market\nShare",
-    caption = "Source: nycflights13 package. HHI = Herfindahl-Hirschman Index."
-  ) +
-  theme_antitrust() +
-  theme(
-    axis.text.y = element_text(size = 8),
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.title.position = "plot",
-    legend.position = "right",
-    panel.grid = element_blank()
-  )
-
-p_heatmap
-
-# Summary table of most concentrated routes
-cat("\nMost concentrated routes (Top 10 by HHI):\n")
-route_hhi |>
-  slice_max(hhi, n = 10) |>
-  mutate(
-    hhi = round(hhi),
-    concentration = case_when(
-      hhi >= 2500 ~ "Highly concentrated",
-      hhi >= 1500 ~ "Moderately concentrated",
-      TRUE ~ "Unconcentrated"
-    )
-  ) |>
-  select(route, hhi, n_carriers, total_flights, concentration) |>
-  head(10) |>
-  knitr::kable(caption = "Top Route Concentration Stats")
-```
+*Top 20 routes by volume. HHI values indicate market concentration (>2,500 = highly concentrated). Source: nycflights13 package.*
 
 **Interpretation:** Routes with HHI > 2,500 (US DOJ/FTC threshold for "highly concentrated") may warrant closer scrutiny. The visualization shows that many NYC routes are served by only 1-2 carriers with dominant shares, which could support narrow route-level market definitions in merger analysis. In practice, you would supplement this with pricing data, switching patterns, and qualitative evidence about entry barriers.
 
@@ -245,85 +87,9 @@ Replace `nycflights13` with live data (slot allocation, loyalty records, booking
 ### Geographic market definition: Shipment flows
 Understanding where products physically flow helps define geographic markets. This visualization shows the intensity of shipments between regions, which can reveal natural market boundaries, trade patterns, and whether distant regions constrain local pricing.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(tidyr)
+![Geographic Shipment Flows: Regional Trade Pattern](../images/geographic-flows-1.png)
 
-# Illustrative shipment flow data
-# In practice, pull from Census Commodity Flow Survey, BEA trade data,
-# company shipping records, or Stats SA provincial trade data
-set.seed(42)
-regions <- c("Northeast", "Southeast", "Midwest", "Southwest", "West")
-
-# Create flow matrix (origin x destination)
-# Self-shipments (diagonal) are typically highest
-flow_data <- expand.grid(
-  origin = regions,
-  destination = regions
-) |>
-  mutate(
-    # Self-shipments are high, nearby regions moderate, distant regions low
-    base_flow = case_when(
-      origin == destination ~ runif(n(), 800, 1200),
-      (origin == "Northeast" & destination == "Southeast") |
-        (origin == "Southeast" & destination == "Northeast") ~ runif(n(), 300, 500),
-      (origin == "Midwest" & destination == "Northeast") |
-        (origin == "Northeast" & destination == "Midwest") ~ runif(n(), 250, 450),
-      (origin == "West" & destination == "Southwest") |
-        (origin == "Southwest" & destination == "West") ~ runif(n(), 350, 550),
-      TRUE ~ runif(n(), 50, 200)
-    ),
-    shipments = round(base_flow)
-  ) |>
-  select(-base_flow)
-
-# Calculate self-sufficiency ratio (intra-regional shipments / total from that origin)
-self_sufficiency <- flow_data |>
-  group_by(origin) |>
-  mutate(
-    total_out = sum(shipments),
-    self_share = shipments / total_out
-  ) |>
-  filter(origin == destination) |>
-  select(region = origin, self_sufficiency = self_share)
-
-# Heatmap of flows
-p_flows <- ggplot(flow_data, aes(x = destination, y = origin, fill = shipments)) +
-  geom_tile(color = "white", linewidth = 1) +
-  geom_text(aes(label = scales::comma(shipments, accuracy = 1)),
-            color = "white", size = 4, fontface = "bold") +
-  scale_fill_viridis_c(
-    option = "mako",
-    labels = scales::comma,
-    begin = 0.2,
-    end = 0.9
-  ) +
-  labs(
-    title = "Geographic Shipment Flows: Regional Trade Pattern",
-    subtitle = "High diagonal values (self-shipments) suggest distinct regional markets",
-    x = "Destination Region",
-    y = "Origin Region",
-    fill = "Shipments\n(units)",
-    caption = "Illustrative data. In practice, use Census Commodity Flow Survey, BEA data, or proprietary shipping records."
-  ) +
-  theme_antitrust() +
-  theme(
-    plot.title.position = "plot",
-    panel.grid = element_blank(),
-    axis.text.x = element_text(angle = 45, hjust = 1)
-  ) +
-  coord_fixed()
-
-p_flows
-
-# Self-sufficiency table
-cat("\nRegional self-sufficiency (intra-regional shipments as % of total):\n")
-self_sufficiency |>
-  mutate(self_sufficiency = scales::percent(self_sufficiency, accuracy = 1)) |>
-  arrange(desc(self_sufficiency)) |>
-  knitr::kable(digits=2, caption="Regional Self-Sufficiency Scores")
-```
+*High diagonal values (self-shipments) suggest distinct regional markets. Illustrative data.*
 
 **How to use this analysis:**
 - **High self-sufficiency** (diagonal dominance): If 70-80%+ of shipments from a region stay within that region, it suggests the region may be a distinct geographic market.
@@ -343,103 +109,9 @@ In practice, combine this with:
 ### Diversion ratios from customer switching data
 Diversion ratios quantify where customers go when their first choice becomes unavailable or more expensive. They are critical for market definition, UPP calculations, and merger simulation. This example shows how to compute diversion from customer-level switching or choice data.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(tidyr)
+![Diversion Ratios: Where Do Customers Go?](../images/diversion-ratios-1.png)
 
-# Simulated customer switching data
-# In practice: loyalty card data, survey "next-best" responses,
-# clickstream/shopping cart abandonment, health plan switching
-set.seed(123)
-n_customers <- 1000
-
-# Customer choices: first choice and second choice (if first unavailable)
-switching_data <- tibble(
-  customer_id = 1:n_customers,
-  first_choice = sample(c("Product_A", "Product_B", "Product_C", "Product_D", "Outside"),
-                        n_customers, replace = TRUE,
-                        prob = c(0.30, 0.25, 0.20, 0.15, 0.10)),
-  second_choice = sample(c("Product_A", "Product_B", "Product_C", "Product_D", "Outside"),
-                         n_customers, replace = TRUE,
-                         prob = c(0.22, 0.23, 0.22, 0.18, 0.15))
-) |>
-  # Ensure second choice differs from first choice
-  rowwise() |>
-  mutate(
-    second_choice = if_else(
-      second_choice == first_choice,
-      sample(setdiff(c("Product_A", "Product_B", "Product_C", "Product_D", "Outside"), first_choice), 1),
-      second_choice
-    )
-  ) |>
-  ungroup()
-
-# Calculate diversion ratios
-# Diversion from Product i to Product j =
-# (# customers switching from i to j) / (total customers choosing i first)
-diversion_matrix <- switching_data |>
-  count(first_choice, second_choice, name = "switchers") |>
-  group_by(first_choice) |>
-  mutate(
-    total_first = sum(switchers),
-    diversion_ratio = switchers / total_first
-  ) |>
-  ungroup() |>
-  select(from = first_choice, to = second_choice, diversion_ratio, switchers, total_first)
-
-# Visualize diversion from Product A and Product B (merger parties)
-products_of_interest <- c("Product_A", "Product_B")
-
-p_diversion <- diversion_matrix |>
-  filter(from %in% products_of_interest, to != from) |>
-  mutate(
-    merger_party = to %in% products_of_interest,
-    from_label = paste("From", from)
-  ) |>
-  ggplot(aes(x = reorder(to, diversion_ratio), y = diversion_ratio, fill = merger_party)) +
-  geom_col() +
-  geom_text(aes(label = scales::percent(diversion_ratio, accuracy = 1)),
-            hjust = -0.1, size = 3.5) +
-  scale_y_continuous(labels = scales::percent_format(), limits = c(0, 0.35)) +
-  scale_fill_manual(
-    values = c("FALSE" = "#0072B2", "TRUE" = "#D55E00"),
-    labels = c("FALSE" = "Competitor", "TRUE" = "Merger Partner")
-  ) +
-  coord_flip() +
-  facet_wrap(~from_label, ncol = 2) +
-  labs(
-    title = "Diversion Ratios: Where Do Customers Go?",
-    subtitle = "High diversion to merger partner suggests products compete closely",
-    x = "Destination Product",
-    y = "Diversion Ratio (% of lost customers)",
-    fill = NULL,
-    caption = "Source: Simulated switching data. In practice: loyalty panels, surveys, or choice experiments."
-  ) +
-  theme_antitrust() +
-  theme(
-    plot.title.position = "plot",
-    legend.position = "top"
-  )
-
-p_diversion
-
-# Summary table
-cat("\nDiversion from Product A:\n")
-diversion_matrix |>
-  filter(from == "Product_A", to != "Product_A") |>
-  arrange(desc(diversion_ratio)) |>
-  mutate(
-    diversion_ratio = scales::percent(diversion_ratio, accuracy = 0.1),
-    interpretation = case_when(
-      to == "Product_B" ~ "HIGH - Merger partner (UPP concern)",
-      to == "Outside" ~ "Customers leave market",
-      TRUE ~ "Substitute competitor"
-    )
-  ) |>
-  select(to, diversion_ratio, switchers, interpretation) |>
-  print(n = Inf)
-```
+*High diversion to merger partner suggests products compete closely. Source: Simulated switching data.*
 
 **Interpretation for merger analysis:**
 - **High diversion between merger parties** (e.g., 25-35% from A→B): Strong evidence products compete closely; supports narrow market definition and raises UPP concerns.

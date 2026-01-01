@@ -164,98 +164,9 @@ Analyze API access restrictions, data sharing, and interoperability constraints:
 ### Enhanced royalty stack waterfall
 A more detailed royalty stack showing how cumulative royalties build up across different technology components. This helps demonstrate potential royalty stack concerns in FRAND disputes.
 
-```r
-library(dplyr)
-library(ggplot2)
+![Royalty Stack Waterfall: Smartphone Example](../images/innovation-royalty-waterfall-1.png)
 
-# Royalty components for a smartphone
-# Replace with actual FRAND rate determinations or licensing data
-royalty_components <- tibble::tribble(
-  ~component,          ~holder_type,    ~royalty_pct,
-  "Device price",      "Base",          100.00,
-  "Cellular (5G)",     "SEP",           -2.50,
-  "WiFi/Bluetooth",    "SEP",           -1.20,
-  "Audio codecs",      "SEP",           -0.80,
-  "Video codecs",      "SEP",           -1.50,
-  "Display tech",      "Patent pool",   -0.90,
-  "Camera tech",       "Non-SEP",       -0.60,
-  "Software/OS",       "License",       -1.80,
-  "Other SEPs",        "SEP",           -1.50,
-  "Net to manufacturer", "Result",      89.20
-) |>
-  mutate(
-    component = factor(component, levels = component),
-    cumulative = cumsum(royalty_pct),
-    start = lag(cumulative, default = 100),
-    end = cumulative,
-    type = case_when(
-      component %in% c("Device price", "Net to manufacturer") ~ "total",
-      royalty_pct < 0 ~ "royalty",
-      TRUE ~ "neutral"
-    )
-  )
-
-# Waterfall plot
-ggplot(royalty_components) +
-  geom_rect(aes(xmin = as.numeric(component) - 0.4,
-                xmax = as.numeric(component) + 0.4,
-                ymin = start, ymax = end, fill = holder_type),
-            color = "black", linewidth = 0.5) +
-  geom_text(aes(x = as.numeric(component),
-                y = (start + end) / 2,
-                label = ifelse(type == "royalty",
-                              paste0(abs(royalty_pct), "%"),
-                              paste0(royalty_pct, "%"))),
-            size = 3, fontface = "bold") +
-  geom_segment(data = filter(royalty_components, !type %in% c("total")),
-               aes(x = as.numeric(component) + 0.4,
-                   xend = as.numeric(component) + 1 - 0.4,
-                   y = end, yend = end),
-               linetype = "dashed", color = "gray50") +
-  scale_fill_manual(
-    values = c(
-      "Base" = "#0072B2",
-      "SEP" = "#D55E00",
-      "Patent pool" = "#009E73",
-      "Non-SEP" = "#F0E442",
-      "License" = "#CC79A7",
-      "Result" = "#0072B2"
-    ),
-    breaks = c("SEP", "Patent pool", "Non-SEP", "License")
-  ) +
-  scale_x_continuous(
-    breaks = seq_along(royalty_components$component),
-    labels = royalty_components$component
-  ) +
-  scale_y_continuous(labels = scales::dollar_format(suffix = "%", prefix = "")) +
-  labs(
-    title = "Royalty Stack Waterfall: Smartphone Example",
-    subtitle = "Cumulative royalty burden on device manufacturer",
-    x = NULL,
-    y = "% of Device Price",
-    fill = "Royalty Type",
-    caption = "Illustrative data. Replace with FRAND rate determinations or licensing disclosures."
-  ) +
-  theme_antitrust() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "bottom",
-    plot.title.position = "plot"
-  )
-
-# Summary statistics
-total_royalties <- 100 - royalty_components$royalty_pct[
-  royalty_components$component == "Net to manufacturer"]
-
-cat("\nRoyalty stack summary:\n")
-cat(paste0("Total royalty burden: ", round(total_royalties, 1), "%\n"))
-cat(paste0("SEP royalties: ",
-          round(sum(abs(royalty_components$royalty_pct[
-            royalty_components$holder_type == "SEP"])), 1), "%\n"))
-cat(paste0("Net to manufacturer: ",
-          round(royalty_components$royalty_pct[
-            royalty_components$component == "Net to manufacturer"], 1), "%\n"))
-```
+*Waterfall showing cumulative royalty burden from device price (100%) down to net manufacturer margin. Color indicates royalty type (SEP, patent pool, non-SEP, license).*
 
 **Key concerns:**
 - **Royalty stacking**: Multiple SEP holders each claiming a "reasonable" royalty can collectively make manufacturing unprofitable.
@@ -271,70 +182,9 @@ Compare against FRAND rate determinations:
 ### Generic entry survival curve
 Analyze the timing of generic pharmaceutical entry, with and without reverse payment settlements. Survival analysis shows whether settlements delay entry.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(survival)
+![Generic Entry Timing: Impact of Reverse Payment Settlements](../images/innovation-generic-entry-1.png)
 
-# Simulated generic entry data
-# Replace with FDA Orange Book data or European/South African equivalents
-set.seed(456)
-n_drugs <- 60
-
-entry_data <- tibble(
-  drug_id = 1:n_drugs,
-  settlement = sample(c("No settlement", "Reverse payment settlement"),
-                     n_drugs, replace = TRUE, prob = c(0.6, 0.4)),
-  months_to_entry = case_when(
-    settlement == "No settlement" ~ rexp(n_drugs, rate = 1/36),
-    TRUE ~ rexp(n_drugs, rate = 1/56)  # Delayed entry with settlement
-  ),
-  entered = sample(c(1, 0), n_drugs, replace = TRUE, prob = c(0.85, 0.15))
-) |>
-  mutate(months_to_entry = pmin(months_to_entry, 120))  # Cap at 10 years
-
-# Kaplan-Meier survival curve
-surv_object <- Surv(time = entry_data$months_to_entry,
-                   event = entry_data$entered)
-surv_fit <- survfit(surv_object ~ settlement, data = entry_data)
-
-# Plot survival curve (requires survminer for ggsurvplot)
-if (!requireNamespace("survminer", quietly = TRUE)) {
-  message("Install the 'survminer' package to render the Kaplan-Meier plot.")
-} else {
-  survminer::ggsurvplot(
-    surv_fit,
-    data = entry_data,
-    palette = c("#0072B2", "#D55E00"),
-    conf.int = TRUE,
-    risk.table = TRUE,
-    risk.table.height = 0.25,
-    xlab = "Months from patent grant",
-    ylab = "Probability no generic entry",
-    title = "Generic Entry Timing: Impact of Reverse Payment Settlements",
-    subtitle = "Kaplan-Meier survival curves by settlement status",
-    legend.title = "Settlement Type",
-    legend.labs = c("No settlement", "Reverse payment settlement"),
-    ggtheme = theme_antitrust(),
-    font.main = c(14, "bold"),
-    font.subtitle = c(11, "plain"),
-    font.caption = c(9, "plain"),
-    caption = "Illustrative data. Replace with FDA Orange Book or EMA data."
-  )
-}
-
-# Log-rank test
-surv_diff <- survdiff(surv_object ~ settlement, data = entry_data)
-cat("\nLog-rank test for difference in survival curves:\n")
-cat(paste0("Chi-squared = ", round(surv_diff$chisq, 2), "\n"))
-cat(paste0("p-value = ", format.pval(1 - pchisq(surv_diff$chisq,
-                                               df = length(surv_diff$n) - 1),
-                                     digits = 3), "\n"))
-
-# Median survival times
-cat("\nMedian time to generic entry:\n")
-print(summary(surv_fit)$table[, c("median", "0.95LCL", "0.95UCL")])
-```
+*Kaplan-Meier survival curves showing probability of no generic entry over time. Drugs with reverse payment settlements show systematically delayed entry.*
 
 **Interpretation:**
 - **Separation of curves**: If settlement drugs show consistently lower entry hazard, this suggests anticompetitive delay.
@@ -350,86 +200,9 @@ print(summary(surv_fit)$table[, c("median", "0.95LCL", "0.95UCL")])
 ### Patent citation network
 Visualize how key patents cite each other to show technological relationships and potential blocking positions.
 
-```r
-library(dplyr)
-library(igraph)
-library(ggraph)
+![Patent Citation Network](../images/innovation-patent-network-1.png)
 
-# Simulated patent citation network
-# Replace with PatentsView or EPO PATSTAT data
-set.seed(567)
-n_patents <- 30
-
-# Create citation edges
-citations <- tibble(
-  from_patent = sample(paste0("Patent_", 1:n_patents), 50, replace = TRUE),
-  to_patent = sample(paste0("Patent_", 1:n_patents), 50, replace = TRUE)
-) |>
-  filter(from_patent != to_patent) |>
-  distinct()
-
-# Create patent metadata
-patents <- tibble(
-  patent_id = paste0("Patent_", 1:n_patents),
-  holder = sample(c("Firm A", "Firm B", "Firm C", "Firm D", "University"),
-                 n_patents, replace = TRUE, prob = c(0.3, 0.25, 0.2, 0.15, 0.1)),
-  essential = sample(c("SEP", "Non-SEP"), n_patents, replace = TRUE,
-                    prob = c(0.3, 0.7))
-)
-
-# Create network
-g <- graph_from_data_frame(citations, directed = TRUE, vertices = patents)
-
-# Calculate centrality measures
-V(g)$in_degree <- degree(g, mode = "in")
-V(g)$out_degree <- degree(g, mode = "out")
-V(g)$betweenness <- betweenness(g)
-
-# Plot network
-ggraph(g, layout = "fr") +
-  geom_edge_link(arrow = arrow(length = unit(2, 'mm'), type = "closed"),
-                 end_cap = circle(3, 'mm'),
-                 alpha = 0.3, color = "gray50") +
-  geom_node_point(aes(size = in_degree, color = holder,
-                     shape = essential), alpha = 0.8) +
-  geom_node_text(
-    aes(label = ifelse(in_degree > 3, name, "")),
-    repel = TRUE,
-    size = 2.5,
-    family = "Arial"
-  ) +
-  scale_size_continuous(range = c(3, 10)) +
-  scale_color_brewer(palette = "Set2") +
-  scale_shape_manual(values = c("SEP" = 17, "Non-SEP" = 19)) +
-  labs(
-    title = "Patent Citation Network",
-    subtitle = "Node size = citation count (in-degree); arrows show citations",
-    color = "Patent Holder",
-    shape = "Patent Type",
-    size = "Citations Received",
-    caption = "Illustrative data. Replace with PatentsView or EPO PATSTAT data."
-  ) +
-  theme_graph(base_size = 12) +
-  theme(
-    text = element_text(family = "Arial"),
-    legend.position = "bottom",
-    plot.title = element_text(size = 14, face = "bold")
-  )
-
-# Summary statistics
-cat("\nPatent network summary:\n")
-cat(paste0("Total patents: ", n_patents, "\n"))
-cat(paste0("Total citations: ", nrow(citations), "\n"))
-cat(paste0("SEP patents: ", sum(V(g)$essential == "SEP"), "\n"))
-cat("\nTop 5 most-cited patents:\n")
-patents |>
-  left_join(tibble(patent_id = V(g)$name, in_degree = V(g)$in_degree),
-           by = "patent_id") |>
-  arrange(desc(in_degree)) |>
-  select(patent_id, holder, essential, in_degree) |>
-  head(5) |>
-  print()
-```
+*Network graph showing patent citations. Node size = citation count (in-degree); color = patent holder; shape = SEP vs. non-SEP.*
 
 **Key insights:**
 - **Central patents**: High betweenness centrality indicates "bottleneck" patents that many others depend on.
@@ -439,75 +212,9 @@ patents |>
 ### R&D spending event study around merger
 Evaluate whether mergers affect innovation incentives by tracking R&D spending before and after the transaction.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(fixest)
+![R&D Spending Around Merger Event](../images/innovation-rd-event-1.png)
 
-# Simulated panel data: R&D spending around merger
-# Replace with Compustat, Orbis, or financial statement data
-set.seed(678)
-quarters <- -12:12
-firms <- c("Merged firms", "Non-merged rivals", "Industry average")
-
-rd_panel <- expand.grid(
-  quarter = quarters,
-  firm_group = firms
-) |>
-  mutate(
-    # Pre-merger: all firms follow similar trends
-    # Post-merger: merged firms reduce R&D relative to others
-    rd_index = case_when(
-      firm_group == "Merged firms" & quarter < 0 ~ 100 + 2 * quarter + rnorm(n(), 0, 3),
-      firm_group == "Merged firms" & quarter >= 0 ~ 100 + 2 * quarter - 8 + rnorm(n(), 0, 3),
-      firm_group == "Non-merged rivals" ~ 100 + 2 * quarter + rnorm(n(), 0, 3),
-      TRUE ~ 100 + 2 * quarter + rnorm(n(), 0, 2)
-    )
-  )
-
-# Time series plot
-ggplot(rd_panel, aes(x = quarter, y = rd_index,
-                    color = firm_group, linetype = firm_group)) +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40",
-             linewidth = 1) +
-  stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
-  annotate("text", x = 0, y = max(rd_panel$rd_index) * 0.95,
-          label = "Merger\ncompletes", hjust = -0.1, size = 3.5,
-          fontface = "italic") +
-  scale_color_manual(values = c("Merged firms" = "#D55E00",
-                                 "Non-merged rivals" = "#0072B2",
-                                 "Industry average" = "#999999")) +
-  scale_linetype_manual(values = c("Merged firms" = "solid",
-                                   "Non-merged rivals" = "solid",
-                                   "Industry average" = "dashed")) +
-  labs(
-    title = "R&D Spending Around Merger Event",
-    subtitle = "Indexed to 100 at merger announcement (quarter 0)",
-    x = "Quarters relative to merger completion",
-    y = "R&D Spending Index",
-    color = NULL,
-    linetype = NULL,
-    caption = "Illustrative data. Replace with Compustat or company financial statements."
-  ) +
-  theme_antitrust() +
-  theme(
-    legend.position = "bottom",
-    plot.title.position = "plot"
-  )
-
-# Diff-in-diff estimate
-rd_panel_did <- rd_panel |>
-  mutate(
-    post = ifelse(quarter >= 0, 1, 0),
-    treated = ifelse(firm_group == "Merged firms", 1, 0)
-  )
-
-did_model <- feols(rd_index ~ treated:post | firm_group + quarter,
-                  data = rd_panel_did)
-
-cat("\nDifference-in-differences estimate:\n")
-summary(did_model)
-```
+*Time series showing R&D spending indexed to 100 at merger announcement. Merged firms show decline relative to non-merged rivals post-merger.*
 
 **Interpretation:**
 - **Pre-trends**: Parallel trends before merger support DiD identification.
@@ -522,56 +229,9 @@ summary(did_model)
 ### Clinical trial pipeline visualization (pharmaceuticals)
 Track clinical trial progress for pharmaceutical innovation assessments.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(tidyr)
+![Clinical Trial Pipeline Comparison](../images/innovation-clinical-pipeline-1.png)
 
-# Simulated clinical trial pipeline
-# Replace with clinicaltrials.gov data or EMA/SAHPRA records
-pipeline <- tibble::tribble(
-  ~phase,       ~firm_a, ~firm_b, ~firm_c,
-  "Preclinical", 45,      38,      52,
-  "Phase I",     28,      22,      31,
-  "Phase II",    15,      12,      18,
-  "Phase III",   6,       5,       8,
-  "Approved",    3,       2,       4
-) |>
-  mutate(phase = factor(phase, levels = phase)) |>
-  pivot_longer(cols = -phase, names_to = "firm", values_to = "count")
-
-# Funnel chart
-ggplot(pipeline, aes(x = phase, y = count, fill = firm, group = firm)) +
-  geom_col(position = position_dodge(width = 0.8), width = 0.7) +
-  geom_text(aes(label = count), position = position_dodge(width = 0.8),
-           vjust = -0.5, size = 3.5) +
-  scale_fill_manual(values = c("firm_a" = "#0072B2",
-                                "firm_b" = "#009E73",
-                                "firm_c" = "#D55E00")) +
-  labs(
-    title = "Clinical Trial Pipeline Comparison",
-    subtitle = "Number of compounds by development stage",
-    x = "Development Stage",
-    y = "Number of Compounds",
-    fill = "Company",
-    caption = "Illustrative data. Replace with clinicaltrials.gov or regulatory filings."
-  ) +
-  theme_antitrust() +
-  theme(
-    legend.position = "bottom",
-    plot.title.position = "plot"
-  )
-
-# Success rates
-pipeline_wide <- pipeline |>
-  pivot_wider(names_from = phase, values_from = count)
-
-cat("\nPipeline success rates (illustrative):\n")
-cat("Phase I to Phase II: ~50-60%\n")
-cat("Phase II to Phase III: ~30-40%\n")
-cat("Phase III to Approval: ~60-70%\n")
-cat("\nUse these rates to model expected future approvals and consumer harm from delays.\n")
-```
+*Bar chart showing number of compounds by development stage (preclinical through approved) for three firms.*
 
 **Applications:**
 - **Merger review**: Compare pipeline depth before/after transaction.

@@ -197,36 +197,12 @@ cat(paste0("Would monopolist profit? Depends on ad revenue vs. user loss tradeof
 ## Ranking, self-preferencing, and defaults
 
 ### Ranking impact visualization
-```r
-library(dplyr)
-library(tidyr)
-library(ggplot2)
 
-ranking <- tibble::tribble(
-  ~slot, ~first_party_ctr, ~third_party_ctr,
-  1, 0.16, 0.08,
-  2, 0.13, 0.06,
-  3, 0.11, 0.05,
-  4, 0.08, 0.04,
-  5, 0.06, 0.03
-) |>
-  pivot_longer(-slot, names_to = "listing", values_to = "ctr")
+![Conversion by Ranking Slot](../images/digital-ranking-1.png)
 
-ggplot(ranking, aes(slot, ctr, color = listing)) +
-  geom_line(linewidth = 1) +
-  geom_point(size = 2) +
-  scale_color_manual(values = c("#1b9e77", "#d95f02"), labels = c("First-party", "Third-party")) +
-  labs(
-    title = "Conversion by ranking slot",
-    subtitle = "Illustrative data; use OIPMI or platform A/B metrics when available",
-    x = "Slot (1 = top)",
-    y = "Conversion rate",
-    color = NULL
-  ) +
-  theme_antitrust() +
-  theme(legend.position = "bottom")
-```
-Populate the tibble with actual ranking data (e.g., OIPMI buy-box audits, CMA Amazon Marketplace analysis) or maintain sanitized values in `data/examples/digital-ranking.csv`. The CMA's market studies are publicly available at [gov.uk/cma](https://www.gov.uk/government/organisations/competition-and-markets-authority).
+*Click-through rates decline sharply with ranking position. First-party listings consistently outperform third-party listings at equivalent slots.*
+
+Populate with actual ranking data (e.g., OIPMI buy-box audits, CMA Amazon Marketplace analysis). The CMA's market studies are publicly available at [gov.uk/cma](https://www.gov.uk/government/organisations/competition-and-markets-authority).
 
 ### Default-choice event study scaffold
 ```r
@@ -311,83 +287,9 @@ Document each dataset in `data/README.md` with provenance, confidentiality notes
 ### Multi-homing Sankey diagram
 Multi-homing patterns reveal competitive constraints and switching costs. A Sankey diagram shows how users flow across platforms, helping visualize whether platforms compete head-to-head or serve distinct niches.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(ggalluvial)
+![Multi-homing Patterns Across Platforms](../images/digital-multihoming-sankey-1.png)
 
-# Simulated multi-homing survey data
-# Replace with OIPMI survey data or DMA compliance reports
-set.seed(234)
-n_users <- 1000
-
-multihoming <- tibble(
-  user_id = 1:n_users,
-  platform_a = sample(c("Active", "Inactive"), n_users, replace = TRUE,
-                     prob = c(0.7, 0.3)),
-  platform_b = sample(c("Active", "Inactive"), n_users, replace = TRUE,
-                     prob = c(0.5, 0.5)),
-  platform_c = sample(c("Active", "Inactive"), n_users, replace = TRUE,
-                     prob = c(0.3, 0.7))
-) |>
-  mutate(
-    pattern = case_when(
-      platform_a == "Active" & platform_b == "Active" & platform_c == "Active" ~ "All three",
-      platform_a == "Active" & platform_b == "Active" ~ "A + B",
-      platform_a == "Active" & platform_c == "Active" ~ "A + C",
-      platform_b == "Active" & platform_c == "Active" ~ "B + C",
-      platform_a == "Active" ~ "A only",
-      platform_b == "Active" ~ "B only",
-      platform_c == "Active" ~ "C only",
-      TRUE ~ "None"
-    )
-  )
-
-# Aggregate flows
-flows <- multihoming |>
-  count(pattern) |>
-  mutate(
-    pct = n / sum(n),
-    pattern = factor(pattern,
-                    levels = c("A only", "B only", "C only",
-                              "A + B", "A + C", "B + C", "All three", "None"))
-  ) |>
-  arrange(pattern)
-
-# Bar chart showing multi-homing patterns
-p1 <- ggplot(flows, aes(x = pattern, y = pct, fill = pattern)) +
-  geom_col(width = 0.7) +
-  geom_text(aes(label = scales::percent(pct, accuracy = 0.1)),
-            vjust = -0.5, size = 3.5) +
-  scale_y_continuous(labels = scales::percent_format(),
-                     expand = expansion(mult = c(0, 0.1))) +
-  scale_fill_brewer(palette = "Set2") +
-  labs(
-    title = "Multi-homing Patterns Across Platforms",
-    subtitle = "User activity across Platform A, B, and C",
-    x = NULL,
-    y = "Share of Users",
-    caption = "Illustrative data. Replace with OIPMI survey or DMA compliance reports."
-  ) +
-  theme_antitrust() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "none",
-    plot.title.position = "plot"
-  )
-
-p1
-
-# Summary statistics
-cat("\nMulti-homing summary:\n")
-cat(paste0("Single-homing (one platform only): ",
-          scales::percent(sum(flows$pct[flows$pattern %in%
-                              c("A only", "B only", "C only")]),
-                         accuracy = 0.1), "\n"))
-cat(paste0("Multi-homing (2+ platforms): ",
-          scales::percent(sum(flows$pct[grepl("\\+|three", flows$pattern)]),
-                         accuracy = 0.1), "\n"))
-```
+*Bar chart showing user activity across platforms. High single-homing suggests lock-in; high multi-homing indicates competitive pressure.*
 
 **Interpretation:**
 -   **High single-homing**: Suggests strong lock-in, switching costs, or network effects. Platforms may have market power.
@@ -403,107 +305,9 @@ cat(paste0("Multi-homing (2+ platforms): ",
 ### Choice screen / default effect visualization
 Quantify how defaults affect market shares using difference-in-differences or event studies around choice screen implementations.
 
-```r
-library(fixest)
-library(dplyr)
-library(ggplot2)
-library(patchwork)
+![Impact of Choice Screen on Rival Search Engine Share](../images/digital-default-impact-1.png)
 
-# Simulated data: Android choice screen impact (EU DMA context)
-# Replace with actual DMA compliance data or CMA experiments
-set.seed(345)
-weeks <- -24:24
-countries <- c("Control (no choice screen)", "Treatment (choice screen)")
-
-default_data <- expand.grid(
-  week = weeks,
-  country = countries
-) |>
-  mutate(
-    # Pre-intervention: both countries similar
-    # Post-intervention: treatment shows rival gain
-    rival_share = case_when(
-      country == "Control (no choice screen)" ~ 0.05 + 0.0005 * week + rnorm(n(), 0, 0.01),
-      week < 0 ~ 0.05 + 0.0005 * week + rnorm(n(), 0, 0.01),
-      TRUE ~ 0.05 + 0.0005 * week + 0.08 + rnorm(n(), 0, 0.01)
-    ),
-    rival_share = pmax(0.01, pmin(0.25, rival_share))
-  )
-
-# Time series plot
-p1 <- ggplot(default_data, aes(x = week, y = rival_share,
-                                color = country, linetype = country)) +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40",
-             linewidth = 1) +
-  stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
-  annotate("text", x = 0, y = 0.22, label = "Choice screen\nintroduced",
-           hjust = -0.1, size = 3.5, fontface = "italic") +
-  scale_color_manual(values = c("Control (no choice screen)" = "#999999",
-                                 "Treatment (choice screen)" = "#0072B2")) +
-  scale_linetype_manual(values = c("Control (no choice screen)" = "dashed",
-                                   "Treatment (choice screen)" = "solid")) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  labs(
-    title = "Impact of Choice Screen on Rival Search Engine Share",
-    subtitle = "Difference-in-Differences: Treatment vs. Control Countries",
-    x = "Weeks relative to choice screen introduction",
-    y = "Rival search engine share",
-    color = NULL,
-    linetype = NULL
-  ) +
-  theme_antitrust() +
-  theme(
-    legend.position = "bottom",
-    plot.title.position = "plot"
-  )
-
-# Coefficient plot (event study coefficients)
-# Simulated DiD estimates
-did_coefs <- tibble(
-  week = weeks[weeks != -1]  # reference period
-) |>
-  mutate(
-    estimate = 0.08 * as.numeric(week >= 0) + rnorm(n(), 0, 0.01),
-    ci_lower = estimate - 1.96 * 0.01,
-    ci_upper = estimate + 1.96 * 0.01
-  )
-
-p2 <- ggplot(did_coefs, aes(x = week, y = estimate)) +
-  geom_hline(yintercept = 0, linetype = "solid", color = "gray40") +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40",
-             linewidth = 1) +
-  geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper),
-              alpha = 0.2, fill = "#0072B2") +
-  geom_line(color = "#0072B2", linewidth = 1) +
-  geom_point(color = "#0072B2", size = 2) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  labs(
-    title = "Event Study Coefficients",
-    subtitle = "Treatment effect by week (relative to week -1)",
-    x = "Weeks relative to choice screen",
-    y = "Effect on rival share (percentage points)",
-    caption = "Illustrative data. Replace with DMA compliance reports or CMA experiments."
-  ) +
-  theme_antitrust() +
-  theme(plot.title.position = "plot")
-
-# Combined plot
-p1 / p2
-
-# Summary statistics
-pre_treatment <- mean(default_data$rival_share[
-  default_data$country == "Treatment (choice screen)" & default_data$week < 0])
-post_treatment <- mean(default_data$rival_share[
-  default_data$country == "Treatment (choice screen)" & default_data$week >= 0])
-effect <- post_treatment - pre_treatment
-
-cat("\nChoice screen impact summary:\n")
-tibble::tibble(
-  metric = c("Pre-treatment share", "Post-treatment share", "Treatment Effect"),
-  value = c(pre_treatment, post_treatment, effect)
-) |>
-  knitr::kable(digits = 3, caption = "Impact of Choice Screen")
-```
+*Top: DiD time series showing treatment vs. control countries. Bottom: Event study coefficients with 95% confidence intervals.*
 
 **How to use this analysis:**
 - **Pre-trends**: Check parallel trends before intervention to validate DiD assumptions.
@@ -517,75 +321,9 @@ The EU Digital Markets Act requires designated gatekeepers to offer choice scree
 ### Platform fee structure visualization
 Commission and fee structures are critical evidence in platform cases. Show how fees vary by seller tier, product category, or fulfillment method.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(tidyr)
+![Platform Fee Structures by Category](../images/digital-fee-structure-1.png)
 
-# Fee structures from major platforms (public sources)
-# App Store, Play Store, Amazon Marketplace, food delivery
-fees <- tibble::tribble(
-  ~platform,            ~category,          ~base_commission, ~fulfillment_fee, ~payment_fee,
-  "App Store",          "Apps",             0.30,             0.00,              0.00,
-  "App Store",          "Apps (< $1M)",     0.15,             0.00,              0.00,
-  "Play Store",         "Apps",             0.30,             0.00,              0.00,
-  "Play Store",         "Apps (< $1M)",     0.15,             0.00,              0.00,
-  "Amazon Marketplace", "FBM (self-fulfill)", 0.15,          0.00,              0.03,
-  "Amazon Marketplace", "FBA (Amazon fulfill)", 0.15,        0.20,              0.03,
-  "Food Delivery A",    "Restaurant",       0.28,             0.00,              0.02,
-  "Food Delivery B",    "Restaurant",       0.32,             0.00,              0.02
-) |>
-  mutate(
-    total_fee = base_commission + fulfillment_fee + payment_fee,
-    total_fee_pct = scales::percent(total_fee, accuracy = 0.1)
-  )
-
-# Stacked bar chart
-fees_long <- fees |>
-  pivot_longer(cols = c(base_commission, fulfillment_fee, payment_fee),
-               names_to = "fee_type", values_to = "rate") |>
-  mutate(
-    fee_type = factor(fee_type,
-                     levels = c("payment_fee", "fulfillment_fee", "base_commission"),
-                     labels = c("Payment Processing", "Fulfillment", "Base Commission"))
-  )
-
-ggplot(fees_long, aes(x = paste(platform, category, sep = "\n"),
-                      y = rate, fill = fee_type)) +
-  geom_col(width = 0.7) +
-  geom_text(data = fees,
-            aes(x = paste(platform, category, sep = "\n"),
-                y = total_fee, label = total_fee_pct, fill = NULL),
-            vjust = -0.5, size = 3.5, fontface = "bold") +
-  scale_y_continuous(labels = scales::percent_format(),
-                     expand = expansion(mult = c(0, 0.1))) +
-  scale_fill_manual(
-    values = c("Base Commission" = "#D55E00",
-               "Fulfillment" = "#0072B2",
-               "Payment Processing" = "#009E73")
-  ) +
-  labs(
-    title = "Platform Fee Structures by Category",
-    subtitle = "Total take rate shown at top of each bar",
-    x = NULL,
-    y = "Fee Rate",
-    fill = "Fee Component",
-    caption = "Data from public platform documentation (2024). FBM = Fulfilled by Merchant; FBA = Fulfilled by Amazon."
-  ) +
-  theme_antitrust() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 9),
-    legend.position = "bottom",
-    plot.title.position = "plot"
-  )
-
-# Summary table
-cat("\nFee structure summary:\n")
-fees |>
-  select(platform, category, total_fee) |>
-  mutate(total_fee = scales::percent(total_fee, accuracy = 0.1)) |>
-  print(n = Inf)
-```
+*Stacked bar chart showing base commission, fulfillment, and payment processing fees. Total take rate shown at top of each bar.*
 
 **Key insights:**
 - **App stores**: 30% standard (15% for small developers under $1M revenue).
@@ -601,85 +339,9 @@ fees |>
 ### Market share evolution for digital platforms
 Track platform market share over time to identify tipping points and competitive dynamics.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(lubridate)
+![Digital Platform Market Share Evolution](../images/digital-market-evolution-1.png)
 
-# Market share evolution from public sources and regulatory filings
-# Illustrative data for search engines, social media, or e-commerce
-market_evolution <- tibble::tribble(
-  ~date,         ~platform,      ~share,
-  "2015-01-01",  "Platform A",   0.88,
-  "2016-01-01",  "Platform A",   0.90,
-  "2017-01-01",  "Platform A",   0.91,
-  "2018-01-01",  "Platform A",   0.92,
-  "2019-01-01",  "Platform A",   0.91,
-  "2020-01-01",  "Platform A",   0.90,
-  "2021-01-01",  "Platform A",   0.89,
-  "2022-01-01",  "Platform A",   0.88,
-  "2023-01-01",  "Platform A",   0.87,
-  "2015-01-01",  "Platform B",   0.08,
-  "2016-01-01",  "Platform B",   0.07,
-  "2017-01-01",  "Platform B",   0.06,
-  "2018-01-01",  "Platform B",   0.05,
-  "2019-01-01",  "Platform B",   0.06,
-  "2020-01-01",  "Platform B",   0.07,
-  "2021-01-01",  "Platform B",   0.08,
-  "2022-01-01",  "Platform B",   0.09,
-  "2023-01-01",  "Platform B",   0.10,
-  "2015-01-01",  "Others",       0.04,
-  "2016-01-01",  "Others",       0.03,
-  "2017-01-01",  "Others",       0.03,
-  "2018-01-01",  "Others",       0.03,
-  "2019-01-01",  "Others",       0.03,
-  "2020-01-01",  "Others",       0.03,
-  "2021-01-01",  "Others",       0.03,
-  "2022-01-01",  "Others",       0.03,
-  "2023-01-01",  "Others",       0.03
-) |>
-  mutate(date = as.Date(date))
-
-# Area chart
-ggplot(market_evolution, aes(x = date, y = share, fill = platform)) +
-  geom_area(alpha = 0.8) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
-  scale_fill_manual(
-    values = c("Platform A" = "#0072B2",
-               "Platform B" = "#009E73",
-               "Others" = "#999999")
-  ) +
-  labs(
-    title = "Digital Platform Market Share Evolution",
-    subtitle = "Example: Search engine market shares 2015-2023",
-    x = NULL,
-    y = "Market Share",
-    fill = "Platform",
-    caption = "Illustrative data. Replace with StatCounter, SimilarWeb, or regulatory filings."
-  ) +
-  theme_antitrust() +
-  theme(
-    legend.position = "bottom",
-    plot.title.position = "plot"
-  )
-
-# Summary statistics
-cat("\nMarket concentration trends:\n")
-cat(paste0("2015 HHI: ", round(sum((market_evolution$share[
-  market_evolution$date == "2015-01-01"] * 100)^2), 0), "\n"))
-cat(paste0("2023 HHI: ", round(sum((market_evolution$share[
-  market_evolution$date == "2023-01-01"] * 100)^2), 0), "\n"))
-cat(paste0("\nPlatform A share trend: ",
-          scales::percent(market_evolution$share[
-            market_evolution$date == "2015-01-01" &
-            market_evolution$platform == "Platform A"], accuracy = 0.1),
-          " (2015) → ",
-          scales::percent(market_evolution$share[
-            market_evolution$date == "2023-01-01" &
-            market_evolution$platform == "Platform A"], accuracy = 0.1),
-          " (2023)\n"))
-```
+*Area chart showing platform market share evolution. Platform A maintains dominant position (87-92%) throughout 2015-2023.*
 
 **Data sources:**
 - **StatCounter**: Global browser, OS, search engine stats

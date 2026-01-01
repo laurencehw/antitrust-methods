@@ -44,34 +44,13 @@ Essential facilities (e.g., telecom loops, pipelines) often require access prici
 ## Incentive regulation and benchmarking
 Benchmarking and yardstick competition compare regulated entities to peers to set targets without micromanaging costs. Examples include Ofgem’s RIIO model and the planned South African Supply-Side Regulator for Health.
 
-#### Visualization scaffold: benchmarking scatter
-```r
-library(dplyr)
-library(ggplot2)
+#### Visualization: benchmarking scatter
 
-utilities <- tibble::tribble(
-  ~entity, ~opex_per_unit, ~quality_score,
-  "Utility A", 18.5, 92,
-  "Utility B", 24.1, 85,
-  "Utility C", 16.0, 88,
-  "Utility D", 22.4, 95,
-  "Utility E", 19.2, 90
-)
+![Benchmarking Scatter: Operating Cost vs. Quality](../images/regulation-benchmark-1.png)
 
-ggplot(utilities, aes(x = opex_per_unit, y = quality_score, label = entity)) +
-  geom_point(color = "#1b9e77", size = 3) +
-  geom_text(nudge_y = 1.2, size = 3) +
-  geom_hline(yintercept = median(utilities$quality_score), linetype = "dashed", color = "gray60") +
-  geom_vline(xintercept = median(utilities$opex_per_unit), linetype = "dashed", color = "gray60") +
-  labs(
-    title = "Benchmarking scatter: operating cost vs. quality",
-    subtitle = "Illustrative data; upper-left quadrant = efficient/high quality",
-    x = "Operating cost per unit (currency)",
-    y = "Quality score (index)"
-  ) +
-  theme_antitrust()
-```
-Replace the illustrative tibble with regulator filings (e.g., NERSA, Ofgem, FERC Form 1), which are typically publicly available from regulatory agencies.
+*Upper-left quadrant = efficient/high quality. Dashed lines indicate median values.*
+
+Replace the illustrative data with regulator filings (e.g., NERSA, Ofgem, FERC Form 1), which are typically publicly available from regulatory agencies.
 
 ## Remedy design after antitrust findings
 
@@ -146,87 +125,9 @@ Swap the synthetic data with actual KPI panels (e.g., mobile data prices before/
 ### Remedy compliance timeline
 A timeline visualization helps communicate key milestones, deadlines, and compliance events for complex remedy packages. This is particularly useful for trustee reports, agency presentations, and public communications.
 
-```r
-source("../program/R/helpers.R")
-library(dplyr)
-library(ggplot2)
-library(lubridate)
+![Remedy Compliance Timeline](../images/regulation-remedy-timeline-1.png)
 
-# Example remedy timeline from a merger case
-# Replace with actual compliance events from trustee reports
-remedy_events <- tibble::tribble(
-  ~date,              ~event,                               ~category,
-  "2021-03-15",       "Merger approved w/ conditions",      "Decision",
-  "2021-04-01",       "Trustee appointed",                  "Monitoring",
-  "2021-07-01",       "Access API go-live",                 "Technical",
-  "2021-09-30",       "Q1 compliance report",               "Reporting",
-  "2021-12-01",       "Data sharing portal launched",       "Technical",
-  "2021-12-31",       "Q2 compliance report",               "Reporting",
-  "2022-03-15",       "First annual review",                "Review",
-  "2022-06-30",       "Q3 compliance report",               "Reporting",
-  "2022-09-01",       "Pricing parity audit",               "Monitoring",
-  "2022-12-31",       "Q4 compliance report",               "Reporting",
-  "2023-03-15",       "Second annual review",               "Review",
-  "2023-06-01",       "Remedy modification hearing",        "Decision",
-  "2024-03-15",       "Final compliance assessment",        "Review",
-  "2024-06-30",       "Sunset date (remedy expires)",       "Termination"
-) |>
-  mutate(
-    date = as.Date(date),
-    category = factor(category,
-                     levels = c("Decision", "Technical", "Monitoring",
-                               "Reporting", "Review", "Termination"))
-  )
-
-# Create timeline plot with categorical coloring
-ggplot(remedy_events, aes(x = date, y = 0)) +
-  # Baseline
-  geom_hline(yintercept = 0, color = "gray70", linewidth = 1) +
-  # Event points
-  geom_point(aes(color = category), size = 4) +
-  # Event labels
-  geom_text(aes(label = event, angle = 45),
-            hjust = -0.1, vjust = -0.5, size = 3) +
-  # Category coloring
-  scale_color_manual(
-    values = c(
-      "Decision" = "#0072B2",
-      "Technical" = "#009E73",
-      "Monitoring" = "#F0E442",
-      "Reporting" = "#999999",
-      "Review" = "#D55E00",
-      "Termination" = "#CC79A7"
-    )
-  ) +
-  scale_x_date(date_breaks = "6 months", date_labels = "%b %Y",
-               expand = expansion(mult = c(0.05, 0.05))) +
-  labs(
-    title = "Remedy Compliance Timeline",
-    subtitle = "Tracking key milestones and reporting obligations",
-    x = NULL,
-    y = NULL,
-    color = "Event Type",
-    caption = "Example from merger conditional approval. Replace with actual compliance data."
-  ) +
-  theme_antitrust() +
-  theme(
-    axis.text.y = element_blank(),
-    axis.ticks.y = element_blank(),
-    panel.grid = element_blank(),
-    plot.title.position = "plot",
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "bottom"
-  ) +
-  coord_cartesian(ylim = c(-0.5, 1.5))
-
-# Summary table
-cat("\nCompliance milestone summary:\n")
-remedy_summary <- remedy_events |>
-  group_by(category) |>
-  summarise(count = n(), .groups = "drop") |>
-  arrange(desc(count))
-print(remedy_summary, n = Inf)
-```
+*Color-coded timeline showing decision events (blue), technical milestones (green), monitoring events (yellow), reporting obligations (gray), review points (orange), and termination/sunset (purple).*
 
 **How to use this timeline:**
 - **Decision events** (blue): Key regulatory or tribunal decisions establishing or modifying remedies.
@@ -251,82 +152,9 @@ Replace with actual dates from:
 ### Enhanced timeline with swimlanes
 For complex remedies involving multiple workstreams (technical, legal, operational), use a swimlane variant:
 
-```r
-library(ggplot2)
-library(dplyr)
+![Remedy Compliance Timeline (Swimlane View)](../images/regulation-remedy-swimlane-1.png)
 
-# Add swimlane assignments
-remedy_events_swim <- remedy_events |>
-  mutate(
-    swimlane = case_when(
-      category %in% c("Decision", "Termination") ~ "Legal/Regulatory",
-      category %in% c("Technical") ~ "Technical Implementation",
-      category %in% c("Monitoring", "Review") ~ "Compliance & Audit",
-      category == "Reporting" ~ "Reporting & Documentation"
-    ),
-    swimlane = factor(swimlane,
-                     levels = c("Legal/Regulatory",
-                               "Technical Implementation",
-                               "Compliance & Audit",
-                               "Reporting & Documentation"))
-  )
-
-ggplot(remedy_events_swim, aes(x = date, y = as.numeric(swimlane))) +
-  # Swimlane backgrounds
-  geom_rect(aes(fill = swimlane),
-            xmin = min(remedy_events_swim$date) - days(30),
-            xmax = max(remedy_events_swim$date) + days(30),
-            ymin = as.numeric(remedy_events_swim$swimlane) - 0.4,
-            ymax = as.numeric(remedy_events_swim$swimlane) + 0.4,
-            alpha = 0.1) +
-  # Event points
-  geom_point(aes(color = category), size = 4) +
-  # Event labels
-  geom_text(aes(label = format(date, "%b %y")),
-            nudge_y = 0.15, size = 2.5, fontface = "bold") +
-  geom_text(aes(label = event),
-            nudge_y = -0.15, size = 2.5, hjust = 0.5) +
-  scale_color_manual(
-    values = c(
-      "Decision" = "#0072B2",
-      "Technical" = "#009E73",
-      "Monitoring" = "#F0E442",
-      "Reporting" = "#999999",
-      "Review" = "#D55E00",
-      "Termination" = "#CC79A7"
-    )
-  ) +
-  scale_fill_manual(
-    values = c(
-      "Legal/Regulatory" = "#0072B2",
-      "Technical Implementation" = "#009E73",
-      "Compliance & Audit" = "#D55E00",
-      "Reporting & Documentation" = "#999999"
-    )
-  ) +
-  scale_y_continuous(
-    breaks = 1:4,
-    labels = levels(remedy_events_swim$swimlane)
-  ) +
-  scale_x_date(date_breaks = "6 months", date_labels = "%b %Y") +
-  labs(
-    title = "Remedy Compliance Timeline (Swimlane View)",
-    subtitle = "Organized by workstream to track parallel activities",
-    x = NULL,
-    y = NULL,
-    color = "Event Type",
-    fill = "Workstream"
-  ) +
-  theme_antitrust() +
-  theme(
-    plot.title.position = "plot",
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "bottom",
-    panel.grid.minor = element_blank(),
-    panel.grid.major.x = element_line(color = "#e0e0e0", linewidth = 0.3)
-  ) +
-  guides(fill = "none")
-```
+*Timeline organized by workstream: Legal/Regulatory, Technical Implementation, Compliance & Audit, and Reporting & Documentation.*
 
 **Swimlane benefits:**
 - Separates legal, technical, and operational workstreams for clarity.

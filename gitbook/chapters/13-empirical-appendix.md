@@ -145,24 +145,10 @@ svymean(~switch_intent, design)
 ```
 
 ### Chronology visualization
-```r
-library(ggplot2)
-library(lubridate)
 
-chronology <- tibble::tribble(
-  ~date, ~category, ~label,
-  ymd("2018-04-12"), "Document", "Board memo",
-  ymd("2019-02-01"), "Interview", "Retailer A",
-  ymd("2021-09-30"), "Data", "SKU 124 spike"
-)
+![Chronology Overview](../images/chronology-overview-1.png)
 
-ggplot(chronology, aes(x = date, y = category, color = category)) +
-  geom_point(size = 3) +
-  geom_text(aes(label = label), hjust = -0.1, size = 3) +
-  labs(title = "Chronology overview", x = NULL, y = NULL) +
-  theme_antitrust() +
-  theme(legend.position = "none")
-```
+*Timeline showing key events by category (Document, Interview, Data). Use this template to visualize case chronologies.*
 
 ## Diagnostic Gallery
 
@@ -171,110 +157,9 @@ This section provides reusable diagnostic visualizations that apply across chapt
 ### Pre-trends and parallel trends checks
 Essential for difference-in-differences designs (mergers, labor, remedies).
 
-```r
-library(dplyr)
-library(ggplot2)
-library(fixest)
-library(patchwork)
+![Pre-Trends Check and Event Study](../images/diagnostic-pretrends-1.png)
 
-# Simulated panel data with treatment in period 10
-# Replace with your actual panel data
-set.seed(123)
-periods <- 20
-n_units <- 50
-
-panel <- expand.grid(
-  unit = 1:n_units,
-  period = 1:periods
-) |>
-  mutate(
-    treated = ifelse(unit <= n_units/2, 1, 0),
-    post = ifelse(period >= 10, 1, 0),
-    # Pre-trends: parallel before period 10
-    outcome = 100 + 2 * period + 5 * treated +
-              10 * treated * post +
-              rnorm(n(), 0, 3)
-  )
-
-# Plot 1: Raw trends by group
-p1 <- panel |>
-  group_by(period, treated) |>
-  summarise(mean_outcome = mean(outcome), .groups = "drop") |>
-  mutate(group = ifelse(treated == 1, "Treatment", "Control")) |>
-  ggplot(aes(x = period, y = mean_outcome, color = group, linetype = group)) +
-  geom_vline(xintercept = 10, linetype = "dashed", color = "gray40") +
-  geom_line(linewidth = 1.2) +
-  annotate("text", x = 10, y = max(panel$outcome) * 0.95,
-          label = "Treatment\nperiod", hjust = -0.1, size = 3.5) +
-  scale_color_manual(values = c("Treatment" = "#D55E00",
-                                 "Control" = "#0072B2")) +
-  labs(
-    title = "Pre-Trends Check: Raw Outcome Trends",
-    subtitle = "Parallel trends before period 10 support DiD identification",
-    x = "Period",
-    y = "Outcome",
-    color = NULL,
-    linetype = NULL
-  ) +
-  theme_antitrust() +
-  theme(
-    legend.position = "bottom",
-    plot.title.position = "plot"
-  )
-
-# Event study with leads and lags
-event_study <- feols(
-  outcome ~ i(period, treated, ref = 9) | unit + period,
-  data = panel
-)
-
-# Extract coefficients
-coef_data <- tibble(
-  period = as.numeric(gsub("period::", "", names(coef(event_study)))),
-  estimate = coef(event_study),
-  se = se(event_study)
-) |>
-  mutate(
-    ci_lower = estimate - 1.96 * se,
-    ci_upper = estimate + 1.96 * se,
-    rel_period = period - 10
-  )
-
-# Plot 2: Event study coefficients
-p2 <- ggplot(coef_data, aes(x = rel_period, y = estimate)) +
-  geom_hline(yintercept = 0, linetype = "solid", color = "gray40") +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40") +
-  geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper),
-             alpha = 0.2, fill = "#0072B2") +
-  geom_line(color = "#0072B2", linewidth = 1) +
-  geom_point(color = "#0072B2", size = 2.5) +
-  annotate("rect", xmin = -Inf, xmax = -1, ymin = -Inf, ymax = Inf,
-          fill = "green", alpha = 0.05) +
-  annotate("text", x = -5, y = max(coef_data$ci_upper) * 0.9,
-          label = "Pre-period\n(should be ≈0)", size = 3, hjust = 0.5) +
-  labs(
-    title = "Event Study Coefficients (Leads and Lags)",
-    subtitle = "Pre-period estimates near zero validate parallel trends assumption",
-    x = "Periods relative to treatment (0 = treatment period)",
-    y = "Treatment Effect Estimate",
-    caption = "Reference period: -1. Shaded region shows 95% confidence interval."
-  ) +
-  theme_antitrust() +
-  theme(plot.title.position = "plot")
-
-# Combine plots
-p1 / p2
-
-# Statistical test for pre-trends
-pre_period_coefs <- coef_data |>
-  filter(rel_period < 0, rel_period != -1)
-
-cat("\nPre-trends test:\n")
-cat(paste0("Number of pre-period coefficients: ", nrow(pre_period_coefs), "\n"))
-cat(paste0("Mean pre-period coefficient: ",
-          round(mean(pre_period_coefs$estimate), 3), "\n"))
-cat(paste0("Joint F-test p-value: [run wald_test on event_study model]\n"))
-```
+*Top: Raw outcome trends showing parallel trends before treatment. Bottom: Event study coefficients with pre-period estimates near zero validating identification.*
 
 **Interpretation:**
 - **Pre-trends near zero**: Validates parallel trends assumption
@@ -285,115 +170,9 @@ cat(paste0("Joint F-test p-value: [run wald_test on event_study model]\n"))
 ### Balance plots for matching/weighting
 Show covariate balance before and after matching or weighting.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(tidyr)
+![Covariate Balance: Love Plot](../images/diagnostic-balance-plot-1.png)
 
-# Simulated covariate data (treatment and control groups)
-set.seed(234)
-n <- 200
-
-covariates <- tibble(
-  id = 1:n,
-  treated = sample(c(0, 1), n, replace = TRUE),
-  firm_size = rnorm(n, mean = 100 + 20 * treated, sd = 30),
-  market_share = rnorm(n, mean = 0.15 + 0.05 * treated, sd = 0.08),
-  years_operating = rnorm(n, mean = 15 + 5 * treated, sd = 7),
-  revenue_growth = rnorm(n, mean = 0.10 + 0.03 * treated, sd = 0.12)
-)
-
-# Calculate standardized mean differences
-calc_smd <- function(var, group) {
-  mean_1 <- mean(var[group == 1])
-  mean_0 <- mean(var[group == 0])
-  sd_pool <- sqrt((var(var[group == 1]) + var(var[group == 0])) / 2)
-  (mean_1 - mean_0) / sd_pool
-}
-
-balance_before <- covariates |>
-  summarise(across(c(firm_size, market_share, years_operating, revenue_growth),
-                  ~calc_smd(.x, treated),
-                  .names = "{.col}")) |>
-  pivot_longer(everything(), names_to = "variable", values_to = "smd") |>
-  mutate(timing = "Before matching")
-
-# Simulate "after matching" with reduced imbalance
-# In practice, replace this with actual matched/weighted sample
-balance_after <- balance_before |>
-  mutate(
-    smd = smd * 0.2,  # Matching reduces imbalance by 80%
-    timing = "After matching"
-  )
-
-variable_levels <- c(
-  "Firm size (employees)",
-  "Market share",
-  "Years operating",
-  "Revenue growth"
-)
-
-balance_combined <- bind_rows(balance_before, balance_after) |>
-  mutate(
-    variable = recode(
-      variable,
-      "firm_size" = "Firm size (employees)",
-      "market_share" = "Market share",
-      "years_operating" = "Years operating",
-      "revenue_growth" = "Revenue growth"
-    ),
-    variable = factor(variable, levels = variable_levels),
-    timing = factor(timing, levels = c("Before matching", "After matching"))
-  )
-
-annotation_label <- tibble(
-  abs_smd = 0.1,
-  variable = variable_levels[1],
-  label = "0.1 threshold\n(acceptable)"
-)
-
-# Love plot
-ggplot(balance_combined, aes(x = abs(smd), y = variable,
-                              color = timing, shape = timing)) +
-  geom_vline(xintercept = 0.1, linetype = "dashed",
-            color = "darkgreen", linewidth = 0.8) +
-  geom_vline(xintercept = 0, linetype = "solid", color = "gray40") +
-  geom_point(size = 3) +
-  geom_text(
-    data = annotation_label,
-    aes(x = abs_smd, y = variable, label = label),
-    inherit.aes = FALSE,
-    hjust = -0.1,
-    size = 3
-  ) +
-  scale_color_manual(values = c("Before matching" = "#D55E00",
-                                 "After matching" = "#0072B2")) +
-  scale_shape_manual(values = c("Before matching" = 16,
-                                "After matching" = 17)) +
-  scale_x_continuous(limits = c(0, max(abs(balance_combined$smd)) * 1.1)) +
-  labs(
-    title = "Covariate Balance: Love Plot",
-    subtitle = "Standardized mean differences before and after matching",
-    x = "Absolute Standardized Mean Difference",
-    y = NULL,
-    color = "Timing",
-    shape = "Timing",
-    caption = "SMD < 0.1 indicates acceptable balance (Austin, 2009)."
-  ) +
-  theme_antitrust() +
-  theme(
-    legend.position = "bottom",
-    plot.title.position = "plot"
-  )
-
-# Summary table
-cat("\nBalance summary:\n")
-balance_combined |>
-  select(variable, timing, smd) |>
-  pivot_wider(names_from = timing, values_from = smd) |>
-  mutate(improvement = abs(`Before matching`) - abs(`After matching`)) |>
-  print()
-```
+*Love plot showing standardized mean differences before and after matching. SMD < 0.1 indicates acceptable balance.*
 
 **Interpretation:**
 - **SMD < 0.1**: Acceptable balance (Austin, 2009)
@@ -403,89 +182,9 @@ balance_combined |>
 ### Regression specification curve
 Show robustness across multiple reasonable specifications.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(fixest)
+![Specification Curve: Treatment Effect Robustness](../images/diagnostic-specification-1.png)
 
-# Simulated data for multiple specifications
-set.seed(345)
-panel_spec <- expand.grid(
-  firm = 1:100,
-  period = 1:20
-) |>
-  mutate(
-    treatment = ifelse(firm <= 50 & period >= 10, 1, 0),
-    control1 = rnorm(n()),
-    control2 = rnorm(n()),
-    control3 = rnorm(n()),
-    outcome = 50 + 5 * treatment + 2 * control1 + 1 * control2 +
-              0.5 * control3 + rnorm(n(), 0, 3)
-  )
-
-# Run multiple specifications
-specs <- list(
-  "No controls" = feols(outcome ~ treatment | firm + period, panel_spec),
-  "+ Control 1" = feols(outcome ~ treatment + control1 | firm + period, panel_spec),
-  "+ Controls 1-2" = feols(outcome ~ treatment + control1 + control2 | firm + period, panel_spec),
-  "+ All controls" = feols(outcome ~ treatment + control1 + control2 + control3 | firm + period, panel_spec),
-  "No FE" = lm(outcome ~ treatment + control1 + control2 + control3, panel_spec),
-  "Firm FE only" = feols(outcome ~ treatment + control1 + control2 + control3 | firm, panel_spec),
-  "Period FE only" = feols(outcome ~ treatment + control1 + control2 + control3 | period, panel_spec)
-)
-
-# Extract coefficients
-spec_results <- tibble(
-  specification = names(specs),
-  estimate = sapply(specs, function(m) {
-    coefs <- coef(m)
-    coefs[grepl("treatment", names(coefs))][1]
-  }),
-  se = sapply(specs, function(m) {
-    ses <- se(m)
-    ses[grepl("treatment", names(ses))][1]
-  })
-) |>
-  mutate(
-    ci_lower = estimate - 1.96 * se,
-    ci_upper = estimate + 1.96 * se,
-    spec_num = row_number(),
-    specification = factor(specification, levels = specification)
-  )
-
-# Specification curve plot
-ggplot(spec_results, aes(x = spec_num, y = estimate)) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
-  geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper),
-             alpha = 0.2, fill = "#0072B2") +
-  geom_line(color = "#0072B2", linewidth = 1.2) +
-  geom_point(color = "#0072B2", size = 3) +
-  scale_x_continuous(
-    breaks = spec_results$spec_num,
-    labels = spec_results$specification
-  ) +
-  labs(
-    title = "Specification Curve: Treatment Effect Robustness",
-    subtitle = "Estimate remains positive and significant across specifications",
-    x = NULL,
-    y = "Treatment Effect Estimate",
-    caption = "Each point represents a different model specification. Shaded area = 95% CI."
-  ) +
-  theme_antitrust() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.title.position = "plot"
-  )
-
-# Summary statistics
-cat("\nSpecification curve summary:\n")
-cat(paste0("Range of estimates: ",
-          round(min(spec_results$estimate), 2), " to ",
-          round(max(spec_results$estimate), 2), "\n"))
-cat(paste0("All specifications significant? ",
-          ifelse(all(spec_results$ci_lower > 0), "Yes", "No"), "\n"))
-cat(paste0("Median estimate: ", round(median(spec_results$estimate), 2), "\n"))
-```
+*Estimates remain positive and significant across specifications (no controls, varying controls, different fixed effects).*
 
 **Interpretation:**
 - **Stable across specs**: Effect robust to model choices
@@ -495,81 +194,9 @@ cat(paste0("Median estimate: ", round(median(spec_results$estimate), 2), "\n"))
 ### Residual diagnostics
 Check model assumptions and identify influential observations.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(patchwork)
+![Residual Diagnostic Plots](../images/diagnostic-residual-1.png)
 
-# Fit model (use your actual model)
-model_data <- panel_spec |>
-  filter(period >= 10)
-
-model <- feols(outcome ~ treatment + control1 + control2 | firm + period,
-              data = model_data)
-
-# Get residuals and fitted values
-diagnostics <- model_data |>
-  mutate(
-    fitted = fitted(model),
-    residual = resid(model),
-    standardized_residual = residual / sd(residual)
-  )
-
-# Plot 1: Residuals vs. fitted
-p1 <- ggplot(diagnostics, aes(x = fitted, y = residual)) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
-  geom_point(alpha = 0.5, color = "#0072B2") +
-  geom_smooth(method = "loess", se = FALSE, color = "#D55E00") +
-  labs(
-    title = "Residuals vs. Fitted Values",
-    subtitle = "Should show no pattern (validates linearity assumption)",
-    x = "Fitted Values",
-    y = "Residuals"
-  ) +
-  theme_antitrust()
-
-# Plot 2: Q-Q plot for normality
-p2 <- ggplot(diagnostics, aes(sample = standardized_residual)) +
-  stat_qq(color = "#0072B2", alpha = 0.6) +
-  stat_qq_line(color = "#D55E00", linewidth = 1) +
-  labs(
-    title = "Q-Q Plot: Residual Normality",
-    subtitle = "Points should follow line for normal distribution",
-    x = "Theoretical Quantiles",
-    y = "Sample Quantiles"
-  ) +
-  theme_antitrust()
-
-# Plot 3: Scale-location plot
-p3 <- ggplot(diagnostics, aes(x = fitted, y = sqrt(abs(standardized_residual)))) +
-  geom_point(alpha = 0.5, color = "#0072B2") +
-  geom_smooth(method = "loess", se = FALSE, color = "#D55E00") +
-  labs(
-    title = "Scale-Location Plot",
-    subtitle = "Should show horizontal line (validates homoscedasticity)",
-    x = "Fitted Values",
-    y = "√|Standardized Residuals|"
-  ) +
-  theme_antitrust()
-
-# Plot 4: Histogram of residuals
-p4 <- ggplot(diagnostics, aes(x = residual)) +
-  geom_histogram(bins = 30, fill = "#0072B2", alpha = 0.8, color = "white") +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "#D55E00") +
-  labs(
-    title = "Distribution of Residuals",
-    subtitle = "Should be approximately normal, centered at zero",
-    x = "Residuals",
-    y = "Count"
-  ) +
-  theme_antitrust()
-
-# Combine plots
-(p1 | p2) / (p3 | p4) + plot_annotation(
-  title = "Residual Diagnostic Plots",
-  caption = "Check for violations of regression assumptions"
-)
-```
+*Four-panel diagnostic: residuals vs. fitted (linearity), Q-Q plot (normality), scale-location (homoscedasticity), and histogram (distribution).*
 
 **What to look for:**
 - **Residuals vs. Fitted**: No pattern (confirms linearity)
@@ -580,70 +207,9 @@ p4 <- ggplot(diagnostics, aes(x = residual)) +
 ### Power analysis visualization
 Show statistical power across different sample sizes and effect sizes.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(pwr)
+![Statistical Power Analysis](../images/diagnostic-power-curve-1.png)
 
-# Calculate power for different scenarios
-sample_sizes <- seq(50, 500, by = 25)
-effect_sizes <- c(0.2, 0.5, 0.8)  # Small, medium, large (Cohen's d)
-
-power_grid <- expand.grid(
-  n = sample_sizes,
-  effect_size = effect_sizes
-) |>
-  mutate(
-    power = pwr.t.test(n = n, d = effect_size, sig.level = 0.05,
-                      type = "two.sample")$power,
-    effect_label = case_when(
-      effect_size == 0.2 ~ "Small effect (d = 0.2)",
-      effect_size == 0.5 ~ "Medium effect (d = 0.5)",
-      effect_size == 0.8 ~ "Large effect (d = 0.8)"
-    )
-  )
-
-# Power curve
-ggplot(power_grid, aes(x = n, y = power, color = effect_label)) +
-  geom_hline(yintercept = 0.80, linetype = "dashed",
-            color = "darkgreen", linewidth = 0.8) +
-  annotate("text", x = max(sample_sizes) * 0.7, y = 0.80,
-          label = "80% power threshold", hjust = 0, vjust = -0.5,
-          size = 3, color = "darkgreen") +
-  geom_line(linewidth = 1.2) +
-  geom_point(data = filter(power_grid, power >= 0.79, power <= 0.81),
-            size = 3) +
-  scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) +
-  scale_color_manual(values = c(
-    "Small effect (d = 0.2)" = "#D55E00",
-    "Medium effect (d = 0.5)" = "#0072B2",
-    "Large effect (d = 0.8)" = "#009E73"
-  )) +
-  labs(
-    title = "Statistical Power Analysis",
-    subtitle = "Sample size requirements for 80% power at α = 0.05",
-    x = "Sample Size (per group)",
-    y = "Statistical Power",
-    color = "Effect Size",
-    caption = "Points indicate minimum sample size for 80% power."
-  ) +
-  theme_antitrust() +
-  theme(
-    legend.position = "bottom",
-    plot.title.position = "plot"
-  )
-
-# Summary table
-power_summary <- power_grid |>
-  filter(power >= 0.79, power <= 0.81) |>
-  group_by(effect_label) |>
-  slice_min(n, n = 1) |>
-  ungroup() |>
-  select(effect_label, n_required = n, power)
-
-cat("\nMinimum sample size for 80% power:\n")
-print(power_summary, n = Inf)
-```
+*Power curves for small, medium, and large effect sizes. Points indicate minimum sample size for 80% power.*
 
 **Use this for:**
 - Study design and sample size planning

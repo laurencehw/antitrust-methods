@@ -136,131 +136,9 @@ cat("Note: Competitive markets typically show >50% diagonal; rotation schemes sh
 ### Bid-rotation network graph
 Network graphs help visualize suspected coordination patterns by showing which bidders consistently "yield" to others. This is particularly useful for identifying systematic rotation schemes or hub-and-spoke arrangements.
 
-```r
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-library(igraph)
-library(ggraph)
+![Bid Rotation Network Graph](../images/cartel-rotation-network-1.png)
 
-# Simulated bid data: tender_id, bidder, rank, bid_amount
-# In practice, replace with actual procurement data
-set.seed(123)
-n_tenders <- 50
-bidders <- c("Firm A", "Firm B", "Firm C", "Firm D", "Firm E")
-
-bids <- expand.grid(
-  tender_id = 1:n_tenders,
-  bidder = bidders
-) |>
-  group_by(tender_id) |>
-  mutate(
-    # Simulate rotation: certain patterns are more likely
-    base_bid = runif(n(), 100, 200),
-    rotation_boost = case_when(
-      tender_id %% 5 == 0 & bidder == "Firm A" ~ -20,
-      tender_id %% 5 == 1 & bidder == "Firm B" ~ -20,
-      tender_id %% 5 == 2 & bidder == "Firm C" ~ -20,
-      tender_id %% 5 == 3 & bidder == "Firm D" ~ -20,
-      tender_id %% 5 == 4 & bidder == "Firm E" ~ -20,
-      TRUE ~ 0
-    ),
-    bid = base_bid + rotation_boost,
-    rank = rank(bid)
-  ) |>
-  ungroup()
-
-# Identify winners and runner-ups
-winners <- bids |>
-  filter(rank == 1) |>
-  select(tender_id, winner = bidder)
-
-runner_ups <- bids |>
-  filter(rank == 2) |>
-  select(tender_id, runner_up = bidder)
-
-# Create edge list: who "yielded" to whom (runner-up -> winner)
-edges <- inner_join(winners, runner_ups, by = "tender_id") |>
-  count(runner_up, winner, name = "weight") |>
-  filter(runner_up != winner)
-
-# Create network graph
-g <- graph_from_data_frame(edges, directed = TRUE)
-
-# Plot using ggraph
-ggraph(g, layout = "fr") +
-  geom_edge_link(aes(width = weight, alpha = weight),
-                 arrow = arrow(length = unit(4, 'mm'), type = "closed"),
-                 end_cap = circle(3, 'mm'),
-                 color = "#666666") +
-  geom_node_point(size = 12, color = "#0072B2", alpha = 0.8) +
-  geom_node_text(
-    aes(label = name),
-    color = "white",
-    fontface = "bold",
-    size = 4,
-    family = "Arial"
-  ) +
-  scale_edge_width(range = c(0.5, 3)) +
-  scale_edge_alpha(range = c(0.3, 0.9)) +
-  labs(
-    title = "Bid Rotation Network Graph",
-    subtitle = "Arrows show which firms consistently submit 2nd-place 'cover bids' when others win",
-    caption = "Edge width = frequency of runner-up pattern. Systematic rotation creates hub-spoke or circular patterns."
-  ) +
-  theme_graph() +
-  theme(
-    text = element_text(family = "Arial"),
-    plot.title = element_text(size = 14, face = "bold"),
-    plot.subtitle = element_text(size = 11),
-    legend.position = "none"
-  )
-
-# Supplementary table: win rates and rotation metrics
-rotation_metrics <- bids |>
-  group_by(bidder) |>
-  summarise(
-    wins = sum(rank == 1),
-    second_place = sum(rank == 2),
-    avg_rank = mean(rank),
-    rotation_index = wins / n_tenders
-  ) |>
-  arrange(desc(wins))
-
-cat("\nRotation metrics by bidder:\n")
-print(rotation_metrics, n = Inf)
-
-# Centrality metrics to identify hub firms
-cat("\n--- NETWORK CENTRALITY ANALYSIS ---\n")
-
-# Eigenvector centrality: identifies influential nodes
-eigen_scores <- eigen_centrality(g)$vector
-cat("\nEigenvector centrality (hub influence):\n")
-print(sort(eigen_scores, decreasing = TRUE))
-
-# In-degree: who receives the most "yielding" from others
-in_deg <- degree(g, mode = "in")
-cat("\nIn-degree (frequency of winning when others yield):\n")
-print(sort(in_deg, decreasing = TRUE))
-
-# Out-degree: who yields most often to others
-out_deg <- degree(g, mode = "out")
-cat("\nOut-degree (frequency of yielding to others):\n")
-print(sort(out_deg, decreasing = TRUE))
-
-# Betweenness: who bridges different parts of the network
-between_scores <- betweenness(g, directed = TRUE)
-cat("\nBetweenness centrality (coordination role):\n")
-print(sort(between_scores, decreasing = TRUE))
-
-# Summary interpretation
-cat("\n--- INTERPRETATION ---\n")
-hub_firm <- names(which.max(eigen_scores))
-cat(paste0("Likely hub/ringleader: ", hub_firm,
-           " (highest eigenvector centrality)\n"))
-cat("High eigenvector + high in-degree = receives wins from many firms\n")
-cat("High betweenness = potential coordinator bridging subgroups\n")
-```
+*Arrows show which firms consistently submit 2nd-place "cover bids" when others win. Edge width = frequency of runner-up pattern.*
 
 **How to interpret this graph:**
 - **Hub-spoke patterns**: If one firm is at the center with many arrows pointing to it, that firm may be the "ringleader" coordinating bids.
@@ -446,35 +324,18 @@ Treat qualitative materials as structured data:
 - **Fertilizer/ammonia (Sasol/Yara/Omnia).** Export-parity benchmarks and plant-level variable-cost data showed 25–30% overcharges despite spare capacity, leading to penalties and divestitures.
 {% endhint %}
 
-## Code box: structural break illustration
-```r
-library(fredr)
-library(dplyr)
-library(strucchange)
-library(ggplot2)
-source("../program/R/helpers.R")
+## Structural break illustration
 
-fredr_set_key(Sys.getenv("FRED_API_KEY"))
-gas <- fredr(series_id = "GASREGW", observation_start = as.Date("2015-01-01")) |>
-  rename(price = value) |>
-  mutate(week = row_number())
+![Regular Gasoline Prices: Structural Break Illustration](../images/cartel-break-gasoline-1.png)
 
-bp <- breakpoints(price ~ week, data = gas, h = 26)
-gas$regime <- factor(cut(gas$week, c(0, bp$breakpoints, Inf)))
+*FRED series GASREGW (weekly, US average). Colors indicate detected structural breaks using Bai-Perron methodology.*
 
-ggplot(gas, aes(date, price, color = regime)) +
-  geom_line(linewidth = 0.8) +
-  labs(
-    title = "Regular Gasoline Prices: Structural Break Illustration",
-    subtitle = "FRED series GASREGW (weekly, US average)",
-    x = NULL,
-    y = "USD per gallon",
-    color = "Regime"
-  ) +
-  scale_color_viridis_d() +
-  theme_antitrust() +
-  guides(color = guide_legend(nrow = 1))
-```
+**How to interpret structural breaks:**
+- **Regime changes** (color shifts) indicate statistically significant shifts in price levels or trends.
+- In cartel detection, compare break dates to known events: raids, leniency announcements, or market entry.
+- If a break aligns with a dawn raid, this supports the hypothesis that enforcement disrupted coordination.
+- Multiple breaks may indicate cartel formation, adjustment, and breakdown phases.
+
 Replace the public FRED data with product-level transactions to present in litigation.
 
 {% hint style="info" %}

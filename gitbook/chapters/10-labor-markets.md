@@ -122,77 +122,9 @@ Combine vacancy data (Indeed, Burning Glass, Pnet) with payroll data to evaluate
 ### Labor market concentration choropleth
 A geographic visualization of labor market concentration helps identify regions and occupations with potential monopsony concerns. This example uses synthetic data but can be adapted for BLS QCEW, Census LEHD, or Stats SA QLFS data.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(maps)
-library(viridis)
+![Labor Market Concentration by State](../images/labor-hhi-choropleth-1.png)
 
-# Simulated labor market HHI data by state/province and occupation
-# Replace with BLS QCEW or Census LEHD data aggregated to commuting zones
-set.seed(456)
-us_states <- map_data("state")
-
-# Create synthetic HHI data for states (illustrative)
-labor_hhi <- tibble(
-  region = unique(us_states$region),
-  hhi = runif(length(unique(us_states$region)), 800, 4500),
-  occupation = "Registered Nurses"
-) |>
-  mutate(
-    concentration_level = case_when(
-      hhi < 1500 ~ "Unconcentrated",
-      hhi < 2500 ~ "Moderately concentrated",
-      TRUE ~ "Highly concentrated"
-    ),
-    concentration_level = factor(
-      concentration_level,
-      levels = c("Unconcentrated", "Moderately concentrated",
-                 "Highly concentrated")
-    )
-  )
-
-# Join with map data
-us_map <- us_states |>
-  left_join(labor_hhi, by = "region")
-
-# Choropleth map
-ggplot(us_map, aes(x = long, y = lat, group = group, fill = hhi)) +
-  geom_polygon(color = "white", linewidth = 0.2) +
-  scale_fill_viridis_c(
-    option = "plasma",
-    direction = -1,
-    breaks = c(1500, 2500, 3500),
-    labels = c("1,500\n(Unconcentrated)",
-               "2,500\n(Moderate)",
-               "3,500\n(High)")
-  ) +
-  labs(
-    title = "Labor Market Concentration by State",
-    subtitle = "HHI for Registered Nurses (Illustrative Data)",
-    fill = "HHI",
-    caption = "Replace with BLS QCEW/LEHD data. Commuting zones provide more granular analysis than states."
-  ) +
-  theme_void(base_size = 12) +
-  theme(
-    plot.title = element_text(face = "bold", hjust = 0.5),
-    plot.subtitle = element_text(hjust = 0.5),
-    legend.position = "right"
-  ) +
-  coord_map()
-
-# Summary statistics by concentration level
-cat("\nConcentration distribution:\n")
-labor_summary <- labor_hhi |>
-  group_by(concentration_level) |>
-  summarise(
-    count = n(),
-    mean_hhi = mean(hhi),
-    median_hhi = median(hhi),
-    .groups = "drop"
-  )
-print(labor_summary, n = Inf)
-```
+*HHI for Registered Nurses by state. Darker colors indicate higher concentration (greater monopsony concern).*
 
 **Interpretation:**
 - **HHI < 1,500**: Competitive labor markets; multiple employers compete for workers.
@@ -228,78 +160,9 @@ library(dplyr)
 ### Labor concentration dashboard by occupation
 Compare HHI across multiple occupations to identify which labor markets face greatest concentration:
 
-```r
-library(dplyr)
-library(ggplot2)
-library(forcats)
+![Labor Market Concentration by Occupation and Region](../images/labor-hhi-comparison-1.png)
 
-# Simulated HHI data across occupations and regions
-# Replace with actual QCEW/LEHD/QLFS data
-set.seed(789)
-occupations <- c("Registered Nurses", "Software Engineers",
-                "Truck Drivers", "Retail Workers",
-                "Fast Food Workers", "Warehouse Workers")
-regions <- c("Urban", "Suburban", "Rural")
-
-labor_occ <- expand.grid(
-  occupation = occupations,
-  region = regions
-) |>
-  mutate(
-    hhi = case_when(
-      region == "Rural" ~ runif(n(), 2200, 4500),
-      region == "Suburban" ~ runif(n(), 1400, 2800),
-      region == "Urban" ~ runif(n(), 800, 2200)
-    ),
-    concentration = case_when(
-      hhi < 1500 ~ "Unconcentrated",
-      hhi < 2500 ~ "Moderately concentrated",
-      TRUE ~ "Highly concentrated"
-    )
-  )
-
-# Grouped bar chart
-ggplot(labor_occ, aes(x = fct_reorder(occupation, hhi, .desc = FALSE),
-                      y = hhi, fill = region)) +
-  geom_col(position = position_dodge(width = 0.8), width = 0.7) +
-  geom_hline(yintercept = 1500, linetype = "dashed",
-             color = "gray40", linewidth = 0.8) +
-  geom_hline(yintercept = 2500, linetype = "dashed",
-             color = "gray40", linewidth = 0.8) +
-  annotate("text", x = 6.5, y = 1500, label = "1,500 threshold",
-           hjust = 0, vjust = -0.5, size = 3) +
-  annotate("text", x = 6.5, y = 2500, label = "2,500 threshold",
-           hjust = 0, vjust = -0.5, size = 3) +
-  scale_fill_manual(values = c("Urban" = "#0072B2",
-                                "Suburban" = "#009E73",
-                                "Rural" = "#D55E00")) +
-  coord_flip() +
-  labs(
-    title = "Labor Market Concentration by Occupation and Region",
-    subtitle = "Rural areas show systematically higher concentration",
-    x = NULL,
-    y = "HHI",
-    fill = "Region Type",
-    caption = "Illustrative data. Replace with QCEW/LEHD aggregated to commuting zones."
-  ) +
-  theme_antitrust() +
-  theme(
-    plot.title.position = "plot",
-    legend.position = "bottom"
-  )
-
-# Summary table: occupations with highest average HHI
-cat("\nHighest concentration occupations (average across regions):\n")
-labor_occ |>
-  group_by(occupation) |>
-  summarise(
-    avg_hhi = mean(hhi),
-    high_conc_regions = sum(hhi > 2500),
-    .groups = "drop"
-  ) |>
-  arrange(desc(avg_hhi)) |>
-  knitr::kable(digits = 0, caption = "Occupations with Highest Concentration")
-```
+*Grouped bar chart showing HHI by occupation across urban, suburban, and rural regions. Dashed lines indicate concentration thresholds.*
 
 **Key insights:**
 - **Rural areas** typically show higher concentration due to fewer employers.
@@ -309,58 +172,9 @@ labor_occ |>
 ### Wage impact visualization
 Combine concentration data with wage outcomes to show the relationship between HHI and wage suppression:
 
-```r
-library(dplyr)
-library(ggplot2)
+![Labor Market Concentration and Wage Suppression](../images/labor-hhi-wage-impact-1.png)
 
-# Simulated data showing HHI vs. wage gap
-# Replace with actual QCEW/OES wage data matched to HHI calculations
-set.seed(890)
-wage_impact <- tibble(
-  market = paste("Market", 1:50),
-  hhi = runif(50, 800, 4500),
-  wage_gap = -0.0003 * hhi + rnorm(50, 5, 3)  # Negative relationship
-) |>
-  mutate(
-    concentration = case_when(
-      hhi < 1500 ~ "Unconcentrated",
-      hhi < 2500 ~ "Moderately concentrated",
-      TRUE ~ "Highly concentrated"
-    )
-  )
-
-# Scatter plot with regression line
-ggplot(wage_impact, aes(x = hhi, y = wage_gap)) +
-  geom_point(aes(color = concentration), size = 3, alpha = 0.7) +
-  geom_smooth(method = "lm", se = TRUE, color = "#D55E00",
-              linewidth = 1.2, alpha = 0.2) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
-  scale_color_manual(
-    values = c(
-      "Unconcentrated" = "#0072B2",
-      "Moderately concentrated" = "#009E73",
-      "Highly concentrated" = "#D55E00"
-    )
-  ) +
-  labs(
-    title = "Labor Market Concentration and Wage Suppression",
-    subtitle = "Higher HHI associated with lower wages relative to competitive benchmark",
-    x = "Labor Market HHI",
-    y = "Wage gap (% below competitive wage)",
-    color = "Concentration Level",
-    caption = "Illustrative data. Replace with matched QCEW/OES data.\nCompetitive benchmark from low-HHI markets or structural estimates."
-  ) +
-  theme_antitrust() +
-  theme(
-    plot.title.position = "plot",
-    legend.position = "bottom"
-  )
-
-# Regression summary
-wage_model <- lm(wage_gap ~ hhi, data = wage_impact)
-cat("\nRegression: Wage gap ~ HHI\n")
-summary(wage_model)
-```
+*Scatter plot showing negative relationship between HHI and wages. Higher concentration associated with larger wage gaps below competitive levels.*
 
 **How to use these visualizations:**
 - **Enforcement priorities**: Focus investigations on high-HHI markets.
