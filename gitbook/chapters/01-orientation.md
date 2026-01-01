@@ -7,7 +7,34 @@ An equally important goal is judgment: when should you push for additional data 
 
 ## Core narrative
 ### Institutions and mandates
-Modern antitrust work is anchored by a handful of institutions with overlapping mandates. In the United States the Department of Justice (DOJ) Antitrust Division and the Federal Trade Commission (FTC) share merger and conduct jurisdiction, aided by state attorneys general and sector regulators such as the Federal Communications Commission or Surface Transportation Board. Post-2000 history matters: the Clinton-era Microsoft litigation cemented exclusionary conduct frameworks, the 2010 Horizontal Merger Guidelines elevated unilateral effects, and the 2023 Merger Guidelines re-centered structural presumptions and platform dynamics. Across the Atlantic, the European Commission’s Directorate-General for Competition (DG COMP) pairs investigations with inquisitorial decision making, while national authorities like the UK Competition and Markets Authority (CMA) play an increasingly global role (e.g., blocking Microsoft/Activision until remedies evolved). Asian agencies—including Japan’s JFTC, Korea’s KFTC, and China’s SAMR—and South Africa’s Competition Commission and Tribunal have expanded resources to scrutinize digital markets, food supply chains, and cartels affecting the Southern African Development Community (SADC). Understanding each body’s statutory tests, procedural timelines, and evidentiary cultures is essential to crafting persuasive analyses.
+Modern antitrust work is anchored by a handful of institutions with overlapping mandates. In the United States the Department of Justice (DOJ) Antitrust Division and the Federal Trade Commission (FTC) share merger and conduct jurisdiction, aided by state attorneys general and sector regulators such as the Federal Communications Commission or Surface Transportation Board. Post-2000 history matters: the Clinton-era Microsoft litigation cemented exclusionary conduct frameworks, the 2010 Horizontal Merger Guidelines elevated unilateral effects, and the 2023 Merger Guidelines re-centered structural presumptions and platform dynamics. Across the Atlantic, the European Commission's Directorate-General for Competition (DG COMP) pairs investigations with inquisitorial decision making, while national authorities like the UK Competition and Markets Authority (CMA) play an increasingly global role (e.g., blocking Microsoft/Activision until remedies evolved). Asian agencies—including Japan's JFTC, Korea's KFTC, and China's SAMR—and South Africa's Competition Commission and Tribunal have expanded resources to scrutinize digital markets, food supply chains, and cartels affecting the Southern African Development Community (SADC). Understanding each body's statutory tests, procedural timelines, and evidentiary cultures is essential to crafting persuasive analyses.
+
+### Comparative statute mapping
+
+For multi-jurisdictional practitioners, the table below maps common conduct types to their statutory homes across the US, EU, and South Africa. Use this as a quick reference when translating theories of harm across legal frameworks.
+
+| Conduct Type | United States | European Union | South Africa |
+|:-------------|:--------------|:---------------|:-------------|
+| **Cartels / Horizontal agreements** | Sherman Act §1 (15 U.S.C. §1) | TFEU Article 101 | Competition Act 89/1998, §4 |
+| **Monopolization / Abuse of dominance** | Sherman Act §2 (15 U.S.C. §2) | TFEU Article 102 | Competition Act 89/1998, §8 |
+| **Vertical restraints** | Sherman Act §1; Rule of reason | TFEU Art. 101 + VBER | Competition Act §4(1)(b), §5 |
+| **Mergers (horizontal)** | Clayton Act §7 (15 U.S.C. §18) | EUMR (Reg. 139/2004) | Competition Act §12, §12A |
+| **Mergers (vertical/conglomerate)** | Clayton Act §7 | EUMR Art. 2 | Competition Act §12A |
+| **Price discrimination** | Robinson-Patman Act | Art. 102(c) (dominant firms) | §9 (price discrimination by dominant firm) |
+| **Unfair trade practices** | FTC Act §5 (15 U.S.C. §45) | Unfair Commercial Practices Dir. | Consumer Protection Act 68/2008 |
+
+**Key differences to note:**
+
+- **Standards**: US uses "monopoly power" (typically >70% share); EU/SA use "dominance" (typically >40-50% share with barriers).
+- **Effects vs. object**: EU Art. 101 distinguishes "object" restrictions (per se illegal) from "effects" analysis; US separates per se from rule of reason.
+- **Public interest**: South Africa uniquely incorporates public interest factors (employment, SME participation, ownership) in merger review under §12A(3).
+- **Private enforcement**: US allows treble damages; EU/SA have more limited private action frameworks.
+
+{% hint style="info" %}
+**Practitioner tip**
+
+When advising on multi-jurisdictional matters, map the same conduct to each regime's statutory test early. A practice that survives US rule-of-reason analysis may still violate EU "object" restrictions or trigger South African public-interest review. Build separate legal-economic narratives for each forum.
+{% endhint %}
 
 ### Workflow from intake to remedies
 Regardless of jurisdiction, investigations follow a recognizable arc. Matters typically begin with a complaint, leniency application, or merger notification. Case teams triage with “hot docs” and quick descriptive analytics, draft a plan that allocates legal and economic workstreams, and establish preservation plus data-request protocols. The second phase is scoping: enumerating data systems, prioritizing custodians, negotiating production formats, and deciding whether to run early econometric screens—such as price-cost margins or diversion ratios—before collecting more costly qualitative evidence. In phase three the team synthesizes theory and evidence into statements of issues, white papers, or ultimately pleadings and testimony. Finally, remedies discussions integrate forward-looking modeling with institutional constraints: can the Competition Tribunal in Pretoria supervise behavioral commitments as effectively as US courts, or is divestiture the only reliable fix? Always document these choices so that tribunals (and future teams) can reconstruct the evidentiary chain.
