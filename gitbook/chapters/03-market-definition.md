@@ -8,7 +8,7 @@ By the end of the chapter you should be able to:
 - Frame relevant product and geographic markets using demand evidence, diversion ratios, and qualitative industry facts.
 - Apply and critique SSNIP/SSNDQ reasoning, critical-loss vs. actual-loss tests, and switching-matrix screens.
 - Integrate survey evidence, internal documents, and econometrics into narratives tuned to the burden of proof in each jurisdiction.
-- Reference key precedents (e.g., DOJ/FTC Merger Guidelines (2010), EC Market Definition Notice (2024), CMA Merger Guidelines (2021)) and literature when defending methodological choices.
+- Reference key precedents (e.g., DOJ/FTC Merger Guidelines (2023), EC Market Definition Notice (2024), CMA Merger Guidelines (2021)) and literature when defending methodological choices.
 
 ## Why market definition still matters
 Even in unilateral-effects cases where agencies focus on margins, diversion, and price effects directly, courts often ask, “what is the market?” The answer shapes presumptions (HHI thresholds, dominance), jurisdictional hooks (public-interest test vs. consumer welfare), and remedy feasibility. Practitioners should treat market definition as an evidence-integration exercise: describe customer substitution paths, quantify them when possible, and tie those findings to the legal standard at issue (e.g., “reasonable interchangeability” in US case law vs. “sufficiently interchangeable” in EC practice). Keep records of how you screened candidate markets so future teams can expand or narrow scope without re-litigating data prep.

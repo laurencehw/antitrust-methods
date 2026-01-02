@@ -102,7 +102,52 @@ Substitute actual wage data (BLS Occupational Employment and Wage Statistics, CP
 ### Franchise no-poach analysis
 - **Contract review:** Extract no-poach clauses, duration, and scope from franchise agreements (fast-food, fitness, healthcare).  
 - **Transaction data:** Use payroll or scheduling data to track cross-franchise transfers before/after clause removal.  
-- **Event study:** Evaluate hiring and wage patterns after the no-poach ban (Washington fast-food settlements, South African retail franchise commitments). For empirical evidence on franchise no-poach agreements, see @krueger_ashenfelter_2018. See also @doj_hr_guidance_2016 for enforcement guidance.
+- **Event study:** Evaluate hiring and wage patterns after the no-poach ban (Washington fast-food settlements, South African retail franchise commitments). For empirical evidence on franchise no-poach agreements, see Krueger and Ashenfelter (2018). See also DOJ HR Guidance (2016) for enforcement guidance.
+
+### Synthetic control for single-state reforms
+
+When only one state implements a policy change (e.g., California's noncompete ban, Washington's franchise no-poach settlement), standard diff-in-diff may lack a valid control group. Synthetic control constructs a weighted combination of untreated states that matches the treated state's pre-treatment trajectory.
+
+```r
+library(Synth)
+library(dplyr)
+
+# Prepare panel data: state-year wages for treated state (WA) and donor pool
+# Columns: state_id, year, wage, covariates (unemployment, industry_mix, etc.)
+
+# Example setup (replace with actual data)
+dataprep_out <- dataprep(
+  foo = panel_data,
+  predictors = c("unemployment", "industry_mix", "education_share"),
+  predictors.op = "mean",
+  dependent = "avg_wage",
+  unit.variable = "state_id",
+  time.variable = "year",
+  treatment.identifier = 53,  # Washington state FIPS
+  controls.identifier = c(4, 6, 8, 12, 13, ...),  # Donor states
+  time.predictors.prior = 2010:2016,
+  time.optimize.ssr = 2010:2016,
+  time.plot = 2010:2022
+)
+
+# Estimate synthetic control weights
+synth_out <- synth(dataprep_out)
+
+# Plot treated vs. synthetic control
+path.plot(synth_out, dataprep_out,
+          Ylab = "Average Wage ($)",
+          Xlab = "Year",
+          Legend = c("Washington", "Synthetic Washington"),
+          Main = "Wage Effects of No-Poach Ban: Synthetic Control")
+abline(v = 2017, lty = 2)  # Policy implementation
+```
+
+**Interpretation:**
+- **Pre-treatment fit:** The synthetic control should closely track Washington's wages before 2017. Poor pre-fit suggests the method may not be reliable.
+- **Post-treatment gap:** The difference between actual and synthetic Washington after 2017 estimates the policy effect.
+- **Placebo tests:** Run the same analysis on each donor state (pretending it was treated). If the Washington effect is larger than most placebos, the finding is more credible.
+
+For the `Synth` package, see Abadie, Diamond, and Hainmueller (2010). For applications to labor policy, see Dube, Lester, and Reich (2016).
 
 ## Wage posting vs. realized wages
 

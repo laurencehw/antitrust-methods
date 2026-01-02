@@ -10,6 +10,12 @@ Digital markets combine traditional IO concepts with product design, governance,
 
 Expect to combine telemetry, clickstream data, partner contracts, and qualitative product documentation with econometric tests and simulation scaffolds.
 
+{% hint style="info" %}
+**Key acronyms**
+
+**OIPMI** = Online Intermediation Platforms Market Inquiry (South African Competition Commission, 2020–2023). A comprehensive investigation into digital platform competition covering marketplaces, app stores, food delivery, travel booking, and software platforms. Provides detailed transaction data, commission structures, and market share analyses referenced throughout this chapter.
+{% endhint %}
+
 ## Core topics
 - Platform demand and multi-homing: participation elasticities, steering, matching efficiency.
 - Self-preferencing and ranking: click-through impacts, A/B test interpretation, fairness metrics.
