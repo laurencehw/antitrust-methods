@@ -42,6 +42,19 @@ Monopolization liability begins with market power. In the United States, courts 
 
 Together, these elements establish the baseline condition for monopolization: a firm with durable market power and the incentive to maintain or extend it.
 
+### Two-sided platforms and the *Amex* framework
+
+For platform markets, defining market power requires careful attention to two-sidedness. In *Ohio v. American Express* (2018), the US Supreme Court held that credit card networks are "transaction platforms" where merchants and cardholders transact simultaneously, so market definition and effects analysis must consider both sides together. The Court found that American Express's anti-steering provisions—which prevented merchants from steering customers to lower-fee cards—could not be condemned without showing net harm across both sides of the platform.
+
+**Implications for monopolization analysis:**
+
+1. **Transaction vs. non-transaction platforms:** *Amex* applies most clearly to platforms where the two sides transact together (payment cards, ride-sharing). For platforms where sides interact indirectly (media, search), courts remain divided on whether *Amex* requires unified market definition.
+2. **Output measurement:** *Amex* suggests measuring total transaction volume across both sides, not just merchant fees. If higher merchant fees fund cardholder rewards that increase usage, net output may rise.
+3. **Efficiencies integration:** Two-sided analysis bakes cross-subsidies and indirect network effects into the market definition stage, potentially shielding conduct that would appear anticompetitive if one side were examined in isolation.
+4. **Burden of proof:** After *Amex*, plaintiffs challenging platform restraints bear a heavier initial burden to demonstrate net harm across both sides before shifting to justifications.
+
+**Critiques and limitations:** Many economists argue *Amex* conflates market definition with competitive effects, allowing platforms to escape scrutiny by pointing to benefits on one side that may not offset harms on the other. The EU and other jurisdictions have not adopted the *Amex* framework, instead analyzing each side's competitive dynamics separately while considering cross-side effects in the effects analysis. For platform monopolization cases, be prepared to argue both unified and separated market definitions depending on jurisdiction.
+
 ### Articulating the theory of harm
 
 Once market power is established, the analysis turns to conduct. Monopolization theories fall into several categories:
@@ -320,21 +333,33 @@ If exclusive or loyalty contracts were adopted in a staggered fashion, use an ev
 - Simple structural checks: margin squeeze sketches using internal cost data.
 {% endhint %}
 
-{% hint style="info" %}
-**Method box: price-cost test sketch**
+{% hint style="warning" %}
+**Method box: price-cost test with suction effect**
+
+Retroactive rebates create "suction" - the effective price of MARGINAL units that trigger the rebate can be deeply negative.
 
 ```r
+# Retroactive rebate suction effect calculation
 contracts <- data.frame(
-  customer = c("C1","C2","C3","C4"),
-  list_price = c(100, 95, 90, 92),
-  rebate = c(10, 5, 0, 8),
+  customer = c("C1", "C2", "C3", "C4"),
+  total_volume = c(100, 100, 80, 100),
+  threshold_pct = c(0.95, 0.95, 0.90, 0.95),
+  list_price = c(100, 100, 100, 100),
+  rebate_pct = c(0.10, 0.08, 0.05, 0.12),
   variable_cost = c(70, 70, 70, 70)
 )
-contracts$effective_price <- contracts$list_price - contracts$rebate
-contracts$margin_over_cost <- contracts$effective_price - contracts$variable_cost
-contracts
+
+contracts <- contracts |>
+  dplyr::mutate(
+    threshold_volume = total_volume * threshold_pct,
+    marginal_units = total_volume - threshold_volume,
+    rebate_value = total_volume * list_price * rebate_pct,
+    effective_marginal_price = list_price - (rebate_value / marginal_units),
+    margin_marginal = effective_marginal_price - variable_cost
+  )
 ```
-Interpretation: negative margins suggest prices below variable cost; adapt to period-level data and include allocable incremental costs where relevant.
+
+**Suction effect example:** When a 10% retroactive rebate on all 100 units ($1,000) is triggered by just 5 marginal units, the effective price of those units is $100 - ($1,000/5) = **-$100 per unit**. An equally efficient rival with $70 costs cannot profitably compete for these units.
 {% endhint %}
 
 {% hint style="info" %}

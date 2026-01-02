@@ -343,10 +343,64 @@ Combine quantitative screens with qualitative evidence: internal documents refer
 {% endhint %}
 
 ### Vertical and mixed effects
-- EDM vs. foreclosure: quantify both. vUPP and upward pricing pressure on rivals’ access should be shown alongside EDM magnitudes.
-- Identify potential raising rivals’ costs channels (input denial, degradation, parity clauses) and model likely price effects.
-- Conglomerate/mixed cases: bundling/tying risk, data advantage transfer, and cross-market leverage should be explicitly linked to facts.
-- When defining “upstream” vs. “downstream,” anchor to transaction flows and incentives; platform settings may require mapping sides rather than tiers.
+
+Vertical mergers combine firms at different levels of the supply chain. The core tension is between **efficiency gains** (elimination of double marginalization) and **foreclosure risks** (raising rivals' costs, input denial).
+
+#### Elimination of Double Marginalization (EDM)
+
+When both upstream and downstream firms have market power, each adds a markup, resulting in higher final prices than a vertically integrated firm would charge. Post-merger, the combined firm internalizes this externality.
+
+**EDM calculation example:**
+- Pre-merger: Upstream margin 30%, downstream margin 25%, upstream MC = $50
+- Upstream price = $50 / (1 - 0.30) = $71.43
+- Final price = $71.43 / (1 - 0.25) = $95.24
+- Post-merger: Upstream margin eliminated (internal transfer at cost)
+- Final price = $50 / (1 - 0.25) = $66.67
+- **EDM savings: $28.57 (30% reduction)**
+
+**Key parameters for EDM estimation:**
+- **Upstream margin**: Often unobserved; infer from cost studies, comparable transactions, or bargaining models.
+- **Pass-through rate**: What fraction of upstream cost savings reaches consumers? Typically 50-100% in competitive downstream markets, less if downstream is concentrated.
+- **Scope of EDM**: Does EDM apply only to the merging downstream firm, or do rivals also benefit from lower input prices?
+
+#### Vertical Upward Pricing Pressure (vUPP)
+
+vUPP quantifies the merged firm's incentive to raise rivals' costs by increasing input prices or degrading input quality. The intuition: post-merger, the integrated firm captures a share of the profits when rivals lose sales to its downstream affiliate.
+
+$$
+\text{vUPP} = D_{RD} \times m_D \times P_D
+$$
+
+Where:
+- $D_{RD}$: Diversion ratio from rival downstream firms to the merged downstream affiliate
+- $m_D$: Downstream margin of the merged firm
+- $P_D$: Downstream price
+
+**vUPP calculation example:**
+- Diversion to affiliate: 25%
+- Downstream margin: 35%
+- Downstream price: $100
+- Upstream margin on rivals: 15%
+
+- Gross vUPP (foreclosure benefit): 0.25 × 0.35 × $100 = $8.75
+- Opportunity cost (lost upstream sales): 0.15 × $100 = $15.00
+- **Net vUPP: -$6.25** (foreclosure unprofitable in this example)
+
+#### Balancing EDM vs. vUPP
+
+The net effect of a vertical merger depends on whether EDM savings outweigh foreclosure harms. Present both calculations with sensitivity ranges.
+
+![Vertical Merger Assessment: EDM vs. Foreclosure](../images/merger-vertical-balance-1.png)
+
+*Heatmap showing net effect of vertical merger across different EDM and foreclosure magnitudes. Green indicates likely procompetitive; red indicates likely anticompetitive.*
+
+**Data sources for vertical analysis:**
+- **Input pricing**: Contracts, invoices, internal transfer pricing documents
+- **Diversion estimates**: Customer surveys, switching data, or structural demand estimation
+- **Margin data**: Cost accounting, segment financials, comparable transactions
+- **Raising rivals' costs evidence**: Internal strategy documents discussing input denial, quality degradation, or discriminatory access
+
+See Salop (2018) for the theoretical framework and DOJ/FTC Vertical Merger Guidelines (2020) for agency guidance.
 
 ### Efficiencies and remedies
 - Synergy claims: require verifiable, merger-specific efficiencies with timelines and implementation costs; stress test with sensitivity tables.

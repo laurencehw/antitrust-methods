@@ -279,12 +279,12 @@ Document each dataset in `data/README.md` with provenance, confidentiality notes
 
 ## Enhanced Visualizations
 
-### Multi-homing Sankey diagram
-Multi-homing patterns reveal competitive constraints and switching costs. A Sankey diagram shows how users flow across platforms, helping visualize whether platforms compete head-to-head or serve distinct niches.
+### Multi-homing patterns
+Multi-homing patterns reveal competitive constraints and switching costs. The following visualization shows the distribution of users across platform combinations, helping identify whether platforms compete head-to-head or serve distinct niches.
 
 ![Multi-homing Patterns Across Platforms](../images/digital-multihoming-sankey-1.png)
 
-*Bar chart showing user activity across platforms. High single-homing suggests lock-in; high multi-homing indicates competitive pressure.*
+*Distribution of user activity across platform combinations. High single-homing suggests lock-in; high multi-homing indicates competitive pressure.*
 
 **Interpretation:**
 -   **High single-homing**: Suggests strong lock-in, switching costs, or network effects. Platforms may have market power.
@@ -349,6 +349,48 @@ Track platform market share over time to identify tipping points and competitive
 - Demonstrate sustained dominance or competitive entry
 - Identify tipping points or competitive interventions
 - Support market definition and dominance assessments
+
+## Generative AI and foundation models
+
+Large language models (LLMs) and generative AI introduce new competitive dynamics that extend traditional platform analysis. As of 2025-2026, enforcement agencies are actively examining AI markets for potential antitrust concerns.
+
+### Market structure concerns
+
+**Vertical integration and compute access:** A small number of cloud providers (AWS, Azure, Google Cloud) control the compute infrastructure essential for training frontier models. Vertical integration between cloud providers and AI model developers (Microsoft/OpenAI, Google/DeepMind, Amazon/Anthropic) creates potential foreclosure concerns similar to traditional media/distribution cases.
+
+**Data moats:** Training data advantages may create barriers to entry that are difficult to replicate. Key questions include:
+- Whether data access is essential for competitive AI development
+- Whether exclusive data arrangements foreclose rivals
+- The role of synthetic data in reducing data barriers
+
+**Partnerships vs. acquisitions:** The Microsoft/OpenAI and Amazon/Anthropic partnership structures may achieve control similar to acquisitions without triggering merger notification. Agencies are scrutinizing whether these arrangements confer de facto control.
+
+### Theory of harm framework
+
+| Concern | Mechanism | Measurement approach |
+|:--------|:----------|:--------------------|
+| **Compute foreclosure** | Integrated cloud provider degrades rivals' access | API latency/uptime for affiliated vs. unaffiliated models |
+| **Training data exclusivity** | Exclusive licensing of high-quality datasets | Document analysis; entry barrier assessment |
+| **API pricing squeeze** | Below-cost API pricing to foreclose rivals | Margin analysis; comparison to standalone costs |
+| **Distribution bundling** | Tying AI features to dominant platforms | Default/pre-installation analysis (cf. browser cases) |
+| **Talent concentration** | Acqui-hires and non-competes limiting rival innovation | Labor market analysis (see Chapter 10) |
+
+### Emerging regulatory frameworks
+
+- **EU AI Act (2024):** Establishes tiered obligations based on risk level; interacts with DMA gatekeeper obligations for AI-integrated platforms.
+- **US Executive Order on AI (2023):** Directs agencies to monitor competitive dynamics; potential FTC Section 5 authority for unfair methods.
+- **CMA AI Foundation Models review (2023-ongoing):** Examines compute concentration, partnerships, and potential competition concerns.
+
+### Practical implications
+
+When analyzing AI market competition:
+
+1. **Define the relevant market carefully:** Is it foundation models, fine-tuned applications, API access, or end-user AI features? Market boundaries are fluid and contested.
+2. **Assess partnership structures:** Evaluate whether minority investments, commercial agreements, and board seats confer control absent formal acquisition.
+3. **Consider dynamic competition:** AI capabilities evolve rapidly; static market shares may understate competitive dynamics or overstate durability of positions.
+4. **Examine data and compute access:** These inputs may function as essential facilities; apply raising rivals' costs and foreclosure frameworks.
+
+For the latest agency guidance, monitor CMA's AI Foundation Models work and FTC/DOJ statements on AI competition.
 
 ## Looking ahead
 Store all digital platform analyses in `data/derived/digital/` with clear provenance notes. When DMA compliance data become available, replace synthetic Sankey flows and choice-screen impacts with actual telemetry. Document API access restrictions and data-sharing agreements in `data/README.md`. Cross-reference these visualizations with Chapter 12 (litigation practice) for expert report templates and Chapter 13 (empirical appendix) for diagnostic checklists.
