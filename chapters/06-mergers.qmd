@@ -373,10 +373,146 @@ Combine quantitative screens with qualitative evidence: internal documents refer
 :::
 
 ### Vertical and mixed effects
-- EDM vs. foreclosure: quantify both. vUPP and upward pricing pressure on rivals’ access should be shown alongside EDM magnitudes.
-- Identify potential raising rivals’ costs channels (input denial, degradation, parity clauses) and model likely price effects.
-- Conglomerate/mixed cases: bundling/tying risk, data advantage transfer, and cross-market leverage should be explicitly linked to facts.
-- When defining “upstream” vs. “downstream,” anchor to transaction flows and incentives; platform settings may require mapping sides rather than tiers.
+
+Vertical mergers combine firms at different levels of the supply chain. The core tension is between **efficiency gains** (elimination of double marginalization) and **foreclosure risks** (raising rivals' costs, input denial).
+
+#### Elimination of Double Marginalization (EDM)
+
+When both upstream and downstream firms have market power, each adds a markup, resulting in higher final prices than a vertically integrated firm would charge. Post-merger, the combined firm internalizes this externality.
+
+```{r}
+#| label: merger-edm
+#| message: false
+#| warning: false
+library(dplyr)
+library(ggplot2)
+source("program/R/helpers.R")
+
+# EDM calculation: compare pre- and post-merger prices
+edm_example <- tibble::tribble(
+  ~scenario, ~upstream_margin, ~downstream_margin, ~upstream_mc, ~description,
+  "Pre-merger", 0.30, 0.25, 50, "Double markup: each firm adds margin",
+  "Post-merger", 0.00, 0.25, 50, "EDM: upstream margin eliminated"
+) |>
+  mutate(
+    # Pre-merger: downstream pays upstream price = MC / (1 - upstream_margin)
+    upstream_price = upstream_mc / (1 - upstream_margin),
+    # Final price includes both markups
+    final_price = upstream_price / (1 - downstream_margin),
+    # Consumer surplus proxy (inverse of price)
+    consumer_benefit = 100 / final_price * 100
+  )
+
+cat("EDM Example:\n")
+cat(paste0("Pre-merger final price: $", round(edm_example$final_price[1], 2), "\n"))
+cat(paste0("Post-merger final price: $", round(edm_example$final_price[2], 2), "\n"))
+cat(paste0("EDM savings: $", round(edm_example$final_price[1] - edm_example$final_price[2], 2),
+           " (", round((1 - edm_example$final_price[2]/edm_example$final_price[1]) * 100, 1), "% reduction)\n"))
+```
+
+**Key parameters for EDM estimation:**
+- **Upstream margin**: Often unobserved; infer from cost studies, comparable transactions, or bargaining models.
+- **Pass-through rate**: What fraction of upstream cost savings reaches consumers? Typically 50-100% in competitive downstream markets, less if downstream is concentrated.
+- **Scope of EDM**: Does EDM apply only to the merging downstream firm, or do rivals also benefit from lower input prices?
+
+#### Vertical Upward Pricing Pressure (vUPP)
+
+vUPP quantifies the merged firm's incentive to raise rivals' costs by increasing input prices or degrading input quality. The intuition: post-merger, the integrated firm captures a share of the profits when rivals lose sales to its downstream affiliate.
+
+$$
+\text{vUPP} = D_{RD} \times m_D \times P_D
+$$
+
+Where:
+- $D_{RD}$: Diversion ratio from rival downstream firms to the merged downstream affiliate
+- $m_D$: Downstream margin of the merged firm
+- $P_D$: Downstream price
+
+```{r}
+#| label: merger-vupp
+#| message: false
+#| warning: false
+
+# vUPP calculation
+vupp_calc <- function(diversion_to_affiliate, downstream_margin, downstream_price,
+                      upstream_margin_on_rivals = 0.20) {
+  # Benefit from foreclosure: captured downstream profits
+  foreclosure_benefit <- diversion_to_affiliate * downstream_margin * downstream_price
+
+  # Cost of foreclosure: lost upstream margin on rivals
+  foreclosure_cost <- upstream_margin_on_rivals * downstream_price
+
+  # Net vUPP
+  net_vupp <- foreclosure_benefit - foreclosure_cost
+
+  return(list(
+    gross_vupp = foreclosure_benefit,
+    opportunity_cost = foreclosure_cost,
+    net_vupp = net_vupp
+  ))
+}
+
+# Example: Media/content vertical merger
+example <- vupp_calc(
+  diversion_to_affiliate = 0.25,  # 25% of rivals' lost sales go to affiliate
+  downstream_margin = 0.35,        # 35% downstream margin
+  downstream_price = 100,          # $100 downstream price
+  upstream_margin_on_rivals = 0.15 # 15% margin on sales to rival distributors
+)
+
+cat("vUPP Analysis (Input Foreclosure):\n")
+cat(paste0("Gross vUPP (foreclosure benefit): $", round(example$gross_vupp, 2), "\n"))
+cat(paste0("Opportunity cost (lost upstream sales): $", round(example$opportunity_cost, 2), "\n"))
+cat(paste0("Net vUPP: $", round(example$net_vupp, 2), "\n"))
+cat(paste0("Interpretation: ", ifelse(example$net_vupp > 0,
+    "Positive net vUPP suggests incentive to foreclose rivals.",
+    "Negative net vUPP suggests foreclosure is unprofitable."), "\n"))
+```
+
+#### Balancing EDM vs. vUPP
+
+The net effect of a vertical merger depends on whether EDM savings outweigh foreclosure harms. Present both calculations with sensitivity ranges:
+
+```{r}
+#| label: merger-vertical-balance
+#| message: false
+#| warning: false
+
+# Create sensitivity matrix
+scenarios <- expand.grid(
+  edm_magnitude = seq(5, 25, by = 5),  # % price reduction from EDM
+  vupp_effect = seq(2, 15, by = 3)      # % price increase to rivals from foreclosure
+) |>
+  mutate(
+    net_effect = edm_magnitude - vupp_effect * 0.5,  # Weight foreclosure by rival share
+    assessment = case_when(
+      net_effect > 5 ~ "Likely procompetitive",
+      net_effect > 0 ~ "Uncertain - needs detailed analysis",
+      TRUE ~ "Likely anticompetitive"
+    )
+  )
+
+ggplot(scenarios, aes(x = edm_magnitude, y = vupp_effect, fill = net_effect)) +
+  geom_tile() +
+  geom_text(aes(label = round(net_effect, 1)), size = 3, color = "white") +
+  scale_fill_gradient2(low = "#D55E00", mid = "#F0E442", high = "#009E73",
+                       midpoint = 0, name = "Net effect\n(% points)") +
+  labs(
+    title = "Vertical merger assessment: EDM vs. foreclosure",
+    subtitle = "Net effect = EDM savings - (foreclosure harm × rival share)",
+    x = "EDM magnitude (% price reduction)",
+    y = "vUPP/foreclosure effect (% price increase to rivals)"
+  ) +
+  theme_antitrust()
+```
+
+**Data sources for vertical analysis:**
+- **Input pricing**: Contracts, invoices, internal transfer pricing documents
+- **Diversion estimates**: Customer surveys, switching data, or structural demand estimation
+- **Margin data**: Cost accounting, segment financials, comparable transactions
+- **Raising rivals' costs evidence**: Internal strategy documents discussing input denial, quality degradation, or discriminatory access
+
+See @salop_2018 for the theoretical framework and @doj_ftc_vmg_2020 for agency guidance on vertical merger analysis.
 
 ### Efficiencies and remedies
 - Synergy claims: require verifiable, merger-specific efficiencies with timelines and implementation costs; stress test with sensitivity tables.

@@ -45,9 +45,18 @@ For economic analysis of patent holdup and royalty stacking, see @shapiro_2001 a
 
 Evidence sources:
 
-- Standards body submissions (ETSI, IEEE, 3GPP) and FRAND commitments.  
-- Essentiality assessments (self-declared vs. independent).  
+- Standards body submissions (ETSI, IEEE, 3GPP) and FRAND commitments.
+- Essentiality assessments (self-declared vs. independent).
 - Licensing histories, audit trails, and comparable agreements.
+
+**Key SEP/FRAND cases:**
+
+- **EU *Huawei v. ZTE* (2015):** Established framework for when SEP holders may seek injunctions—requiring good-faith negotiations, FRAND offers, and willingness to license before injunctive relief is appropriate.
+- **UK *Unwired Planet* (2020):** Court determined global FRAND rates across patent portfolio; established precedent for courts setting rates when parties cannot agree.
+- **FTC v. Qualcomm (2019-2020):** The FTC alleged Qualcomm used its SEP position and chip monopoly to extract supracompetitive royalties through "no license, no chips" policies. The district court found antitrust violations, but the Ninth Circuit reversed, holding that Qualcomm's practices—even if anticompetitive in licensing markets—did not harm competition in chip markets. The case highlights difficulties in applying antitrust to SEP licensing and the importance of identifying the correct market for harm analysis.
+- **EC Qualcomm decisions (2018-2019):** The Commission fined Qualcomm for predatory pricing to exclude Icera and for exclusivity payments to Apple, demonstrating EU willingness to pursue SEP-adjacent conduct.
+
+These cases illustrate jurisdictional divergence: EU authorities more readily pursue SEP-related antitrust claims, while US courts after *Qualcomm* require clearer links between licensing conduct and competitive harm.
 
 ### Royalty stack analysis
 ```{r}
@@ -167,6 +176,33 @@ library(fixest)
 # rd_model <- feols(log(rd_spend) ~ merger_dummy + controls | firm + year, data = panel)
 # summary(rd_model)
 ```
+
+### Killer acquisitions
+
+"Killer acquisitions" occur when an incumbent acquires a nascent competitor specifically to discontinue its innovation pipeline, eliminating a competitive threat rather than realizing synergies [@cunningham_ederer_ma_2021]. These transactions often fall below merger notification thresholds, allowing them to proceed without antitrust review.
+
+**Empirical identification:**
+
+1. **Pipeline discontinuation rates:** Compare probability that acquired projects are discontinued vs. comparable projects at independent firms. Cunningham et al. (2021) find 5-7% of pharma acquisitions are "killer" in this sense.
+2. **Overlap analysis:** Higher discontinuation rates for targets whose pipelines overlap with acquirer's marketed products suggest elimination of competition.
+3. **Post-acquisition R&D:** Track whether acquirer shifts resources away from the target's development programs.
+
+**Key metrics:**
+
+| Indicator | Measurement | Data source |
+|:----------|:------------|:------------|
+| Pipeline overlap | % therapeutic areas in common | Clinical trials databases, patent filings |
+| Discontinuation rate | % acquired projects discontinued | FDA/EMA filings, company announcements |
+| Development timeline | Delay in milestone achievement | Clinical trial phase transitions |
+| R&D reallocation | Post-acquisition spending shifts | SEC filings, segment disclosures |
+
+**Remedies and policy responses:**
+
+- **Expanded notification thresholds:** Several jurisdictions now require notification based on transaction value (not just target revenue), capturing high-value acquisitions of pre-revenue startups.
+- **Continuation requirements:** Behavioral remedies may require the acquirer to continue development of acquired pipeline assets for a specified period.
+- **Periodic reporting:** Monitor development milestones post-acquisition to detect strategic discontinuation.
+
+For pharmaceutical and biotech markets, cross-reference FDA and EMA clinical trial databases with acquisition announcements. For technology markets, track product launches, API deprecations, and talent retention post-acquisition.
 
 ## Interoperability and data access
 
