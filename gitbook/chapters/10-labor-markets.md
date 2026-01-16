@@ -46,7 +46,7 @@ Reference US DOJ/FTC criminal wage-fixing cases, state AG settlements, the FTC's
 ## Measuring labor market power
 
 ### Concentration indices
-Compute HHI or concentration ratios for labor markets defined by occupation × geography (e.g., SOC × commuting zone). Use BLS QCEW, Census LODES/LEHD Origin-Destination Employment Statistics, or Stats SA labour force microdata. For empirical evidence on labor market concentration, see @azar_marinescu_steinbaum_2020 and @benmelech_bergman_kim_2020.
+Compute HHI or concentration ratios for labor markets defined by occupation × geography (e.g., SOC × commuting zone). Use BLS QCEW, Census LODES/LEHD Origin-Destination Employment Statistics, or Stats SA labour force microdata. For empirical evidence on labor market concentration, see (Azar, Marinescu & Steinbaum, 2020) and (Benmelech, Bergman & Kim, 2020).
 
 ```r
 library(dplyr)
@@ -78,7 +78,7 @@ library(fixest)
 # elasticity_model <- feols(log(wage) ~ log(employment) + controls | firm + occupation + period, data = panel)
 # summary(elasticity_model)
 ```
-Use matched employer-employee data (LEHD, SSA, UI wage records) or firm-level HR exports. Elasticities below 2–3 indicate meaningful monopsony power [@manning_2003; @ashenfelter_farber_ransom_2010]. For policy implications, see @naidu_posner_weyl_2018.
+Use matched employer-employee data (LEHD, SSA, UI wage records) or firm-level HR exports. Elasticities below 2–3 indicate meaningful monopsony power (Manning, 2003); (Ashenfelter, Farber & Ransom, 2010). For policy implications, see (Naidu, Posner & Weyl, 2018).
 
 ## Noncompetes, no-poach, and wage fixing
 
@@ -102,7 +102,7 @@ Substitute actual wage data (BLS Occupational Employment and Wage Statistics, CP
 ### Franchise no-poach analysis
 - **Contract review:** Extract no-poach clauses, duration, and scope from franchise agreements (fast-food, fitness, healthcare).  
 - **Transaction data:** Use payroll or scheduling data to track cross-franchise transfers before/after clause removal.  
-- **Event study:** Evaluate hiring and wage patterns after the no-poach ban (Washington fast-food settlements, South African retail franchise commitments). For empirical evidence on franchise no-poach agreements, see @krueger_ashenfelter_2018. See also @doj_hr_guidance_2016 for enforcement guidance.
+- **Event study:** Evaluate hiring and wage patterns after the no-poach ban (Washington fast-food settlements, South African retail franchise commitments). For empirical evidence on franchise no-poach agreements, see (Krueger & Ashenfelter, 2018). See also (DOJ/FTC HR Guidance, 2016) for enforcement guidance.
 
 ### Synthetic control for single-state reforms
 
@@ -147,7 +147,7 @@ abline(v = 2017, lty = 2)  # Policy implementation
 - **Post-treatment gap:** The difference between actual and synthetic Washington after 2017 estimates the policy effect.
 - **Placebo tests:** Run the same analysis on each donor state (pretending it was treated). If the Washington effect is larger than most placebos, the finding is more credible.
 
-For the `Synth` package, see @abadie_diamond_hainmueller_2010. For applications to labor policy, see @dube_lester_reich_2016.
+For the `Synth` package, see (Abadie, Diamond & Hainmueller, 2010). For applications to labor policy, see (Dube, Lester & Reich, 2016).
 
 ## Wage posting vs. realized wages
 

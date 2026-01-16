@@ -19,7 +19,7 @@ This appendix is the shared workspace for reusable diagnostics, qualitative prot
 | Digital markets | [EU DMA](https://ec.europa.eu/dma), CMA Digital Markets Unit |
 | Labor markets | [BLS data](https://www.bls.gov/), [Census LEHD](https://lehd.ces.census.gov/) |
 
-Use this table alongside external references such as [@ashenfelter_hosken_2010] and agency guidelines.
+Use this table alongside external references such as (Ashenfelter & Hosken, 2010) and agency guidelines.
 
 ## Case chronology template
 When building mixed-method narratives, start with a matrix that ties events to evidence and hypotheses. Duplicate the scaffold below into your project notebook:
@@ -91,12 +91,12 @@ Maintain the lexicon as a YAML or CSV in `data/derived`.
 ## Reusable diagnostics
 
 ### Diff-in-diff and event studies
-- Run parallel-trend visuals, dynamic leads/lags, and placebo periods (`did::att_gt`, `fixest::sunab`). Reference @cunningham_2021 for intuition and cite @ashenfelter_hosken_2010 for merger retrospectives. For staggered treatment timing, see @callaway_santanna_2021.
-- For South African matters with staggered regulatory actions, consider matrix-completion methods from recent econometrics literature [@athey_imbens_2017].
+- Run parallel-trend visuals, dynamic leads/lags, and placebo periods (`did::att_gt`, `fixest::sunab`). Reference (Cunningham, 2021) for intuition and cite (Ashenfelter & Hosken, 2010) for merger retrospectives. For staggered treatment timing, see (Callaway & Sant'Anna, 2021).
+- For South African matters with staggered regulatory actions, consider matrix-completion methods from recent econometrics literature (Athey & Imbens, 2017).
 
 ### Matching and weighting
-- Propensity score, entropy balancing, and synthetic controls should include balance plots (standardized differences, variance ratios) [@abadie_diamond_hainmueller_2010].
-- Store reusable plotting code in `R/helpers.R` (`plot_balance()`). For general guidance on matching methods, see @angrist_pischke_2009.
+- Propensity score, entropy balancing, and synthetic controls should include balance plots (standardized differences, variance ratios) (Abadie, Diamond & Hainmueller, 2010).
+- Store reusable plotting code in `R/helpers.R` (`plot_balance()`). For general guidance on matching methods, see (Angrist & Pischke, 2009).
 
 ### Panel FE and inference choices
 - Two-way FE with staggered treatment: document estimator choice and weights; cite the relevant methodological literature.

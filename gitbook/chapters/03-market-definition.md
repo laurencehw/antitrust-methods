@@ -11,7 +11,7 @@ By the end of the chapter you should be able to:
 - Frame relevant product and geographic markets using demand evidence, diversion ratios, and qualitative industry facts.
 - Apply and critique SSNIP/SSNDQ reasoning, critical-loss vs. actual-loss tests, and switching-matrix screens.
 - Integrate survey evidence, internal documents, and econometrics into narratives tuned to the burden of proof in each jurisdiction.
-- Reference key precedents (e.g., [@doj_ftc_hmg_2023], [@ec_market_definition_2024], [@cma_merger_assessment_2021]) and literature when defending methodological choices.
+- Reference key precedents (e.g., (DOJ/FTC Merger Guidelines, 2023), (EC Market Definition Notice, 2024), (CMA Merger Assessment Guidelines, 2021)) and literature when defending methodological choices.
 
 ## Why market definition still matters
 Even in unilateral-effects cases where agencies focus on margins, diversion, and price effects directly, courts often ask, “what is the market?” The answer shapes presumptions (HHI thresholds, dominance), jurisdictional hooks (public-interest test vs. consumer welfare), and remedy feasibility. Practitioners should treat market definition as an evidence-integration exercise: describe customer substitution paths, quantify them when possible, and tie those findings to the legal standard at issue (e.g., “reasonable interchangeability” in US case law vs. “sufficiently interchangeable” in EC practice). Keep records of how you screened candidate markets so future teams can expand or narrow scope without re-litigating data prep.
@@ -148,7 +148,7 @@ knitr::kable(cl_table, digits=3, caption="Critical Loss Decision Table")
 
 **How to use this chart:** For a given margin estimate (horizontal axis), find the critical loss threshold (the curve). If your observed or estimated actual loss (from switching data, surveys, or diversion ratios) falls *above* the curve, customers switch too readily for a hypothetical monopolist to profitably raise prices by 5-10%, suggesting the candidate market is too narrow and should be expanded. Conversely, if actual loss is *below* the curve, the market definition may be defensible.
 
-Swap `margin` and `price_increase` with matter-specific values. For theoretical derivations, see @katz_shapiro_2003. For alternatives to traditional market definition, see @farrell_shapiro_2010 and @schmalensee_2009. For quantitative techniques, consult @davis_garces_2010.
+Swap `margin` and `price_increase` with matter-specific values. For theoretical derivations, see (Katz & Shapiro, 2003). For alternatives to traditional market definition, see (Farrell & Shapiro, 2010) and (Schmalensee, 2009). For quantitative techniques, consult (Davis & Garcés, 2010).
 
 ### Route-share heatmap: NYC airline concentration
 This heatmap visualizes carrier concentration on specific routes, helping identify whether route-by-route markets are appropriate or whether broader origin-destination-pairs should be considered. High concentration (dark colors) on specific routes may signal competitive concerns.
@@ -522,7 +522,7 @@ A lively debate centers on whether formal market definition remains essential in
 {% hint style="info" %}
 **Citations and comparative note**
 
-- Cite market definition sources such as US Merger Guidelines SSNIP discussion [@doj_ftc_hmg_2023] and EC Notice on market definition [@ec_market_definition_2024]; add CMA cases for UK context.
+- Cite market definition sources such as US Merger Guidelines SSNIP discussion (DOJ/FTC Merger Guidelines, 2023) and EC Notice on market definition (EC Market Definition Notice, 2024); add CMA cases for UK context.
 - When using surveys or switching analyses, reference standards on survey reliability (e.g., reference guides, cases admitting/excluding surveys).
 - Flag jurisdictional differences explicitly when SSNDQ or platform-centric approaches apply more than SSNIP (e.g., EU digital contexts).
 {% endhint %}

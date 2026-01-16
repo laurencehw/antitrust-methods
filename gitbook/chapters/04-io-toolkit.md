@@ -11,11 +11,11 @@ By the end you should be able to:
 - Explain each model’s intuition, diagnostics, and jurisdictional track record.
 
 ## Core components
-1. **Demand estimation.** Start with logit/BLP-lite intuition (shares vs. prices and characteristics) [@nevo_2000; @berry_levinsohn_pakes_1995]. Add nested logit or random coefficients when differentiation is material, and report diversion matrices.  
+1. **Demand estimation.** Start with logit/BLP-lite intuition (shares vs. prices and characteristics) (Nevo, 2000); (Berry, Levinsohn & Pakes, 1995). Add nested logit or random coefficients when differentiation is material, and report diversion matrices.  
 2. **Supply modeling & pass-through.** Recover marginal costs via first-order conditions (FOCs) or reduced-form models, and estimate pass-through elasticities (see code below).  
-3. **Bargaining frameworks.** Nash-in-Nash approximations for platform or healthcare negotiations. For theoretical foundations, see @tirole_1988 and @motta_2004.  
-4. **Multi-sided interactions.** Incorporate indirect network effects, multi-homing rates, and platform policies (MFNs, parity clauses) as either covariates or structural parameters [@rochet_tirole_2003].  
-5. **Diagnostics & validation.** Cross-check simulated price effects against historical shocks, third-party benchmarks [@ashenfelter_hosken_2010], or rival stock reactions.
+3. **Bargaining frameworks.** Nash-in-Nash approximations for platform or healthcare negotiations. For theoretical foundations, see (Tirole, 1988) and (Motta, 2004).  
+4. **Multi-sided interactions.** Incorporate indirect network effects, multi-homing rates, and platform policies (MFNs, parity clauses) as either covariates or structural parameters (Rochet & Tirole, 2003).  
+5. **Diagnostics & validation.** Cross-check simulated price effects against historical shocks, third-party benchmarks (Ashenfelter & Hosken, 2010), or rival stock reactions.
 
 ## Structural vs. Reduced Form Approaches
 
@@ -55,7 +55,7 @@ In modern practice, these approaches reinforce each other. You might use a **red
 {% hint style="info" %}
 **Citations and comparative note**
 
-- Cite foundational IO models and their antitrust applications (e.g., diversion/UPP notes in merger guidelines [@doj_ftc_hmg_2010; @ec_hmg_2004]).
+- Cite foundational IO models and their antitrust applications (e.g., diversion/UPP notes in merger guidelines (DOJ/FTC Horizontal Merger Guidelines, 2010); (EC Horizontal Merger Guidelines, 2004)).
 - Note jurisdictional differences in treatment of MFNs/parity clauses (e.g., EU/UK platform cases vs. US approach).
 - Attribute platform multi-sided modeling references (e.g., Rochet-Tirole style papers) and cite any A/B evidence or agency decisions when used.
 {% endhint %}
