@@ -1,9 +1,6 @@
+# Required API keys for data collection scripts
 FRED_API_KEY=
 BLS_KEY=
 BEA_KEY=
 CENSUS_API_KEY=
 COMTRADE_KEY=
-
-# Optional: keep repo paths explicit for R and Python if needed
-R_USER_LIBS=C:/Users/lwils/AppData/Local/R/library
-PYTHON_PATH=C:/Users/lwils/Python

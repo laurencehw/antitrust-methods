@@ -1,7 +1,10 @@
 # Market Definition and Competitive Landscape
 
 ## Learning goals
-Market definition is no longer a rote SSNIP ritual, but agencies and courts still expect a disciplined articulation of product and geographic boundaries before debating competitive effects. This chapter shows you how to frame those boundaries with data and qualitative evidence, evaluate SSNIP/SSNDQ logic, and communicate results across DOJ/FTC, DG COMP, CMA, SAMR, and Competition Tribunal South Africa processes.
+
+Market definition is no longer a rote SSNIP ritual. Yet agencies and courts still expect a disciplined articulation of product and geographic boundaries before debating competitive effects.
+
+This chapter shows you how to frame those boundaries using data and qualitative evidence, evaluate SSNIP/SSNDQ logic, and communicate results across multiple jurisdictions—DOJ/FTC, DG COMP, CMA, SAMR, and Competition Tribunal South Africa.
 
 By the end of the chapter you should be able to:
 
@@ -16,7 +19,8 @@ Even in unilateral-effects cases where agencies focus on margins, diversion, and
 > "The 'relevant market' is not an intrinsic feature of the economy, but a tool for analyzing competitive effects... It is defined by the constraints that prevent a hypothetical monopolist from raising prices." — *United States v. Google LLC*, Memorandum Opinion (D.D.C. 2024)
 
 ## Core tools and workflow
-Modern market-definition work typically cycles through four toolkits:
+
+Now that we've established why market definition remains essential, this section introduces the practical toolkit for conducting the analysis. Modern market-definition work typically cycles through four complementary approaches, each suited to different data environments and legal standards.
 
 1. **Descriptive analytics.** Price/volume trends, seasonality, and policy shocks that reveal when products or regions move together. Use `ggplot2` quick looks before heavy modeling.
 2. **Demand elasticities & diversion.** Log-log regressions, AIDS-lite models, discrete choice, or churn-based diversion ratios that quantify substitutability. Always document instruments, fixed effects, or controls used.
@@ -25,8 +29,9 @@ Modern market-definition work typically cycles through four toolkits:
 
 The workflow mirrors Chapter 02’s research design steps: scoping memo → data inventory → qualitative plan → estimation → memo/slide deck. Revisit `chapters/13-empirical-appendix.qmd` for templates.
 
-## Core tools
-Use these specific diagnostics to anchor your analysis:
+## Core diagnostic tools
+
+The workflow above identifies *what* to do; this section shows *how* to do it. Each diagnostic below produces artifacts that feed directly into merger simulations (Chapter 06) and cartel analysis (Chapter 05). Use these specific diagnostics to anchor your analysis:
 
 - **Price/quantity dashboards.** Track cointegration, variance ratios, and shock responses to see which products move together.
 - **Elasticities/diversion.** Estimate log-log or `fixest` panel regressions; or use choice data (`mlogit`, `apollo`) when products are differentiated.
@@ -34,7 +39,13 @@ Use these specific diagnostics to anchor your analysis:
 - **Switching matrices, flows, and gravity models.** Summarize customer-level churn or shipment adjacency to motivate geographic splits.
 
 ### Critical-loss worksheet
+
+**What this shows:** Critical loss analysis tests whether a hypothetical monopolist could profitably raise prices. The "critical loss" is the maximum share loss that would still leave a price increase profitable, given the firm's margins.
+
+**Why it matters:** If observed customer switching exceeds the critical loss threshold, the proposed market is too narrow—customers are switching to substitutes outside the candidate market, meaning the market should be expanded.
+
 We can calculate critical loss thresholds for various hypothetical segments (e.g., Commercial, Government, SMB) to test if a price increase would be profitable.
+
 ```{r}
 #| label: critical-loss-table
 #| echo: false
@@ -363,7 +374,12 @@ In practice, combine this with:
 - Company-specific: Shipping manifests, customer address clustering, delivery zone definitions
 
 ### Diversion ratios from customer switching data
-Diversion ratios quantify where customers go when their first choice becomes unavailable or more expensive. They are critical for market definition, UPP calculations, and merger simulation. This example shows how to compute diversion from customer-level switching or choice data.
+
+**What diversion measures:** Diversion ratios quantify where customers go when their first choice becomes unavailable or more expensive. If Product A loses 100 customers and 35 of them switch to Product B, the diversion ratio from A to B is 35%.
+
+**Why it matters:** High diversion between products suggests they compete closely. In merger analysis, high diversion between merging parties signals unilateral effects concerns (more in Chapter 06). For market definition, diversion patterns reveal which products belong in the same market.
+
+This example shows how to compute diversion from customer-level switching or choice data.
 
 ```{r}
 #| label: diversion-ratios
@@ -527,4 +543,13 @@ A lively debate centers on whether formal market definition remains essential in
 :::
 
 ## Looking ahead
-Export cleaned switching matrices, elasticity estimates, and qualitative chronologies to the shared appendix so the IO, merger, and cartels chapters can reuse them. Before moving to Chapter 04, confirm that your demand estimates include the product/segment labels used in the IO models and that any survey instruments or interviews are logged in the qualitative template.
+
+With market boundaries now defined, we turn in **Chapter 04** to the **Industrial Organization Toolkit**: quantifying market power *within* those boundaries using concentration measures (HHI), pricing relationships, and entry barriers. Market definition answers "which products compete?"; IO analysis answers "how much pricing power does each firm have?"
+
+**Before proceeding, prepare:**
+
+1. **Product labels**: Ensure switching matrices and elasticity estimates use the same product names you'll use in IO models (don't rename later—it creates errors).
+2. **Geographic definitions**: Confirm that shipment-flow maps and customer testimony align with the geographic markets you'll assume in Chapter 04.
+3. **Data artifacts**: Export cleaned switching matrices, elasticity estimates, and qualitative chronologies to the shared appendix so the IO, merger, and cartels chapters can reuse them.
+
+In Chapter 04, we'll assume market definitions are fixed and focus on what happens *inside* those markets: how firms set prices, whether entry threatens incumbents, and what evidence suggests market power. You'll use the switching matrices from this chapter to compute diversion ratios for merger simulations in Chapter 06.

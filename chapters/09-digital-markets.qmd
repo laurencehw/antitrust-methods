@@ -15,11 +15,29 @@ Expect to combine telemetry, clickstream data, partner contracts, and qualitativ
 :::
 
 ## Core topics
-- Platform demand and multi-homing: participation elasticities, steering, matching efficiency.
-- Self-preferencing and ranking: click-through impacts, A/B test interpretation, fairness metrics.
-- Data advantages and economies of scope; switching costs, lock-in, and interoperability.
-- Algorithmic pricing and tacit collusion risk.
-- Workflow for platform cases: market definition, theory of harm, mechanism measurement, effects, and remedies (choice screens, access mandates, data portability, separation).
+
+Digital platform analysis extends traditional IO tools to multi-sided markets where network effects, data advantages, and zero-price business models create distinct competitive dynamics. This section covers the key mechanisms and evidence types.
+
+**Multi-sided markets** connect different user groups (buyers/sellers, users/advertisers, drivers/riders) who value each other's participation:
+
+- **Participation and multi-homing**: How do users on each side respond to fees, quality, and participation on other sides?
+- **Network effects**: Do more users on one side attract more users on other sides? How strong is the feedback loop?
+- **Switching costs and lock-in**: What prevents users from moving to rival platforms?
+
+**Platform conduct concerns** include:
+
+- **Self-preferencing**: Does the platform favor its own products in search rankings or recommendations?
+- **Ranking manipulation**: Do algorithm changes benefit the platform at users' expense?
+- **Default tying**: Are defaults structured to foreclose rivals?
+- **Data leverage**: Does the platform use seller/developer data to compete against them?
+
+**The platform case workflow** proceeds through five stages:
+
+1. Define sides and metrics (MAU, GMV, multi-homing rates)
+2. Map fees and monetization (commissions, ad loads, data collection)
+3. Identify theory of harm (self-preferencing, foreclosure, data leverage)
+4. Measure mechanisms (ranking impacts, default effects, fee pass-through)
+5. Assess effects and design remedies (choice screens, access mandates, portability)
 
 ## Platform workflow overview
 
@@ -96,6 +114,12 @@ summary(merchant_model)
 Replace the synthetic `panel` with sanitized telemetry (monthly active users/merchants) or aggregated OIPMI data stored in `data/examples/digital-two-sided.csv`. Document the estimated cross-side elasticities in your memo.
 
 ### Zero-price demand model (attention markets)
+
+**The challenge:** Many platforms don't charge users money—instead, users "pay" with attention (watching ads) and data (surrendering personal information). Standard price-based demand models don't directly apply.
+
+**The solution:** Replace monetary fees with **attention costs**: ad load, time spent, or quality degradation. This lets us estimate how sensitive users are to non-price dimensions of competition and apply the SSNDQ (Small but Significant Non-transitory Decrease in Quality) framework used by competition authorities.
+
+**What this model shows:** We estimate how user engagement (daily active users) responds to "attention costs" like ad load and data collection, as well as quality metrics like load time and content relevance. This lets us simulate whether a hypothetical monopolist could profitably degrade quality.
 
 When users pay with attention rather than money, standard fee-based demand models need adaptation. Replace monetary fees with **attention costs**: ad load, time spent, or quality degradation metrics. This aligns with the SSNDQ (Small but Significant Non-transitory Decrease in Quality) framework used by competition authorities.
 
@@ -715,7 +739,11 @@ cat(paste0("\nPlatform A share trend: ",
 
 ## Generative AI and foundation models
 
-Large language models (LLMs) and generative AI introduce new competitive dynamics that extend traditional platform analysis. As of 2025-2026, enforcement agencies are actively examining AI markets for potential antitrust concerns.
+The platform competition framework developed above—multi-sided markets, network effects, data as a competitive moat—extends naturally to AI markets. Yet foundation models introduce novel concerns that merit separate treatment: compute concentration, partnership structures that may confer control without acquisition, and rapidly evolving capabilities that challenge static market share analysis.
+
+This section surveys early enforcement thinking on AI markets, adapting concepts from the platform discussion above. As of 2025-2026, enforcement agencies are actively examining AI markets for potential antitrust concerns.
+
+Large language models (LLMs) and generative AI introduce new competitive dynamics that extend traditional platform analysis.
 
 ### Market structure concerns
 
@@ -756,4 +784,13 @@ When analyzing AI market competition:
 For the latest agency guidance, monitor CMA's AI Foundation Models work and FTC/DOJ statements on AI competition.
 
 ## Looking ahead
-Store all digital platform analyses in `data/derived/digital/` with clear provenance notes. When DMA compliance data become available, replace synthetic Sankey flows and choice-screen impacts with actual telemetry. Document API access restrictions and data-sharing agreements in `data/README.md`. Cross-reference these visualizations with Chapter 12 (litigation practice) for expert report templates and Chapter 13 (empirical appendix) for diagnostic checklists.
+
+Digital markets evolve rapidly, making data currency and documentation essential. In **Chapter 10 (Labor Markets)**, we apply similar monopsony frameworks to employer-side platform power—gig economy classification, wage-fixing algorithms, and no-poach agreements.
+
+**Before proceeding, prepare:**
+
+1. **Archive outputs**: Store digital platform analyses in `data/derived/digital/` with clear provenance notes (data source, extraction date, confidentiality status).
+2. **DMA monitoring**: When DMA compliance data become available, replace synthetic choice-screen impacts with actual telemetry.
+3. **API documentation**: Document any API access restrictions and data-sharing agreements in `data/README.md`.
+
+Cross-reference these visualizations with Chapter 12 (litigation practice) for expert report templates and Chapter 13 (empirical appendix) for diagnostic checklists. Many of the same event-study and difference-in-differences techniques apply when evaluating platform remedies as when assessing merger retrospectives.
