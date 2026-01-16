@@ -15,6 +15,147 @@ import os
 from pathlib import Path
 import yaml
 
+# Citation key to readable format mapping
+# Built from references.bib - maps @key to (Author, Year) format
+CITATION_MAP = {
+    # Core academic references
+    'nevo_2000': '(Nevo, 2000)',
+    'berry_levinsohn_pakes_1995': '(Berry, Levinsohn & Pakes, 1995)',
+    'rochet_tirole_2003': '(Rochet & Tirole, 2003)',
+    'armstrong_2006': '(Armstrong, 2006)',
+    'evans_schmalensee_2007': '(Evans & Schmalensee, 2007)',
+    'hagiu_wright_2015': '(Hagiu & Wright, 2015)',
+    'parker_van_alstyne_2005': '(Parker & Van Alstyne, 2005)',
+    'katz_shapiro_2003': '(Katz & Shapiro, 2003)',
+    'farrell_shapiro_2010': '(Farrell & Shapiro, 2010)',
+    'schmalensee_2009': '(Schmalensee, 2009)',
+    'davis_garces_2010': '(Davis & Garcés, 2010)',
+    'harrington_2008': '(Harrington, 2008)',
+    'porter_zona_1993': '(Porter & Zona, 1993)',
+    'abrantes_mello_2010': '(Abrantes-Mello, 2010)',
+    'motta_2004': '(Motta, 2004)',
+    'tirole_1988': '(Tirole, 1988)',
+    'whinston_2006': '(Whinston, 2006)',
+    'shapiro_2001': '(Shapiro, 2001)',
+    'ordover_saloner_salop_1990': '(Ordover, Saloner & Salop, 1990)',
+    'salop_scheffman_1983': '(Salop & Scheffman, 1983)',
+    'salop_2018': '(Salop, 2018)',
+    'areeda_turner_1975': '(Areeda & Turner, 1975)',
+    'edlin_hemphill_2012': '(Edlin & Hemphill, 2012)',
+    'lemley_shapiro_2007': '(Lemley & Shapiro, 2007)',
+    'hemphill_sampat_2012': '(Hemphill & Sampat, 2012)',
+    'jaffe_weyl_2013': '(Jaffe & Weyl, 2013)',
+    'cunningham_ederer_ma_2021': '(Cunningham, Ederer & Ma, 2021)',
+    'scott_morton_2000': '(Scott Morton, 2000)',
+    'miller_weinberg_2017': '(Miller & Weinberg, 2017)',
+    'ashenfelter_hosken_2010': '(Ashenfelter & Hosken, 2010)',
+    'weinberg_hosken_2013': '(Weinberg & Hosken, 2013)',
+    'farrell_hayes_shapiro_sullivan_2007': '(Farrell et al., 2007)',
+    'baker_rubinfeld_1999': '(Baker & Rubinfeld, 1999)',
+    'dickey_rubinfeld_2014': '(Dickey & Rubinfeld, 2014)',
+    'rubinfeld_2010': '(Rubinfeld, 2010)',
+
+    # Econometrics and methods
+    'angrist_pischke_2009': '(Angrist & Pischke, 2009)',
+    'abadie_diamond_hainmueller_2010': '(Abadie, Diamond & Hainmueller, 2010)',
+    'athey_imbens_2017': '(Athey & Imbens, 2017)',
+    'callaway_santanna_2021': '(Callaway & Sant\'Anna, 2021)',
+    'conley_decarolis_2016': '(Conley & Decarolis, 2016)',
+    'manning_2003': '(Manning, 2003)',
+    'fjc_reference_manual_2011': '(FJC Reference Manual, 2011)',
+    'huntington_klein_2021': '(Huntington-Klein, 2021)',
+    'alves_2022': '(Alves, 2022)',
+    'cunningham_2021': '(Cunningham, 2021)',
+
+    # Labor economics
+    'azar_marinescu_steinbaum_2020': '(Azar, Marinescu & Steinbaum, 2020)',
+    'ashenfelter_farber_ransom_2010': '(Ashenfelter, Farber & Ransom, 2010)',
+    'benmelech_bergman_kim_2020': '(Benmelech, Bergman & Kim, 2020)',
+    'krueger_ashenfelter_2018': '(Krueger & Ashenfelter, 2018)',
+    'naidu_posner_weyl_2018': '(Naidu, Posner & Weyl, 2018)',
+    'dube_lester_reich_2016': '(Dube, Lester & Reich, 2016)',
+
+    # US Guidelines and cases
+    'doj_ftc_hmg_2010': '(DOJ/FTC Horizontal Merger Guidelines, 2010)',
+    'doj_ftc_hmg_2023': '(DOJ/FTC Merger Guidelines, 2023)',
+    'doj_ftc_vmg_2020': '(DOJ/FTC Vertical Merger Guidelines, 2020)',
+    'doj_hr_guidance_2016': '(DOJ/FTC HR Guidance, 2016)',
+    'us_microsoft_2001': '(*United States v. Microsoft*, 2001)',
+    'us_actavis_2013': '(*FTC v. Actavis*, 2013)',
+    'us_brooke_group_1993': '(*Brooke Group v. Brown & Williamson*, 1993)',
+    'us_grinnell_1966': '(*United States v. Grinnell*, 1966)',
+    'us_linkline_2009': '(*Pacific Bell v. linkLine*, 2009)',
+    'us_tampa_electric_1961': '(*Tampa Electric v. Nashville Coal*, 1961)',
+
+    # EU Guidelines and cases
+    'ec_hmg_2004': '(EC Horizontal Merger Guidelines, 2004)',
+    'ec_market_definition_2024': '(EC Market Definition Notice, 2024)',
+    'eu_united_brands_1978': '(*United Brands*, 1978)',
+    'eu_akzo_1991': '(*AKZO*, 1991)',
+    'eu_bronner_1998': '(*Bronner*, 1998)',
+    'eu_ims_2004': '(*IMS Health*, 2004)',
+    'eu_intel_2017': '(*Intel*, 2017)',
+    'eu_post_danmark_2012': '(*Post Danmark*, 2012)',
+    'eu_deutsche_telekom_2010': '(*Deutsche Telekom*, 2010)',
+    'eu_telefonica_2014': '(*Telefónica*, 2014)',
+    'eu_google_android_2018': '(*Google Android*, 2018)',
+
+    # UK
+    'cma_merger_assessment_2021': '(CMA Merger Assessment Guidelines, 2021)',
+
+    # OECD
+    'oecd_cartel_screens_2013': '(OECD Cartel Screens, 2013)',
+    'oecd_leniency_2015': '(OECD Leniency Programmes, 2015)',
+}
+
+
+def convert_citations(content: str) -> str:
+    """Convert Pandoc-style citations to readable text."""
+
+    def replace_citation(match):
+        """Replace a single citation or group of citations."""
+        citation_text = match.group(1)
+        # Handle multiple citations separated by semicolons
+        keys = [k.strip().lstrip('@') for k in citation_text.split(';')]
+
+        readable_parts = []
+        for key in keys:
+            if key in CITATION_MAP:
+                readable_parts.append(CITATION_MAP[key])
+            else:
+                # Fallback: convert key to readable format
+                # e.g., author_year_2020 -> (Author Year, 2020)
+                parts = key.split('_')
+                if parts and parts[-1].isdigit():
+                    year = parts[-1]
+                    authors = ' '.join(p.capitalize() for p in parts[:-1])
+                    readable_parts.append(f'({authors}, {year})')
+                else:
+                    readable_parts.append(f'({key})')
+
+        return '; '.join(readable_parts)
+
+    # Pattern for bracketed citations: [@key] or [@key1; @key2]
+    content = re.sub(r'\[(@[^\]]+)\]', replace_citation, content)
+
+    # Pattern for inline citations: @key (not in brackets)
+    def replace_inline_citation(match):
+        key = match.group(1)
+        if key in CITATION_MAP:
+            return CITATION_MAP[key]
+        else:
+            parts = key.split('_')
+            if parts and parts[-1].isdigit():
+                year = parts[-1]
+                authors = ' '.join(p.capitalize() for p in parts[:-1])
+                return f'({authors}, {year})'
+            return f'({key})'
+
+    content = re.sub(r'(?<!\[)@([a-zA-Z0-9_]+)(?!\])', replace_inline_citation, content)
+
+    return content
+
+
 def convert_callouts(content: str) -> str:
     """Convert Quarto callouts to GitBook hints."""
     # Pattern for Quarto callouts: ::: {.callout-TYPE title="TITLE"}
@@ -111,6 +252,7 @@ def convert_chapter(input_path: Path, output_path: Path) -> None:
     # Apply conversions
     content = convert_r_chunks(content)
     content = convert_callouts(content)
+    content = convert_citations(content)
     content = fix_math_delimiters(content)
 
     # Remove Quarto-specific div classes (but keep content)

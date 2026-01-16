@@ -22,6 +22,6 @@
 - Expert judgment: where and how to exercise professional judgment, including survey design and qualitative interviews.
 
 ## Citations and jurisdictions
-- Cite claims and data with `[@key]` inline; include papers, books, agency actions, and case law (US focus with EU/UK/Japan/China notes where relevant).
+- Cite claims and data with `(key)` inline; include papers, books, agency actions, and case law (US focus with EU/UK/Japan/China notes where relevant).
 - All references live in `references/references.bib`; add `note = {Last accessed: YYYY-MM-DD}` for web/agency sources.
 - When a claim hinges on jurisdictional nuance, flag it explicitly (e.g., `{US}`, `{EU}`) and note divergences in standards or burdens.

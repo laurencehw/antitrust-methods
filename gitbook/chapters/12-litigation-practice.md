@@ -107,10 +107,10 @@ Use tornado charts or tables to present ranges; highlight the “central” assu
 
 ## Daubert/Kumho readiness
 
-1. **Validation:** Compare model outputs to raw data; show that code replicates known benchmarks [@fjc_reference_manual_2011].  
-2. **Sensitivity:** Document how results change with different controls, clustering levels, or sample definitions [@rubinfeld_2010].  
-3. **Alternative specifications:** Provide at least one alternative consistent with the theory of harm; explain why it does or does not materially change outcomes [@baker_rubinfeld_1999].  
-4. **Error checking:** Peer review within the expert team; code audits; reproducibility scripts [@dickey_rubinfeld_2014].
+1. **Validation:** Compare model outputs to raw data; show that code replicates known benchmarks (FJC Reference Manual, 2011).  
+2. **Sensitivity:** Document how results change with different controls, clustering levels, or sample definitions (Rubinfeld, 2010).  
+3. **Alternative specifications:** Provide at least one alternative consistent with the theory of harm; explain why it does or does not materially change outcomes (Baker & Rubinfeld, 1999).  
+4. **Error checking:** Peer review within the expert team; code audits; reproducibility scripts (Dickey & Rubinfeld, 2014).
 
 ## Presentation and storytelling
 

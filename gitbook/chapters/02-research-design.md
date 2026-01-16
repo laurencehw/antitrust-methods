@@ -7,7 +7,7 @@ Because antitrust matters often unfold across jurisdictions, we emphasize how to
 
 ## Workflow
 ### Scoping memo
-Every matter should begin with a scoping memo linking the narrative theory of harm to measurable outcomes. Specify the primary question (“Did the 2018 hospital merger in Texas raise commercial insurance prices?”), outline plausible channels (unilateral effects vs. coordination), and list essential datasets with owners, legal process required, and likely cleaning steps. Capture timing constraints—the DOJ’s Second Request clock, the CMA’s Phase I deadlines, or the Competition Commission South Africa’s 60-business-day merger review period—and highlight non-negotiable assumptions (e.g., availability of claims-level data or ability to survey procurement managers). Include citations to precedent such as merger retrospectives [@ashenfelter_hosken_2010] or class-certification common-impact decisions [@dickey_rubinfeld_2014] so legal teams can anticipate how courts reacted to similar designs.
+Every matter should begin with a scoping memo linking the narrative theory of harm to measurable outcomes. Specify the primary question (“Did the 2018 hospital merger in Texas raise commercial insurance prices?”), outline plausible channels (unilateral effects vs. coordination), and list essential datasets with owners, legal process required, and likely cleaning steps. Capture timing constraints—the DOJ’s Second Request clock, the CMA’s Phase I deadlines, or the Competition Commission South Africa’s 60-business-day merger review period—and highlight non-negotiable assumptions (e.g., availability of claims-level data or ability to survey procurement managers). Include citations to precedent such as merger retrospectives (Ashenfelter & Hosken, 2010) or class-certification common-impact decisions (Dickey & Rubinfeld, 2014) so legal teams can anticipate how courts reacted to similar designs.
 
 ### Data pipeline architecture
 Treat the data pipeline as infrastructure. Raw productions, public datasets, and hand-entered chronologies should land in `data/raw`, with documented schemas and hashing to ensure integrity. Cleaning scripts housed in `scripts/` or `R/` should emit analytic files to `data/derived`, complete with README files explaining variable creation, filtering rules, and version numbers. Cloud-based teams should use reproducible environments (Renv, Conda, Docker) so every regression or visualization is rerunnable months later when litigation heats up. For South African matters, plan for hybrid data sources—local procurement records may arrive as PDFs, while US financials might come via SEC APIs—so build ingestion scripts that normalize currencies, indexation, and time zones.
@@ -43,9 +43,9 @@ Modern estimators like Callaway & Sant'Anna or Sun & Abraham (implemented in R p
 **Getting Up to Speed**
 
 For a practical guide to these methods, we recommend three complementary resources:
-1.  **"Causal Inference: The Mixtape"** [@cunningham_2021]: Excellent for intuition and history. [mixtape.scunning.com](https://mixtape.scunning.com/)
-2.  **"The Effect"** [@huntington_klein_2021]: A highly accessible introduction to design-based thinking. [theeffectbook.net](https://theeffectbook.net/)
-3.  **"Causal Inference for the Brave and True"** [@alves_2022]: Covers intermediate topics including machine-learning approaches to interference. [matheusfacure.github.io/python-causality-handbook](https://matheusfacure.github.io/python-causality-handbook/)
+1.  **"Causal Inference: The Mixtape"** (Cunningham, 2021): Excellent for intuition and history. [mixtape.scunning.com](https://mixtape.scunning.com/)
+2.  **"The Effect"** (Huntington-Klein, 2021): A highly accessible introduction to design-based thinking. [theeffectbook.net](https://theeffectbook.net/)
+3.  **"Causal Inference for the Brave and True"** (Alves, 2022): Covers intermediate topics including machine-learning approaches to interference. [matheusfacure.github.io/python-causality-handbook](https://matheusfacure.github.io/python-causality-handbook/)
 
 For the academic foundations, see Angrist & Pischke (2010), "The Credibility Revolution in Empirical Economics" ([AEA link](https://www.aeaweb.org/articles?id=10.1257/jep.24.2.3)).
 {% endhint %}

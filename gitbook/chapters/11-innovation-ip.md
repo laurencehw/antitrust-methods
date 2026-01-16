@@ -44,10 +44,10 @@ Innovation cases require translating R&D pipelines, patent portfolios, and techn
 ### Market power and hold-up vs. hold-out
 Standard-essential patents (SEPs) can confer significant bargaining leverage once a standard is adopted. Distinguish:
 
-- **Hold-up:** SEP holder extracts supra-FRAND royalties by threatening injunctions after firms are locked into the standard [@lemley_shapiro_2007].  
+- **Hold-up:** SEP holder extracts supra-FRAND royalties by threatening injunctions after firms are locked into the standard (Lemley & Shapiro, 2007).  
 - **Hold-out:** Implementers delay or underpay royalties despite benefiting from the standard.
 
-For economic analysis of patent holdup and royalty stacking, see @shapiro_2001 and @farrell_hayes_shapiro_sullivan_2007.
+For economic analysis of patent holdup and royalty stacking, see (Shapiro, 2001) and (Farrell et al., 2007).
 
 Evidence sources:
 
@@ -121,11 +121,11 @@ Use `tidyquant` with actual ticker lists; cite the docket (e.g., “Optis v. App
 ## Pay-for-delay and reverse payments
 
 ### Entry timing and hazard models
-Reverse-payment settlements can delay generic entry and harm consumers [@us_actavis_2013]. Analyze:
+Reverse-payment settlements can delay generic entry and harm consumers (*FTC v. Actavis*, 2013). Analyze:
 
-- **Payment size:** Compare settlement payment to expected litigation costs and projected profits [@edlin_hemphill_2012].  
+- **Payment size:** Compare settlement payment to expected litigation costs and projected profits (Edlin & Hemphill, 2012).  
 - **Entry timing:** Use survival models or diff-in-diff to estimate delay relative to counterfactuals.  
-- **Price effects:** Simulate price paths with and without generic entry [@scott_morton_2000; @hemphill_sampat_2012].
+- **Price effects:** Simulate price paths with and without generic entry (Scott Morton, 2000); (Hemphill & Sampat, 2012).
 
 ```r
 library(survival)
@@ -169,7 +169,7 @@ library(fixest)
 
 ### Killer acquisitions
 
-"Killer acquisitions" occur when an incumbent acquires a nascent competitor specifically to discontinue its innovation pipeline, eliminating a competitive threat rather than realizing synergies [@cunningham_ederer_ma_2021]. These transactions often fall below merger notification thresholds, allowing them to proceed without antitrust review.
+"Killer acquisitions" occur when an incumbent acquires a nascent competitor specifically to discontinue its innovation pipeline, eliminating a competitive threat rather than realizing synergies (Cunningham, Ederer & Ma, 2021). These transactions often fall below merger notification thresholds, allowing them to proceed without antitrust review.
 
 **Empirical identification:**
 
