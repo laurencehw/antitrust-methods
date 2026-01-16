@@ -11,13 +11,28 @@ By the end you should be able to:
 - Propose remedies tied explicitly to diagnosed harms.
 
 ## Core topics
-- Market structure pre/post; diversion from shares and switching data.
-- UPP/GUPPI screens; thresholds and caveats.
-- Merger simulation: differentiated products logit/nested logit; calibrating margins and ownership.
-- Coordinated effects: maverick analysis, transparency, capacity and bidding dynamics.
-- Retrospectives: diff-in-diff/event studies with rivals and controls.
-- Horizontal, vertical, and mixed mergers; define “upstream” and “downstream” relative to the theory of harm and adapt analysis to industry specifics.
-- Workflow: (1) transaction and market overview; (2) shares/diversion/HHI; (3) UPP/GUPPI and margins; (4) unilateral and coordinated effects (structural or reduced form); (5) vertical/mixed theories (EDM vs. foreclosure); (6) efficiencies evidence; (7) remedies and retrospectives.
+
+Merger analysis synthesizes the tools from previous chapters into a coherent assessment of whether a transaction will harm competition. This section covers the major theories of harm and the workflow for evaluating each.
+
+**Horizontal mergers** eliminate competition between direct rivals. The key questions are:
+
+- **Unilateral effects**: Will the merged firm raise prices by internalizing competition between the merging parties? (Measured via diversion ratios, UPP/GUPPI, simulation)
+- **Coordinated effects**: Will the merger make tacit coordination easier among remaining competitors? (Measured via maverick analysis, symmetry, transparency)
+
+**Vertical and mixed mergers** combine firms at different supply chain levels or across related markets:
+
+- **Efficiency gains**: Elimination of double marginalization (EDM) can lower prices
+- **Foreclosure risks**: The merged firm may raise rivals' costs or deny access to inputs/customers
+
+**The merger review workflow** proceeds through seven stages:
+
+1. Transaction and market overview
+2. Shares, diversion, and HHI calculations
+3. UPP/GUPPI screens with margin data
+4. Unilateral and coordinated effects analysis
+5. Vertical/mixed theories (EDM vs. foreclosure)
+6. Efficiencies evidence
+7. Remedies and retrospectives
 
 ### Transaction overview and market structure
 - Summarize products, geographies, overlaps, and timing; map to candidate relevant markets.
@@ -34,6 +49,13 @@ By the end you should be able to:
 - For readers, tie back to case examples in your slides to show how margins and diversion were evidenced (transaction data, surveys, switching analyses).
 
 #### Simple UPP/GUPPI calculation
+
+**What UPP measures:** Upward Pricing Pressure (UPP) quantifies the merged firm's incentive to raise prices. When Product A raises its price post-merger, some customers switch to Product B (now owned by the same firm). Pre-merger, those customers were "lost" to a competitor. Post-merger, the merged firm captures that profit—the "diverted profit"—giving it an incentive to raise prices.
+
+**The formula:** $\text{UPP} = \text{Diversion} \times \text{Price} \times \text{Margin} - \text{Efficiency}$
+
+**What to look for:** UPP > 0 means the merger creates upward pricing pressure. GUPPI (Gross UPP Index) expresses this as a percentage of price. Values above 5-10% typically trigger enhanced scrutiny, though thresholds vary by jurisdiction and context.
+
 ```{r}
 #| label: merger-upp-example
 #| message: false
@@ -56,6 +78,18 @@ inputs
 Highlight the evidence sources for diversion (switching matrices, conjoint surveys, clickstream data) and margins (cost accounting, P&L, expert testimony). Note that negative efficiencies shift UPP upward, so document synergy assumptions thoroughly.
 
 #### Logit simulation: executable example
+
+**Why simulation matters:** UPP/GUPPI screens provide first-order approximations, but they don't account for competitive response or demand curvature. Merger simulation uses a calibrated demand model to predict post-merger equilibrium prices, incorporating how rivals will react and how consumers substitute across products.
+
+**What this example shows:** Using a simple 3-product market, we demonstrate how to:
+
+1. Calibrate price sensitivity from pre-merger shares and margins
+2. Compute diversion ratios implied by the demand model
+3. Calculate UPP/GUPPI for the merging products
+4. Predict post-merger price increases
+
+**Key assumptions to scrutinize:** Results depend heavily on the outside share (customers who leave the market entirely), margin data quality, and the logit functional form. Always show sensitivity analysis.
+
 This example demonstrates merger simulation using a 3-product differentiated market. The logit demand model allows us to compute diversion ratios, own-price elasticities, and post-merger price effects.
 
 ```{r}
@@ -416,6 +450,10 @@ cat(paste0("EDM savings: $", round(edm_example$final_price[1] - edm_example$fina
 - **Scope of EDM**: Does EDM apply only to the merging downstream firm, or do rivals also benefit from lower input prices?
 
 #### Vertical Upward Pricing Pressure (vUPP)
+
+**The problem:** When a firm integrates upstream and downstream, it gains an incentive to raise its rivals' costs. Why? Because when a rival loses customers to the merged firm's downstream affiliate, the merged firm captures both the downstream profit *and* any margin it would have earned selling inputs to that rival.
+
+**The intuition:** Imagine a content distributor (Netflix, Hulu) merges with a content studio. Post-merger, if the studio raises licensing prices for rival distributors, some subscribers switch to the merged distributor. The merged firm captures that profit. So it has an incentive to raise rivals' costs—even if it loses some upstream revenue—because it more than makes up for it downstream.
 
 vUPP quantifies the merged firm's incentive to raise rivals' costs by increasing input prices or degrading input quality. The intuition: post-merger, the integrated firm captures a share of the profits when rivals lose sales to its downstream affiliate.
 
@@ -902,4 +940,13 @@ cat(paste0("Price increase: ",
 Replace simulated values with outputs from your actual merger simulation model (logit, nested logit, BLP, or custom structural model).
 
 ## Looking ahead
-Archive merger sims, UPP tables, and event-study outputs in `data/derived` with README files so later chapters (litigation practice, appendices) can reuse them. When you transition to the remedies chapter or empirical appendix, reference which datasets (Nielsen panels, loyalty data, procurement archives) need anonymization or refreshed pulls. Update the visualization tracker with any new dashboards (e.g., post-merger share waterfalls) to keep teaching decks synchronized with the book.
+
+Merger analysis produces artifacts—simulation outputs, UPP tables, event-study results—that feed directly into **Chapter 07 (Monopolization)** and **Chapter 12 (Litigation Practice)**. The same frameworks apply when assessing whether a dominant firm's conduct harms competition.
+
+**Before proceeding, prepare:**
+
+1. **Archive outputs**: Store merger sims, UPP tables, and event-study code in `data/derived/` with README files documenting assumptions and data sources.
+2. **Data refresh plan**: Note which datasets (Nielsen panels, loyalty data, procurement archives) need anonymization or refreshed pulls for teaching or publication.
+3. **Retrospective benchmarks**: Keep a reference list of merger retrospectives (airlines, hospitals, beer) with their effect-size estimates—useful for validating your simulations against real-world outcomes.
+
+In Chapter 07, we apply similar diversion and foreclosure frameworks to unilateral conduct by dominant firms. The simulation and screening tools from this chapter transfer directly—the key difference is that we're analyzing conduct by a single firm rather than a transaction between two firms.

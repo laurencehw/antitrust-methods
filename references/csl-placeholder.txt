@@ -1,7 +1,0 @@
-Place your preferred CSL file here (e.g., `chicago-author-date.csl`) and set in `_quarto.yml`:
-
-```
-csl: references/chicago-author-date.csl
-```
-
-If you export from Zotero/Better BibTeX, you can also export the CSL to this folder for consistency across builds.
