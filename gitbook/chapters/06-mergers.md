@@ -1,0 +1,928 @@
+# Mergers
+
+## Learning goals
+Merger reviews synthesize everything covered so far: market definition, IO modeling, qualitative evidence, and remedies. This chapter provides a practical workflow for assessing unilateral, coordinated, vertical, and public-interest effects across US, EU/UK, and South African jurisdictions, drawing on agency guidance [@doj_ftc_hmg_2023; @ec_hmg_2004; @cma_merger_assessment_2021].
+
+By the end you should be able to:
+
+- Assess unilateral and coordinated effects with descriptive and structural tools (UPP/GUPPI, logit simulations, retrospectives).
+- Evaluate vertical/mixed theories (elimination of double marginalization (EDM) vs. foreclosure) and quantify vUPP.
+- Integrate efficiencies and public-interest claims with evidence.
+- Propose remedies tied explicitly to diagnosed harms.
+
+## Core topics
+
+Merger analysis synthesizes the tools from previous chapters into a coherent assessment of whether a transaction will harm competition. This section covers the major theories of harm and the workflow for evaluating each.
+
+**Horizontal mergers** eliminate competition between direct rivals. The key questions are:
+
+- **Unilateral effects**: Will the merged firm raise prices by internalizing competition between the merging parties? (Measured via diversion ratios, UPP/GUPPI, simulation)
+- **Coordinated effects**: Will the merger make tacit coordination easier among remaining competitors? (Measured via maverick analysis, symmetry, transparency)
+
+**Vertical and mixed mergers** combine firms at different supply chain levels or across related markets:
+
+- **Efficiency gains**: Elimination of double marginalization (EDM) can lower prices
+- **Foreclosure risks**: The merged firm may raise rivals' costs or deny access to inputs/customers
+
+**The merger review workflow** proceeds through seven stages:
+
+1. Transaction and market overview
+2. Shares, diversion, and HHI calculations
+3. UPP/GUPPI screens with margin data
+4. Unilateral and coordinated effects analysis
+5. Vertical/mixed theories (EDM vs. foreclosure)
+6. Efficiencies evidence
+7. Remedies and retrospectives
+
+### Transaction overview and market structure
+- Summarize products, geographies, overlaps, and timing; map to candidate relevant markets.
+- Compute shares/HHI and diversion using shares, switching, or survey-based measures. Flag mavericks and fringe.
+- Upstream/downstream definitions depend on the theory of harm: be explicit about the vertical chain and platform sides.
+- Ground definitions in agency guidance (US Merger Guidelines [@doj_ftc_hmg_2023; @doj_ftc_hmg_2010], EC/CMA guidance [@ec_hmg_2004; @cma_merger_assessment_2021]) and adjust for platform/digital contexts.
+
+**Practical tips:** keep a data inventory (chapter 13 template) noting which datasets inform shares (transaction data, Nielsen panels, loyalty cards). Align product labels with the IO models you plan to run later so you avoid remapping midstream.
+
+### Unilateral effects: UPP/GUPPI and sim
+- Use UPP/GUPPI as a screen [@farrell_shapiro_2010_merger; @jaffe_weyl_2013]; report inputs (diversion, margins) transparently. Sensitivity to margin measurement and diversion estimates should be shown.
+- For differentiated products, simulate with logit/nested-logit or BLP-lite [@nevo_2000; @berry_levinsohn_pakes_1995]; emphasize calibration choices (outside share, margin sources).
+- Convey uncertainty: confidence intervals on diversion, ranges on margins, and alternative ownership assumptions [@weinberg_hosken_2013].
+- For readers, tie back to case examples in your slides to show how margins and diversion were evidenced (transaction data, surveys, switching analyses).
+
+#### Simple UPP/GUPPI calculation
+
+**What UPP measures:** Upward Pricing Pressure (UPP) quantifies the merged firm's incentive to raise prices. When Product A raises its price post-merger, some customers switch to Product B (now owned by the same firm). Pre-merger, those customers were "lost" to a competitor. Post-merger, the merged firm captures that profit—the "diverted profit"—giving it an incentive to raise prices.
+
+**The formula:** $\text{UPP} = \text{Diversion} \times \text{Price} \times \text{Margin} - \text{Efficiency}$
+
+**What to look for:** UPP > 0 means the merger creates upward pricing pressure. GUPPI (Gross UPP Index) expresses this as a percentage of price. Values above 5-10% typically trigger enhanced scrutiny, though thresholds vary by jurisdiction and context.
+
+```r
+library(dplyr)
+upp <- function(diversion, price, margin, efficiency = 0) {
+  # UPP = diverted profit - efficiencies
+  # margin = (P-C)/P, so price * margin = P - C = profit per unit
+  diversion * price * margin - efficiency
+}
+
+inputs <- tibble::tribble(
+  ~pair, ~diversion, ~price, ~margin, ~efficiency,
+  "A->B", 0.35, 11.50, 0.45, 0.50,
+  "B->A", 0.28, 10.00, 0.40, 0.30
+) |>
+  mutate(upp = upp(diversion, price, margin, efficiency))
+
+inputs
+```
+Highlight the evidence sources for diversion (switching matrices, conjoint surveys, clickstream data) and margins (cost accounting, P&L, expert testimony). Note that negative efficiencies shift UPP upward, so document synergy assumptions thoroughly.
+
+#### Logit simulation: executable example
+
+**Why simulation matters:** UPP/GUPPI screens provide first-order approximations, but they don't account for competitive response or demand curvature. Merger simulation uses a calibrated demand model to predict post-merger equilibrium prices, incorporating how rivals will react and how consumers substitute across products.
+
+**What this example shows:** Using a simple 3-product market, we demonstrate how to:
+
+1. Calibrate price sensitivity from pre-merger shares and margins
+2. Compute diversion ratios implied by the demand model
+3. Calculate UPP/GUPPI for the merging products
+4. Predict post-merger price increases
+
+**Key assumptions to scrutinize:** Results depend heavily on the outside share (customers who leave the market entirely), margin data quality, and the logit functional form. Always show sensitivity analysis.
+
+This example demonstrates merger simulation using a 3-product differentiated market. The logit demand model allows us to compute diversion ratios, own-price elasticities, and post-merger price effects.
+
+```r
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+source("program/R/helpers.R")
+
+# Toy market: 3 products, 2 firms (Firm A owns products 1 & 2, Firm B owns product 3)
+# After merger: Combined firm owns all three products
+products <- tibble::tribble(
+  ~product,    ~firm,    ~price,  ~share,  ~margin,
+  "Product 1", "Firm A",  10.00,   0.30,    0.40,
+
+  "Product 2", "Firm A",  12.00,   0.25,    0.35,
+  "Product 3", "Firm B",  11.00,   0.20,    0.38
+) |>
+  mutate(
+    mc = price * (1 - margin),  # Marginal cost from margin
+    outside_share = 1 - sum(share)
+  )
+
+# Step 1: Calibrate logit parameters
+# Mean utility delta from shares: delta_j = log(s_j) - log(s_0)
+s0 <- 1 - sum(products$share)  # Outside good share = 0.25
+products <- products |>
+  mutate(
+    delta = log(share) - log(s0),
+    # Calibrate alpha (price sensitivity) from FOC: margin = 1 / (alpha * price * (1 - s_j))
+    # Rearranging: alpha = 1 / (margin * price * (1 - s_j))
+    alpha_implied = 1 / (margin * price * (1 - share))
+  )
+
+# Use average alpha for simulation
+alpha <- mean(products$alpha_implied)
+cat("Calibrated price sensitivity (alpha):", round(alpha, 3), "\n\n")
+
+# Step 2: Compute own-price elasticities and diversion ratios
+products <- products |>
+  mutate(
+    own_elasticity = -alpha * price * (1 - share),
+    # Diversion ratio from j to k: D_jk = s_k / (1 - s_j)
+    diversion_to_1 = products$share[1] / (1 - share),
+    diversion_to_2 = products$share[2] / (1 - share),
+    diversion_to_3 = products$share[3] / (1 - share)
+  )
+
+# Display pre-merger diagnostics
+cat("Pre-merger elasticities and diversion:\n")
+products |>
+  select(product, firm, price, share, margin, own_elasticity) |>
+  mutate(across(c(share, margin), ~scales::percent(., accuracy = 0.1)),
+         own_elasticity = round(own_elasticity, 2)) |>
+  print()
+
+# Diversion matrix
+cat("\nDiversion matrix (row = source product, column = destination):\n")
+diversion_matrix <- products |>
+  select(product, diversion_to_1, diversion_to_2, diversion_to_3) |>
+  mutate(across(starts_with("diversion"), ~round(., 3)))
+print(diversion_matrix)
+
+# Step 3: Compute UPP for merger of Firm A and Firm B
+# UPP_j = sum over rival products k: D_jk * (P_k - MC_k)
+# After merger, Product 3 internalizes diversion to Products 1 & 2
+
+upp_results <- tibble(
+  product = products$product,
+  firm = products$firm,
+  price = products$price,
+  # UPP calculation
+  upp = c(
+    # Product 1: already owned with Product 2, gains internalization of Product 3
+    products$share[3] / (1 - products$share[1]) * (products$price[3] - products$mc[3]),
+    # Product 2: already owned with Product 1, gains internalization of Product 3
+    products$share[3] / (1 - products$share[2]) * (products$price[3] - products$mc[3]),
+    # Product 3: gains internalization of Products 1 & 2
+    products$share[1] / (1 - products$share[3]) * (products$price[1] - products$mc[1]) +
+    products$share[2] / (1 - products$share[3]) * (products$price[2] - products$mc[2])
+  )
+) |>
+  mutate(
+    guppi = upp / price,  # GUPPI as % of price
+    # First-order price effect approximation: ΔP ≈ UPP / (2 * alpha * (1 - s))
+    price_effect_pct = upp / (price * 2 * alpha * (1 - products$share))
+  )
+
+cat("\nMerger price pressure (UPP/GUPPI):\n")
+upp_results |>
+  mutate(
+    upp = scales::dollar(upp, accuracy = 0.01),
+    guppi = scales::percent(guppi, accuracy = 0.1),
+    price_effect_pct = scales::percent(price_effect_pct, accuracy = 0.1)
+  ) |>
+  print()
+
+# Step 4: Visualize results
+# Waterfall showing price effect decomposition for Product 3 (acquired product)
+waterfall_data <- tibble::tribble(
+  ~component,                ~value,     ~type,
+  "Pre-merger price",        11.00,      "total",
+  "Diversion to Product 1",  +0.32,      "increase",
+  "Diversion to Product 2",  +0.26,      "increase",
+  "Competitive response",    -0.08,      "decrease",
+  "Post-merger price",       11.50,      "total"
+) |>
+  mutate(
+    component = factor(component, levels = component),
+    cumulative = cumsum(value),
+    start = lag(cumulative, default = 0),
+    end = cumulative
+  )
+
+ggplot(waterfall_data) +
+  geom_rect(aes(xmin = as.numeric(component) - 0.4,
+                xmax = as.numeric(component) + 0.4,
+                ymin = start, ymax = end, fill = type),
+            color = "black", linewidth = 0.5) +
+  geom_text(aes(x = as.numeric(component),
+                y = (start + end) / 2,
+                label = scales::dollar(value, accuracy = 0.01)),
+            size = 4, fontface = "bold") +
+  scale_fill_manual(values = c("total" = "#0072B2", "increase" = "#D55E00",
+                                "decrease" = "#009E73")) +
+  scale_x_continuous(breaks = 1:5, labels = waterfall_data$component) +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  labs(
+    title = "Merger Simulation: Price Effect Decomposition (Product 3)",
+    subtitle = "First-order effects from internalizing diversion to acquired products",
+    x = NULL, y = "Price ($)",
+    caption = "Based on logit demand calibration. Competitive response estimated at 15% pass-through."
+  ) +
+  theme_antitrust() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1),
+        legend.position = "none")
+
+# Summary statistics
+cat("\n--- MERGER SIMULATION SUMMARY ---\n")
+cat(paste0("Market: 3 products, outside share = ", scales::percent(s0, accuracy = 0.1), "\n"))
+cat(paste0("Calibrated alpha: ", round(alpha, 3), "\n"))
+cat(paste0("Product 3 predicted price increase: ",
+           scales::percent(upp_results$price_effect_pct[3], accuracy = 0.1), "\n"))
+cat(paste0("Combined firm post-merger share: ",
+           scales::percent(sum(products$share), accuracy = 0.1), "\n"))
+```
+
+**Key takeaways from this simulation:**
+
+1. **Diversion ratios** determine how much pricing pressure the merger creates. Higher diversion between merging products = higher UPP.
+2. **GUPPI** (Gross Upward Pricing Pressure Index) expresses UPP as a percentage of price—values above 5-10% typically warrant further scrutiny.
+3. **Price effects** depend on demand curvature and competitive response. First-order approximations assume linear demand; actual effects may differ.
+4. **Calibration matters**: Results are sensitive to the outside share assumption and margin data quality.
+
+Before presenting results, show calibration diagnostics: how well the model reproduces pre-merger shares, whether price elasticities fall in plausible ranges, and how sensitive predictions are to alternative marginal-cost assumptions.
+
+### Coordinated effects
+- Look for increased symmetry, transparency, or capacity alignment post-merger; include bidding/auction context where relevant.
+- Event studies around merger announcements can show rivals' stock price reactions (coordination signal) but should be paired with real-world capacity/contract evidence.
+- Document maverick roles and whether the transaction removes or disciplines them.
+
+Useful evidence: internal documents describing "price umbrella" logic, third-party contracts showing increased transparency, and supply/demand data indicating higher capacity utilization or inventory visibility. Build a maverick profile (pricing aggressiveness, innovation track record) to show whether elimination meaningfully raises coordination risk.
+
+#### Detecting mavericks: quantitative screen
+A "maverick" is a firm whose pricing or capacity behavior disrupts tacit coordination. Quantitative screens can identify mavericks by measuring pricing volatility, capacity utilization patterns, and deviations from industry norms. The coefficient of variation (CV) in prices is a useful starting metric.
+
+```r
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
+source("program/R/helpers.R")
+
+# Simulated pricing data for 4 firms over 36 months
+# Replace with actual transaction data, Nielsen panels, or industry pricing indices
+set.seed(42)
+
+pricing_data <- expand.grid(
+  firm = c("Industry Avg", "Firm A (Target)", "Firm B", "Firm C"),
+  month = seq.Date(as.Date("2022-01-01"), as.Date("2024-12-01"), by = "month")
+) |>
+  as_tibble() |>
+  mutate(
+    # Base price trend
+    base_price = 100 + as.numeric(month - min(month)) / 30 * 5,
+    # Firm-specific behavior
+    price = case_when(
+      # Target firm: aggressive pricing, high volatility, frequent promotions
+      firm == "Firm A (Target)" ~ base_price * (1 + rnorm(n(), -0.05, 0.08)),
+      # Industry average: stable pricing
+      firm == "Industry Avg" ~ base_price * (1 + rnorm(n(), 0, 0.02)),
+      # Firm B: follows industry
+      firm == "Firm B" ~ base_price * (1 + rnorm(n(), 0.02, 0.03)),
+      # Firm C: premium pricing, stable
+      firm == "Firm C" ~ base_price * (1 + rnorm(n(), 0.08, 0.025))
+    ),
+    # Capacity utilization (mavericks often run fuller capacity)
+    capacity_util = case_when(
+      firm == "Firm A (Target)" ~ pmin(1, rnorm(n(), 0.92, 0.05)),
+      firm == "Industry Avg" ~ rnorm(n(), 0.78, 0.04),
+      firm == "Firm B" ~ rnorm(n(), 0.75, 0.05),
+      firm == "Firm C" ~ rnorm(n(), 0.72, 0.06)
+    )
+  )
+
+# Calculate coefficient of variation by firm
+maverick_metrics <- pricing_data |>
+  group_by(firm) |>
+  summarize(
+    mean_price = mean(price),
+    sd_price = sd(price),
+    cv_price = sd_price / mean_price * 100,  # CV as percentage
+    mean_capacity = mean(capacity_util) * 100,
+    price_vs_industry = mean(price) / mean(pricing_data$price[pricing_data$firm == "Industry Avg"]) - 1,
+    .groups = "drop"
+  ) |>
+  mutate(
+    maverick_score = cv_price * (1 - price_vs_industry) * (mean_capacity / 80),
+    maverick_flag = maverick_score > quantile(maverick_score, 0.75)
+  )
+
+# Print summary
+cat("Maverick Detection Metrics:\n")
+cat("Higher CV + Lower prices + Higher capacity = Maverick signal\n\n")
+maverick_metrics |>
+  mutate(
+    cv_price = paste0(round(cv_price, 1), "%"),
+    mean_capacity = paste0(round(mean_capacity, 0), "%"),
+    price_vs_industry = scales::percent(price_vs_industry, accuracy = 0.1),
+    maverick_score = round(maverick_score, 2)
+  ) |>
+  select(firm, cv_price, price_vs_industry, mean_capacity, maverick_score, maverick_flag) |>
+  print()
+
+# Plot 1: Price time series
+p1 <- ggplot(pricing_data, aes(x = month, y = price, color = firm)) +
+  geom_line(aes(linewidth = firm == "Firm A (Target)"), alpha = 0.8) +
+  scale_linewidth_manual(values = c("TRUE" = 1.2, "FALSE" = 0.6), guide = "none") +
+  scale_color_manual(
+    values = c("Industry Avg" = "#999999", "Firm A (Target)" = "#D55E00",
+               "Firm B" = "#0072B2", "Firm C" = "#009E73")
+  ) +
+  labs(
+    title = "Price Trends by Firm",
+    subtitle = "Target firm (orange) shows higher volatility and lower average price",
+    x = NULL, y = "Price Index", color = NULL
+  ) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+
+# Plot 2: Price volatility (CV) comparison
+p2 <- maverick_metrics |>
+  mutate(highlight = firm == "Firm A (Target)") |>
+  ggplot(aes(x = reorder(firm, cv_price), y = as.numeric(gsub("%", "", cv_price)),
+             fill = highlight)) +
+  geom_col(width = 0.7) +
+  geom_hline(yintercept = 5, linetype = "dashed", color = "gray40") +
+  annotate("text", x = 0.5, y = 5, label = "Industry norm (~5%)",
+           hjust = 0, vjust = -0.5, size = 3) +
+  coord_flip() +
+  scale_fill_manual(values = c("TRUE" = "#D55E00", "FALSE" = "#0072B2"),
+                    guide = "none") +
+  labs(
+    title = "Price Volatility (Coefficient of Variation)",
+    subtitle = "Mavericks typically show CV > industry average",
+    x = NULL, y = "CV (%)"
+  ) +
+  theme_antitrust()
+
+# Plot 3: Capacity utilization distribution
+p3 <- pricing_data |>
+  ggplot(aes(x = capacity_util * 100, fill = firm)) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    values = c("Industry Avg" = "#999999", "Firm A (Target)" = "#D55E00",
+               "Firm B" = "#0072B2", "Firm C" = "#009E73")
+  ) +
+  labs(
+    title = "Capacity Utilization Distribution",
+    subtitle = "Mavericks often run higher capacity, undercutting on price",
+    x = "Capacity Utilization (%)", y = "Density", fill = NULL
+  ) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+
+# Combine
+(p1) / (p2 | p3) + plot_annotation(
+  title = "Maverick Detection Dashboard",
+  subtitle = "Identifying disruptive competitors in coordinated effects analysis",
+  caption = "Synthetic data for illustration. Replace with actual pricing and capacity data."
+)
+```
+
+**Interpreting maverick screens:**
+
+1. **Coefficient of Variation (CV)**: Mavericks typically show CV 1.5–3× the industry average. High volatility signals frequent promotions, aggressive price responses, or willingness to sacrifice short-term margins.
+
+2. **Price positioning**: Mavericks often price 5–15% below industry average while maintaining or expanding volume. Calculate: $\text{Price Gap} = \frac{P_{\text{firm}} - P_{\text{industry}}}{P_{\text{industry}}}$
+
+3. **Capacity utilization**: Firms running >85% capacity utilization despite lower prices may be pursuing volume-based strategies that disrupt coordination.
+
+4. **Innovation/entry record**: Document the target's history of new product launches, geographic expansion, or entry into adjacent markets—qualitative factors that amplify quantitative signals.
+
+{% hint style="info" %}
+**Practitioner tip**
+
+Combine quantitative screens with qualitative evidence: internal documents referencing the target as a "disruptor" or "price leader," customer testimony about switching patterns, and board materials discussing competitive responses to the target. Courts and agencies look for convergence across evidence types.
+{% endhint %}
+
+### Vertical and mixed effects
+
+Vertical mergers combine firms at different levels of the supply chain. The core tension is between **efficiency gains** (elimination of double marginalization) and **foreclosure risks** (raising rivals' costs, input denial).
+
+#### Elimination of Double Marginalization (EDM)
+
+When both upstream and downstream firms have market power, each adds a markup, resulting in higher final prices than a vertically integrated firm would charge. Post-merger, the combined firm internalizes this externality.
+
+```r
+library(dplyr)
+library(ggplot2)
+source("program/R/helpers.R")
+
+# EDM calculation: compare pre- and post-merger prices
+edm_example <- tibble::tribble(
+  ~scenario, ~upstream_margin, ~downstream_margin, ~upstream_mc, ~description,
+  "Pre-merger", 0.30, 0.25, 50, "Double markup: each firm adds margin",
+  "Post-merger", 0.00, 0.25, 50, "EDM: upstream margin eliminated"
+) |>
+  mutate(
+    # Pre-merger: downstream pays upstream price = MC / (1 - upstream_margin)
+    upstream_price = upstream_mc / (1 - upstream_margin),
+    # Final price includes both markups
+    final_price = upstream_price / (1 - downstream_margin),
+    # Consumer surplus proxy (inverse of price)
+    consumer_benefit = 100 / final_price * 100
+  )
+
+cat("EDM Example:\n")
+cat(paste0("Pre-merger final price: $", round(edm_example$final_price[1], 2), "\n"))
+cat(paste0("Post-merger final price: $", round(edm_example$final_price[2], 2), "\n"))
+cat(paste0("EDM savings: $", round(edm_example$final_price[1] - edm_example$final_price[2], 2),
+           " (", round((1 - edm_example$final_price[2]/edm_example$final_price[1]) * 100, 1), "% reduction)\n"))
+```
+
+**Key parameters for EDM estimation:**
+- **Upstream margin**: Often unobserved; infer from cost studies, comparable transactions, or bargaining models.
+- **Pass-through rate**: What fraction of upstream cost savings reaches consumers? Typically 50-100% in competitive downstream markets, less if downstream is concentrated.
+- **Scope of EDM**: Does EDM apply only to the merging downstream firm, or do rivals also benefit from lower input prices?
+
+#### Vertical Upward Pricing Pressure (vUPP)
+
+**The problem:** When a firm integrates upstream and downstream, it gains an incentive to raise its rivals' costs. Why? Because when a rival loses customers to the merged firm's downstream affiliate, the merged firm captures both the downstream profit *and* any margin it would have earned selling inputs to that rival.
+
+**The intuition:** Imagine a content distributor (Netflix, Hulu) merges with a content studio. Post-merger, if the studio raises licensing prices for rival distributors, some subscribers switch to the merged distributor. The merged firm captures that profit. So it has an incentive to raise rivals' costs—even if it loses some upstream revenue—because it more than makes up for it downstream.
+
+vUPP quantifies the merged firm's incentive to raise rivals' costs by increasing input prices or degrading input quality. The intuition: post-merger, the integrated firm captures a share of the profits when rivals lose sales to its downstream affiliate.
+
+$$
+\text{vUPP} = D_{RD} \times m_D \times P_D
+$$
+
+Where:
+- $D_{RD}$: Diversion ratio from rival downstream firms to the merged downstream affiliate
+- $m_D$: Downstream margin of the merged firm
+- $P_D$: Downstream price
+
+```r
+
+# vUPP calculation
+vupp_calc <- function(diversion_to_affiliate, downstream_margin, downstream_price,
+                      upstream_margin_on_rivals = 0.20) {
+  # Benefit from foreclosure: captured downstream profits
+  foreclosure_benefit <- diversion_to_affiliate * downstream_margin * downstream_price
+
+  # Cost of foreclosure: lost upstream margin on rivals
+  foreclosure_cost <- upstream_margin_on_rivals * downstream_price
+
+  # Net vUPP
+  net_vupp <- foreclosure_benefit - foreclosure_cost
+
+  return(list(
+    gross_vupp = foreclosure_benefit,
+    opportunity_cost = foreclosure_cost,
+    net_vupp = net_vupp
+  ))
+}
+
+# Example: Media/content vertical merger
+example <- vupp_calc(
+  diversion_to_affiliate = 0.25,  # 25% of rivals' lost sales go to affiliate
+  downstream_margin = 0.35,        # 35% downstream margin
+  downstream_price = 100,          # $100 downstream price
+  upstream_margin_on_rivals = 0.15 # 15% margin on sales to rival distributors
+)
+
+cat("vUPP Analysis (Input Foreclosure):\n")
+cat(paste0("Gross vUPP (foreclosure benefit): $", round(example$gross_vupp, 2), "\n"))
+cat(paste0("Opportunity cost (lost upstream sales): $", round(example$opportunity_cost, 2), "\n"))
+cat(paste0("Net vUPP: $", round(example$net_vupp, 2), "\n"))
+cat(paste0("Interpretation: ", ifelse(example$net_vupp > 0,
+    "Positive net vUPP suggests incentive to foreclose rivals.",
+    "Negative net vUPP suggests foreclosure is unprofitable."), "\n"))
+```
+
+#### Balancing EDM vs. vUPP
+
+The net effect of a vertical merger depends on whether EDM savings outweigh foreclosure harms. Present both calculations with sensitivity ranges:
+
+```r
+
+# Create sensitivity matrix
+scenarios <- expand.grid(
+  edm_magnitude = seq(5, 25, by = 5),  # % price reduction from EDM
+  vupp_effect = seq(2, 15, by = 3)      # % price increase to rivals from foreclosure
+) |>
+  mutate(
+    net_effect = edm_magnitude - vupp_effect * 0.5,  # Weight foreclosure by rival share
+    assessment = case_when(
+      net_effect > 5 ~ "Likely procompetitive",
+      net_effect > 0 ~ "Uncertain - needs detailed analysis",
+      TRUE ~ "Likely anticompetitive"
+    )
+  )
+
+ggplot(scenarios, aes(x = edm_magnitude, y = vupp_effect, fill = net_effect)) +
+  geom_tile() +
+  geom_text(aes(label = round(net_effect, 1)), size = 3, color = "white") +
+  scale_fill_gradient2(low = "#D55E00", mid = "#F0E442", high = "#009E73",
+                       midpoint = 0, name = "Net effect\n(% points)") +
+  labs(
+    title = "Vertical merger assessment: EDM vs. foreclosure",
+    subtitle = "Net effect = EDM savings - (foreclosure harm × rival share)",
+    x = "EDM magnitude (% price reduction)",
+    y = "vUPP/foreclosure effect (% price increase to rivals)"
+  ) +
+  theme_antitrust()
+```
+
+**Data sources for vertical analysis:**
+- **Input pricing**: Contracts, invoices, internal transfer pricing documents
+- **Diversion estimates**: Customer surveys, switching data, or structural demand estimation
+- **Margin data**: Cost accounting, segment financials, comparable transactions
+- **Raising rivals' costs evidence**: Internal strategy documents discussing input denial, quality degradation, or discriminatory access
+
+See @salop_2018 for the theoretical framework and @doj_ftc_vmg_2020 for agency guidance on vertical merger analysis.
+
+### Efficiencies and remedies
+- Synergy claims: require verifiable, merger-specific efficiencies with timelines and implementation costs; stress test with sensitivity tables.
+- Remedies: structural first; behavioral only if verifiable/monitorable. Link proposed remedies to modeled harms and operational feasibility.
+
+Tie efficiencies to data. For example, if parties cite procurement savings, request SKU-level cost projections and simulate whether those savings offset UPP. For behavioral remedies, document monitoring costs and fallback options (trustees, data rooms) referenced in CMA/DG COMP practice.
+
+### Retrospectives
+- Where historical analogs exist, run diff-in-diff/event studies on prices/output/quality. Use rivals and unaffected markets as controls; test pre-trends [@ashenfelter_hosken_2010; @miller_weinberg_2017].
+- For platform/vertical cases, examine participation/multi-homing effects and access terms over time.
+- Cite retrospective literature to benchmark magnitudes and methods [@weinberg_hosken_2013].
+- Use well-known retrospectives (e.g., supermarket/hospital/airline cases) to set expectations on effect sizes and uncertainty.
+
+#### Stock-event diagnostic
+```r
+library(tidyquant)
+library(dplyr)
+library(ggplot2)
+
+event_date <- as.Date("2013-02-14") # substitute deal date
+tickers <- c("AAL", "DAL", "LUV", "SPY")
+
+prices <- tq_get(
+  tickers,
+  from = event_date - lubridate::days(120),
+  to   = event_date + lubridate::days(60)
+) |>
+  group_by(symbol) |>
+  arrange(date) |>
+  mutate(ret = log(adjusted) - log(lag(adjusted))) |>
+  ungroup()
+
+market <- prices |> filter(symbol == "SPY") |> transmute(date, mkt_ret = ret)
+cars <- prices |> filter(symbol != "SPY") |>
+  left_join(market, by = "date") |>
+  mutate(abnormal = ret - mkt_ret, rel_day = as.integer(date - event_date)) |>
+  filter(between(rel_day, -20, 20)) |>
+  group_by(symbol) |>
+  arrange(rel_day) |>
+  mutate(car = cumsum(abnormal))
+
+ggplot(cars, aes(rel_day, car, color = symbol)) +
+  geom_hline(yintercept = 0, linewidth = 0.3, color = "gray70") +
+  geom_line(linewidth = 0.9) +
+  labs(title = "Cumulative abnormal returns around merger announcement",
+       subtitle = "Illustrative airline example (event ±20 trading days)",
+       x = "Event time (days)", y = "CAR", color = NULL) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+```
+Use CAR patterns as suggestive evidence of coordination or efficiency expectations, but always pair with operational data (capacity, contracts).
+
+### Southern African merger evidence
+- **Walmart/Massmart (2011).** The Competition Commission and Tribunal analyzed SKU-level sales and procurement data showing Massmart’s 20–25% share in formal general merchandise with limited reach into township grocery segments. Diversion estimates from loyalty-card switching rates indicated minimal unilateral effect, so the case turned on public-interest harms. Conditions ultimately required a R240 million supplier development fund, a two-year moratorium on merger-specific retrenchments, and detailed annual reporting on local procurement shares—providing a template for tying data-backed public-interest claims to remedies.
+- **Mediclinic/Matlosana (2014).** Using patient-level discharge data covering 24 specialties, the Commission computed local HHIs above 6,000 and estimated post-merger tariff increases of 8–12% for insured patients. The Tribunal accepted that rival hospitals were more than 150 km away and prohibited the deal, highlighting how granular utilization data can anchor both geographic market definition and competitive-effects narratives in middle-income regions.
+- **Heineken/Distell/Capevin (2022).** In evaluating the creation of Newco, the Commission’s demand estimates—calibrated from Nielsen panel data—showed cider/RTD diversion ratios above 0.5 between Hunters, Savanna, and Strongbow, with Newco projected to command roughly 65% share. Conditional approval required a R10 billion investment commitment, maintenance of existing third-party distribution contracts, and shelf-space safeguards for smaller craft brands, illustrating how quantitative evidence on differentiated products fed into both competition and public-interest remedies.
+
+{% hint style="info" %}
+**Method box**
+
+- Simple merger sim template (see R helpers).
+- Event study around merger announcement/close; rival effects.
+- Vertical tools: vUPP, EDM, raising rivals’ costs sketches.
+{% endhint %}
+
+{% hint style="info" %}
+**Method box: UPP/GUPPI quick calc**
+
+See the UPP/GUPPI example above. Expand the template with case-specific diversion estimates (from surveys, loyalty data, or conjoint work) and margin sources (accounting or expert models). Always show sensitivity ranges.
+{% endhint %}
+
+{% hint style="info" %}
+**Qualitative evidence**
+
+- Integration plans, synergy decks, customer feedback on alternatives.
+- Internal pricing and margin analyses; board materials on strategic rationale.
+- Remedy feasibility from operations teams and third parties.
+{% endhint %}
+
+{% hint style="info" %}
+**Code box: merger sim skeleton**
+
+```r
+# robust path in case execution dir is chapter folder
+source("program/R/helpers.R")
+# products_df: product, firm, price, share, mc (or margin), group (nest)
+# sim <- run_logit_sim(products_df, merging_firms = c("FirmA","FirmB"))
+# sim$summary
+```
+{% endhint %}
+
+{% hint style="info" %}
+**Citations and comparative note**
+
+- Anchor claims to current US Merger Guidelines (2023) [@doj_ftc_hmg_2023] and legacy 2010 guidance [@doj_ftc_hmg_2010]; include EC Horizontal Guidelines [@ec_hmg_2004] and CMA merger assessment guidelines for comparisons.
+- Cite empirical merger retrospective studies when presenting methods or benchmarks (e.g., airlines, hospitals).
+- For vertical mergers, cite vUPP/EDM references and any key enforcement actions (e.g., US v. AT&T/Time Warner, EC cases on input foreclosure).
+{% endhint %}
+
+{% hint style="info" %}
+**Case box: Illustrative mergers**
+
+- Horizontal: airline mergers (UA/CO, DL/NW, AA/US) — retrospectives and coordinated effects; hospital mergers for local market power.
+- Vertical: AT&T/Time Warner (US), Microsoft/Activision (platform/distribution) — input foreclosure/EDM debates.
+- Mixed conglomerate/ad tech: Google/DoubleClick; media/telecom bundling examples.
+{% endhint %}
+
+## Visualizations
+
+### Market shares and HHI dashboard
+This dashboard provides a comprehensive view of market structure before and after the merger, combining share distributions, HHI calculations, and competitive thresholds.
+
+```r
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
+
+# Simulated market data (replace with actual transaction/Nielsen data)
+market_pre <- tibble::tribble(
+  ~firm,      ~share,
+  "Firm A",   0.28,
+  "Firm B",   0.22,
+  "Firm C",   0.18,
+  "Firm D",   0.12,
+  "Firm E",   0.08,
+  "Firm F",   0.06,
+  "Fringe",   0.06
+)
+
+# Post-merger: A acquires B
+market_post <- market_pre |>
+  mutate(
+    firm = if_else(firm == "Firm B", "Firm A+B", firm),
+    share = if_else(firm == "Firm A", share + 0.22, share)
+  ) |>
+  filter(firm != "Firm B") |>
+  arrange(desc(share))
+
+# Calculate HHI
+calc_hhi <- function(shares) {
+  sum((shares * 100)^2)
+}
+
+hhi_pre <- calc_hhi(market_pre$share)
+hhi_post <- calc_hhi(market_post$share)
+delta_hhi <- hhi_post - hhi_pre
+
+# Prepare data for visualization
+market_pre$period <- "Pre-merger"
+market_post$period <- "Post-merger"
+market_combined <- bind_rows(market_pre, market_post)
+market_combined$period <- factor(market_combined$period,
+                                  levels = c("Pre-merger", "Post-merger"))
+
+# Plot 1: Share comparison
+p1 <- ggplot(market_combined, aes(x = reorder(firm, share), y = share,
+                                   fill = period)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.7) +
+  coord_flip() +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_fill_manual(values = c("Pre-merger" = "#0072B2",
+                                "Post-merger" = "#D55E00")) +
+  labs(
+    title = "Market Shares: Pre- vs. Post-Merger",
+    x = NULL,
+    y = "Market Share",
+    fill = NULL
+  ) +
+  theme_antitrust() +
+  theme(
+    legend.position = "bottom",
+    plot.title.position = "plot"
+  )
+
+# Plot 2: HHI change
+hhi_data <- tibble::tribble(
+  ~scenario, ~hhi,
+  "Pre-merger", hhi_pre,
+  "Post-merger", hhi_post
+) |>
+  mutate(
+    scenario = factor(scenario, levels = c("Pre-merger", "Post-merger")),
+    concern_level = case_when(
+      hhi < 1000 ~ "Unconcentrated",
+      hhi < 1800 ~ "Moderately concentrated",
+      TRUE ~ "Highly concentrated (structural presumption)"
+    )
+  )
+
+p2 <- ggplot(hhi_data, aes(x = scenario, y = hhi, fill = scenario)) +
+  geom_col(width = 0.6) +
+  geom_hline(yintercept = 1000, linetype = "dashed", color = "gray40",
+             linewidth = 0.8) +
+  geom_hline(yintercept = 1800, linetype = "dashed", color = "gray40",
+             linewidth = 0.8) +
+  annotate("text", x = 2.5, y = 1000, label = "1,000 threshold",
+           hjust = 0, vjust = -0.5, size = 3) +
+  annotate("text", x = 2.5, y = 1800, label = "1,800 (2023 Guidelines)",
+           hjust = 0, vjust = -0.5, size = 3) +
+  annotate("rect", xmin = -Inf, xmax = Inf, ymin = 1000, ymax = 1800,
+           fill = "yellow", alpha = 0.05) +
+  annotate("rect", xmin = -Inf, xmax = Inf, ymin = 1800, ymax = Inf,
+           fill = "red", alpha = 0.05) +
+  scale_fill_manual(values = c("Pre-merger" = "#0072B2",
+                                "Post-merger" = "#D55E00")) +
+  labs(
+    title = "HHI Analysis",
+    subtitle = paste0("Δ HHI = ", round(delta_hhi, 0)),
+    x = NULL,
+    y = "HHI",
+    fill = NULL
+  ) +
+  theme_antitrust() +
+  theme(
+    legend.position = "none",
+    plot.title.position = "plot"
+  )
+
+# Plot 3: Concentration curve
+market_post_sorted <- market_post |>
+  arrange(desc(share)) |>
+  mutate(cumulative_share = cumsum(share))
+
+p3 <- ggplot(market_post_sorted, aes(x = seq_along(firm), y = cumulative_share)) +
+  geom_line(color = "#D55E00", linewidth = 1.2) +
+  geom_point(color = "#D55E00", size = 3) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", color = "gray40") +
+  annotate("text", x = 1, y = 0.5, label = "50% market share",
+           hjust = 0, vjust = -0.5, size = 3) +
+  scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) +
+  scale_x_continuous(breaks = seq_along(market_post_sorted$firm),
+                     labels = market_post_sorted$firm) +
+  labs(
+    title = "Post-Merger Concentration Curve",
+    subtitle = "Cumulative market share by firm rank",
+    x = NULL,
+    y = "Cumulative Share"
+  ) +
+  theme_antitrust() +
+  theme(
+    plot.title.position = "plot",
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+# Combine plots
+(p1 | p2) / p3 + plot_annotation(
+  title = "Market Structure Dashboard",
+  subtitle = paste0("Pre-merger HHI: ", round(hhi_pre, 0),
+                   " | Post-merger HHI: ", round(hhi_post, 0),
+                   " | Δ HHI: ", round(delta_hhi, 0)),
+  caption = "US Merger Guidelines (2023): Structural presumption applies when
+  HHI > 1,800 and Δ HHI > 100. Higher concentration warrants enhanced scrutiny."
+)
+
+# Summary table
+cat("\nMarket structure summary:\n")
+cat(paste0("Pre-merger HHI: ", round(hhi_pre, 0), "\n"))
+cat(paste0("Post-merger HHI: ", round(hhi_post, 0), "\n"))
+cat(paste0("Change in HHI: ", round(delta_hhi, 0), "\n"))
+cat(paste0("\nCombined entity share: ",
+           scales::percent(market_post$share[market_post$firm == "Firm A+B"],
+                          accuracy = 0.1), "\n"))
+```
+
+**Interpretation:**
+- **HHI thresholds**: The 2023 US Merger Guidelines establish a structural presumption of illegality when post-merger HHI > 1,800 and the merger increases HHI by more than 100 points.
+- **Delta HHI**: Changes above 100 in concentrated markets (HHI > 1,800) trigger the structural presumption.
+- **Combined entity**: The merged firm's share and rank indicate potential unilateral effects concerns.
+- **Concentration curve**: Shows how quickly the top firms accumulate market share.
+
+Replace simulated data with actual transaction volumes, Nielsen scanner data, or industry-specific sources (e.g., airline MIDT, hospital discharge data).
+
+### Merger simulation waterfall
+A waterfall chart decomposes the predicted post-merger price change into its component parts: diversion, margin, efficiencies, and second-order effects. This helps communicate which parameters drive the result.
+
+```r
+library(dplyr)
+library(ggplot2)
+
+# Simulation components (from a differentiated products model)
+# Replace with actual simulation outputs
+sim_components <- tibble::tribble(
+  ~component,              ~value,     ~description,
+  "Base price",            10.00,      "Pre-merger price",
+  "First-order UPP",       +0.80,      "Diversion × Margin effect",
+  "Internalization",       +0.35,      "Portfolio reoptimization",
+  "Efficiency offset",     -0.25,      "Verified cost synergies",
+  "Competitive response",  -0.15,      "Rival price reactions",
+  "Post-merger price",     10.75,      "Predicted equilibrium"
+) |>
+  mutate(
+    component = factor(component, levels = component),
+    cumulative = cumsum(value),
+    start = lag(cumulative, default = 0),
+    end = cumulative,
+    type = case_when(
+      component %in% c("Base price", "Post-merger price") ~ "total",
+      value > 0 ~ "increase",
+      value < 0 ~ "decrease",
+      TRUE ~ "neutral"
+    )
+  )
+
+# Waterfall plot
+ggplot(sim_components) +
+  geom_rect(aes(xmin = as.numeric(component) - 0.4,
+                xmax = as.numeric(component) + 0.4,
+                ymin = start, ymax = end, fill = type),
+            color = "black", linewidth = 0.5) +
+  geom_text(aes(x = as.numeric(component),
+                y = (start + end) / 2,
+                label = scales::dollar(value, accuracy = 0.01)),
+            size = 3.5, fontface = "bold") +
+  geom_segment(data = filter(sim_components, !type %in% c("total")),
+               aes(x = as.numeric(component) + 0.4,
+                   xend = as.numeric(component) + 1 - 0.4,
+                   y = end, yend = end),
+               linetype = "dashed", color = "gray50") +
+  scale_fill_manual(
+    values = c(
+      "total" = "#0072B2",
+      "increase" = "#D55E00",
+      "decrease" = "#009E73",
+      "neutral" = "#999999"
+    ),
+    labels = c(
+      "total" = "Price level",
+      "increase" = "Price increase",
+      "decrease" = "Price decrease",
+      "neutral" = "Neutral"
+    )
+  ) +
+  scale_x_continuous(
+    breaks = seq_along(sim_components$component),
+    labels = sim_components$component
+  ) +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  labs(
+    title = "Merger Simulation Waterfall: Price Effect Decomposition",
+    subtitle = "Breaking down predicted price change into component effects",
+    x = NULL,
+    y = "Price ($)",
+    fill = "Effect type",
+    caption = "Components from differentiated products logit simulation.
+    Replace with actual model outputs."
+  ) +
+  theme_antitrust() +
+  theme(
+    axis.text.x = element_text(angle = 30, hjust = 1),
+    legend.position = "bottom",
+    plot.title.position = "plot"
+  )
+
+# Summary statistics
+cat("\nSimulation summary:\n")
+cat(paste0("Pre-merger price: ",
+           scales::dollar(sim_components$value[1], accuracy = 0.01), "\n"))
+cat(paste0("Post-merger price: ",
+           scales::dollar(sim_components$end[nrow(sim_components)],
+                         accuracy = 0.01), "\n"))
+cat(paste0("Price increase: ",
+           scales::dollar(sim_components$end[nrow(sim_components)] -
+                         sim_components$value[1], accuracy = 0.01),
+           " (",
+           scales::percent((sim_components$end[nrow(sim_components)] /
+                           sim_components$value[1]) - 1, accuracy = 0.1),
+           ")\n"))
+```
+
+**How to use this waterfall:**
+- **First-order UPP**: Direct pricing pressure from internalizing diversion.
+- **Internalization**: Additional optimization from portfolio effects (multi-product firms).
+- **Efficiency offset**: Cost savings that reduce pricing pressure (must be verifiable and merger-specific).
+- **Competitive response**: Predicted reactions from non-merging firms (can amplify or dampen effects).
+
+**Practical tips:**
+- Document the source of each component (diversion from surveys, margins from cost data, efficiencies from integration plans).
+- Show sensitivity: run alternative scenarios varying key parameters.
+- Compare to retrospective evidence: if similar past mergers raised prices by X%, does your simulation predict comparable magnitudes?
+
+Replace simulated values with outputs from your actual merger simulation model (logit, nested logit, BLP, or custom structural model).
+
+## Looking ahead
+
+Merger analysis produces artifacts—simulation outputs, UPP tables, event-study results—that feed directly into **Chapter 07 (Monopolization)** and **Chapter 12 (Litigation Practice)**. The same frameworks apply when assessing whether a dominant firm's conduct harms competition.
+
+**Before proceeding, prepare:**
+
+1. **Archive outputs**: Store merger sims, UPP tables, and event-study code in `data/derived/` with README files documenting assumptions and data sources.
+2. **Data refresh plan**: Note which datasets (Nielsen panels, loyalty data, procurement archives) need anonymization or refreshed pulls for teaching or publication.
+3. **Retrospective benchmarks**: Keep a reference list of merger retrospectives (airlines, hospitals, beer) with their effect-size estimates—useful for validating your simulations against real-world outcomes.
+
+In Chapter 07, we apply similar diversion and foreclosure frameworks to unilateral conduct by dominant firms. The simulation and screening tools from this chapter transfer directly—the key difference is that we're analyzing conduct by a single firm rather than a transaction between two firms.

@@ -1,0 +1,344 @@
+# Regulation and Remedies
+
+## Learning goals
+Antitrust analysis often ends with a liability finding, but policy work begins there. This chapter explains how to translate theories of harm into durable remedies and how to design regulatory frameworks when competition alone cannot discipline pricing or access. You will learn to:
+
+- Compare rate-of-return, price-cap, and incentive regulation, and pick the tool that matches industry fundamentals (cost structure, demand volatility, data availability).
+- Design structural and behavioral remedies that map directly to diagnosed harms, with clear monitoring and reporting plans.
+- Evaluate remedy effectiveness using retrospective econometrics (diff-in-diff, event studies) and benchmarking models.
+- Integrate qualitative evidence (compliance reports, trustee memos, stakeholder hearings) with quantitative indicators.
+
+## Why regulation and remedies matter
+Competition authorities increasingly pair enforcement with sector inquiries that feed straight into regulatory design (e.g., the South African Data Services and Private Healthcare inquiries). Meanwhile, merger and monopolization cases frequently conclude with behavioral obligations or divestitures that require economic monitoring. Understanding regulatory levers ensures your recommendations remain credible after the headline settlement.
+
+## Workflow overview
+
+A typical engagement looks like this:
+
+1. **Diagnose** the source of market power or harm (natural monopoly, entry barriers, conduct).  
+2. **Select regulatory instruments** (rate-of-return, price-cap, access pricing, incentive schemes).  
+3. **Design remedies** matched to the theory of harm (divestitures, access mandates, data-sharing, reporting).  
+4. **Specify monitoring**: KPIs, reporting cadence, trustee authority.  
+5. **Evaluate outcomes** periodically using benchmarking or causal inference.
+
+## Rate-of-return vs. price-cap regulation
+
+### Rate-of-return (cost-plus) regime
+- **Mechanics:** Regulator sets allowable revenue = (Regulated Asset Base × allowed return) + operating costs + depreciation. Common in energy and telecom infrastructure.  
+- **Data needs:** Audited cost of capital, asset valuation, depreciation schedules, operating expense detail.  
+- **Risks:** Gold-plating, weak cost discipline. Mitigate via prudency tests and benchmarking.
+
+### Price-cap (RPI-X) regime
+- **Mechanics:** Allowed price path indexed to inflation minus expected productivity (X-factor). Encourages cost reduction because firms keep savings between resets.  
+- **Data needs:** Inflation series, productivity benchmarks, quality metrics.  
+- **Risks:** Quality degradation, gaming of cost categories. Add service-quality penalties or deadbands.
+
+#### Access pricing and ECPR sketches
+Essential facilities (e.g., telecom loops, pipelines) often require access pricing. The Efficient Component Pricing Rule (ECPR) sets access price = incumbent downstream price − incumbent downstream cost + incremental cost of access. Critics note that ECPR can entrench monopoly margins; regulators frequently adopt cost-plus (LRIC) or benchmarked access tariffs instead. When designing access remedies, document:
+
+- Incremental cost of providing access.  
+- Margin squeeze tests (wholesale price vs. retail price minus downstream cost).  
+- Capacity constraints and queue management.  
+- Quality and operational KPIs (fault rates, installation times).
+
+## Incentive regulation and benchmarking
+Benchmarking and yardstick competition compare regulated entities to peers to set targets without micromanaging costs. Examples include Ofgem’s RIIO model and the planned South African Supply-Side Regulator for Health.
+
+#### Visualization scaffold: benchmarking scatter
+```r
+library(dplyr)
+library(ggplot2)
+
+utilities <- tibble::tribble(
+  ~entity, ~opex_per_unit, ~quality_score,
+  "Utility A", 18.5, 92,
+  "Utility B", 24.1, 85,
+  "Utility C", 16.0, 88,
+  "Utility D", 22.4, 95,
+  "Utility E", 19.2, 90
+)
+
+ggplot(utilities, aes(x = opex_per_unit, y = quality_score, label = entity)) +
+  geom_point(color = "#1b9e77", size = 3) +
+  geom_text(nudge_y = 1.2, size = 3) +
+  geom_hline(yintercept = median(utilities$quality_score), linetype = "dashed", color = "gray60") +
+  geom_vline(xintercept = median(utilities$opex_per_unit), linetype = "dashed", color = "gray60") +
+  labs(
+    title = "Benchmarking scatter: operating cost vs. quality",
+    subtitle = "Illustrative data; upper-left quadrant = efficient/high quality",
+    x = "Operating cost per unit (currency)",
+    y = "Quality score (index)"
+  ) +
+  theme_antitrust()
+```
+Replace the illustrative tibble with regulator filings (e.g., NERSA, Ofgem, FERC Form 1), which are typically publicly available from regulatory agencies.
+
+## Remedy design after antitrust findings
+
+### Structural vs. behavioral
+- **Structural:** Divestitures, ownership separation, asset swaps. Pros: self-enforcing; cons: disruption, valuation disputes.  
+- **Behavioral:** Access commitments, MFN bans, parity obligations, algorithm transparency, zero-rating requirements. Pros: flexible; cons: monitoring burden.
+
+When drafting behavioral remedies, specify:
+
+1. **Scope and metrics** (e.g., access price formula, quality KPIs).  
+2. **Reporting cadence** (quarterly dashboards, API feeds).  
+3. **Trustee authority** (independent monitor credentials, escalation paths).  
+4. **Sunset or reassessment triggers.**
+
+### Monitoring and compliance
+Create compliance scorecards that align with the remedy’s logic. For example, if the remedy ensures rival access to APIs, track uptime, latency, and parity between internal and external developers. Use qualitative sources—monitor reports, public hearings, stakeholder interviews—to contextualize metrics.
+
+#### Retrospective diff-in-diff scaffold
+```r
+library(dplyr)
+library(fixest)
+
+# data columns: region, period, treated (1 if subject to remedy), outcome
+# Example uses synthetic data
+set.seed(123)
+panel <- expand.grid(region = LETTERS[1:6], period = 2016:2022) |>
+  mutate(
+    treated = if_else(region %in% c("A","B","C"), 1, 0),
+    post = if_else(period >= 2019, 1, 0),
+    outcome = 100 + rnorm(n(), 0, 2) - 2 * (treated * post) + 0.5 * period
+  )
+
+did_model <- feols(outcome ~ treated:post | region + period, data = panel)
+summary(did_model)
+```
+Swap the synthetic data with actual KPI panels (e.g., mobile data prices before/after the Data Services commitments, hospital tariffs after remedy adoption). Store sanitized versions in `data/derived/regulation/` with README files tracking provenance.
+
+## Southern African market inquiries and remedy design
+- **Private Healthcare Market Inquiry (2014–2019).** Case-mix adjusted benchmarking across eight hospital groups supported recommendations for a Supply-Side Regulator for Health and shared data hubs.  
+- **Data Services Market Inquiry (2017–2019).** International price benchmarks and profitability models justified prepaid price cuts, open-access APN rules, and zero-rating obligations.  
+- **Public Passenger Transport Inquiry (2017–2020).** Route maps, tender records, and e-hailing logs fed subsidy formulas, fare transparency rules, and data-sharing standards tailored to formal and informal operators.  
+- **Sasol Gas and Telkom wholesale settlements.** Margin-squeeze tests combined with cost-plus access obligations illustrate how antitrust remedies can morph into quasi-regulatory regimes when enforcement alone cannot guarantee compliance.
+
+## Callouts and qualitative evidence
+
+{% hint style="info" %}
+**Method box**
+
+- Benchmarking models and productivity comparisons.  
+- Remedy simulations (cost/pass-through projections).  
+- Retrospective diff-in-diff and event studies on post-remedy outcomes.
+{% endhint %}
+
+{% hint style="info" %}
+**Qualitative evidence**
+
+- Implementation plans, trustee reports, stakeholder workshops.  
+- Regulator-stakeholder hearings and public comment summaries.  
+- Operational feasibility memos from engineering or procurement teams.
+{% endhint %}
+
+{% hint style="info" %}
+**Citations and comparative note**
+
+- Sector-specific regulators: FCC/Ofcom (telecom), FERC/Ofgem (energy), NERSA/ICASA (South Africa).  
+- Classic references: Kahn’s *Economics of Regulation*, Vogelsang’s work on price-cap regulation, OECD remedy guidelines.  
+- Antitrust remedies: US DOJ/FTC remedy manuals, EC notice on remedies, CMA remedy guidance.
+{% endhint %}
+
+## Visualizations
+
+### Remedy compliance timeline
+A timeline visualization helps communicate key milestones, deadlines, and compliance events for complex remedy packages. This is particularly useful for trustee reports, agency presentations, and public communications.
+
+```r
+source("program/R/helpers.R")
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+
+# Example remedy timeline from a merger case
+# Replace with actual compliance events from trustee reports
+remedy_events <- tibble::tribble(
+  ~date,              ~event,                               ~category,
+  "2021-03-15",       "Merger approved w/ conditions",      "Decision",
+  "2021-04-01",       "Trustee appointed",                  "Monitoring",
+  "2021-07-01",       "Access API go-live",                 "Technical",
+  "2021-09-30",       "Q1 compliance report",               "Reporting",
+  "2021-12-01",       "Data sharing portal launched",       "Technical",
+  "2021-12-31",       "Q2 compliance report",               "Reporting",
+  "2022-03-15",       "First annual review",                "Review",
+  "2022-06-30",       "Q3 compliance report",               "Reporting",
+  "2022-09-01",       "Pricing parity audit",               "Monitoring",
+  "2022-12-31",       "Q4 compliance report",               "Reporting",
+  "2023-03-15",       "Second annual review",               "Review",
+  "2023-06-01",       "Remedy modification hearing",        "Decision",
+  "2024-03-15",       "Final compliance assessment",        "Review",
+  "2024-06-30",       "Sunset date (remedy expires)",       "Termination"
+) |>
+  mutate(
+    date = as.Date(date),
+    category = factor(category,
+                     levels = c("Decision", "Technical", "Monitoring",
+                               "Reporting", "Review", "Termination"))
+  )
+
+# Create timeline plot with categorical coloring
+ggplot(remedy_events, aes(x = date, y = 0)) +
+  # Baseline
+  geom_hline(yintercept = 0, color = "gray70", linewidth = 1) +
+  # Event points
+  geom_point(aes(color = category), size = 4) +
+  # Event labels
+  geom_text(aes(label = event, angle = 45),
+            hjust = -0.1, vjust = -0.5, size = 3) +
+  # Category coloring
+  scale_color_manual(
+    values = c(
+      "Decision" = "#0072B2",
+      "Technical" = "#009E73",
+      "Monitoring" = "#F0E442",
+      "Reporting" = "#999999",
+      "Review" = "#D55E00",
+      "Termination" = "#CC79A7"
+    )
+  ) +
+  scale_x_date(date_breaks = "6 months", date_labels = "%b %Y",
+               expand = expansion(mult = c(0.05, 0.05))) +
+  labs(
+    title = "Remedy Compliance Timeline",
+    subtitle = "Tracking key milestones and reporting obligations",
+    x = NULL,
+    y = NULL,
+    color = "Event Type",
+    caption = "Example from merger conditional approval. Replace with actual compliance data."
+  ) +
+  theme_antitrust() +
+  theme(
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.grid = element_blank(),
+    plot.title.position = "plot",
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  ) +
+  coord_cartesian(ylim = c(-0.5, 1.5))
+
+# Summary table
+cat("\nCompliance milestone summary:\n")
+remedy_summary <- remedy_events |>
+  group_by(category) |>
+  summarise(count = n(), .groups = "drop") |>
+  arrange(desc(count))
+print(remedy_summary, n = Inf)
+```
+
+**How to use this timeline:**
+- **Decision events** (blue): Key regulatory or tribunal decisions establishing or modifying remedies.
+- **Technical milestones** (green): System launches, API deployments, portal go-lives.
+- **Monitoring events** (yellow): Audits, investigations, compliance checks.
+- **Reporting obligations** (gray): Regular quarterly or annual reports.
+- **Review points** (orange): Scheduled assessments where remedies may be modified or extended.
+- **Termination** (purple): Sunset date when behavioral remedies expire.
+
+**Practical applications:**
+- Include in trustee reports to show progress against mandated milestones.
+- Present in annual compliance reviews to agency staff.
+- Use in public communications to demonstrate transparency.
+- Adapt for different remedy types: structural (divestitures), behavioral (access, pricing), or hybrid packages.
+
+Replace with actual dates from:
+- Consent decrees and settlement agreements (DOJ/FTC, DG COMP, CMA)
+- Trustee reports and compliance dashboards
+- Agency monitoring databases
+- Tribunal orders (South African Competition Tribunal)
+
+### Enhanced timeline with swimlanes
+For complex remedies involving multiple workstreams (technical, legal, operational), use a swimlane variant:
+
+```r
+library(ggplot2)
+library(dplyr)
+
+# Add swimlane assignments
+remedy_events_swim <- remedy_events |>
+  mutate(
+    swimlane = case_when(
+      category %in% c("Decision", "Termination") ~ "Legal/Regulatory",
+      category %in% c("Technical") ~ "Technical Implementation",
+      category %in% c("Monitoring", "Review") ~ "Compliance & Audit",
+      category == "Reporting" ~ "Reporting & Documentation"
+    ),
+    swimlane = factor(swimlane,
+                     levels = c("Legal/Regulatory",
+                               "Technical Implementation",
+                               "Compliance & Audit",
+                               "Reporting & Documentation"))
+  )
+
+ggplot(remedy_events_swim, aes(x = date, y = as.numeric(swimlane))) +
+  # Swimlane backgrounds
+  geom_rect(aes(fill = swimlane),
+            xmin = min(remedy_events_swim$date) - days(30),
+            xmax = max(remedy_events_swim$date) + days(30),
+            ymin = as.numeric(remedy_events_swim$swimlane) - 0.4,
+            ymax = as.numeric(remedy_events_swim$swimlane) + 0.4,
+            alpha = 0.1) +
+  # Event points
+  geom_point(aes(color = category), size = 4) +
+  # Event labels
+  geom_text(aes(label = format(date, "%b %y")),
+            nudge_y = 0.15, size = 2.5, fontface = "bold") +
+  geom_text(aes(label = event),
+            nudge_y = -0.15, size = 2.5, hjust = 0.5) +
+  scale_color_manual(
+    values = c(
+      "Decision" = "#0072B2",
+      "Technical" = "#009E73",
+      "Monitoring" = "#F0E442",
+      "Reporting" = "#999999",
+      "Review" = "#D55E00",
+      "Termination" = "#CC79A7"
+    )
+  ) +
+  scale_fill_manual(
+    values = c(
+      "Legal/Regulatory" = "#0072B2",
+      "Technical Implementation" = "#009E73",
+      "Compliance & Audit" = "#D55E00",
+      "Reporting & Documentation" = "#999999"
+    )
+  ) +
+  scale_y_continuous(
+    breaks = 1:4,
+    labels = levels(remedy_events_swim$swimlane)
+  ) +
+  scale_x_date(date_breaks = "6 months", date_labels = "%b %Y") +
+  labs(
+    title = "Remedy Compliance Timeline (Swimlane View)",
+    subtitle = "Organized by workstream to track parallel activities",
+    x = NULL,
+    y = NULL,
+    color = "Event Type",
+    fill = "Workstream"
+  ) +
+  theme_antitrust() +
+  theme(
+    plot.title.position = "plot",
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom",
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_line(color = "#e0e0e0", linewidth = 0.3)
+  ) +
+  guides(fill = "none")
+```
+
+**Swimlane benefits:**
+- Separates legal, technical, and operational workstreams for clarity.
+- Shows dependencies and sequencing across different teams.
+- Useful for program management and stakeholder coordination.
+
+## Data and visualization plan
+- **Benchmarking scatter (Ch. 08 Visual 1):** Use regulator filings (Ofgem RIIO datasets, NERSA approved tariffs) or sanitized hospital benchmarking tables from public inquiries. If confidential, create synthetic replicas stored in `data/examples/benchmarking.csv`.
+- **Remedy compliance timeline (Visual 2):** Build from trustee reports and milestone trackers from public sources.
+- **Post-remedy diff-in-diff (Visual 3):** For telecom data, draw on public tariffs (ICASA reports) or TeleGeography archives; for energy, use Eskom/NERSA tariff series.
+
+Document every dataset in `data/README.md` and note whether it can ship with the book (public) or must be replicated with synthetic values for open-source builds.
+
+## Looking ahead
+Store remedy models, compliance timelines, and benchmarking outputs in `data/derived/remedies/` with detailed READMEs. When transitioning to the litigation chapter, reference which remedy types (structural, behavioral, hybrid) appeared most frequently in your jurisdiction's case law. Update the visualization tracker if you add new dashboard components (e.g., interactive Shiny apps for remedy monitoring) so future readers can replicate or extend the templates.

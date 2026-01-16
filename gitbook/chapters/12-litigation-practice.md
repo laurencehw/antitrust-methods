@@ -1,0 +1,528 @@
+# Litigation Practice: Evidence and Expert Work
+
+## Learning goals
+This chapter translates all prior analytics into courtroom-ready workflows. Drawing on agency guidance (US DOJ/FTC, EC best practices) and established expert practice standards, we focus on:
+
+- Structuring investigations so every exhibit and code run is reproducible.
+- Designing class certification analyses (common impact, damages) that withstand Daubert/Kumho challenges.
+- Integrating empirical, qualitative, and documentary evidence in expert reports, depositions, and testimony.
+- Communicating uncertainty, sensitivity, and alternative specifications to judges and juries.
+
+## Core topics
+- Class certification: common impact frameworks, sampling, and predominance arguments.
+- Evidence management: document IDs, data provenance, reproducible code bundles.
+- Daubert readiness: validation, sensitivity analyses, alternative specifications.
+- Presentation: graphics for court, explanatory appendices, deposition prep.
+- Coordination with legal teams, witnesses, and regulators; public-interest considerations in South Africa and other jurisdictions.
+
+{% hint style="info" %}
+**Method box**
+
+- Common impact tests with clustered SEs and randomization inference.
+- Damages models: before/after, yardstick, difference-in-differences, hedonic variants.
+- Scenario/sensitivity tables for assumptions (e.g., pass-through bounds).
+{% endhint %}
+
+{% hint style="info" %}
+**Qualitative evidence**
+
+- Fact witness integration: mapping testimonies to model assumptions.
+- Survey admissibility checkpoints (universe, sampling, questionnaire design, pretests).
+- Expert judgment: when to narrow claims due to data limits.
+{% endhint %}
+
+{% hint style="info" %}
+**Citations and comparative note**
+
+- Cite case law on admissibility (Daubert/Kumho in US; local standards elsewhere) and notable opinions accepting/rejecting methods (e.g., class cert common impact challenges).
+- Include agency guidance where relevant (e.g., FTC/DOJ guidance on data handling, EC best practices for expert submissions).
+- When drawing on foreign cases (EU/UK/Canada/Australia/Japan/China), flag differences in evidentiary standards and expert roles.
+{% endhint %}
+
+## Evidence pipeline and reproducibility
+
+### Evidence map
+
+Create an evidence map linking:
+
+1. **Data sources:** Production IDs, custodians, time periods, transformations.  
+2. **Documentary evidence:** Bates numbers, key quotes, translation status.  
+3. **Witness testimony:** Depositions, declarations, trial testimony, and their linkage to quantitative claims.  
+4. **Model outputs:** Code, inputs, parameters, and versions stored in reproducible folders.
+
+A typical structure (`/data/raw`, `/data/derived`, `/scripts`, `/reports`) mirrors earlier chapters; maintain `README` files and `renv`/`requirements` snapshots.
+
+### Reproducible bundle checklist
+
+- Git repository (even if private) with hashed datasets and code.  
+- Quarto notebooks or Rmarkdown scripts that render exhibits.  
+- `packrat`/`renv` lockfiles or Conda environments.  
+- Document IDs within code comments for traceability.
+
+## Class certification and common impact
+
+### Sampling and aggregation decisions
+
+- Align sampling frames with class definitions (time, geography, product).  
+- Document random sampling pr OCED images? (no)  
+- For opt-out classes, track individual damages calculations.
+
+### Common impact tests
+
+```r
+library(fixest)
+
+# panel columns: class_member, period, treatment, outcome, controls
+# Example diff-in-diff for common impact
+# ci_model <- feols(outcome ~ treatment | class_member + period, data = panel)
+# summary(ci_model)
+```
+Add clustered SEs (e.g., `cluster = ~class_member`) or randomization inference for small N. Consult academic literature on class certification econometrics for methodological guidance.
+
+### Randomization inference scaffold
+```r
+library(fixest)
+library(magrittr)
+
+# After estimating ci_model, permute treatment labels to compute empirical p-values
+# ri_p <- permute_plm(ci_model, treat = "treatment", cluster = "class_member", reps = 1000)
+```
+
+## Damages modeling
+
+- **Before/after:** Baseline for cartel or monopolization; control for costs/demand.  
+- **Yardstick:** Compare to unaffected markets or products.  
+- **Diff-in-diff:** For mergers, supply shocks, or wage suppression cases.  
+- **Hedonic/regression models:** When product characteristics matter (tech, pharma).
+
+### Scenario/sensitivity tables
+```r
+library(dplyr)
+
+scenarios <- expand.grid(pass_through = c(0.5, 0.7, 0.9), overcharge = c(0.1, 0.2, 0.3)) |>
+  mutate(damages = pass_through * overcharge * 1000)
+scenarios
+```
+Use tornado charts or tables to present ranges; highlight the “central” assumption and explain why alternatives are plausible.
+
+## Daubert/Kumho readiness
+
+1. **Validation:** Compare model outputs to raw data; show that code replicates known benchmarks [@fjc_reference_manual_2011].  
+2. **Sensitivity:** Document how results change with different controls, clustering levels, or sample definitions [@rubinfeld_2010].  
+3. **Alternative specifications:** Provide at least one alternative consistent with the theory of harm; explain why it does or does not materially change outcomes [@baker_rubinfeld_1999].  
+4. **Error checking:** Peer review within the expert team; code audits; reproducibility scripts [@dickey_rubinfeld_2014].
+
+## Presentation and storytelling
+
+- **Exhibits:** Keep figures clean; highlight key numbers; avoid jargon. Use `ggplot2` themes consistent with earlier chapters.  
+- **Timelines:** Combine quantitative and qualitative milestones (evidence triad).  
+- **Deposition prep:** Build Q&A outlines linking each opinion to evidence.  
+- **Trial graphics:** Build layered presentations (overview, methodology, results, robustness).
+
+## Southern African litigation practice notes
+
+- **Bread cartel damages (Tribunal hearings 2007–2010):** Combined CPI microdata, mill cost studies, and consumer testimony; damages model anchored to structural break analysis.  
+- **Sasol polypropylene appeal:** Extensive documentation of export parity benchmarks, incremental cost models, and technical expert testimony on production processes.  
+- **Vodacom/MTN data services commitments:** Monitoring trustees reported quarterly KPIs; Commission used diff-in-diff to show compliance with price-reduction commitments.
+
+## Enhanced Visualizations for Expert Reports
+
+### Common impact distribution
+Demonstrate that the alleged conduct had a common effect across class members, a key requirement for class certification.
+
+```r
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+
+# Simulated individual-level treatment effects
+# Replace with actual class member data from your damages model
+set.seed(789)
+n_members <- 500
+
+class_data <- tibble(
+  member_id = 1:n_members,
+  treatment_effect = rnorm(n_members, mean = 15, sd = 4),  # Common positive impact
+  baseline_damages = runif(n_members, 50, 200),
+  geographic_region = sample(c("Region A", "Region B", "Region C"),
+                             n_members, replace = TRUE),
+  purchase_frequency = sample(c("Low", "Medium", "High"),
+                              n_members, replace = TRUE,
+                              prob = c(0.3, 0.5, 0.2))
+) |>
+  mutate(
+    total_damages = baseline_damages + treatment_effect,
+    purchase_frequency = factor(purchase_frequency,
+                                levels = c("Low", "Medium", "High"))
+  )
+
+# Plot 1: Distribution of treatment effects
+p1 <- ggplot(class_data, aes(x = treatment_effect)) +
+  geom_histogram(bins = 30, fill = "#0072B2", alpha = 0.8,
+                color = "white") +
+  geom_vline(xintercept = mean(class_data$treatment_effect),
+            linetype = "dashed", color = "#D55E00", linewidth = 1.2) +
+  annotate("text",
+          x = mean(class_data$treatment_effect),
+          y = Inf,
+          label = paste0("Mean effect: $",
+                        round(mean(class_data$treatment_effect), 2)),
+          hjust = -0.1, vjust = 2, size = 4, fontface = "bold") +
+  scale_x_continuous(labels = scales::dollar_format()) +
+  labs(
+    title = "Distribution of Individual Treatment Effects",
+    subtitle = "Common impact across class members (positive mean effect)",
+    x = "Treatment Effect ($)",
+    y = "Number of Class Members",
+    caption = "Illustrative data. Replace with actual class member damages calculations."
+  ) +
+  theme_antitrust() +
+  theme(plot.title.position = "plot")
+
+# Plot 2: Treatment effect by subgroup
+p2 <- ggplot(class_data, aes(x = geographic_region,
+                              y = treatment_effect,
+                              fill = geographic_region)) +
+  geom_boxplot(alpha = 0.7, outlier.alpha = 0.3) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Treatment Effect by Geographic Region",
+    subtitle = "Effect is positive across all subgroups (common impact)",
+    x = NULL,
+    y = "Treatment Effect ($)"
+  ) +
+  theme_antitrust() +
+  theme(
+    legend.position = "none",
+    plot.title.position = "plot"
+  )
+
+# Combine plots
+(p1 | p2) + plot_annotation(
+  title = "Common Impact Analysis for Class Certification",
+  subtitle = "Demonstrating that conduct had common effect across class members",
+  caption = "Illustrative data. Replace with actual class member impact calculations."
+)
+```
+
+**Expert report presentation:**
+- Present central estimate prominently
+- Show sensitivity ranges transparently
+- Explain basis for each parameter assumption
+- Link to documentary evidence (pricing data, expert testimony, econometric estimates)
+
+### Evidence provenance network
+Map how different evidence sources support specific expert opinions and damages calculations.
+
+```r
+library(dplyr)
+library(igraph)
+library(ggraph)
+
+# Evidence map: sources -> analysis -> opinions
+# Replace with actual case evidence map
+evidence_edges <- tibble::tribble(
+  ~from,                    ~to,                     ~type,
+  # Data sources to analyses
+  "Transaction data",       "Overcharge estimate",   "data_to_analysis",
+  "Transaction data",       "Market share calc",     "data_to_analysis",
+  "Cost data",              "Margin analysis",       "data_to_analysis",
+  "Pricing documents",      "Overcharge estimate",   "doc_to_analysis",
+  "Meeting notes",          "Cartel timeline",       "doc_to_analysis",
+  "Email evidence",         "Cartel timeline",       "doc_to_analysis",
+  "Witness testimony",      "Cartel timeline",       "testimony_to_analysis",
+  "Competitor prices",      "But-for benchmark",     "data_to_analysis",
+
+  # Analyses to opinions
+  "Overcharge estimate",    "Opinion 1: Price impact", "analysis_to_opinion",
+  "Market share calc",      "Opinion 2: Market power", "analysis_to_opinion",
+  "Margin analysis",        "Opinion 1: Price impact", "analysis_to_opinion",
+  "Cartel timeline",        "Opinion 3: Duration",     "analysis_to_opinion",
+  "But-for benchmark",      "Opinion 4: Damages",      "analysis_to_opinion",
+  "Overcharge estimate",    "Opinion 4: Damages",      "analysis_to_opinion"
+)
+
+# Create node attributes
+nodes <- tibble(
+  name = unique(c(evidence_edges$from, evidence_edges$to))
+) |>
+  mutate(
+    category = case_when(
+      grepl("data|prices", name) ~ "Data source",
+      grepl("documents|notes|Email", name) ~ "Documentary evidence",
+      grepl("testimony", name) ~ "Witness testimony",
+      grepl("Opinion", name) ~ "Expert opinion",
+      TRUE ~ "Analysis"
+    )
+  )
+
+# Create network
+g <- graph_from_data_frame(evidence_edges, directed = TRUE, vertices = nodes)
+
+# Plot
+ggraph(g, layout = "sugiyama") +
+  geom_edge_link(aes(color = type),
+                arrow = arrow(length = unit(3, 'mm'), type = "closed"),
+                end_cap = circle(8, 'mm'),
+                alpha = 0.6) +
+  geom_node_point(aes(color = category, size = category),
+                 alpha = 0.8) +
+  geom_node_text(aes(label = name), repel = TRUE, size = 3) +
+  scale_edge_color_manual(
+    values = c(
+      "data_to_analysis" = "#0072B2",
+      "doc_to_analysis" = "#009E73",
+      "testimony_to_analysis" = "#F0E442",
+      "analysis_to_opinion" = "#D55E00"
+    ),
+    labels = c(
+      "data_to_analysis" = "Data → Analysis",
+      "doc_to_analysis" = "Documents → Analysis",
+      "testimony_to_analysis" = "Testimony → Analysis",
+      "analysis_to_opinion" = "Analysis → Opinion"
+    )
+  ) +
+  scale_color_manual(
+    values = c(
+      "Data source" = "#0072B2",
+      "Documentary evidence" = "#009E73",
+      "Witness testimony" = "#F0E442",
+      "Analysis" = "#CC79A7",
+      "Expert opinion" = "#D55E00"
+    )
+  ) +
+  scale_size_manual(
+    values = c(
+      "Data source" = 5,
+      "Documentary evidence" = 5,
+      "Witness testimony" = 5,
+      "Analysis" = 7,
+      "Expert opinion" = 9
+    )
+  ) +
+  labs(
+    title = "Evidence Provenance Network",
+    subtitle = "Tracing evidence sources through analyses to expert opinions",
+    edge_color = "Connection Type",
+    color = "Evidence Category",
+    caption = "Each expert opinion should be supported by multiple independent evidence sources."
+  ) +
+  theme_graph(base_size = 12) +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(size = 14, face = "bold")
+  ) +
+  guides(size = "none")
+
+# Summary statistics
+cat("\nEvidence network summary:\n")
+cat(paste0("Total evidence sources: ",
+          sum(nodes$category %in% c("Data source", "Documentary evidence",
+                                    "Witness testimony")), "\n"))
+cat(paste0("Intermediate analyses: ",
+          sum(nodes$category == "Analysis"), "\n"))
+cat(paste0("Expert opinions: ",
+          sum(nodes$category == "Expert opinion"), "\n"))
+```
+
+**Daubert/Kumho preparation:**
+- Each opinion traceable to specific evidence
+- Multiple independent sources support key findings
+- Clear methodology from raw data to conclusion
+- Document all transformations and assumptions
+
+### Expert timeline and deliverables
+Track expert work product and key milestones for case management.
+
+```r
+source("program/R/helpers.R")
+library(dplyr)
+
+# Expert engagement timeline
+# Replace with actual case dates
+expert_timeline <- tibble::tribble(
+  ~date,         ~event,                                ~category,
+  "2023-01-15",  "Expert retained",                     "Engagement",
+  "2023-02-01",  "Initial data production received",    "Data",
+  "2023-03-15",  "Preliminary analysis complete",       "Analysis",
+  "2023-04-10",  "Supplemental data request",           "Data",
+  "2023-05-01",  "Draft report circulated",             "Report",
+  "2023-05-20",  "Rebuttal expert report received",     "Opposing expert",
+  "2023-06-15",  "Final expert report submitted",       "Report",
+  "2023-07-30",  "Expert deposition",                   "Deposition",
+  "2023-09-15",  "Supplemental analysis (new data)",    "Analysis",
+  "2023-10-01",  "Sur-reply report submitted",          "Report",
+  "2023-11-20",  "Pre-trial conference",                "Court",
+  "2024-01-15",  "Trial testimony",                     "Trial",
+  "2024-02-28",  "Post-trial briefing",                 "Court"
+) |>
+  mutate(date = as.Date(date))
+
+# Create timeline
+plot_timeline(
+  events = expert_timeline,
+  title = "Expert Engagement Timeline",
+  date_breaks = "2 months"
+)
+
+# Add summary table
+cat("\nKey deliverables:\n")
+expert_timeline |>
+  filter(category %in% c("Report", "Deposition", "Trial")) |>
+  select(date, event, category) |>
+  print(n = Inf)
+```
+
+### Individual vs. aggregate damages
+Show how individual class member damages aggregate to total class damages, important for both class certification and damages calculation.
+
+```r
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+
+# Simulated individual damages for class members
+# Replace with actual damages calculations
+set.seed(890)
+n_class <- 1000
+
+individual_damages <- tibble(
+  member_id = 1:n_class,
+  purchases = rpois(n_class, lambda = 50),  # Number of affected purchases
+  avg_overcharge = rnorm(n_class, mean = 5.50, sd = 1.20),  # Per-unit overcharge
+  damages = purchases * avg_overcharge
+) |>
+  arrange(desc(damages)) |>
+  mutate(
+    cumulative_damages = cumsum(damages),
+    percentile = percent_rank(damages),
+    damages_category = case_when(
+      damages < 100 ~ "< $100",
+      damages < 500 ~ "$100-500",
+      damages < 1000 ~ "$500-1,000",
+      TRUE ~ "> $1,000"
+    ),
+    damages_category = factor(damages_category,
+                             levels = c("< $100", "$100-500",
+                                       "$500-1,000", "> $1,000"))
+  )
+
+# Plot 1: Distribution of individual damages
+p1 <- ggplot(individual_damages, aes(x = damages)) +
+  geom_histogram(bins = 40, fill = "#0072B2", alpha = 0.8, color = "white") +
+  geom_vline(xintercept = median(individual_damages$damages),
+            linetype = "dashed", color = "#D55E00", linewidth = 1) +
+  annotate("text",
+          x = median(individual_damages$damages),
+          y = Inf,
+          label = paste0("Median: $",
+                        round(median(individual_damages$damages), 2)),
+          hjust = -0.1, vjust = 2, size = 3.5) +
+  scale_x_continuous(labels = scales::dollar_format()) +
+  labs(
+    title = "Distribution of Individual Class Member Damages",
+    x = "Individual Damages ($)",
+    y = "Number of Class Members"
+  ) +
+  theme_antitrust() +
+  theme(plot.title.position = "plot")
+
+# Plot 2: Lorenz curve (cumulative damages)
+p2 <- ggplot(individual_damages,
+            aes(x = percent_rank(row_number(member_id)),
+                y = cumulative_damages / max(cumulative_damages))) +
+  geom_line(color = "#0072B2", linewidth = 1.2) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed",
+             color = "gray40") +
+  annotate("text", x = 0.3, y = 0.7,
+          label = "Line of equality\n(uniform damages)",
+          hjust = 0, size = 3) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(
+    title = "Cumulative Damages Distribution (Lorenz Curve)",
+    x = "Cumulative % of Class Members (ranked by damages)",
+    y = "Cumulative % of Total Damages"
+  ) +
+  theme_antitrust() +
+  theme(plot.title.position = "plot")
+
+# Plot 3: Damages by category
+damages_summary <- individual_damages |>
+  group_by(damages_category) |>
+  summarise(
+    count = n(),
+    total_damages = sum(damages),
+    .groups = "drop"
+  ) |>
+  mutate(
+    pct_members = count / sum(count),
+    pct_damages = total_damages / sum(total_damages)
+  )
+
+p3 <- ggplot(damages_summary, aes(x = damages_category,
+                                  y = pct_members, fill = damages_category)) +
+  geom_col(alpha = 0.8) +
+  geom_text(aes(label = scales::percent(pct_members, accuracy = 0.1)),
+           vjust = -0.5, size = 3.5) +
+  scale_y_continuous(labels = scales::percent_format(),
+                    expand = expansion(mult = c(0, 0.1))) +
+  scale_fill_brewer(palette = "Blues") +
+  labs(
+    title = "Class Members by Damages Category",
+    x = "Individual Damages Range",
+    y = "% of Class Members"
+  ) +
+  theme_antitrust() +
+  theme(
+    legend.position = "none",
+    plot.title.position = "plot"
+  )
+
+# Combine plots
+(p1 | p2) / p3 + plot_annotation(
+  title = "Individual and Aggregate Damages Analysis",
+  subtitle = paste0("Total class: ", scales::comma(n_class),
+                   " members | Total damages: $",
+                   round(sum(individual_damages$damages) / 1e6, 2), "M"),
+  caption = "Illustrative data. Replace with actual class member damages calculations."
+)
+
+# Summary statistics
+cat("\nDamages distribution summary:\n")
+cat(paste0("Total class members: ", scales::comma(n_class), "\n"))
+cat(paste0("Total damages: $",
+          round(sum(individual_damages$damages) / 1e6, 2), "M\n"))
+cat(paste0("Mean individual damages: $",
+          round(mean(individual_damages$damages), 2), "\n"))
+cat(paste0("Median individual damages: $",
+          round(median(individual_damages$damages), 2), "\n"))
+cat(paste0("Top 10% of class accounts for ",
+          scales::percent(sum(individual_damages$damages[
+            individual_damages$percentile >= 0.9]) /
+            sum(individual_damages$damages), accuracy = 0.1),
+          " of total damages\n"))
+```
+
+**Class certification considerations:**
+- Show damages are calculable on class-wide basis
+- Document methodology for individual damages calculations
+- Address potential administrative feasibility concerns
+- Prepare for de minimis exclusion arguments
+
+## Visualizations and data plan
+- **Common impact distribution plot:** Use class-member residuals or individual damages estimates; store sanitized dataset in `data/examples/common-impact.csv`.
+- **Scenario/sensitivity tornado charts:** Build from `litigation-sensitivity` scaffold.
+- **Evidence provenance diagram:** Use `DiagrammeR` or `ggplot2` to map data sources to opinions; data from evidence map spreadsheet.
+
+## Checklist for "fill with real data"
+
+- Link every figure/code chunk to a dataset entry in `data/README.md`.
+- Maintain sanitized or synthetic datasets for public builds; swap in confidential data before expert report filing.
+- Capture hashed outputs (`.rds`, `.parquet`) so exhibits can be regenerated quickly.
+- Coordinate with litigation support to ensure document IDs and privilege status are preserved.
+
+## Looking ahead
+Archive all litigation outputs in `data/derived/litigation/` with clear version control and privilege markings. Cross-reference expert opinions with substantive chapters (cartels Ch. 05, mergers Ch. 06, etc.) for methodological support. Document all code reviews and sensitivity analyses in appendices to expert reports. Coordinate with legal team on discovery timelines and protective orders for confidential data.
