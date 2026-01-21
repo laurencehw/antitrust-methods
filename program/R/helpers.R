@@ -233,7 +233,13 @@ fetch_bls <- function(series_id, start_year = 2010, end_year = as.numeric(format
   response
 }
 
-# Quick Census API pull
+#' Quick Census API pull
+#'
+#' @param dataset Character. Census dataset name (e.g., "acs/acs5")
+#' @param vintage Integer. Year of the dataset
+#' @param vars Character vector. Variables to retrieve
+#' @param region Character. Geographic region specification
+#' @return Data frame with Census data
 fetch_census <- function(dataset, vintage = 2021, vars, region = "us:*") {
   if (!requireNamespace("censusapi", quietly = TRUE)) {
     stop("Install censusapi to fetch Census data.")
@@ -245,5 +251,188 @@ fetch_census <- function(dataset, vintage = 2021, vars, region = "us:*") {
     vars = vars,
     region = region,
     key = Sys.getenv("CENSUS_API_KEY")
+  )
+}
+
+#' Waterfall chart for cumulative changes (e.g., HHI, royalty stacks)
+#'
+#' Creates a waterfall chart showing how values accumulate or change across
+#' categories. Useful for merger HHI analysis, royalty stacks, and damages
+#' decompositions.
+#'
+#' @param data Data frame with columns: category (character), value (numeric)
+#' @param category_col Character. Name of column with category labels
+#' @param value_col Character. Name of column with numeric values
+#' @param fill_col Character. Optional column for fill color grouping
+#' @param title Character. Plot title
+#' @param subtitle Character. Plot subtitle
+#' @param y_label Character. Y-axis label
+#' @param show_connector Logical. Show dashed lines connecting bars
+#' @param total_label Character. Label for the total bar (NULL to omit)
+#' @return A ggplot2 object
+#'
+#' @examples
+#' # HHI change waterfall
+#' hhi_data <- tibble::tibble(
+#'   category = c("Pre-merger HHI", "Lost competition", "Post-merger HHI"),
+#'   value = c(1800, 400, NA)
+#' )
+#' plot_waterfall(hhi_data, "category", "value", title = "HHI Change")
+plot_waterfall <- function(data,
+                           category_col = "category",
+                           value_col = "value",
+                           fill_col = NULL,
+                           title = "Waterfall Chart",
+                           subtitle = NULL,
+                           y_label = "Value",
+                           show_connector = TRUE,
+                           total_label = NULL) {
+
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Install ggplot2 to create waterfall charts.")
+  }
+
+  # Prepare data with cumulative values
+  df <- data.frame(
+    cat = data[[category_col]],
+    val = data[[value_col]]
+  )
+
+  # Calculate running totals for waterfall positioning
+  df$end <- cumsum(df$val)
+  df$start <- c(0, head(df$end, -1))
+
+  # Add total bar if requested
+  if (!is.null(total_label)) {
+    total_row <- data.frame(
+      cat = total_label,
+      val = df$end[nrow(df)],
+      start = 0,
+      end = df$end[nrow(df)]
+    )
+    df <- rbind(df, total_row)
+  }
+
+  # Preserve category order
+  df$cat <- factor(df$cat, levels = df$cat)
+
+  # Color by increase/decrease
+
+  df$direction <- ifelse(df$val >= 0, "Increase", "Decrease")
+
+  p <- ggplot2::ggplot(df) +
+    ggplot2::geom_rect(
+      ggplot2::aes(
+        xmin = as.numeric(cat) - 0.4,
+        xmax = as.numeric(cat) + 0.4,
+        ymin = start,
+        ymax = end,
+        fill = direction
+      ),
+      color = "white",
+      linewidth = 0.5
+    )
+
+  # Add connector lines between bars
+  if (show_connector && nrow(df) > 1) {
+    connectors <- df[-nrow(df), ]
+    connectors$x_start <- as.numeric(factor(connectors$cat, levels = levels(df$cat))) + 0.4
+    connectors$x_end <- connectors$x_start + 0.2
+
+    p <- p + ggplot2::geom_segment(
+      data = connectors,
+      ggplot2::aes(x = x_start, xend = x_end, y = end, yend = end),
+      linetype = "dashed",
+      color = "gray50",
+      linewidth = 0.5
+    )
+  }
+
+  # Add value labels centered in each bar
+  p <- p + ggplot2::geom_text(
+    ggplot2::aes(
+      x = as.numeric(cat),
+      y = (start + end) / 2,
+      label = round(val, 0)
+    ),
+    size = 3.5,
+    fontface = "bold"
+  )
+
+  # Style the plot
+  p <- p +
+    ggplot2::scale_x_continuous(
+      breaks = seq_along(levels(df$cat)),
+      labels = levels(df$cat)
+    ) +
+    ggplot2::scale_fill_manual(
+      values = c("Increase" = "#D55E00", "Decrease" = "#0072B2"),
+      guide = "none"
+    ) +
+    ggplot2::labs(
+      title = title,
+      subtitle = subtitle,
+      x = NULL,
+      y = y_label
+    ) +
+    theme_antitrust() +
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
+      legend.position = "none"
+    )
+
+  p
+}
+
+#' Calculate HHI and change from market share data
+#'
+#' Computes HHI before and after a merger, with the change (delta HHI).
+#' Uses the 2023 Merger Guidelines thresholds:
+#' - HHI < 1,500: Unconcentrated
+#' - HHI 1,500-2,500: Moderately concentrated
+#' - HHI > 2,500: Highly concentrated
+#' - Delta HHI > 100: May warrant scrutiny
+#'
+#' @param shares Data frame with columns: firm, share (as decimal 0-1)
+#' @param merging_firms Character vector of merging firm names
+#' @return List with pre_hhi, post_hhi, delta_hhi, and shares_post data frame
+#'
+#' @examples
+#' shares <- tibble::tibble(
+#'   firm = c("A", "B", "C", "D"),
+#'   share = c(0.30, 0.25, 0.20, 0.25)
+#' )
+#' calc_hhi_change(shares, c("A", "B"))
+calc_hhi_change <- function(shares, merging_firms) {
+  stopifnot(all(c("firm", "share") %in% names(shares)))
+
+  # Convert to percentages for HHI calculation (shares * 100)
+  shares$share_pct <- shares$share * 100
+
+  # Pre-merger HHI: sum of squared market shares
+  pre_hhi <- sum(shares$share_pct^2)
+
+  # Post-merger: combine merging firms' shares
+  merged_share <- sum(shares$share_pct[shares$firm %in% merging_firms])
+  merged_name <- paste(merging_firms, collapse = "+")
+
+  shares_post <- shares[!shares$firm %in% merging_firms, ]
+  shares_post <- rbind(
+    shares_post,
+    data.frame(
+      firm = merged_name,
+      share = merged_share / 100,
+      share_pct = merged_share
+    )
+  )
+
+  # Post-merger HHI
+  post_hhi <- sum(shares_post$share_pct^2)
+
+  list(
+    pre_hhi = round(pre_hhi, 0),
+    post_hhi = round(post_hhi, 0),
+    delta_hhi = round(post_hhi - pre_hhi, 0),
+    shares_post = shares_post
   )
 }

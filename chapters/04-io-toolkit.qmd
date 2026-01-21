@@ -1,4 +1,8 @@
-# Industrial Organization Toolkit
+# Industrial Organization Toolkit {#sec-io-toolkit}
+
+The previous chapters established how to define markets and conduct causal research. We now turn to the analytical machinery that powers much of modern antitrust analysis: the industrial organization (IO) toolkit. These methods allow us to model how firms compete, estimate parameters like marginal costs and demand elasticities, and simulate the effects of mergers or conduct before they occur.
+
+This chapter occupies a pivotal position in the book. The demand models, cost estimates, and bargaining frameworks introduced here feed directly into the merger simulations in Chapter 6, the exclusionary conduct analysis in Chapter 7, and the digital markets analysis in Chapter 9. Master these tools, and you will be equipped to tackle nearly any quantitative antitrust question.
 
 ## Learning goals
 This chapter bridges descriptive evidence and full-blown merger simulations. You will learn when to deploy lightweight demand or supply models, how to explain their assumptions to agencies and courts, and how to integrate qualitative evidence (contracts, governance documents, interviews) so the results feel grounded.
@@ -35,6 +39,28 @@ Antitrust economics relies on two distinct methodological traditions. Understand
 
 ### Complementarity in Practice
 In modern practice, these approaches reinforce each other. You might use a **reduced-form** event study to show that a past merger in the same industry raised prices by 5%. You then calibrate a **structural** simulation model to reproduce that 5% increase. Once the model is "validated" by the historical data, you can confidently use it to predict the effects of the *current* merger.
+
+| Criterion | Structural (Simulation) | Reduced-Form (Causal) |
+|:----------|:------------------------|:---------------------|
+| **Question** | "What will happen?" | "What did happen?" |
+| **Data needs** | Prices, shares, characteristics | Treatment/control, panel |
+| **Assumptions** | Equilibrium model, functional form | Parallel trends, exogeneity |
+| **Output** | Predicted price changes | Estimated effects |
+| **Robustness** | Sensitivity to model choice | Placebo tests, pre-trends |
+| **Agency preference** | Mergers (prospective) | Retrospectives, damages |
+| **Key packages** | `BLPestimatoR`, custom code | `fixest`, `did`, `synthdid` |
+
+::: {.callout-important title="Key IO Formulas"}
+| Formula | Definition | Use Case |
+|:--------|:-----------|:---------|
+| **UPP** = Diversion x Margin - Efficiency | Upward Pricing Pressure | Merger screening |
+| **GUPPI** = Diversion x Margin | Gross UPP (no efficiencies) | Agency benchmarks |
+| **Lerner Index** = (P - MC) / P | Price-cost margin | Market power proxy |
+| **Pass-through** = dP/dC | Price response to cost | Damages, EDM |
+| **Critical Loss** = SSNIP / (SSNIP + Margin) | Break-even loss for SSNIP | Market definition |
+| **HHI** = Sum of squared shares | Concentration index | Structural presumption |
+| **Delta HHI** = 2 x Share1 x Share2 | Merger-induced HHI change | Screening threshold |
+:::
 
 ::: {.callout-note title="Method box"}
 **UPP/GUPPI.** Use diversion ratios and margins to compute Upward Pricing Pressure (UPP) or Gross Upward Pricing Pressure Index (GUPPI). See Farrell & Shapiro (2010) "Antitrust Evaluation of Horizontal Mergers: An Economic Alternative to Market Definition" for the theoretical foundation.  

@@ -1,4 +1,6 @@
-# Orientation: Antitrust and Regulation
+# Orientation: Antitrust and Regulation {#sec-orientation}
+
+Before diving into specific methods, we need to understand the institutional landscape where antitrust analysis occurs. This chapter provides that foundation. Economic analysis does not happen in a vacuum---it responds to legal standards, agency priorities, and procedural constraints that vary across jurisdictions. Understanding these institutions will help you frame your analyses to address the questions that actually matter in practice.
 
 ## Learning goals
 This opening chapter orients you to the institutional settings where economists, researchers, and lawyers work side by side. By the end you should be able to articulate how competition authorities define their objectives, how they translate statutes or guidelines into investigative hypotheses, and how evidentiary burdens shift between agencies and courts. You will also learn how to map economic questions—market definition, market power, theory of harm, efficiencies, and remedy selection—onto the specific legal elements regulators must prove or rebut.
@@ -15,6 +17,17 @@ Post-2000 history matters for understanding current doctrine. The Clinton-era Mi
 Across the Atlantic, the European Commission's Directorate-General for Competition (DG COMP) pairs investigations with inquisitorial decision making, while national authorities like the UK Competition and Markets Authority (CMA) play an increasingly global role—for example, blocking Microsoft/Activision until remedies evolved. Asian agencies—including Japan's JFTC, Korea's KFTC, and China's SAMR—have expanded resources to scrutinize digital markets and cross-border conduct.
 
 For practitioners working in Southern Africa, the Competition Commission and Competition Tribunal are essential reference points. These bodies have expanded their focus to digital markets, food supply chains, and cartels affecting the Southern African Development Community (SADC). Understanding each body's statutory tests, procedural timelines, and evidentiary cultures is essential to crafting persuasive analyses.
+
+::: {.callout-tip title="Definition: Key Antitrust Concepts"}
+| Term | Definition |
+|:-----|:-----------|
+| **Market Power** | The ability to profitably raise prices above competitive levels or exclude competitors |
+| **Relevant Market** | The product and geographic scope where competitive effects are assessed |
+| **Theory of Harm** | The causal mechanism by which conduct is alleged to harm competition |
+| **Efficiencies** | Cost savings or quality improvements that may offset anticompetitive effects |
+| **Consumer Welfare** | The standard measuring harm to buyers (price, quality, choice, innovation) |
+| **Public Interest** | Non-efficiency factors (employment, SMEs, ownership) considered in some jurisdictions |
+:::
 
 ### Comparative statute mapping
 
@@ -44,6 +57,33 @@ When advising on multi-jurisdictional matters, map the same conduct to each regi
 ### Workflow from intake to remedies
 
 Having mapped these institutions and their statutory frameworks, practitioners must translate regulatory mandates into operational workflows. The section below outlines the typical arc from case intake through remedy selection, highlighting key decision points where economic analysis informs legal strategy.
+
+::: {.callout-note title="Investigation Workflow Overview"}
+```
+INTAKE                 SCOPING                ANALYSIS               DECISION
+   |                      |                      |                      |
+   v                      v                      v                      v
++--------------+    +--------------+    +--------------+    +--------------+
+| Complaint /  |    | Data         |    | Market       |    | Statement    |
+| Leniency /   |--->| inventory &  |--->| definition & |--->| of Issues /  |
+| Notification |    | custodians   |    | effects      |    | White Paper  |
++--------------+    +--------------+    +--------------+    +--------------+
+       |                  |                   |                    |
+       v                  v                   v                    v
+  "Hot docs"         Preservation        Econometric          Remedies
+  triage             protocols           + qualitative        discussion
+                          |                   |
+                          v                   v
+                    +--------------+    +--------------+
+                    | Quick        |    | Test         |
+                    | screens:     |    | theories:    |
+                    | - Shares/HHI |    | - DiD / IV   |
+                    | - Entry data |    | - Simulation |
+                    | - Margins    |    | - Documents  |
+                    +--------------+    +--------------+
+```
+**Key decision points:** At each transition, evaluate whether additional data work or qualitative evidence offers the better marginal return given deadlines and burden of proof.
+:::
 
 Regardless of jurisdiction, investigations follow a recognizable arc. Matters typically begin with a complaint, leniency application, or merger notification. Case teams triage with “hot docs” and quick descriptive analytics, draft a plan that allocates legal and economic workstreams, and establish preservation plus data-request protocols. The second phase is scoping: enumerating data systems, prioritizing custodians, negotiating production formats, and deciding whether to run early econometric screens—such as price-cost margins or diversion ratios—before collecting more costly qualitative evidence. In phase three the team synthesizes theory and evidence into statements of issues, white papers, or ultimately pleadings and testimony. Finally, remedies discussions integrate forward-looking modeling with institutional constraints: can the Competition Tribunal in Pretoria supervise behavioral commitments as effectively as US courts, or is divestiture the only reliable fix? Always document these choices so that tribunals (and future teams) can reconstruct the evidentiary chain.
 

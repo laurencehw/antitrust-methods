@@ -1,4 +1,8 @@
-# Mergers
+# Mergers {#sec-mergers}
+
+Merger analysis brings together nearly everything from the preceding chapters. Market definition (Chapter 3) establishes the competitive boundaries. The IO toolkit (Chapter 4) provides the simulation machinery. The cartel chapter's (Chapter 5) coordinated effects framework informs our assessment of whether a merger facilitates tacit collusion. And the qualitative evidence protocols from Chapter 2 guide how we integrate internal documents, customer testimony, and efficiency claims.
+
+This chapter provides a practical workflow for merger review. We move from transaction overview through shares and concentration metrics, unilateral and coordinated effects analysis, vertical theories, efficiency evaluation, and finally to remedy design. Throughout, we emphasize the differences in legal standards and analytical approaches across the major jurisdictions---US, EU, UK, and South Africa---because merger practitioners increasingly operate in a multi-jurisdictional environment.
 
 ## Learning goals
 Merger reviews synthesize everything covered so far: market definition, IO modeling, qualitative evidence, and remedies. This chapter provides a practical workflow for assessing unilateral, coordinated, vertical, and public-interest effects across US, EU/UK, and South African jurisdictions, drawing on agency guidance [@doj_ftc_hmg_2023; @ec_hmg_2004; @cma_merger_assessment_2021].
@@ -13,6 +17,36 @@ By the end you should be able to:
 ## Core topics
 
 Merger analysis synthesizes the tools from previous chapters into a coherent assessment of whether a transaction will harm competition. This section covers the major theories of harm and the workflow for evaluating each.
+
+::: {.callout-note title="Merger Review Workflow"}
+```
+PHASE 1: SCREENING              PHASE 2: DEEP DIVE              PHASE 3: DECISION
+       |                              |                              |
+       v                              v                              v
++----------------+            +----------------+            +----------------+
+| Transaction    |            | Unilateral     |            | Efficiency     |
+| overview &     |            | effects:       |            | evaluation &   |
+| market mapping |----------->| UPP/GUPPI +    |----------->| Remedy design  |
+|                |            | Simulation     |            |                |
++----------------+            +----------------+            +----------------+
+       |                              |                              |
+       v                              v                              v
++----------------+            +----------------+            +----------------+
+| Shares, HHI &  |            | Coordinated    |            | Decision:      |
+| diversion      |            | effects:       |            | Clear / Block  |
+| calculation    |            | Maverick +     |            | / Remedies     |
+|                |            | symmetry       |            |                |
++----------------+            +----------------+            +----------------+
+       |                              |
+       v                              v
++----------------+            +----------------+
+| Flag: Above    |            | Vertical/mixed |
+| 1,800 HHI +    |            | vUPP vs. EDM   |
+| 100 delta?     |            | analysis       |
++----------------+            +----------------+
+```
+**Agency timelines:** US HSR (30 days initial, 30+ days Phase II) | EU EUMR (25+90 working days) | UK CMA (40+24 weeks) | SA (60 business days)
+:::
 
 **Horizontal mergers** eliminate competition between direct rivals. The key questions are:
 
@@ -59,10 +93,17 @@ Merger analysis synthesizes the tools from previous chapters into a coherent ass
 ```{r}
 #| label: merger-upp-example
 #| message: false
+#| warning: false
 library(dplyr)
+
+#' Calculate Upward Pricing Pressure (UPP) for a merger
+#' @param diversion Fraction of lost sales that go to the merger partner
+#' @param price Price of the product losing sales
+#' @param margin Lerner margin (P-MC)/P as decimal
+#' @param efficiency Per-unit cost savings from merger synergies
 upp <- function(diversion, price, margin, efficiency = 0) {
   # UPP = diverted profit - efficiencies
-  # margin = (P-C)/P, so price * margin = P - C = profit per unit
+  # margin = (P-MC)/P, so price * margin = P - MC = profit per unit
   diversion * price * margin - efficiency
 }
 
@@ -668,6 +709,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(patchwork)
+source("program/R/helpers.R")
 
 # Simulated market data (replace with actual transaction/Nielsen data)
 market_pre <- tibble::tribble(
@@ -835,6 +877,7 @@ A waterfall chart decomposes the predicted post-merger price change into its com
 #| fig-height: 7
 library(dplyr)
 library(ggplot2)
+source("program/R/helpers.R")
 
 # Simulation components (from a differentiated products model)
 # Replace with actual simulation outputs

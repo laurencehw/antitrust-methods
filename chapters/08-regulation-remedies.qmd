@@ -1,4 +1,8 @@
-# Regulation and Remedies
+# Regulation and Remedies {#sec-regulation-remedies}
+
+The preceding chapters focused on diagnosing competitive harm---identifying cartels, predicting merger effects, and establishing exclusionary conduct. But identifying harm is only half the job. This chapter addresses what comes next: designing remedies that actually work and, in some cases, ongoing regulatory frameworks that substitute for competition where markets cannot be made competitive.
+
+Remedy design requires different skills than liability analysis. You must think dynamically about how firms will respond to constraints, whether trustees can effectively monitor behavioral commitments, and whether structural relief will create viable competitors. The economic tools are familiar---cost analysis, benchmarking, causal inference for evaluation---but the application shifts from diagnosis to prescription.
 
 ## Learning goals
 Antitrust analysis often ends with a liability finding, but policy work begins there. This chapter explains how to translate theories of harm into durable remedies and how to design regulatory frameworks when competition alone cannot discipline pricing or access. You will learn to:
@@ -13,12 +17,51 @@ Competition authorities increasingly pair enforcement with sector inquiries that
 
 ## Workflow overview
 
+::: {.callout-note title="Remedy Design and Evaluation Workflow"}
+```
+DIAGNOSIS                 DESIGN                    IMPLEMENTATION
+    |                        |                           |
+    v                        v                           v
++-------------+        +-------------+            +-------------+
+| Identify    |        | Match       |            | Specify     |
+| source of   |------->| remedy to   |----------->| monitoring  |
+| market      |        | theory of   |            | & compliance|
+| power/harm  |        | harm        |            | framework   |
++-------------+        +-------------+            +-------------+
+    |                        |                           |
+    v                        v                           v
++-------------+        +-------------+            +-------------+
+| Natural     |        | STRUCTURAL: |            | KPIs &      |
+| monopoly?   |        | Divestiture |            | dashboards  |
+| Entry       |        | Asset swap  |            |             |
+| barriers?   |        +-------------+            +-------------+
+| Conduct?    |               |                         |
++-------------+               v                         v
+                       +-------------+            +-------------+
+                       | BEHAVIORAL: |            | Trustee     |
+                       | Access      |            | reports &   |
+                       | MFN bans    |            | audits      |
+                       | Pricing     |            +-------------+
+                       | Transparency|                   |
+                       +-------------+                   v
+                              |                   +-------------+
+                              v                   | EVALUATION  |
+                       +-------------+            | DiD / Event |
+                       | REGULATORY: |            | studies     |
+                       | Rate-of-    |            | Benchmarks  |
+                       | return      |            +-------------+
+                       | Price-cap   |
+                       +-------------+
+```
+**Key principle:** Remedies must be verifiable, enforceable, and tied directly to the diagnosed harm.
+:::
+
 A typical engagement looks like this:
 
-1. **Diagnose** the source of market power or harm (natural monopoly, entry barriers, conduct).  
-2. **Select regulatory instruments** (rate-of-return, price-cap, access pricing, incentive schemes).  
-3. **Design remedies** matched to the theory of harm (divestitures, access mandates, data-sharing, reporting).  
-4. **Specify monitoring**: KPIs, reporting cadence, trustee authority.  
+1. **Diagnose** the source of market power or harm (natural monopoly, entry barriers, conduct).
+2. **Select regulatory instruments** (rate-of-return, price-cap, access pricing, incentive schemes).
+3. **Design remedies** matched to the theory of harm (divestitures, access mandates, data-sharing, reporting).
+4. **Specify monitoring**: KPIs, reporting cadence, trustee authority.
 5. **Evaluate outcomes** periodically using benchmarking or causal inference.
 
 ## Rate-of-return vs. price-cap regulation
