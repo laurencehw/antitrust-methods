@@ -1,5 +1,9 @@
 # Antitrust and Labor Markets
 
+The preceding chapters focused primarily on product markets---markets where firms sell goods and services to customers. This chapter turns to labor markets, where firms buy the services of workers. The economic logic is parallel but inverted: instead of asking whether sellers have market power to raise prices, we ask whether employers have market power to suppress wages.
+
+Labor antitrust has emerged as a major enforcement priority. The DOJ has brought criminal wage-fixing and no-poach cases; the FTC attempted a nationwide ban on noncompete agreements; and academics have documented substantial labor market concentration in many occupations and regions. The tools are familiar---concentration measurement, causal inference, qualitative evidence---but the application to input markets raises distinctive issues, from the statutory labor exemption to the measurement of commuting zones and occupational boundaries.
+
 ## Learning goals
 Labor cases now sit alongside mergers and cartels in agency priorities. This chapter blends empirical tools from recent academic research on labor market power with practical guidance on using BLS and Census data. You will learn to:
 
@@ -9,6 +13,35 @@ Labor cases now sit alongside mergers and cartels in agency priorities. This cha
 - Design remedies (noncompete bans, pay-transparency orders, notice requirements) and evaluate their effects.
 
 ## Core topics
+
+{% hint style="info" %}
+**Labor Antitrust Analysis Workflow**
+
+```
+MARKET DEFINITION          CONDUCT ANALYSIS          EFFECTS & DAMAGES
+       |                          |                         |
+       v                          v                         v
++--------------+           +--------------+           +--------------+
+| Define labor |           | Identify     |           | Measure wage |
+| market:      |           | restraint:   |           | suppression: |
+| - Occupation |---------->| - No-poach   |---------->| - DiD/Event  |
+| - Geography  |           | - Wage-fix   |           | - Elasticity |
+| - Commute    |           | - Noncompete |           | - Pass-thru  |
++--------------+           +--------------+           +--------------+
+       |                          |                         |
+       v                          v                         v
++--------------+           +--------------+           +--------------+
+| Compute      |           | Review       |           | Calculate    |
+| concentration|           | evidence:    |           | damages:     |
+| - HHI        |           | - HR docs    |           | - Lost wages |
+| - C4         |           | - Agreements |           | - Benefits   |
+| - Elasticity |           | - Comms      |           | - Mobility   |
++--------------+           +--------------+           +--------------+
+```
+
+**Key data sources:** BLS QCEW/OES | Census LEHD/LODES | Stats SA QLFS | Platform APIs | HR records
+{% endhint %}
+
 - Labor concentration (HHI, Herfindahl-Hirschman Index for labor markets) and labor supply elasticity estimates.
 - Event studies and diff-in-diff around policy shocks (noncompete bans, wage disclosure laws, franchise no-poach settlements).
 - Wage-posting vs. realized wage analysis; vacancy scraping; platform data for gig markets.

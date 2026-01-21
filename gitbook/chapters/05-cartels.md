@@ -1,5 +1,9 @@
 # Cartels and Collusion
 
+Cartels represent the clearest antitrust violations---competitors agreeing to fix prices, rig bids, or allocate markets cause direct and quantifiable harm to consumers. Yet proving collusion and measuring damages requires integrating the research design, market definition, and IO tools from earlier chapters into a coherent evidentiary package.
+
+This chapter shows how to detect collusion, measure its effects, and build cases that survive both economic and legal scrutiny. We emphasize the interplay between quantitative screens and qualitative evidence: econometric analysis can establish that prices were artificially elevated, but leniency statements and internal communications provide the smoking gun that confirms coordination. The two streams of evidence reinforce each other.
+
 ## Learning goals
 Cartel enforcement hinges on weaving together quantitative screens, econometric estimates, and documentary evidence. This chapter walks through that workflow using established methodologies from the OECD and academic literature on cartel detection.
 
@@ -11,7 +15,52 @@ By the end you should be able to:
 - Triangulate econometrics with leniency statements, chats, and procurement narratives to build court-ready stories.
 
 ## Workflow roadmap
-1. **Timeline & conduct map.** Build a dated chronology from complaints, internal messages, procurement milestones, and raids. Align suspected mechanisms (bid rotation, geographic allocation, price floors) with specific products and periods.  
+
+{% hint style="info" %}
+**Cartel Detection and Analysis Workflow**
+
+```
+PHASE 1: DETECTION            PHASE 2: ESTIMATION          PHASE 3: LITIGATION
+       |                            |                            |
+       v                            v                            v
++----------------+           +----------------+           +----------------+
+| Intake:        |           | Overcharge     |           | Expert report  |
+| - Leniency app |           | estimation:    |           | preparation:   |
+| - Complaint    |---------->| - Before/after |---------->| - Methodology  |
+| - Market intel |           | - DiD          |           | - Damages      |
++----------------+           | - Yardstick    |           | - Uncertainty  |
+       |                     +----------------+           +----------------+
+       v                            |
++----------------+                  v
+| Screening:     |           +----------------+
+| - Variance     |           | Pass-through   |
+| - Rotation     |           | analysis:      |
+| - Correlation  |           | - Direct/      |
+| - Benford      |           |   indirect     |
++----------------+           +----------------+
+       |
+       v
++----------------+
+| Event/break    |
+| analysis:      |
+| - Raid dates   |
+| - Leniency     |
+| - Regime shift |
++----------------+
+       |
+       v
++----------------+
+| Triangulation: |
+| - Documents    |
+| - Interviews   |
+| - Messaging    |
++----------------+
+```
+
+**Detection triggers:** Leniency applications | Whistleblowers | Market screens | Competitor complaints
+{% endhint %}
+
+1. **Timeline & conduct map.** Build a dated chronology from complaints, internal messages, procurement milestones, and raids. Align suspected mechanisms (bid rotation, geographic allocation, price floors) with specific products and periods.
 2. **Descriptive diagnostics.** Plot prices, costs, and quantities; look for unnatural stability or compression.  
 3. **Screens.** Run variance, digit, and rotation screens to triage markets. Treat them as prioritization tools, not dispositive proof.  
 4. **Event/break tests.** Evaluate how prices or spreads change around raids, leniency announcements, or policy shifts.  

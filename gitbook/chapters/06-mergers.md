@@ -1,5 +1,9 @@
 # Mergers
 
+Merger analysis brings together nearly everything from the preceding chapters. Market definition (Chapter 3) establishes the competitive boundaries. The IO toolkit (Chapter 4) provides the simulation machinery. The cartel chapter's (Chapter 5) coordinated effects framework informs our assessment of whether a merger facilitates tacit collusion. And the qualitative evidence protocols from Chapter 2 guide how we integrate internal documents, customer testimony, and efficiency claims.
+
+This chapter provides a practical workflow for merger review. We move from transaction overview through shares and concentration metrics, unilateral and coordinated effects analysis, vertical theories, efficiency evaluation, and finally to remedy design. Throughout, we emphasize the differences in legal standards and analytical approaches across the major jurisdictions---US, EU, UK, and South Africa---because merger practitioners increasingly operate in a multi-jurisdictional environment.
+
 ## Learning goals
 Merger reviews synthesize everything covered so far: market definition, IO modeling, qualitative evidence, and remedies. This chapter provides a practical workflow for assessing unilateral, coordinated, vertical, and public-interest effects across US, EU/UK, and South African jurisdictions, drawing on agency guidance (DOJ/FTC Merger Guidelines, 2023); (EC Horizontal Merger Guidelines, 2004); (CMA Merger Assessment Guidelines, 2021).
 
@@ -13,6 +17,39 @@ By the end you should be able to:
 ## Core topics
 
 Merger analysis synthesizes the tools from previous chapters into a coherent assessment of whether a transaction will harm competition. This section covers the major theories of harm and the workflow for evaluating each.
+
+{% hint style="info" %}
+**Merger Review Workflow**
+
+```
+PHASE 1: SCREENING              PHASE 2: DEEP DIVE              PHASE 3: DECISION
+       |                              |                              |
+       v                              v                              v
++----------------+            +----------------+            +----------------+
+| Transaction    |            | Unilateral     |            | Efficiency     |
+| overview &     |            | effects:       |            | evaluation &   |
+| market mapping |----------->| UPP/GUPPI +    |----------->| Remedy design  |
+|                |            | Simulation     |            |                |
++----------------+            +----------------+            +----------------+
+       |                              |                              |
+       v                              v                              v
++----------------+            +----------------+            +----------------+
+| Shares, HHI &  |            | Coordinated    |            | Decision:      |
+| diversion      |            | effects:       |            | Clear / Block  |
+| calculation    |            | Maverick +     |            | / Remedies     |
+|                |            | symmetry       |            |                |
++----------------+            +----------------+            +----------------+
+       |                              |
+       v                              v
++----------------+            +----------------+
+| Flag: Above    |            | Vertical/mixed |
+| 1,800 HHI +    |            | vUPP vs. EDM   |
+| 100 delta?     |            | analysis       |
++----------------+            +----------------+
+```
+
+**Agency timelines:** US HSR (30 days initial, 30+ days Phase II) | EU EUMR (25+90 working days) | UK CMA (40+24 weeks) | SA (60 business days)
+{% endhint %}
 
 **Horizontal mergers** eliminate competition between direct rivals. The key questions are:
 
