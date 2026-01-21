@@ -1,5 +1,9 @@
 # Monopolization and Exclusion
 
+The previous chapter examined mergers---transactions that combine formerly independent firms. This chapter turns to conduct by firms that already possess substantial market power. How do dominant firms exclude rivals? When does aggressive competition cross the line into antitrust violation? And how do we measure the harm from exclusionary practices?
+
+These questions require us to integrate all the tools developed so far. Market definition establishes dominance. The IO toolkit provides pricing and foreclosure models. And research design principles guide our empirical measurement of competitive effects. But monopolization cases also demand particular attention to intent evidence and business justifications, making the interplay between quantitative and qualitative evidence especially critical.
+
 ## Learning goals
 - Analyze exclusionary conduct (predation, rebates, tying, MFNs, vertical restraints).
 - Connect theory to measurable foreclosure and consumer harm.
@@ -23,6 +27,48 @@ Throughout, we emphasize reproducibility and transparency. Code boxes demonstrat
 For deeper context, consult the extensive case law on exclusionary conduct, including landmark decisions like *United States v. Microsoft* (*United States v. Microsoft*, 2001) and the European Commission's decisions on abuse of dominance (Ec Article102 Guidance, 2009). For theoretical foundations, see (Whinston, 2006) and (Salop & Scheffman, 1983) on raising rivals' costs.
 
 ## Market power and the monopolization workflow
+
+{% hint style="info" %}
+**Monopolization Analysis Workflow**
+
+```
+STEP 1: MARKET POWER          STEP 2: CONDUCT               STEP 3: EFFECTS
+       |                            |                            |
+       v                            v                            v
++----------------+           +----------------+           +----------------+
+| Market         |           | Identify       |           | Measure        |
+| definition     |           | conduct type:  |           | foreclosure &  |
+| (Chapter 3)    |---------->| - Predation    |---------->| harm:          |
+|                |           | - Rebates      |           | - Share loss   |
++----------------+           | - Tying        |           | - Entry/exit   |
+       |                     | - MFNs         |           | - Price effects|
+       v                     | - Refusal      |           +----------------+
++----------------+           +----------------+                  |
+| Dominance      |                  |                            v
+| evidence:      |                  v                     +----------------+
+| - Shares >50%  |           +----------------+           | Compare to     |
+| - Barriers     |           | Articulate     |           | counterfactual |
+| - Duration     |           | mechanism:     |           | (absent        |
++----------------+           | - Raise costs  |           | conduct)       |
+                             | - Deny scale   |           +----------------+
+                             | - Leverage     |
+                             +----------------+
+                                    |
+          +---------+---------------+---------------+---------+
+          |                         |                         |
+          v                         v                         v
+STEP 4: JUSTIFICATIONS    STEP 5: BALANCING         STEP 6: REMEDIES
++----------------+        +----------------+        +----------------+
+| Business       |        | Harm vs.       |        | Structural vs. |
+| rationale:     |------->| efficiency     |------->| behavioral:    |
+| - Efficiencies |        | tradeoff       |        | - Divestiture  |
+| - Investment   |        | (Rule of       |        | - Conduct bans |
+| - Quality      |        | reason / AEC)  |        | - Interop/API  |
++----------------+        +----------------+        +----------------+
+```
+
+**Key tests:** Sherman Act Section 2 (US) | Article 102 TFEU (EU) | SA Competition Act Section 8
+{% endhint %}
 
 ### Establishing market power
 

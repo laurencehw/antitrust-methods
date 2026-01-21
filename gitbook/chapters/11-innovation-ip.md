@@ -1,5 +1,9 @@
 # Innovation, Intellectual Property, and Antitrust
 
+Competition policy increasingly grapples with innovation. Mergers may eliminate nascent competitors before they mature. Patent settlements may delay generic entry. Standard-essential patents may enable hold-up of entire industries. These cases require economists to work with unfamiliar evidence---patent portfolios, clinical trial data, standards body submissions---and to think carefully about dynamic competition that unfolds over years rather than the static price effects emphasized in earlier chapters.
+
+This chapter shows how to analyze innovation-related antitrust issues. We cover standard-essential patents and FRAND licensing, pay-for-delay pharmaceutical settlements, killer acquisitions, and the measurement of innovation effects more broadly. The tools include survival analysis for entry timing, event studies around patent announcements, and the integration of technical expert testimony with economic analysis.
+
 ## Learning goals
 Innovation cases require translating R&D pipelines, patent portfolios, and technical standards into competition narratives. This chapter shows how to:
 
