@@ -1,4 +1,8 @@
-# Market Definition and Competitive Landscape
+# Market Definition and Competitive Landscape {#sec-market-definition}
+
+With the research design principles from Chapter 2 in hand, we now turn to one of the foundational tasks in antitrust analysis: defining the relevant market. Market definition is often the first substantive question in any competition matter, and the answer shapes everything that follows---from market share calculations to theories of harm to remedy design.
+
+This chapter builds on the causal inference toolkit introduced earlier, showing how to combine quantitative analysis with qualitative evidence to draw market boundaries that will withstand scrutiny from regulators and courts.
 
 ## Learning goals
 
@@ -14,7 +18,55 @@ By the end of the chapter you should be able to:
 - Reference key precedents (e.g., [@doj_ftc_hmg_2023], [@ec_market_definition_2024], [@cma_merger_assessment_2021]) and literature when defending methodological choices.
 
 ## Why market definition still matters
-Even in unilateral-effects cases where agencies focus on margins, diversion, and price effects directly, courts often ask, “what is the market?” The answer shapes presumptions (HHI thresholds, dominance), jurisdictional hooks (public-interest test vs. consumer welfare), and remedy feasibility. Practitioners should treat market definition as an evidence-integration exercise: describe customer substitution paths, quantify them when possible, and tie those findings to the legal standard at issue (e.g., “reasonable interchangeability” in US case law vs. “sufficiently interchangeable” in EC practice). Keep records of how you screened candidate markets so future teams can expand or narrow scope without re-litigating data prep.
+Even in unilateral-effects cases where agencies focus on margins, diversion, and price effects directly, courts often ask, "what is the market?" The answer shapes presumptions (HHI thresholds, dominance), jurisdictional hooks (public-interest test vs. consumer welfare), and remedy feasibility. Practitioners should treat market definition as an evidence-integration exercise: describe customer substitution paths, quantify them when possible, and tie those findings to the legal standard at issue (e.g., "reasonable interchangeability" in US case law vs. "sufficiently interchangeable" in EC practice). Keep records of how you screened candidate markets so future teams can expand or narrow scope without re-litigating data prep.
+
+::: {.callout-note title="SSNIP Test Decision Flowchart"}
+```
+START: Define candidate market (products + geography)
+                        |
+                        v
++-----------------------------------------------+
+| STEP 1: Identify the focal product(s)         |
+| - Merging parties' products                   |
+| - Alleged dominant firm's products            |
++-----------------------------------------------+
+                        |
+                        v
++-----------------------------------------------+
+| STEP 2: Calculate margin (P - MC) / P         |
+| - Use accounting data, benchmarks, or proxies |
++-----------------------------------------------+
+                        |
+                        v
++-----------------------------------------------+
+| STEP 3: Apply 5-10% hypothetical price        |
+| increase (SSNIP) or quality decrease (SSNDQ)  |
++-----------------------------------------------+
+                        |
+                        v
++-----------------------------------------------+
+| STEP 4: Estimate actual loss (switching)      |
+| - Diversion ratios from data/surveys          |
+| - Cross-price elasticities                    |
+| - Natural experiments                         |
++-----------------------------------------------+
+                        |
+                        v
+          Compare actual loss to critical loss
+          Critical Loss = SSNIP / (SSNIP + Margin)
+                        |
+          +-------------+-------------+
+          |                           |
+          v                           v
+   Actual > Critical           Actual < Critical
+          |                           |
+          v                           v
+   MARKET TOO NARROW           MARKET DEFENSIBLE
+   Expand candidate            Proceed with
+   market and repeat           current definition
+```
+**Key insight:** High-margin firms face lower critical loss thresholds, making it easier to sustain a narrow market definition. Low-margin firms face higher thresholds, often requiring broader markets.
+:::
 
 > "The 'relevant market' is not an intrinsic feature of the economy, but a tool for analyzing competitive effects... It is defined by the constraints that prevent a hypothetical monopolist from raising prices." — *United States v. Google LLC*, Memorandum Opinion (D.D.C. 2024)
 
@@ -91,6 +143,7 @@ This visualization compares the theoretical critical loss threshold to observed 
 library(dplyr)
 library(ggplot2)
 library(patchwork)
+source("program/R/helpers.R")
 
 # Generate critical loss curves for different price increases
 margins <- seq(0.05, 0.60, by = 0.01)
@@ -282,6 +335,7 @@ Understanding where products physically flow helps define geographic markets. Th
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+source("program/R/helpers.R")
 
 # Illustrative shipment flow data
 # In practice, pull from Census Commodity Flow Survey, BEA trade data,
@@ -388,6 +442,7 @@ This example shows how to compute diversion from customer-level switching or cho
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+source("program/R/helpers.R")
 
 # Simulated customer switching data
 # In practice: loyalty card data, survey "next-best" responses,
@@ -540,6 +595,20 @@ A lively debate centers on whether formal market definition remains essential in
 - Cite market definition sources such as US Merger Guidelines SSNIP discussion [@doj_ftc_hmg_2023] and EC Notice on market definition [@ec_market_definition_2024]; add CMA cases for UK context.
 - When using surveys or switching analyses, reference standards on survey reliability (e.g., reference guides, cases admitting/excluding surveys).
 - Flag jurisdictional differences explicitly when SSNDQ or platform-centric approaches apply more than SSNIP (e.g., EU digital contexts).
+:::
+
+::: {.callout-tip title="Key Takeaways"}
+1. **Market definition is a tool, not an end.** The goal is to identify competitive constraints that discipline pricing. Draw boundaries where those constraints meaningfully weaken.
+
+2. **SSNIP provides structure, not answers.** The hypothetical monopolist test is a thought experiment that organizes evidence. It requires data on margins and switching behavior to operationalize.
+
+3. **Critical loss is sensitive to margins.** High-margin products face low critical-loss thresholds, making narrow markets easier to sustain. Always report margin assumptions clearly.
+
+4. **Multiple evidence types reinforce each other.** Combine price correlations, switching matrices, customer testimony, and internal documents. No single method is dispositive.
+
+5. **Geographic markets require travel time and cost analysis.** "Willingness to travel" depends on the product; a 30-minute drive acceptable for groceries may be infeasible for emergency care.
+
+6. **Document your process.** Future teams---and opposing experts---will scrutinize your choices. Keep a record of candidate markets screened, data sources consulted, and assumptions made.
 :::
 
 ## Looking ahead

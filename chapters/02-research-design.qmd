@@ -1,4 +1,8 @@
-# Research Design: Quantitative and Qualitative
+# Research Design: Quantitative and Qualitative {#sec-research-design}
+
+The previous chapter oriented you to the institutions and legal standards that shape antitrust work. With that foundation in place, we now turn to methodology. How do you design research that will persuade regulators, courts, and opposing experts? This chapter introduces the core principles of research design---both quantitative and qualitative---that underpin the specific applications in later chapters.
+
+The goal is not just to learn techniques, but to develop the judgment to choose among them. Different questions call for different methods, and the choice depends as much on available data and institutional constraints as on statistical properties. We emphasize the "credibility revolution" in applied economics while recognizing that qualitative evidence often plays an equally important role in antitrust matters.
 
 ## Learning goals
 The goal of this chapter is to help you translate messy case facts into evidence that withstands scrutiny from opposing experts, agency staff, and judges. You will learn how to articulate research questions that map directly to legal theories of harm and to choose empirical strategies—diff-in-diff, event study, instrumental variables (IV), regression discontinuity (RDD), matching, or structural models—that are feasible with available data. Equally important, you will practice designing qualitative instruments (surveys, interviews, document coding schemes) that align with those empirical tests so each stream of evidence reinforces the others.
@@ -33,6 +37,56 @@ While the toolkit is vast, antitrust practitioners lean heavily on a few workhor
 -   **Synthetic Control:** Crucial for "N=1" cases (e.g., a single national merger) where no single control unit exists.
 -   **Instrumental Variables (IV):** Used when prices are endogenous; we look for "shifters" (like tax changes or weather) that move supply but not demand.
 -   **Regression Discontinuity (RDD):** Exploits arbitrary cutoffs (e.g., population thresholds for regulation) to compare similar firms on either side of the line.
+
+::: {.callout-note title="Method Selection Guide"}
+```
+                            WHAT IS YOUR QUESTION?
+                                     |
+          +--------------------------+---------------------------+
+          |                          |                           |
+          v                          v                           v
+   RETROSPECTIVE              PROSPECTIVE                 DAMAGES
+   "Did X cause Y?"           "Will X cause Y?"           "How much harm?"
+          |                          |                           |
+          v                          v                           v
+   Do you have a             Use STRUCTURAL               Calculate
+   control group?            SIMULATION                   overcharge or
+          |                  (Chapter 4, 6)               lost profits
+    +-----+-----+                                         (Chapter 12)
+    |           |
+    v           v
+   YES          NO
+    |           |
+    v           v
+   DiD or    Synthetic
+   Event     Control or
+   Study     Before/After
+    |
+    v
+   Is treatment
+   timing staggered?
+    |
+    +-----+-----+
+    |           |
+    v           v
+   YES          NO
+    |           |
+    v           v
+   Callaway-  Standard
+   Sant'Anna  TWFE
+   or Sun-    (with
+   Abraham    pre-trends)
+```
+**Key diagnostic:** Always plot raw data before and after treatment. If parallel trends fail visually, no estimator will save you.
+:::
+
+| Method | When to Use | Key Assumption | Antitrust Application |
+|:-------|:------------|:---------------|:---------------------|
+| **DiD** | Policy/merger with clear timing, parallel control group | Parallel trends | Merger retrospectives, cartel breakdowns |
+| **Synthetic Control** | Single treated unit, multiple potential controls | Weights construct valid counterfactual | National mergers, single-market interventions |
+| **IV** | Endogenous treatment/price, valid instrument available | Relevance + exclusion | Demand estimation, price-fixing damages |
+| **RDD** | Sharp cutoff determines treatment | Continuity at threshold | Regulatory thresholds, antitrust exemptions |
+| **Structural** | Forward-looking prediction needed | Model correctly specified | Merger simulation, counterfactual pricing |
 
 ### The Evolution of DiD
 A critical development in recent years is the realization that the standard Two-Way Fixed Effects (TWFE) estimator can be biased when treatment timing varies (staggered adoption). If you are analyzing a rollup strategy where a firm buys competitors in 2018, 2019, and 2020, standard regressions might compare early-treated units to late-treated units in ways that invert the sign of the effect.

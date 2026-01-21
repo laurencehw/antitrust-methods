@@ -1,4 +1,8 @@
-# Monopolization and Exclusion
+# Monopolization and Exclusion {#sec-monopolization}
+
+The previous chapter examined mergers---transactions that combine formerly independent firms. This chapter turns to conduct by firms that already possess substantial market power. How do dominant firms exclude rivals? When does aggressive competition cross the line into antitrust violation? And how do we measure the harm from exclusionary practices?
+
+These questions require us to integrate all the tools developed so far. Market definition establishes dominance. The IO toolkit provides pricing and foreclosure models. And research design principles guide our empirical measurement of competitive effects. But monopolization cases also demand particular attention to intent evidence and business justifications, making the interplay between quantitative and qualitative evidence especially critical.
 
 ## Learning goals
 - Analyze exclusionary conduct (predation, rebates, tying, MFNs, vertical restraints).
@@ -23,6 +27,45 @@ Throughout, we emphasize reproducibility and transparency. Code boxes demonstrat
 For deeper context, consult the extensive case law on exclusionary conduct, including landmark decisions like *United States v. Microsoft* [@us_microsoft_2001] and the European Commission's decisions on abuse of dominance [@ec_article102_guidance_2009]. For theoretical foundations, see @whinston_2006 and @salop_scheffman_1983 on raising rivals' costs.
 
 ## Market power and the monopolization workflow
+
+::: {.callout-note title="Monopolization Analysis Workflow"}
+```
+STEP 1: MARKET POWER          STEP 2: CONDUCT               STEP 3: EFFECTS
+       |                            |                            |
+       v                            v                            v
++----------------+           +----------------+           +----------------+
+| Market         |           | Identify       |           | Measure        |
+| definition     |           | conduct type:  |           | foreclosure &  |
+| (Chapter 3)    |---------->| - Predation    |---------->| harm:          |
+|                |           | - Rebates      |           | - Share loss   |
++----------------+           | - Tying        |           | - Entry/exit   |
+       |                     | - MFNs         |           | - Price effects|
+       v                     | - Refusal      |           +----------------+
++----------------+           +----------------+                  |
+| Dominance      |                  |                            v
+| evidence:      |                  v                     +----------------+
+| - Shares >50%  |           +----------------+           | Compare to     |
+| - Barriers     |           | Articulate     |           | counterfactual |
+| - Duration     |           | mechanism:     |           | (absent        |
++----------------+           | - Raise costs  |           | conduct)       |
+                             | - Deny scale   |           +----------------+
+                             | - Leverage     |
+                             +----------------+
+                                    |
+          +---------+---------------+---------------+---------+
+          |                         |                         |
+          v                         v                         v
+STEP 4: JUSTIFICATIONS    STEP 5: BALANCING         STEP 6: REMEDIES
++----------------+        +----------------+        +----------------+
+| Business       |        | Harm vs.       |        | Structural vs. |
+| rationale:     |------->| efficiency     |------->| behavioral:    |
+| - Efficiencies |        | tradeoff       |        | - Divestiture  |
+| - Investment   |        | (Rule of       |        | - Conduct bans |
+| - Quality      |        | reason / AEC)  |        | - Interop/API  |
++----------------+        +----------------+        +----------------+
+```
+**Key tests:** Sherman Act Section 2 (US) | Article 102 TFEU (EU) | SA Competition Act Section 8
+:::
 
 ### Establishing market power
 
@@ -472,6 +515,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(patchwork)
+source("program/R/helpers.R")
 
 # Scenario: Operating system (OS) vendor bundles media player
 # Tracks bundle penetration and rival media player market share
@@ -635,6 +679,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(patchwork)
+source("program/R/helpers.R")
 
 # Scenario: Hotel booking platforms
 # Pre-MFN: hotels price differently across platforms (Incumbent, Rival A, Rival B, Direct)
@@ -799,6 +844,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(patchwork)
+source("program/R/helpers.R")
 
 # Scenario: Incumbent provides wholesale broadband access AND competes in retail
 # Wholesale price charged to rivals vs. implicit wholesale price to own retail arm
@@ -942,6 +988,7 @@ When evaluating exclusive dealing or loyalty rebate programs, compute the share 
 #| warning: false
 library(dplyr)
 library(ggplot2)
+source("program/R/helpers.R")
 
 # Example: market with 10 customers, dominant firm has exclusive/loyalty contracts with subset
 contracts_data <- data.frame(
@@ -1041,3 +1088,9 @@ contracts[, c("customer", "marginal_units", "effective_marginal_price", "margin_
 - Foreclosure and predation: United Brands (EU), Intel rebates (EU), Qualcomm (US/EU), predation tests (e.g., Brooke Group, AKZO).
 - IP vs. monopoly conduct: refusal to deal/essential facilities and licensing constraints; flag tensions between IP rights and exclusion analysis.
 :::
+
+## Looking ahead
+
+Monopolization analysis produces artifacts---foreclosure calculations, effective price computations, margin squeeze tests---that reappear throughout the remaining chapters. **Chapter 8 (Regulation and Remedies)** addresses what happens after a liability finding: how to design remedies that actually cure the diagnosed harm and how to evaluate whether they work. Many monopolization cases end in consent decrees with behavioral obligations; the next chapter explains how to structure and monitor those commitments.
+
+The exclusionary conduct frameworks in this chapter also apply directly to **Chapter 9 (Digital Markets)**, where platform self-preferencing, default tying, and data leverage cases build on the same analytical foundations. Store your foreclosure share calculations, effective price templates, and event study code in `data/derived/` so they can be adapted for platform-specific applications.

@@ -1,4 +1,8 @@
-# Digital Markets and Platforms
+# Digital Markets and Platforms {#sec-digital-markets}
+
+The tools and frameworks from the preceding chapters---market definition, IO modeling, merger analysis, and monopolization doctrine---apply to digital markets, but with distinctive challenges. Multi-sided platforms, network effects, zero-price business models, and rapid technological change all complicate traditional antitrust analysis. This chapter shows how to adapt the general toolkit to these specific features.
+
+We also introduce new evidence types that matter especially in digital markets: telemetry data, clickstream analysis, API documentation, and product requirements documents. The intersection of technical product knowledge and economic reasoning defines much of the frontier in digital platform enforcement, from the US cases against Google and Meta to the EU's Digital Markets Act and South Africa's Online Intermediation Platforms Market Inquiry.
 
 ## Learning goals
 Digital markets combine traditional IO concepts with product design, governance, and behavioral nudges. Drawing on DMA/Digital Markets Unit briefings and recent enforcement actions, this chapter helps you:
@@ -40,6 +44,40 @@ Digital platform analysis extends traditional IO tools to multi-sided markets wh
 5. Assess effects and design remedies (choice screens, access mandates, portability)
 
 ## Platform workflow overview
+
+::: {.callout-note title="Platform Competition Analysis Workflow"}
+```
+SCOPING                   ANALYSIS                  REMEDIES
+   |                          |                         |
+   v                          v                         v
++--------------+        +--------------+        +--------------+
+| Define       |        | Quantify     |        | Design       |
+| sides &      |------->| mechanisms:  |------->| remedies:    |
+| metrics      |        | - Ranking    |        | - Choice     |
+|              |        | - Defaults   |        |   screens    |
++--------------+        | - Fees       |        | - API access |
+   |                    +--------------+        | - Fair       |
+   v                          |                |   ranking    |
++--------------+              v                +--------------+
+| Map          |        +--------------+
+| monetization:|        | Test         |
+| - Commissions|        | theories:    |
+| - Ad loads   |        | - DiD/Event  |
+| - Data       |        | - A/B logs   |
++--------------+        | - Telemetry  |
+   |                    +--------------+
+   v
++--------------+
+| Identify     |
+| theory of    |
+| harm:        |
+| - Self-pref  |
+| - Foreclosure|
+| - Data lever.|
++--------------+
+```
+**Data sources:** Platform telemetry | DMA compliance | OIPMI surveys | Partner contracts | API documentation
+:::
 
 1. **Define sides and metrics.** Identify user, merchant, advertiser, developer, courier, or publisher sides. Track MAU/DAU, GMV, multi-homing rates, engagement depth, and conversion metrics.
 2. **Map fees and monetization.** Build ladders for commissions, subscriptions, ad loads, and data monetization; compute pass-through and elasticity. For two-sided market theory, see @rochet_tirole_2003 and @armstrong_2006.
