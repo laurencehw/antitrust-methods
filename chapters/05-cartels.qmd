@@ -541,9 +541,23 @@ ggplot(gas, aes(date, price, color = regime)) +
 Replace the public FRED data with product-level transactions to present in litigation.
 
 ::: {.callout-note title="Citations and comparative note"}
-- Cite OECD screen guidance, FTC/DOJ econometrics speeches, and EC/JFTC leniency notices when defending methodology.  
-- Reference cases (lysine, DRAM, auto parts, LIBOR) with docket numbers.  
+- Cite OECD screen guidance, FTC/DOJ econometrics speeches, and EC/JFTC leniency notices when defending methodology.
+- Reference cases (lysine, DRAM, auto parts, LIBOR) with docket numbers.
 - Flag jurisdictional differences: e.g., SAMR often requires data-driven screens, while US courts scrutinize documentary corroboration.
+:::
+
+::: {.callout-tip title="Key Takeaways"}
+1. **Screens are triage tools, not proof.** Variance screens, rotation patterns, and price correlations identify suspicious markets worth investigating. They rarely prove collusion alone.
+
+2. **Leniency evidence anchors timelines.** The strongest cartel cases combine econometric analysis with documentary evidence from leniency applicants. Build your analysis around known communication dates.
+
+3. **Overcharge estimation requires a credible counterfactual.** Whether using before-after, yardstick, or difference-in-differences, clearly articulate what prices would have been absent the cartel.
+
+4. **Pass-through matters for damages.** If overcharges were passed through to downstream customers, direct purchasers may not bear the full harm. Document pass-through assumptions.
+
+5. **Structural breaks are not self-interpreting.** A price drop after a raid is consistent with cartel breakdown---but also with demand shocks, cost changes, or confounding events. Triangulate with qualitative evidence.
+
+6. **Document everything.** Cartel analysis often leads to litigation. Keep code reproducible, data hashed, and methodology memos contemporaneous.
 :::
 
 ## Looking ahead

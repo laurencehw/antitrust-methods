@@ -13,6 +13,39 @@ This chapter translates all prior analytics into courtroom-ready workflows. Draw
 - Communicating uncertainty, sensitivity, and alternative specifications to judges and juries.
 
 ## Core topics
+
+::: {.callout-note title="Expert Work Workflow"}
+```
+ENGAGEMENT               ANALYSIS                 REPORTS & TESTIMONY
+     |                       |                           |
+     v                       v                           v
++------------+         +------------+             +------------+
+| Scoping &  |         | Common     |             | Draft      |
+| data       |-------->| impact &   |------------>| expert     |
+| inventory  |         | damages    |             | report     |
++------------+         +------------+             +------------+
+     |                       |                           |
+     v                       v                           v
++------------+         +------------+             +------------+
+| Evidence   |         | Sensitivity|             | Deposition |
+| mapping:   |         | & Daubert  |             | prep &     |
+| - Docs     |         | readiness: |             | testimony  |
+| - Data     |         | - Validation             | - Q&A outline
+| - Testimony|         | - Alternatives           | - Exhibits |
++------------+         +------------+             +------------+
+     |                       |
+     v                       v
++------------+         +------------+
+| Reproducible         | Scenario   |
+| code bundle:         | tables &   |
+| - Git/renv           | tornado    |
+| - README             | charts     |
+| - Doc IDs            +------------+
++------------+
+```
+**Deliverables:** Expert report | Rebuttal report | Deposition testimony | Trial testimony | Exhibit package
+:::
+
 - Class certification: common impact frameworks, sampling, and predominance arguments.
 - Evidence management: document IDs, data provenance, reproducible code bundles.
 - Daubert readiness: validation, sensitivity analyses, alternative specifications.

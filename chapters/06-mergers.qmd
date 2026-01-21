@@ -982,6 +982,22 @@ cat(paste0("Price increase: ",
 
 Replace simulated values with outputs from your actual merger simulation model (logit, nested logit, BLP, or custom structural model).
 
+::: {.callout-tip title="Key Takeaways"}
+1. **Structural screens come first.** HHI levels and deltas provide the starting point. Mergers creating HHI > 2,500 with delta > 200 face heightened scrutiny under current guidelines.
+
+2. **Diversion is the key variable.** For unilateral effects, what matters is how many customers would switch between the merging parties. Diversion ratios from surveys or switching data drive UPP and simulation results.
+
+3. **Coordinated effects require different evidence.** Look for mavericks being removed, increased symmetry, enhanced transparency, or reduced capacity. These concerns apply even when unilateral effects are modest.
+
+4. **Vertical concerns are real but harder to prove.** Foreclosure and raising rivals' costs require showing both ability and incentive. The elimination of double marginalization creates legitimate efficiency arguments.
+
+5. **Efficiencies must be merger-specific and verifiable.** "Synergies" claimed in press releases rarely survive scrutiny. Focus on cost savings that cannot be achieved through internal growth or contracts.
+
+6. **Retrospectives validate prospective analysis.** Compare your simulation predictions to actual outcomes from similar past mergers. If you predict 5% price increases but comparable mergers show 2%, explain the difference.
+
+7. **Remedies must fix the diagnosed harm.** A divestiture that creates a non-viable competitor is worse than none. Match remedy design to the specific theory of harm identified.
+:::
+
 ## Looking ahead
 
 Merger analysis produces artifacts—simulation outputs, UPP tables, event-study results—that feed directly into **Chapter 07 (Monopolization)** and **Chapter 12 (Litigation Practice)**. The same frameworks apply when assessing whether a dominant firm's conduct harms competition.

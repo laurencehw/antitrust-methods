@@ -13,6 +13,32 @@ Labor cases now sit alongside mergers and cartels in agency priorities. This cha
 - Design remedies (noncompete bans, pay-transparency orders, notice requirements) and evaluate their effects.
 
 ## Core topics
+
+::: {.callout-note title="Labor Antitrust Analysis Workflow"}
+```
+MARKET DEFINITION          CONDUCT ANALYSIS          EFFECTS & DAMAGES
+       |                          |                         |
+       v                          v                         v
++--------------+           +--------------+           +--------------+
+| Define labor |           | Identify     |           | Measure wage |
+| market:      |           | restraint:   |           | suppression: |
+| - Occupation |---------->| - No-poach   |---------->| - DiD/Event  |
+| - Geography  |           | - Wage-fix   |           | - Elasticity |
+| - Commute    |           | - Noncompete |           | - Pass-thru  |
++--------------+           +--------------+           +--------------+
+       |                          |                         |
+       v                          v                         v
++--------------+           +--------------+           +--------------+
+| Compute      |           | Review       |           | Calculate    |
+| concentration|           | evidence:    |           | damages:     |
+| - HHI        |           | - HR docs    |           | - Lost wages |
+| - C4         |           | - Agreements |           | - Benefits   |
+| - Elasticity |           | - Comms      |           | - Mobility   |
++--------------+           +--------------+           +--------------+
+```
+**Key data sources:** BLS QCEW/OES | Census LEHD/LODES | Stats SA QLFS | Platform APIs | HR records
+:::
+
 - Labor concentration (HHI, Herfindahl-Hirschman Index for labor markets) and labor supply elasticity estimates.
 - Event studies and diff-in-diff around policy shocks (noncompete bans, wage disclosure laws, franchise no-poach settlements).
 - Wage-posting vs. realized wage analysis; vacancy scraping; platform data for gig markets.
