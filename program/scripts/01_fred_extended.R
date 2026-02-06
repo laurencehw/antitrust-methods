@@ -117,7 +117,7 @@ for (name in names(fred_data)) {
 }
 
 # Create a combined long-format dataset
-fred_combined <- bind_rows(fred_data, .id = "series_name") %>%
+fred_combined <- bind_rows(fred_data, .id = "series_name") |>
   select(series_name, series_id, date, value)
 
 write_csv(fred_combined, "data/raw/fred_combined.csv")

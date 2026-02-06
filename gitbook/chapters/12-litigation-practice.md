@@ -1,11 +1,12 @@
 # Litigation Practice: Evidence and Expert Work
 
-The methods chapters taught you how to analyze competition questions. This chapter teaches you how to present that analysis in litigation. The audience changes from academic reviewers or agency staff to judges, juries, and opposing counsel armed with their own experts. The standards shift from "interesting and well-identified" to "reliable and relevant under Daubert" (in US courts) or comparable evidentiary frameworks elsewhere.
+The preceding chapters developed the analytical methods; this chapter addresses how to present them in litigation. The audience shifts from academic reviewers or agency staff to judges, juries, and opposing counsel armed with their own experts. The standard shifts from "interesting and well-identified" to "reliable and relevant under Daubert" (in US courts) or comparable evidentiary frameworks elsewhere.
 
-Effective expert work requires more than technical competence. You must structure your analysis for reproducibility, anticipate challenges to your methodology, communicate uncertainty honestly, and tell a coherent story that connects evidence to legal standards. This chapter covers the workflow from initial data handling through expert report preparation, deposition, and trial testimony.
+Expert work demands more than technical competence. The analysis must be structured for reproducibility, the methodology must withstand adversarial challenge, uncertainty must be communicated honestly, and the whole must tell a coherent story connecting evidence to legal standards. What follows covers the workflow from initial data handling through expert report preparation, deposition, and trial testimony.
 
 ## Learning goals
-This chapter translates all prior analytics into courtroom-ready workflows. Drawing on agency guidance (US DOJ/FTC, EC best practices) and established expert practice standards, we focus on:
+
+Drawing on agency guidance (US DOJ/FTC, EC best practices) and established expert practice standards, this chapter focuses on:
 
 - Structuring investigations so every exhibit and code run is reproducible.
 - Designing class certification analyses (common impact, damages) that withstand Daubert/Kumho challenges.
@@ -18,32 +19,32 @@ This chapter translates all prior analytics into courtroom-ready workflows. Draw
 **Expert Work Workflow**
 
 ```
-ENGAGEMENT               ANALYSIS                 REPORTS & TESTIMONY
-     |                       |                           |
-     v                       v                           v
-+------------+         +------------+             +------------+
-| Scoping &  |         | Common     |             | Draft      |
-| data       |-------->| impact &   |------------>| expert     |
-| inventory  |         | damages    |             | report     |
-+------------+         +------------+             +------------+
-     |                       |                           |
-     v                       v                           v
-+------------+         +------------+             +------------+
-| Evidence   |         | Sensitivity|             | Deposition |
-| mapping:   |         | & Daubert  |             | prep &     |
-| - Docs     |         | readiness: |             | testimony  |
-| - Data     |         | - Validation             | - Q&A outline
-| - Testimony|         | - Alternatives           | - Exhibits |
-+------------+         +------------+             +------------+
+ENGAGEMENT               ANALYSIS                  REPORTS & TESTIMONY
+     |                       |                            |
+     v                       v                            v
++------------+         +------------+              +------------+
+| Scoping &  |         | Common     |              | Draft      |
+| data       |-------->| impact &   |------------->| expert     |
+| inventory  |         | damages    |              | report     |
++------------+         +------------+              +------------+
+     |                       |                            |
+     v                       v                            v
++------------+         +------------+              +------------+
+| Evidence   |         | Sensitivity|              | Deposition |
+| mapping:   |         | & Daubert  |              | prep &     |
+| - Docs     |         | readiness: |              | testimony: |
+| - Data     |         | - Validate |              | - Q&A      |
+| - Testimony|         | - Altern.  |              | - Exhibits |
++------------+         +------------+              +------------+
      |                       |
      v                       v
 +------------+         +------------+
 | Reproducible         | Scenario   |
-| code bundle:         | tables &   |
-| - Git/renv           | tornado    |
-| - README             | charts     |
-| - Doc IDs            +------------+
-+------------+
+| code bundle:  |      | tables &   |
+| - Git/renv    |      | tornado    |
+| - README      |      | charts     |
+| - Doc IDs     |      +------------+
++---------------+
 ```
 
 **Deliverables:** Expert report | Rebuttal report | Deposition testimony | Trial testimony | Exhibit package
@@ -113,7 +114,7 @@ A typical structure (`/data/raw`, `/data/derived`, `/scripts`, `/reports`) mirro
 library(fixest)
 
 # panel columns: class_member, period, treatment, outcome, controls
-# Example diff-in-diff for common impact
+# Example DiD for common impact
 # ci_model <- feols(outcome ~ treatment | class_member + period, data = panel)
 # summary(ci_model)
 ```
@@ -122,7 +123,6 @@ Add clustered SEs (e.g., `cluster = ~class_member`) or randomization inference f
 ### Randomization inference scaffold
 ```r
 library(fixest)
-library(magrittr)
 
 # After estimating ci_model, permute treatment labels to compute empirical p-values
 # ri_p <- permute_plm(ci_model, treat = "treatment", cluster = "class_member", reps = 1000)
@@ -132,7 +132,7 @@ library(magrittr)
 
 - **Before/after:** Baseline for cartel or monopolization; control for costs/demand.  
 - **Yardstick:** Compare to unaffected markets or products.  
-- **Diff-in-diff:** For mergers, supply shocks, or wage suppression cases.  
+- **DiD:** For mergers, supply shocks, or wage suppression cases.  
 - **Hedonic/regression models:** When product characteristics matter (tech, pharma).
 
 ### Scenario/sensitivity tables
@@ -147,9 +147,13 @@ Use tornado charts or tables to present ranges; highlight the “central” assu
 
 ## Daubert/Kumho readiness
 
-1. **Validation:** Compare model outputs to raw data; show that code replicates known benchmarks (FJC Reference Manual, 2011).  
-2. **Sensitivity:** Document how results change with different controls, clustering levels, or sample definitions (Rubinfeld, 2010).  
-3. **Alternative specifications:** Provide at least one alternative consistent with the theory of harm; explain why it does or does not materially change outcomes (Baker & Rubinfeld, 1999).  
+{% hint style="success" %}
+**Practitioner checklist for admissibility.** Before finalizing an expert report, confirm that each of the four pillars below is documented. Courts increasingly exclude experts who cannot demonstrate all four.
+{% endhint %}
+
+1. **Validation:** Compare model outputs to raw data; show that code replicates known benchmarks (FJC Reference Manual, 2011).
+2. **Sensitivity:** Document how results change with different controls, clustering levels, or sample definitions (Rubinfeld, 2010).
+3. **Alternative specifications:** Provide at least one alternative consistent with the theory of harm; explain why it does or does not materially change outcomes (Baker & Rubinfeld, 1999).
 4. **Error checking:** Peer review within the expert team; code audits; reproducibility scripts (Dickey & Rubinfeld, 2014).
 
 ## Presentation and storytelling
@@ -163,7 +167,7 @@ Use tornado charts or tables to present ranges; highlight the “central” assu
 
 - **Bread cartel damages (Tribunal hearings 2007–2010):** Combined CPI microdata, mill cost studies, and consumer testimony; damages model anchored to structural break analysis.  
 - **Sasol polypropylene appeal:** Extensive documentation of export parity benchmarks, incremental cost models, and technical expert testimony on production processes.  
-- **Vodacom/MTN data services commitments:** Monitoring trustees reported quarterly KPIs; Commission used diff-in-diff to show compliance with price-reduction commitments.
+- **Vodacom/MTN data services commitments:** Monitoring trustees reported quarterly KPIs; Commission used DiD to show compliance with price-reduction commitments.
 
 ## Enhanced Visualizations for Expert Reports
 
@@ -174,6 +178,7 @@ Demonstrate that the alleged conduct had a common effect across class members, a
 library(dplyr)
 library(ggplot2)
 library(patchwork)
+source("program/R/helpers.R")
 
 # Simulated individual-level treatment effects
 # Replace with actual class member data from your damages model
@@ -254,7 +259,7 @@ p2 <- ggplot(class_data, aes(x = geographic_region,
 - Link to documentary evidence (pricing data, expert testimony, econometric estimates)
 
 ### Evidence provenance network
-Map how different evidence sources support specific expert opinions and damages calculations.
+The evidence provenance network traces how different sources feed into specific expert opinions and damages calculations.
 
 ```r
 library(dplyr)
@@ -416,12 +421,13 @@ expert_timeline |>
 ```
 
 ### Individual vs. aggregate damages
-Show how individual class member damages aggregate to total class damages, important for both class certification and damages calculation.
+Individual class member damages must aggregate to total class damages---a requirement for both class certification and final damages calculation.
 
 ```r
 library(dplyr)
 library(ggplot2)
 library(patchwork)
+source("program/R/helpers.R")
 
 # Simulated individual damages for class members
 # Replace with actual damages calculations
@@ -565,4 +571,4 @@ cat(paste0("Top 10% of class accounts for ",
 - Coordinate with litigation support to ensure document IDs and privilege status are preserved.
 
 ## Looking ahead
-Archive all litigation outputs in `data/derived/litigation/` with clear version control and privilege markings. Cross-reference expert opinions with substantive chapters (cartels Ch. 05, mergers Ch. 06, etc.) for methodological support. Document all code reviews and sensitivity analyses in appendices to expert reports. Coordinate with legal team on discovery timelines and protective orders for confidential data.
+Archive litigation outputs in `data/derived/litigation/` with version control and privilege markings. Expert opinions should cross-reference the substantive analytical chapters for methodological support: cartel overcharge models from **Chapter 5**, merger simulation and UPP/GUPPI analysis from **Chapter 6**, monopolization foreclosure tests from **Chapter 7**, remedy evaluation frameworks from **Chapter 8**, platform self-preferencing evidence from **Chapter 9**, and labor market wage suppression analyses from **Chapter 10**. For innovation-related cases involving SEPs, FRAND disputes, or killer acquisitions, the methods in **Chapter 11** provide the relevant econometric templates. The **Empirical Appendix (Chapter 13)** collects the reusable diagnostics---pre-trends checks, specification curves, residual plots, and power analyses---that underpin Daubert readiness across all case types. Document all code reviews and sensitivity analyses in appendices to expert reports, and coordinate with the legal team on discovery timelines and protective orders for confidential data.

@@ -8,6 +8,7 @@ library(tidyr)
 library(readr)
 library(httr)
 library(jsonlite)
+library(lubridate)
 
 # Note: BLS QCEW API requires registration at https://data.bls.gov/registrationEngine/
 # For now, we'll use the public bulk download approach
@@ -16,11 +17,11 @@ library(jsonlite)
 # Option 1: Use blscrapeR package for easier access
 # ============================================================================
 
-if (!require("blscrapeR", quietly = TRUE)) {
-  cat("Installing blscrapeR package...\n")
-  install.packages("blscrapeR")
-  library(blscrapeR)
+if (!requireNamespace("blscrapeR", quietly = TRUE)) {
+  stop("Package 'blscrapeR' is required but not installed. ",
+       "Install with: install.packages('blscrapeR')")
 }
+library(blscrapeR)
 
 # ============================================================================
 # Pull national employment data by industry (NAICS 2-digit)
@@ -54,7 +55,7 @@ employment_data <- lapply(industry_series, function(series) {
     cat("Warning: Could not fetch", series, "\n")
     return(NULL)
   })
-}) %>%
+}) |>
   bind_rows()
 
 if (nrow(employment_data) > 0) {
@@ -152,15 +153,15 @@ years <- 2015:2023
 synthetic_hhi <- expand_grid(
   county = counties,
   year = years
-) %>%
+) |>
   mutate(
     # Simulate HHI with some variation
     hhi_retail = rnorm(n(), mean = 1200, sd = 300),
     hhi_healthcare = rnorm(n(), mean = 1800, sd = 400),
     hhi_hospitality = rnorm(n(), mean = 900, sd = 200),
     hhi_manufacturing = rnorm(n(), mean = 1500, sd = 350),
-    # Ensure HHI bounds
-    across(starts_with("hhi_"), ~pmax(500, pmin(10000, .)))
+    # Ensure HHI bounds (clamp to 500-10000 range)
+    across(starts_with("hhi_"), \(x) pmax(500, pmin(10000, x)))
   )
 
 write_csv(synthetic_hhi, "data/derived/labor_market_hhi_synthetic.csv")

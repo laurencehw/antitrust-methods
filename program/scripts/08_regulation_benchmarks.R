@@ -51,7 +51,7 @@ set.seed(123)
 utilities <- expand_grid(
   utility_id = paste0("Utility_", LETTERS[1:20]),
   year = 2018:2023
-) %>%
+) |>
   mutate(
     # Regulatory regime
     regime = sample(c("Rate-of-return", "Price-cap", "Revenue-cap"), 
@@ -108,8 +108,8 @@ write_csv(access_pricing, "data/derived/access_pricing_examples.csv")
 incentive_schemes <- expand_grid(
   regime = c("Rate-of-return", "Price-cap", "Revenue-cap"),
   year = 2015:2023
-) %>%
-  group_by(regime) %>%
+) |>
+  group_by(regime) |>
   mutate(
     # Efficiency gains over time (price-cap shows more improvement)
     efficiency_gain = case_when(
@@ -129,7 +129,7 @@ incentive_schemes <- expand_grid(
       regime == "Revenue-cap" ~ 0.15 + rnorm(n(), 0, 0.02),
       regime == "Rate-of-return" ~ 0.18 + rnorm(n(), 0, 0.02)
     )
-  ) %>%
+  ) |>
   ungroup()
 
 write_csv(incentive_schemes, "data/derived/regulatory_incentive_schemes.csv")
@@ -147,7 +147,7 @@ remedy_monitoring <- tibble(
   remedy_type = sample(c("Behavioral", "Structural", "Access"), 
                       length(seq(as.Date("2020-01-01"), as.Date("2023-12-01"), by = "quarter")),
                       replace = TRUE)
-) %>%
+) |>
   mutate(
     # Compliance metrics
     compliance_score = rnorm(n(), 85, 10),

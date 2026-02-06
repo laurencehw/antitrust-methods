@@ -1,11 +1,12 @@
 # Industrial Organization Toolkit
 
-The previous chapters established how to define markets and conduct causal research. We now turn to the analytical machinery that powers much of modern antitrust analysis: the industrial organization (IO) toolkit. These methods allow us to model how firms compete, estimate parameters like marginal costs and demand elasticities, and simulate the effects of mergers or conduct before they occur.
+The previous chapters showed how to define markets and conduct causal research. This chapter introduces the industrial organization (IO) toolkit---the analytical machinery that powers much of modern antitrust analysis. These methods allow us to model how firms compete, estimate parameters like marginal costs and demand elasticities, and simulate the effects of mergers or conduct before they occur.
 
-This chapter occupies a pivotal position in the book. The demand models, cost estimates, and bargaining frameworks introduced here feed directly into the merger simulations in Chapter 6, the exclusionary conduct analysis in Chapter 7, and the digital markets analysis in Chapter 9. Master these tools, and you will be equipped to tackle nearly any quantitative antitrust question.
+The demand models, cost estimates, and bargaining frameworks introduced here feed directly into the merger simulations in Chapter 6, the exclusionary conduct analysis in Chapter 7, and the digital markets analysis in Chapter 9.
 
 ## Learning goals
-This chapter bridges descriptive evidence and full-blown merger simulations. You will learn when to deploy lightweight demand or supply models, how to explain their assumptions to agencies and courts, and how to integrate qualitative evidence (contracts, governance documents, interviews) so the results feel grounded.
+
+This chapter sits between descriptive evidence and full merger simulations. You will learn when to deploy lightweight demand or supply models, how to explain their assumptions to agencies and courts, and how to integrate qualitative evidence (contracts, governance documents, interviews) so the results stay connected to observable market behavior.
 
 By the end you should be able to:
 
@@ -23,7 +24,7 @@ By the end you should be able to:
 
 ## Structural vs. Reduced Form Approaches
 
-Antitrust economics relies on two distinct methodological traditions. Understanding the difference—and knowing when to use each—is critical for designing an effective expert report.
+Antitrust economics relies on two distinct methodological traditions. Knowing when to use each is central to designing an effective expert report.
 
 ### The Contrast
 
@@ -38,7 +39,10 @@ Antitrust economics relies on two distinct methodological traditions. Understand
     *   **Pros/Cons:** Relies on fewer assumptions about market conduct, but cannot typically predict the effect of a *new* policy or merger (the Lucas Critique).
 
 ### Complementarity in Practice
-In modern practice, these approaches reinforce each other. You might use a **reduced-form** event study to show that a past merger in the same industry raised prices by 5%. You then calibrate a **structural** simulation model to reproduce that 5% increase. Once the model is "validated" by the historical data, you can confidently use it to predict the effects of the *current* merger.
+
+{% hint style="success" %}
+**Best practice: Combine both approaches.** Use a **reduced-form** event study to show that a past merger in the same industry raised prices by 5%. Then calibrate a **structural** simulation model to reproduce that 5% increase. Once the model is "validated" by the historical data, you can confidently use it to predict the effects of the *current* merger.
+{% endhint %}
 
 | Criterion | Structural (Simulation) | Reduced-Form (Causal) |
 |:----------|:------------------------|:---------------------|
@@ -88,9 +92,13 @@ In modern practice, these approaches reinforce each other. You might use a **red
 - Attribute platform multi-sided modeling references (e.g., Rochet-Tirole style papers) and cite any A/B evidence or agency decisions when used.
 {% endhint %}
 
+---
+
 ## Demand skeleton: simple logit example
+
 ```r
-library(tidyverse)
+library(dplyr)
+library(tibble)
 source("program/R/helpers.R")
 
 products <- tribble(
@@ -152,6 +160,7 @@ A tornado chart shows how UPP changes as we vary key inputs (diversion, margin, 
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+source("program/R/helpers.R")
 
 # Base case parameters (Product A -> Product B merger)
 base_diversion <- 0.30
@@ -259,7 +268,7 @@ Tie the efficiency term to documented synergies or cost savings (procurement eco
 ## Visualizations
 
 ### Pass-through diagnostic using public price indices
-Pass-through analysis estimates how much of a cost change flows through to consumer prices. This is critical for cartel damages (upstream overcharge → downstream harm), merger analysis (will cost savings benefit consumers?), and vertical restraints. This example uses real FRED data for gasoline prices.
+Pass-through analysis estimates how much of a cost change flows through to consumer prices. It matters for cartel damages (upstream overcharge flowing to downstream harm), merger analysis (whether cost savings benefit consumers), and vertical restraints. This example uses real FRED data for gasoline prices.
 
 ```r
 library(fredr)
@@ -267,6 +276,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(patchwork)
+source("program/R/helpers.R")
 
 fredr_set_key(Sys.getenv("FRED_API_KEY"))
 
@@ -365,10 +375,13 @@ knitr::kable(pass_summary, digits=3, caption="Pass-Through Analysis Results")
 - **Incomplete pass-through**: Common in competitive markets where firms absorb cost shocks to retain customers. Can also occur with sticky prices or menu costs.
 - **Over-shifting**: May signal market power (firms use cost increases as "focal points" to raise prices beyond the cost change) or complementarities/network effects.
 
+{% hint style="success" %}
 **Applications in antitrust:**
+
 - **Cartel damages**: If pass-through is 80%, a $10 upstream overcharge causes an $8 downstream price increase.
 - **Merger efficiencies**: If parties claim $5M in cost savings but pass-through is only 30%, consumers benefit by only $1.5M.
 - **Vertical mergers**: Estimate pass-through separately for upstream and downstream stages to predict EDM (Elimination of Double Marginalization) benefits.
+{% endhint %}
 
 Swap series IDs for your industry (e.g., `WPUSI012011` for steel PPI, `CPIAUCSL` for overall CPI) or use firm-specific cost and price data when available.
 
@@ -379,4 +392,4 @@ When platforms or healthcare networks negotiate contracts, full structural model
 - **Qualitative overlays.** Pair negotiation timelines, renewal clauses, and concession histories with the empirical results.
 
 ## Looking ahead
-Store demand estimates, diversion matrices, and pass-through/bargaining diagnostics in `data/derived` with READMEs so the mergers and monopolization chapters can drop them into simulations. Before moving to Chapter 05 (Cartels), note which datasets or code paths (e.g., `io-logit`, `upp-gup` templates) should be generalized in `chapters/13-empirical-appendix.qmd`. Update the visualization tracker if you add new figures so the team can coordinate future enhancements.
+Store demand estimates, diversion matrices, and pass-through/bargaining diagnostics in `data/derived` with READMEs so the mergers and monopolization chapters can reuse them in simulations. **Chapter 5** (Cartels) will use the pass-through analysis introduced here to trace overcharge harm along the supply chain, while **Chapter 6** (Mergers) deploys the UPP/GUPPI and logit simulation frameworks for prospective merger assessment. Note which datasets or code paths (e.g., `io-logit`, `upp-gup` templates) should be generalized in the Empirical Appendix (Chapter 13), and update the visualization tracker when adding new figures.

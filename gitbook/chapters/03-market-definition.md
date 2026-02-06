@@ -1,14 +1,14 @@
 # Market Definition and Competitive Landscape
 
-With the research design principles from Chapter 2 in hand, we now turn to one of the foundational tasks in antitrust analysis: defining the relevant market. Market definition is often the first substantive question in any competition matter, and the answer shapes everything that follows---from market share calculations to theories of harm to remedy design.
+Defining the relevant market is often the first substantive question in any competition matter, and the answer shapes everything that follows---from market share calculations to theories of harm to remedy design.
 
-This chapter builds on the causal inference toolkit introduced earlier, showing how to combine quantitative analysis with qualitative evidence to draw market boundaries that will withstand scrutiny from regulators and courts.
+This chapter applies the causal inference toolkit from Chapter 2 to the specific problem of drawing market boundaries, combining quantitative analysis with qualitative evidence to produce definitions that withstand scrutiny from regulators and courts.
 
 ## Learning goals
 
-Market definition is no longer a rote SSNIP ritual. Yet agencies and courts still expect a disciplined articulation of product and geographic boundaries before debating competitive effects.
+Market definition is no longer a rote SSNIP---Small but Significant Non-transitory Increase in Price---ritual. Yet agencies and courts still expect a disciplined articulation of product and geographic boundaries before debating competitive effects.
 
-This chapter shows you how to frame those boundaries using data and qualitative evidence, evaluate SSNIP/SSNDQ logic, and communicate results across multiple jurisdictions—DOJ/FTC, DG COMP, CMA, SAMR, and Competition Tribunal South Africa.
+This chapter shows you how to frame those boundaries using data and qualitative evidence, evaluate SSNIP/SSNDQ (Small but Significant Non-transitory Decrease in Quality) logic, and communicate results across multiple jurisdictions—DOJ/FTC, DG COMP, CMA, SAMR, and Competition Tribunal South Africa.
 
 By the end of the chapter you should be able to:
 
@@ -18,7 +18,12 @@ By the end of the chapter you should be able to:
 - Reference key precedents (e.g., (DOJ/FTC Merger Guidelines, 2023), (EC Market Definition Notice, 2024), (CMA Merger Assessment Guidelines, 2021)) and literature when defending methodological choices.
 
 ## Why market definition still matters
-Even in unilateral-effects cases where agencies focus on margins, diversion, and price effects directly, courts often ask, "what is the market?" The answer shapes presumptions (HHI thresholds, dominance), jurisdictional hooks (public-interest test vs. consumer welfare), and remedy feasibility. Practitioners should treat market definition as an evidence-integration exercise: describe customer substitution paths, quantify them when possible, and tie those findings to the legal standard at issue (e.g., "reasonable interchangeability" in US case law vs. "sufficiently interchangeable" in EC practice). Keep records of how you screened candidate markets so future teams can expand or narrow scope without re-litigating data prep.
+
+Even in unilateral-effects cases where agencies focus on margins, diversion, and price effects directly, courts often ask, "what is the market?" The answer shapes presumptions (HHI thresholds, dominance), jurisdictional hooks (public-interest test vs. consumer welfare), and remedy feasibility.
+
+{% hint style="success" %}
+**Practitioner takeaway:** Treat market definition as an evidence-integration exercise. Describe customer substitution paths, quantify them when possible, and tie findings to the legal standard at issue (e.g., "reasonable interchangeability" in US case law vs. "sufficiently interchangeable" in EC practice). Keep records of how you screened candidate markets so future teams can expand or narrow scope without re-litigating data prep.
+{% endhint %}
 
 {% hint style="info" %}
 **SSNIP Test Decision Flowchart**
@@ -75,18 +80,18 @@ START: Define candidate market (products + geography)
 
 ## Core tools and workflow
 
-Now that we've established why market definition remains essential, this section introduces the practical toolkit for conducting the analysis. Modern market-definition work typically cycles through four complementary approaches, each suited to different data environments and legal standards.
+Modern market-definition work typically cycles through four complementary approaches, each suited to different data environments and legal standards.
 
 1. **Descriptive analytics.** Price/volume trends, seasonality, and policy shocks that reveal when products or regions move together. Use `ggplot2` quick looks before heavy modeling.
 2. **Demand elasticities & diversion.** Log-log regressions, AIDS-lite models, discrete choice, or churn-based diversion ratios that quantify substitutability. Always document instruments, fixed effects, or controls used.
 3. **Critical-loss vs. actual-loss.** Compare hypothetical post-SSNIP losses to observed switching, stating margin assumptions and capacity constraints. Highlight when brand repositioning or supply limits break the classic calculations.
 4. **Geographic screens.** Shipment flows, travel-time analyses, or catchment-area heatmaps built from loyalty data, mobile location pings, or Stats SA transport datasets. Pair with qualitative evidence on delivery commitments or regulatory boundaries.
 
-The workflow mirrors Chapter 02’s research design steps: scoping memo → data inventory → qualitative plan → estimation → memo/slide deck. Revisit `chapters/13-empirical-appendix.qmd` for templates.
+The workflow mirrors Chapter 02’s research design steps: scoping memo → data inventory → qualitative plan → estimation → memo/slide deck. Revisit the Empirical Appendix (Chapter 13) for templates.
 
 ## Core diagnostic tools
 
-The workflow above identifies *what* to do; this section shows *how* to do it. Each diagnostic below produces artifacts that feed directly into merger simulations (Chapter 06) and cartel analysis (Chapter 05). Use these specific diagnostics to anchor your analysis:
+Each diagnostic below produces artifacts that feed directly into merger simulations (Chapter 06) and cartel analysis (Chapter 05):
 
 - **Price/quantity dashboards.** Track cointegration, variance ratios, and shock responses to see which products move together.
 - **Elasticities/diversion.** Estimate log-log or `fixest` panel regressions; or use choice data (`mlogit`, `apollo`) when products are differentiated.
@@ -135,6 +140,7 @@ This visualization compares the theoretical critical loss threshold to observed 
 library(dplyr)
 library(ggplot2)
 library(patchwork)
+source("program/R/helpers.R")
 
 # Generate critical loss curves for different price increases
 margins <- seq(0.05, 0.60, by = 0.01)
@@ -213,6 +219,7 @@ library(nycflights13)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+source("program/R/helpers.R")
 
 # Calculate route-level shares and HHI
 route_shares <- flights |>
@@ -315,6 +322,7 @@ Understanding where products physically flow helps define geographic markets. Th
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+source("program/R/helpers.R")
 
 # Illustrative shipment flow data
 # In practice, pull from Census Commodity Flow Survey, BEA trade data,
@@ -408,9 +416,11 @@ In practice, combine this with:
 
 ### Diversion ratios from customer switching data
 
-**What diversion measures:** Diversion ratios quantify where customers go when their first choice becomes unavailable or more expensive. If Product A loses 100 customers and 35 of them switch to Product B, the diversion ratio from A to B is 35%.
+{% hint style="info" %}
+**Key definition: Diversion ratio**
 
-**Why it matters:** High diversion between products suggests they compete closely. In merger analysis, high diversion between merging parties signals unilateral effects concerns (more in Chapter 06). For market definition, diversion patterns reveal which products belong in the same market.
+Diversion ratios quantify where customers go when their first choice becomes unavailable or more expensive. If Product A loses 100 customers and 35 of them switch to Product B, the diversion ratio from A to B is **35%**. High diversion between products suggests they compete closely; in merger analysis, high diversion between merging parties signals unilateral effects concerns (Chapter 06).
+{% endhint %}
 
 This example shows how to compute diversion from customer-level switching or choice data.
 
@@ -418,6 +428,7 @@ This example shows how to compute diversion from customer-level switching or cho
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+source("program/R/helpers.R")
 
 # Simulated customer switching data
 # In practice: loyalty card data, survey "next-best" responses,
@@ -513,7 +524,7 @@ diversion_matrix |>
 ```
 
 **Interpretation for merger analysis:**
-- **High diversion between merger parties** (e.g., 25-35% from A→B): Strong evidence products compete closely; supports narrow market definition and raises UPP concerns.
+- **High diversion between merger parties** (e.g., 25-35% from A→B): Strong evidence products compete closely; supports narrow market definition and raises Upward Pricing Pressure (UPP) concerns (see Chapter 4 for the formal UPP framework).
 - **Low diversion to outside option**: Customers are "captive" to the industry, strengthening market power concerns.
 - **Symmetric vs. asymmetric diversion**: If A→B is 30% but B→A is only 15%, Product A is a closer substitute for B than vice versa (important for UPP calculations).
 
@@ -558,14 +569,17 @@ diversion_matrix |>
 {% endhint %}
 
 ### Southern African market evidence
-- **Private Healthcare Market Inquiry (Competition Commission, 2014–2019).** Tribunal-appointed panel reviewed six years of patient-level claims covering roughly 70% of the 8.8 million beneficiaries in South Africa’s private schemes, combining them with supplier cost data to test alternative geographic definitions for specialist care. The inquiry found Herfindahl indices above 4,000 in several provinces and documented limited patient switching despite tariff differentials, motivating recommendations on supply-side licensing reform and transparency.
-- **Grocery Retail Market Inquiry (2015–2019).** Investigators merged retailer loyalty data, mall lease registers, and micro-CPI data to map catchment areas for supermarkets versus spaza shops. By simulating 5% SSNIP-style shocks with actual basket-level switching elasticities, the Commission showed how long-term exclusive leases between national chains and landlords constrained entry by discounters in townships and secondary towns.
-- **Data Services Market Inquiry (2017–2019).** The Competition Commission benchmarked prepaid mobile data prices (30-day 1GB basket) against a peer group of African and BRICS comparators, documenting South African prices that were roughly 20–40% above the median even after controlling for spectrum cost proxies and GDP per capita. Subscriber-level usage data from MTN and Vodacom revealed steep price discrimination by income segment, which fed into the Tribunal-endorsed commitments to cut headline prepaid rates by 30–50% and expand zero-rated educational content.
+
+**Private Healthcare Market Inquiry (Competition Commission, 2014--2019).** Tribunal-appointed panel reviewed six years of patient-level claims covering roughly 70% of the 8.8 million beneficiaries in South Africa's private schemes, combining them with supplier cost data to test alternative geographic definitions for specialist care. The inquiry found Herfindahl indices above 4,000 in several provinces and documented limited patient switching despite tariff differentials, motivating recommendations on supply-side licensing reform and transparency.
+
+**Grocery Retail Market Inquiry (2015--2019).** Investigators merged retailer loyalty data, mall lease registers, and micro-CPI data to map catchment areas for supermarkets versus spaza shops. By simulating 5% SSNIP-style shocks with actual basket-level switching elasticities, the Commission showed how long-term exclusive leases between national chains and landlords constrained entry by discounters in townships and secondary towns.
+
+**Data Services Market Inquiry (2017--2019).** The Competition Commission benchmarked prepaid mobile data prices (30-day 1GB basket) against a peer group of African and BRICS comparators, documenting South African prices that were roughly 20--40% above the median even after controlling for spectrum cost proxies and GDP per capita. Subscriber-level usage data from MTN and Vodacom revealed steep price discrimination by income segment, which fed into the Tribunal-endorsed commitments to cut headline prepaid rates by 30--50% and expand zero-rated educational content.
 
 {% hint style="info" %}
 **Debate: Is market definition still necessary?**
 
-A lively debate centers on whether formal market definition remains essential in unilateral effects analysis. **The traditional view** (agencies, most courts) holds that market definition disciplines the analysis: it forces practitioners to articulate which products/regions constrain pricing, establishes evidentiary presumptions (HHI thresholds), and provides a common language across jurisdictions. Without it, arguments risk becoming untethered from competitive reality.
+Whether formal market definition remains necessary in unilateral effects analysis is a live question. **The traditional view** (agencies, most courts) holds that market definition disciplines the analysis: it forces practitioners to articulate which products and regions constrain pricing, establishes evidentiary presumptions (HHI thresholds), and provides a common language across jurisdictions. Without it, arguments risk becoming untethered from competitive reality.
 
 **The reform view** (some economists, recent US guidelines commentary) argues that diversion ratios, margins, and UPP/GUPPI directly answer the relevant question—"will this merger raise prices?"—without the need for binary in/out market distinctions. Forcing a SSNIP test can be arbitrary (the 5-10% threshold is a convention, not economics), and critical-loss analysis is sensitive to margin measurement. Modern tools (merger simulation, natural experiments) can estimate price effects directly. See Katz & Shapiro (2003), Farrell & Shapiro (2010), and Werden (2012) for the evolution of this debate.
 
@@ -584,7 +598,7 @@ A lively debate centers on whether formal market definition remains essential in
 
 ## Looking ahead
 
-With market boundaries now defined, we turn in **Chapter 04** to the **Industrial Organization Toolkit**: quantifying market power *within* those boundaries using concentration measures (HHI), pricing relationships, and entry barriers. Market definition answers "which products compete?"; IO analysis answers "how much pricing power does each firm have?"
+**Chapter 04** turns to the **Industrial Organization Toolkit**: quantifying market power *within* defined boundaries using concentration measures (HHI), pricing relationships, and entry barriers. Market definition answers "which products compete?"; IO analysis answers "how much pricing power does each firm have?"
 
 **Before proceeding, prepare:**
 

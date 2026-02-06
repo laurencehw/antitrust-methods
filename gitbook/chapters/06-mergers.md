@@ -1,10 +1,11 @@
 # Mergers
 
-Merger analysis brings together nearly everything from the preceding chapters. Market definition (Chapter 3) establishes the competitive boundaries. The IO toolkit (Chapter 4) provides the simulation machinery. The cartel chapter's (Chapter 5) coordinated effects framework informs our assessment of whether a merger facilitates tacit collusion. And the qualitative evidence protocols from Chapter 2 guide how we integrate internal documents, customer testimony, and efficiency claims.
+Merger analysis draws on the full toolkit developed in earlier chapters. Market definition (Chapter 3) establishes competitive boundaries. The IO toolkit (Chapter 4) provides simulation machinery. The cartel chapter's (Chapter 5) coordinated effects framework informs whether a merger facilitates tacit collusion. And the qualitative evidence protocols from Chapter 2 guide how we integrate internal documents, customer testimony, and efficiency claims.
 
-This chapter provides a practical workflow for merger review. We move from transaction overview through shares and concentration metrics, unilateral and coordinated effects analysis, vertical theories, efficiency evaluation, and finally to remedy design. Throughout, we emphasize the differences in legal standards and analytical approaches across the major jurisdictions---US, EU, UK, and South Africa---because merger practitioners increasingly operate in a multi-jurisdictional environment.
+This chapter provides a practical workflow for merger review, moving from transaction overview through shares and concentration metrics, unilateral and coordinated effects analysis, vertical theories, efficiency evaluation, and remedy design. Throughout, we highlight differences in legal standards and analytical approaches across the US, EU, UK, and South Africa---merger practitioners now routinely face parallel reviews in multiple jurisdictions.
 
 ## Learning goals
+
 Merger reviews synthesize everything covered so far: market definition, IO modeling, qualitative evidence, and remedies. This chapter provides a practical workflow for assessing unilateral, coordinated, vertical, and public-interest effects across US, EU/UK, and South African jurisdictions, drawing on agency guidance (DOJ/FTC Merger Guidelines, 2023); (EC Horizontal Merger Guidelines, 2004); (CMA Merger Assessment Guidelines, 2021).
 
 By the end you should be able to:
@@ -16,7 +17,7 @@ By the end you should be able to:
 
 ## Core topics
 
-Merger analysis synthesizes the tools from previous chapters into a coherent assessment of whether a transaction will harm competition. This section covers the major theories of harm and the workflow for evaluating each.
+This section covers the major theories of harm and the workflow for evaluating each.
 
 {% hint style="info" %}
 **Merger Review Workflow**
@@ -533,6 +534,9 @@ cat(paste0("Interpretation: ", ifelse(example$net_vupp > 0,
 The net effect of a vertical merger depends on whether EDM savings outweigh foreclosure harms. Present both calculations with sensitivity ranges:
 
 ```r
+library(dplyr)
+library(ggplot2)
+source("program/R/helpers.R")
 
 # Create sensitivity matrix
 scenarios <- expand.grid(
@@ -577,7 +581,7 @@ See (Salop, 2018) for the theoretical framework and (DOJ/FTC Vertical Merger Gui
 Tie efficiencies to data. For example, if parties cite procurement savings, request SKU-level cost projections and simulate whether those savings offset UPP. For behavioral remedies, document monitoring costs and fallback options (trustees, data rooms) referenced in CMA/DG COMP practice.
 
 ### Retrospectives
-- Where historical analogs exist, run diff-in-diff/event studies on prices/output/quality. Use rivals and unaffected markets as controls; test pre-trends (Ashenfelter & Hosken, 2010); (Miller & Weinberg, 2017).
+- Where historical analogs exist, run DiD/event studies on prices/output/quality. Use rivals and unaffected markets as controls; test pre-trends (Ashenfelter & Hosken, 2010); (Miller & Weinberg, 2017).
 - For platform/vertical cases, examine participation/multi-homing effects and access terms over time.
 - Cite retrospective literature to benchmark magnitudes and methods (Weinberg & Hosken, 2013).
 - Use well-known retrospectives (e.g., supermarket/hospital/airline cases) to set expectations on effect sizes and uncertainty.
@@ -587,6 +591,7 @@ Tie efficiencies to data. For example, if parties cite procurement savings, requ
 library(tidyquant)
 library(dplyr)
 library(ggplot2)
+source("program/R/helpers.R")
 
 event_date <- as.Date("2013-02-14") # substitute deal date
 tickers <- c("AAL", "DAL", "LUV", "SPY")
@@ -622,9 +627,12 @@ ggplot(cars, aes(rel_day, car, color = symbol)) +
 Use CAR patterns as suggestive evidence of coordination or efficiency expectations, but always pair with operational data (capacity, contracts).
 
 ### Southern African merger evidence
-- **Walmart/Massmart (2011).** The Competition Commission and Tribunal analyzed SKU-level sales and procurement data showing Massmart’s 20–25% share in formal general merchandise with limited reach into township grocery segments. Diversion estimates from loyalty-card switching rates indicated minimal unilateral effect, so the case turned on public-interest harms. Conditions ultimately required a R240 million supplier development fund, a two-year moratorium on merger-specific retrenchments, and detailed annual reporting on local procurement shares—providing a template for tying data-backed public-interest claims to remedies.
-- **Mediclinic/Matlosana (2014).** Using patient-level discharge data covering 24 specialties, the Commission computed local HHIs above 6,000 and estimated post-merger tariff increases of 8–12% for insured patients. The Tribunal accepted that rival hospitals were more than 150 km away and prohibited the deal, highlighting how granular utilization data can anchor both geographic market definition and competitive-effects narratives in middle-income regions.
-- **Heineken/Distell/Capevin (2022).** In evaluating the creation of Newco, the Commission’s demand estimates—calibrated from Nielsen panel data—showed cider/RTD diversion ratios above 0.5 between Hunters, Savanna, and Strongbow, with Newco projected to command roughly 65% share. Conditional approval required a R10 billion investment commitment, maintenance of existing third-party distribution contracts, and shelf-space safeguards for smaller craft brands, illustrating how quantitative evidence on differentiated products fed into both competition and public-interest remedies.
+
+**Walmart/Massmart (2011).** The Competition Commission and Tribunal analyzed SKU-level sales and procurement data showing Massmart's 20--25% share in formal general merchandise with limited reach into township grocery segments. Diversion estimates from loyalty-card switching rates indicated minimal unilateral effect, so the case turned on public-interest harms. Conditions ultimately required a R240 million supplier development fund, a two-year moratorium on merger-specific retrenchments, and detailed annual reporting on local procurement shares---providing a template for tying data-backed public-interest claims to remedies.
+
+**Mediclinic/Matlosana (2014).** Using patient-level discharge data covering 24 specialties, the Commission computed local HHIs above 6,000 and estimated post-merger tariff increases of 8--12% for insured patients. The Tribunal accepted that rival hospitals were more than 150 km away and prohibited the deal, highlighting how granular utilization data can anchor both geographic market definition and competitive-effects narratives in middle-income regions.
+
+**Heineken/Distell/Capevin (2022).** In evaluating the creation of Newco, the Commission's demand estimates---calibrated from Nielsen panel data---showed cider/RTD diversion ratios above 0.5 between Hunters, Savanna, and Strongbow, with Newco projected to command roughly 65% share. Conditional approval required a R10 billion investment commitment, maintenance of existing third-party distribution contracts, and shelf-space safeguards for smaller craft brands, illustrating how quantitative evidence on differentiated products fed into both competition and public-interest remedies.
 
 {% hint style="info" %}
 **Method box**
@@ -679,13 +687,14 @@ source("program/R/helpers.R")
 ## Visualizations
 
 ### Market shares and HHI dashboard
-This dashboard provides a comprehensive view of market structure before and after the merger, combining share distributions, HHI calculations, and competitive thresholds.
+This dashboard displays market structure before and after the merger, combining share distributions, HHI calculations, and competitive thresholds.
 
 ```r
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(patchwork)
+source("program/R/helpers.R")
 
 # Simulated market data (replace with actual transaction/Nielsen data)
 market_pre <- tibble::tribble(
@@ -834,9 +843,18 @@ cat(paste0("\nCombined entity share: ",
                           accuracy = 0.1), "\n"))
 ```
 
+{% hint style="info" %}
+**HHI Concentration Thresholds (2023 US Merger Guidelines)**
+
+| HHI Range | Classification | Delta HHI trigger |
+|:----------|:---------------|:------------------|
+| Below 1,000 | Unconcentrated | Generally no concern |
+| 1,000--1,800 | Moderately concentrated | Delta > 100 warrants scrutiny |
+| Above 1,800 | Highly concentrated | Delta > 100 triggers structural presumption |
+{% endhint %}
+
 **Interpretation:**
-- **HHI thresholds**: The 2023 US Merger Guidelines establish a structural presumption of illegality when post-merger HHI > 1,800 and the merger increases HHI by more than 100 points.
-- **Delta HHI**: Changes above 100 in concentrated markets (HHI > 1,800) trigger the structural presumption.
+- **Delta HHI**: Changes above 100 in concentrated markets (HHI > 1,800) trigger the structural presumption of illegality.
 - **Combined entity**: The merged firm's share and rank indicate potential unilateral effects concerns.
 - **Concentration curve**: Shows how quickly the top firms accumulate market share.
 
@@ -848,6 +866,7 @@ A waterfall chart decomposes the predicted post-merger price change into its com
 ```r
 library(dplyr)
 library(ggplot2)
+source("program/R/helpers.R")
 
 # Simulation components (from a differentiated products model)
 # Replace with actual simulation outputs
@@ -954,7 +973,7 @@ Replace simulated values with outputs from your actual merger simulation model (
 
 ## Looking ahead
 
-Merger analysis produces artifacts—simulation outputs, UPP tables, event-study results—that feed directly into **Chapter 07 (Monopolization)** and **Chapter 12 (Litigation Practice)**. The same frameworks apply when assessing whether a dominant firm's conduct harms competition.
+The simulation outputs, UPP tables, and event-study results from this chapter feed directly into **Chapter 07 (Monopolization)** and **Chapter 12 (Litigation Practice)**. The same frameworks apply when assessing whether a dominant firm's conduct harms competition.
 
 **Before proceeding, prepare:**
 
@@ -962,4 +981,4 @@ Merger analysis produces artifacts—simulation outputs, UPP tables, event-study
 2. **Data refresh plan**: Note which datasets (Nielsen panels, loyalty data, procurement archives) need anonymization or refreshed pulls for teaching or publication.
 3. **Retrospective benchmarks**: Keep a reference list of merger retrospectives (airlines, hospitals, beer) with their effect-size estimates—useful for validating your simulations against real-world outcomes.
 
-In Chapter 07, we apply similar diversion and foreclosure frameworks to unilateral conduct by dominant firms. The simulation and screening tools from this chapter transfer directly—the key difference is that we're analyzing conduct by a single firm rather than a transaction between two firms.
+Chapter 07 applies similar diversion and foreclosure frameworks to unilateral conduct by dominant firms. The screening tools transfer directly; the difference is that the analysis centers on a single firm's behavior rather than a transaction between two firms.

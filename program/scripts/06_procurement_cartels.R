@@ -8,6 +8,7 @@ library(tidyr)
 library(readr)
 library(httr)
 library(jsonlite)
+library(lubridate)
 
 # ============================================================================
 # Phase 1: World Bank procurement data
@@ -27,16 +28,16 @@ tryCatch({
   response <- GET(wb_query)
   
   if (status_code(response) == 200) {
-    wb_data <- content(response, as = "parsed") %>%
-      bind_rows() %>%
+    wb_data <- content(response, as = "parsed") |>
+      bind_rows() |>
       as_tibble()
     
     # Clean and standardize
-    wb_clean <- wb_data %>%
+    wb_clean <- wb_data |>
       mutate(
         contract_amount = as.numeric(total_contract_amount),
         fiscal_year = as.integer(fiscal_year)
-      ) %>%
+      ) |>
       filter(!is.na(contract_amount), contract_amount > 0)
     
     write_csv(wb_clean, "data/raw/worldbank_procurement.csv")
@@ -94,7 +95,7 @@ cement_bids <- tibble(
   project_id = 1:n_projects,
   date = seq(as.Date("2010-01-01"), by = "month", length.out = n_projects),
   year = lubridate::year(date)
-) %>%
+) |>
   mutate(
     # Assign winner based on period
     cartel_period = year >= 2014 & year <= 2018,
@@ -120,8 +121,8 @@ write_csv(cement_bids, "data/derived/cartel_cement_bids.csv")
 firms_prices <- expand_grid(
   date = seq(as.Date("2015-01-01"), as.Date("2023-12-01"), by = "month"),
   firm = paste0("Firm_", LETTERS[1:5])
-) %>%
-  group_by(firm) %>%
+) |>
+  group_by(firm) |>
   mutate(
     # Base price with common shock
     common_shock = rnorm(n(), 0, 2),
@@ -129,7 +130,7 @@ firms_prices <- expand_grid(
     firm_shock = rnorm(n(), 0, if_else(date < as.Date("2018-01-01"), 3, 0.5)),
     # Price
     price = 100 + common_shock + firm_shock + 0.01 * row_number()
-  ) %>%
+  ) |>
   ungroup()
 
 write_csv(firms_prices, "data/derived/cartel_price_correlation.csv")
@@ -142,14 +143,14 @@ if (file.exists("data/derived/cartel_cement_bids.csv")) {
   bids <- read_csv("data/derived/cartel_cement_bids.csv", show_col_types = FALSE)
   
   # Calculate bid rotation metrics
-  rotation_metrics <- bids %>%
-    group_by(year, winner) %>%
+  rotation_metrics <- bids |>
+    group_by(year, winner) |>
     summarise(
       wins = n(),
       avg_bid = mean(winning_bid),
       .groups = "drop"
-    ) %>%
-    group_by(year) %>%
+    ) |>
+    group_by(year) |>
     mutate(
       total_projects = sum(wins),
       win_share = wins / total_projects,

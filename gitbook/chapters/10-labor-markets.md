@@ -1,10 +1,11 @@
 # Antitrust and Labor Markets
 
-The preceding chapters focused primarily on product markets---markets where firms sell goods and services to customers. This chapter turns to labor markets, where firms buy the services of workers. The economic logic is parallel but inverted: instead of asking whether sellers have market power to raise prices, we ask whether employers have market power to suppress wages.
+The preceding chapters analyzed product markets---markets where firms sell goods and services to customers. Labor markets invert the question: instead of asking whether sellers have market power to raise prices, we ask whether employers have market power to suppress wages.
 
-Labor antitrust has emerged as a major enforcement priority. The DOJ has brought criminal wage-fixing and no-poach cases; the FTC attempted a nationwide ban on noncompete agreements; and academics have documented substantial labor market concentration in many occupations and regions. The tools are familiar---concentration measurement, causal inference, qualitative evidence---but the application to input markets raises distinctive issues, from the statutory labor exemption to the measurement of commuting zones and occupational boundaries.
+Labor antitrust has become a front-line enforcement priority. The DOJ has brought criminal wage-fixing and no-poach cases; the FTC attempted a nationwide ban on noncompete agreements; and empirical research has documented substantial labor market concentration across many occupations and regions. The tools---concentration measurement (Chapter 3), causal inference (Chapter 2, especially DiD and event studies), and qualitative evidence protocols---carry over from product market analysis, and the cartel detection methods from Chapter 5 adapt directly to wage-fixing and no-poach agreements. But input markets raise distinctive issues, from the statutory labor exemption to the measurement of commuting zones and occupational boundaries.
 
 ## Learning goals
+
 Labor cases now sit alongside mergers and cartels in agency priorities. This chapter blends empirical tools from recent academic research on labor market power with practical guidance on using BLS and Census data. You will learn to:
 
 - Measure labor market power (concentration, labor supply elasticity, pass-through).
@@ -43,7 +44,7 @@ MARKET DEFINITION          CONDUCT ANALYSIS          EFFECTS & DAMAGES
 {% endhint %}
 
 - Labor concentration (HHI, Herfindahl-Hirschman Index for labor markets) and labor supply elasticity estimates.
-- Event studies and diff-in-diff around policy shocks (noncompete bans, wage disclosure laws, franchise no-poach settlements).
+- Event studies and DiD around policy shocks (noncompete bans, wage disclosure laws, franchise no-poach settlements).
 - Wage-posting vs. realized wage analysis; vacancy scraping; platform data for gig markets.
 - Mobility, retention, and heterogeneity by occupation, region, and worker demographics.
 - Qualitative evidence from HR documents, franchise agreements, and worker testimony.
@@ -52,8 +53,8 @@ MARKET DEFINITION          CONDUCT ANALYSIS          EFFECTS & DAMAGES
 **Method box**
 
 **Monopsony elasticities:** Estimate labor supply elasticity using quits, recruitment response, or equilibrium wage-setting models (e.g., inverse labor supply).  
-**Policy diff-in-diff:** Evaluate wage or mobility effects after noncompete bans or franchise no-poach settlements.  
-**Synthetic control:** Single-state reforms (e.g., Washington franchise no-poach settlement) can be assessed via synthetic control or staggered diff-in-diff.
+**Policy DiD:** Evaluate wage or mobility effects after noncompete bans or franchise no-poach settlements.  
+**Synthetic control:** Single-state reforms (e.g., Washington franchise no-poach settlement) can be assessed via synthetic control or staggered DiD.
 {% endhint %}
 
 {% hint style="info" %}
@@ -79,7 +80,12 @@ Reference US DOJ/FTC criminal wage-fixing cases, state AG settlements, the FTC's
 ## Measuring labor market power
 
 ### Concentration indices
-Compute HHI or concentration ratios for labor markets defined by occupation × geography (e.g., SOC × commuting zone). Use BLS QCEW, Census LODES/LEHD Origin-Destination Employment Statistics, or Stats SA labour force microdata. For empirical evidence on labor market concentration, see (Azar, Marinescu & Steinbaum, 2020) and (Benmelech, Bergman & Kim, 2020).
+
+{% hint style="info" %}
+**Defining the labor market.** Labor markets are typically defined by the intersection of **occupation** (SOC code) and **geography** (commuting zone or metro area). The choice of granularity matters: too broad and you miss pockets of monopsony; too narrow and sample sizes are unreliable.
+{% endhint %}
+
+Compute HHI or concentration ratios for labor markets defined by occupation x geography (e.g., SOC x commuting zone). Use BLS QCEW, Census LODES/LEHD Origin-Destination Employment Statistics, or Stats SA labour force microdata. For empirical evidence on labor market concentration, see (Azar, Marinescu & Steinbaum, 2020) and (Benmelech, Bergman & Kim, 2020).
 
 ```r
 library(dplyr)
@@ -113,13 +119,17 @@ library(fixest)
 ```
 Use matched employer-employee data (LEHD, SSA, UI wage records) or firm-level HR exports. Elasticities below 2–3 indicate meaningful monopsony power (Manning, 2003); (Ashenfelter, Farber & Ransom, 2010). For policy implications, see (Naidu, Posner & Weyl, 2018).
 
+---
+
 ## Noncompetes, no-poach, and wage fixing
 
-### Policy shock diff-in-diff
+### Policy shock DiD
 ```r
 library(dplyr)
 library(fixest)
 
+# Synthetic panel for illustration; replace with actual BLS/CPS wage data
+set.seed(99)
 panel <- expand.grid(state = c("WA","OR","ID","MT"), year = 2014:2022) |>
   mutate(
     treated = if_else(state == "WA" & year >= 2019, 1, 0),
@@ -139,7 +149,7 @@ Substitute actual wage data (BLS Occupational Employment and Wage Statistics, CP
 
 ### Synthetic control for single-state reforms
 
-When only one state implements a policy change (e.g., California's noncompete ban, Washington's franchise no-poach settlement), standard diff-in-diff may lack a valid control group. Synthetic control constructs a weighted combination of untreated states that matches the treated state's pre-treatment trajectory.
+When only one state implements a policy change (e.g., California's noncompete ban, Washington's franchise no-poach settlement), standard DiD may lack a valid control group. Synthetic control constructs a weighted combination of untreated states that matches the treated state's pre-treatment trajectory.
 
 ```r
 library(Synth)
@@ -204,7 +214,7 @@ Combine vacancy data (Indeed, Burning Glass, Pnet) with payroll data to evaluate
 ## Visualizations
 
 ### Labor market concentration choropleth
-A geographic visualization of labor market concentration helps identify regions and occupations with potential monopsony concerns. This example uses synthetic data but can be adapted for BLS QCEW, Census LEHD, or Stats SA QLFS data.
+Geographic visualization of labor market concentration pinpoints regions and occupations with potential monopsony concerns. The example below uses synthetic data but adapts directly to BLS QCEW, Census LEHD, or Stats SA QLFS data.
 
 ```r
 library(dplyr)
@@ -316,6 +326,7 @@ Compare HHI across multiple occupations to identify which labor markets face gre
 library(dplyr)
 library(ggplot2)
 library(forcats)
+source("program/R/helpers.R")
 
 # Simulated HHI data across occupations and regions
 # Replace with actual QCEW/LEHD/QLFS data
@@ -396,6 +407,7 @@ Combine concentration data with wage outcomes to show the relationship between H
 ```r
 library(dplyr)
 library(ggplot2)
+source("program/R/helpers.R")
 
 # Simulated data showing HHI vs. wage gap
 # Replace with actual QCEW/OES wage data matched to HHI calculations
@@ -461,7 +473,17 @@ summary(wage_model)
 
 ## Visualizations and data sourcing
 - **Labor HHI choropleths:** Source [BLS QCEW](https://www.bls.gov/cew/) (US), Stats SA, or EU Labour Force Survey; for publication, provide a template script plus sanitized shapefiles.
-- **Noncompete diff-in-diff plots:** Use state-level CPS microdata, WA Dept. of Labor wage records, or Stats SA sectoral wages; fallback to synthetic data until approvals land.
+- **Noncompete DiD plots:** Use state-level CPS microdata, WA Dept. of Labor wage records, or Stats SA sectoral wages; fallback to synthetic data until approvals land.
 - **Mobility transition matrices:** Build from [LEHD/LODES](https://lehd.ces.census.gov/) or anonymized HR exports; include aggregated gig-platform transitions.
 
-Document each dataset in `data/README.md` and tag whether it is public, sanitized, or confidential. When ready to "fill with real data," replace the synthetic CSVs in `data/examples/` with actual extracts, rerun the figures, and cache redacted outputs for broader distribution.
+Document each dataset in `data/README.md`, tagging whether it is public, sanitized, or confidential. When substituting real data, replace the synthetic CSVs in `data/examples/` with actual extracts, rerun the figures, and cache redacted outputs for broader distribution.
+
+## Looking ahead
+
+Labor market antitrust is increasingly intertwined with innovation policy and litigation strategy. **Chapter 11** (Innovation and IP) examines how noncompete agreements interact with innovation incentives---the tension between protecting trade secrets and enabling worker mobility that drives knowledge spillovers. The wage-fixing and no-poach frameworks developed here also appear in **Chapter 12** (Litigation Practice), which covers damages calculation for labor antitrust claims (lost wages, reduced mobility, benefits suppression) and the procedural challenges of class certification in worker cases. For practitioners working in Southern Africa, the public-interest considerations in labor cases---employment effects, worker welfare, and equity concerns---connect directly to the merger remedy frameworks in Chapter 8.
+
+**Before proceeding, prepare:**
+
+1. **Labor market database**: Archive HHI calculations, wage panel data, and mobility matrices in `data/derived/labor/` with documentation of occupation codes (SOC/ISCO), geographic definitions (commuting zones, MSAs, or districts), and data vintages.
+2. **Policy event calendar**: Maintain a timeline of noncompete bans, no-poach settlements, and wage transparency laws that can serve as treatment events in future DiD or synthetic control analyses.
+3. **Cross-market links**: Note where labor market concentration overlaps with product market concentration---for example, hospital mergers that raise both patient prices and suppress nurse wages may require integrated analysis across Chapters 6, 7, and 10.

@@ -41,7 +41,7 @@ cat("Starting data collection...\n\n")
 # ============================================================================
 cat("01. FRED extended data (concentration, prices, labor)...\n")
 tryCatch({
-  source("scripts/01_fred_extended.R")
+  source("program/scripts/01_fred_extended.R")
 }, error = function(e) {
   cat("   ⚠ Error:", e$message, "\n")
 })
@@ -52,7 +52,7 @@ cat("\n")
 # ============================================================================
 cat("02. Financial data (event studies)...\n")
 tryCatch({
-  source("scripts/02_finance_extended.R")
+  source("program/scripts/02_finance_extended.R")
 }, error = function(e) {
   cat("   ⚠ Error:", e$message, "\n")
 })
@@ -63,7 +63,7 @@ cat("\n")
 # ============================================================================
 cat("03. BLS labor market data...\n")
 tryCatch({
-  source("scripts/03_bls_labor.R")
+  source("program/scripts/03_bls_labor.R")
 }, error = function(e) {
   cat("   ⚠ Error:", e$message, "\n")
 })
@@ -74,7 +74,7 @@ cat("\n")
 # ============================================================================
 cat("04. Patents (PatentsView) and FDA Orange Book...\n")
 tryCatch({
-  source("scripts/04_patents_fda.R")
+  source("program/scripts/04_patents_fda.R")
 }, error = function(e) {
   cat("   ⚠ Error:", e$message, "\n")
 })
@@ -85,7 +85,7 @@ cat("\n")
 # ============================================================================
 cat("05. Airline/flights data (nycflights13)...\n")
 tryCatch({
-  source("scripts/05_flights_extended.R")
+  source("program/scripts/05_flights_extended.R")
 }, error = function(e) {
   cat("   ⚠ Error:", e$message, "\n")
 })
@@ -96,7 +96,7 @@ cat("\n")
 # ============================================================================
 cat("06. Procurement and cartel screening data...\n")
 tryCatch({
-  source("scripts/06_procurement_cartels.R")
+  source("program/scripts/06_procurement_cartels.R")
 }, error = function(e) {
   cat("   ⚠ Error:", e$message, "\n")
 })
@@ -107,7 +107,7 @@ cat("\n")
 # ============================================================================
 cat("07. Digital platforms data...\n")
 tryCatch({
-  source("scripts/07_digital_platforms.R")
+  source("program/scripts/07_digital_platforms.R")
 }, error = function(e) {
   cat("   ⚠ Error:", e$message, "\n")
 })
@@ -118,7 +118,7 @@ cat("\n")
 # ============================================================================
 cat("08. Regulation and benchmarking data...\n")
 tryCatch({
-  source("scripts/08_regulation_benchmarks.R")
+  source("program/scripts/08_regulation_benchmarks.R")
 }, error = function(e) {
   cat("   ⚠ Error:", e$message, "\n")
 })

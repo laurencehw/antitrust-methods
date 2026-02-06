@@ -13,21 +13,21 @@ library(readr)
 # ============================================================================
 
 # Calculate route shares from nycflights13
-route_shares <- flights %>%
-  filter(!is.na(origin), !is.na(dest)) %>%
-  mutate(route = paste(pmin(origin, dest), pmax(origin, dest), sep = "-")) %>%
-  group_by(route, carrier) %>%
+route_shares <- flights |>
+  filter(!is.na(origin), !is.na(dest)) |>
+  mutate(route = paste(pmin(origin, dest), pmax(origin, dest), sep = "-")) |>
+  group_by(route, carrier) |>
   summarise(
     flights = n(),
     avg_distance = mean(distance, na.rm = TRUE),
     .groups = "drop"
-  ) %>%
-  group_by(route) %>%
+  ) |>
+  group_by(route) |>
   mutate(
     total_flights = sum(flights),
     share = flights / total_flights,
     hhi = sum(share^2) * 10000
-  ) %>%
+  ) |>
   ungroup()
 
 write_csv(route_shares, "data/derived/airline_route_shares.csv")
@@ -36,20 +36,20 @@ write_csv(route_shares, "data/derived/airline_route_shares.csv")
 # Phase 2: Hub concentration metrics
 # ============================================================================
 
-hub_concentration <- flights %>%
-  filter(!is.na(origin), !is.na(carrier)) %>%
-  group_by(origin, carrier) %>%
+hub_concentration <- flights |>
+  filter(!is.na(origin), !is.na(carrier)) |>
+  group_by(origin, carrier) |>
   summarise(
     flights = n(),
     destinations = n_distinct(dest),
     .groups = "drop"
-  ) %>%
-  group_by(origin) %>%
+  ) |>
+  group_by(origin) |>
   mutate(
     total_flights = sum(flights),
     share = flights / total_flights,
     hhi = sum(share^2) * 10000
-  ) %>%
+  ) |>
   arrange(origin, desc(share))
 
 write_csv(hub_concentration, "data/derived/airline_hub_concentration.csv")
@@ -58,9 +58,9 @@ write_csv(hub_concentration, "data/derived/airline_hub_concentration.csv")
 # Phase 3: Carrier-level metrics
 # ============================================================================
 
-carrier_metrics <- flights %>%
-  left_join(nycflights13::airlines, by = "carrier") %>%
-  group_by(carrier, name) %>%
+carrier_metrics <- flights |>
+  left_join(nycflights13::airlines, by = "carrier") |>
+  group_by(carrier, name) |>
   summarise(
     total_flights = n(),
     routes = n_distinct(paste(origin, dest, sep = "-")),
@@ -68,7 +68,7 @@ carrier_metrics <- flights %>%
     avg_distance = mean(distance, na.rm = TRUE),
     avg_delay = mean(arr_delay, na.rm = TRUE),
     .groups = "drop"
-  ) %>%
+  ) |>
   arrange(desc(total_flights))
 
 write_csv(carrier_metrics, "data/derived/airline_carrier_metrics.csv")
@@ -77,14 +77,14 @@ write_csv(carrier_metrics, "data/derived/airline_carrier_metrics.csv")
 # Phase 4: Time-of-day patterns (for capacity/slot analysis)
 # ============================================================================
 
-hourly_patterns <- flights %>%
-  filter(!is.na(hour)) %>%
-  group_by(origin, hour, carrier) %>%
+hourly_patterns <- flights |>
+  filter(!is.na(hour)) |>
+  group_by(origin, hour, carrier) |>
   summarise(
     flights = n(),
     .groups = "drop"
-  ) %>%
-  group_by(origin, hour) %>%
+  ) |>
+  group_by(origin, hour) |>
   mutate(
     total_flights = sum(flights),
     share = flights / total_flights
@@ -96,13 +96,13 @@ write_csv(hourly_patterns, "data/derived/airline_hourly_patterns.csv")
 # Phase 5: Delay analysis (quality dimension for market definition)
 # ============================================================================
 
-delay_analysis <- flights %>%
-  filter(!is.na(arr_delay)) %>%
+delay_analysis <- flights |>
+  filter(!is.na(arr_delay)) |>
   mutate(
     route = paste(pmin(origin, dest), pmax(origin, dest), sep = "-"),
     delayed = arr_delay > 15
-  ) %>%
-  group_by(route, carrier) %>%
+  ) |>
+  group_by(route, carrier) |>
   summarise(
     flights = n(),
     avg_delay = mean(arr_delay, na.rm = TRUE),
