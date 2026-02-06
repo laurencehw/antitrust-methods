@@ -5,6 +5,7 @@ The tools and frameworks from the preceding chapters---market definition, IO mod
 We also introduce new evidence types that matter especially in digital markets: telemetry data, clickstream analysis, API documentation, and product requirements documents. The intersection of technical product knowledge and economic reasoning defines much of the frontier in digital platform enforcement, from the US cases against Google and Meta to the EU's Digital Markets Act and South Africa's Online Intermediation Platforms Market Inquiry.
 
 ## Learning goals
+
 Digital markets combine traditional IO concepts with product design, governance, and behavioral nudges. Drawing on DMA/Digital Markets Unit briefings and recent enforcement actions, this chapter helps you:
 
 - Analyze multi-sided participation, indirect network effects, and multi-homing incentives.
@@ -21,8 +22,6 @@ Expect to combine telemetry, clickstream data, partner contracts, and qualitativ
 {% endhint %}
 
 ## Core topics
-
-Digital platform analysis extends traditional IO tools to multi-sided markets where network effects, data advantages, and zero-price business models create distinct competitive dynamics. This section covers the key mechanisms and evidence types.
 
 **Multi-sided markets** connect different user groups (buyers/sellers, users/advertisers, drivers/riders) who value each other's participation:
 
@@ -96,7 +95,7 @@ The table below maps common platform theories of harm to measurable metrics and 
 
 | Theory of Harm | Key Metric | Empirical Test | Data Sources |
 |:---------------|:-----------|:---------------|:-------------|
-| **Self-preferencing** | Downstream traffic share; CTR by listing type | Diff-in-Diff around algorithm changes; A/B test analysis | Platform telemetry, OIPMI audits, CMA studies |
+| **Self-preferencing** | Downstream traffic share; CTR by listing type | DiD around algorithm changes; A/B test analysis | Platform telemetry, OIPMI audits, CMA studies |
 | **Ranking manipulation** | Position-adjusted CTR; conversion by slot | Regression of outcomes on ranking position × first-party indicator | Clickstream logs, buy-box audits |
 | **Default tying** | Rival market share pre/post choice screen | Event study around remedy implementation | DMA compliance reports, browser/search share data |
 | **Foreclosure (input denial)** | API latency; error rates; access denial frequency | Regression of 3rd-party performance on access restrictions | API logs, developer complaints, uptime monitoring |
@@ -139,6 +138,7 @@ library(fixest)
 source("program/R/helpers.R")
 
 # Synthetic example; replace with platform telemetry
+set.seed(42)
 panel <- expand.grid(platform = c("Alpha","Beta"), period = 2018:2023) |>
   mutate(
     fees_users = runif(n(), 0, 4),
@@ -157,13 +157,9 @@ Replace the synthetic `panel` with sanitized telemetry (monthly active users/mer
 
 ### Zero-price demand model (attention markets)
 
-**The challenge:** Many platforms don't charge users money—instead, users "pay" with attention (watching ads) and data (surrendering personal information). Standard price-based demand models don't directly apply.
+Many platforms charge users nothing in money terms---instead, users pay with attention (watching ads) and data (surrendering personal information). Standard price-based demand models do not directly apply. The fix is to replace monetary fees with **attention costs**: ad load, time spent, or quality degradation, then estimate how sensitive users are to non-price dimensions of competition. This maps onto the SSNDQ (Small but Significant Non-transitory Decrease in Quality) framework competition authorities use for zero-price markets.
 
-**The solution:** Replace monetary fees with **attention costs**: ad load, time spent, or quality degradation. This lets us estimate how sensitive users are to non-price dimensions of competition and apply the SSNDQ (Small but Significant Non-transitory Decrease in Quality) framework used by competition authorities.
-
-**What this model shows:** We estimate how user engagement (daily active users) responds to "attention costs" like ad load and data collection, as well as quality metrics like load time and content relevance. This lets us simulate whether a hypothetical monopolist could profitably degrade quality.
-
-When users pay with attention rather than money, standard fee-based demand models need adaptation. Replace monetary fees with **attention costs**: ad load, time spent, or quality degradation metrics. This aligns with the SSNDQ (Small but Significant Non-transitory Decrease in Quality) framework used by competition authorities.
+The model below estimates how user engagement (daily active users) responds to attention costs (ad load, data collection) and quality metrics (load time, content relevance), then simulates whether a hypothetical monopolist could profitably degrade quality.
 
 ```r
 library(dplyr)
@@ -272,6 +268,7 @@ cat(paste0("Would monopolist profit? Depends on ad revenue vs. user loss tradeof
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+source("program/R/helpers.R")
 
 ranking <- tibble::tribble(
   ~slot, ~first_party_ctr, ~third_party_ctr,
@@ -375,12 +372,13 @@ Document each dataset in `data/README.md` with provenance, confidentiality notes
 ## Enhanced Visualizations
 
 ### Multi-homing patterns
-Multi-homing patterns reveal competitive constraints and switching costs. The following visualization shows the distribution of users across platform combinations, helping identify whether platforms compete head-to-head or serve distinct niches.
+Multi-homing patterns reveal competitive constraints and switching costs. The distribution of users across platform combinations indicates whether platforms compete head-to-head or serve distinct niches.
 
 ```r
 library(dplyr)
 library(ggplot2)
 library(ggalluvial)
+source("program/R/helpers.R")
 
 # Simulated multi-homing survey data
 # Replace with OIPMI survey data or DMA compliance reports
@@ -474,6 +472,7 @@ library(fixest)
 library(dplyr)
 library(ggplot2)
 library(patchwork)
+source("program/R/helpers.R")
 
 # Simulated data: Android choice screen impact (EU DMA context)
 # Replace with actual DMA compliance data or CMA experiments
@@ -587,6 +586,7 @@ Commission and fee structures are critical evidence in platform cases. Show how 
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+source("program/R/helpers.R")
 
 # Fee structures from major platforms (public sources)
 # App Store, Play Store, Amazon Marketplace, food delivery
@@ -671,6 +671,7 @@ Track platform market share over time to identify tipping points and competitive
 library(dplyr)
 library(ggplot2)
 library(lubridate)
+source("program/R/helpers.R")
 
 # Market share evolution from public sources and regulatory filings
 # Illustrative data for search engines, social media, or e-commerce
@@ -759,13 +760,15 @@ cat(paste0("\nPlatform A share trend: ",
 - Identify tipping points or competitive interventions
 - Support market definition and dominance assessments
 
+---
+
 ## Generative AI and foundation models
 
-The platform competition framework developed above—multi-sided markets, network effects, data as a competitive moat—extends naturally to AI markets. Yet foundation models introduce novel concerns that merit separate treatment: compute concentration, partnership structures that may confer control without acquisition, and rapidly evolving capabilities that challenge static market share analysis.
+{% hint style="warning" %}
+**Rapidly evolving area.** AI market competition is subject to fast-moving developments in both technology and regulation. The frameworks below provide a starting point, but practitioners should monitor agency guidance closely for updates.
+{% endhint %}
 
-This section surveys early enforcement thinking on AI markets, adapting concepts from the platform discussion above. As of 2025-2026, enforcement agencies are actively examining AI markets for potential antitrust concerns.
-
-Large language models (LLMs) and generative AI introduce new competitive dynamics that extend traditional platform analysis.
+The platform competition framework developed above---multi-sided markets, network effects, data as a competitive moat---applies to AI markets, but foundation models raise distinct concerns: compute concentration, partnership structures that may confer control without acquisition, and rapidly evolving capabilities that resist static market share analysis. Enforcement agencies in multiple jurisdictions began examining these issues in 2024--2025.
 
 ### Market structure concerns
 
@@ -807,12 +810,6 @@ For the latest agency guidance, monitor CMA's AI Foundation Models work and FTC/
 
 ## Looking ahead
 
-Digital markets evolve rapidly, making data currency and documentation essential. In **Chapter 10 (Labor Markets)**, we apply similar monopsony frameworks to employer-side platform power—gig economy classification, wage-fixing algorithms, and no-poach agreements.
+Store digital platform analyses in `data/derived/digital/` with clear provenance notes (data source, extraction date, confidentiality status). When DMA compliance data become available, replace synthetic choice-screen impacts with actual telemetry; document API access restrictions and data-sharing agreements in `data/README.md`.
 
-**Before proceeding, prepare:**
-
-1. **Archive outputs**: Store digital platform analyses in `data/derived/digital/` with clear provenance notes (data source, extraction date, confidentiality status).
-2. **DMA monitoring**: When DMA compliance data become available, replace synthetic choice-screen impacts with actual telemetry.
-3. **API documentation**: Document any API access restrictions and data-sharing agreements in `data/README.md`.
-
-Cross-reference these visualizations with Chapter 12 (litigation practice) for expert report templates and Chapter 13 (empirical appendix) for diagnostic checklists. Many of the same event-study and difference-in-differences techniques apply when evaluating platform remedies as when assessing merger retrospectives.
+**Chapter 10** (Labor Markets) applies related monopsony frameworks to employer-side platform power---gig economy classification, wage-fixing algorithms, and no-poach agreements---extending the platform analysis to the labor side. **Chapter 11** (Innovation and IP) addresses interoperability mandates and API access disputes that parallel the data-leverage and foreclosure concerns analyzed here. **Chapter 12** (Litigation Practice) provides expert report templates for platform litigation, and the **Empirical Appendix (Chapter 13)** covers the diagnostic checklists (event studies, DiD) that apply equally to platform remedy evaluation and merger retrospectives. The remedy design principles from **Chapter 8** are essential when crafting platform-specific relief such as choice screens, interoperability mandates, and data portability requirements.

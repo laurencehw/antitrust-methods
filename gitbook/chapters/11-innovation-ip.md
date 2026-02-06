@@ -1,10 +1,11 @@
 # Innovation, Intellectual Property, and Antitrust
 
-Competition policy increasingly grapples with innovation. Mergers may eliminate nascent competitors before they mature. Patent settlements may delay generic entry. Standard-essential patents may enable hold-up of entire industries. These cases require economists to work with unfamiliar evidence---patent portfolios, clinical trial data, standards body submissions---and to think carefully about dynamic competition that unfolds over years rather than the static price effects emphasized in earlier chapters.
+Competition policy increasingly confronts innovation questions. Mergers may eliminate nascent competitors before they mature---the "killer acquisitions" concern that extends the merger framework from Chapter 6 into dynamic settings. Patent settlements may delay generic entry. Standard-essential patents may enable hold-up of entire industries. These cases force economists to work with unfamiliar evidence---patent portfolios, clinical trial data, standards body submissions---and to reason about dynamic competition that unfolds over years rather than the static price effects that dominate earlier chapters. The remedy design principles from Chapter 8 (particularly behavioral commitments, monitoring frameworks, and sunset provisions) are essential when crafting FRAND-related relief.
 
-This chapter shows how to analyze innovation-related antitrust issues. We cover standard-essential patents and FRAND licensing, pay-for-delay pharmaceutical settlements, killer acquisitions, and the measurement of innovation effects more broadly. The tools include survival analysis for entry timing, event studies around patent announcements, and the integration of technical expert testimony with economic analysis.
+The topics here---standard-essential patents and Fair, Reasonable, and Non-Discriminatory (FRAND) licensing, pay-for-delay pharmaceutical settlements, killer acquisitions, and the measurement of innovation effects---require survival analysis for entry timing, event studies around patent announcements, and the integration of technical expert testimony with economic analysis.
 
 ## Learning goals
+
 Innovation cases require translating R&D pipelines, patent portfolios, and technical standards into competition narratives. This chapter shows how to:
 
 - Evaluate SEPs/FRAND licensing, patent pools, and interoperability disputes.
@@ -13,11 +14,14 @@ Innovation cases require translating R&D pipelines, patent portfolios, and techn
 - Integrate qualitative expert testimony with econometric and event-study evidence.
 
 ## Core topics
-- SEPs/FRAND licensing economics; hold-up vs. hold-out.
-- Pay-for-delay: economic characterization, entry timing, consumer harm.
-- Innovation measures: patent counts/citations, R&D spend, pipeline probability.
-- Interoperability and standards; access to APIs and data.
-- Remedy design: FRAND commitments, compulsory licensing, data/technology access, behavioral constraints on reverse payments.
+
+| Topic | Key questions | Primary evidence |
+|:------|:-------------|:-----------------|
+| SEPs/FRAND licensing | Hold-up vs. hold-out? FRAND rate determination? | Licensing histories, comparable agreements, standards body submissions |
+| Pay-for-delay | Entry timing? Consumer harm magnitude? | Settlement agreements, FDA/EMA data, price series |
+| Innovation measurement | Did conduct reduce innovation? | Patent counts/citations, R&D spend, pipeline probability |
+| Interoperability | Access to APIs and data? | Technical documentation, standards specifications |
+| Remedy design | FRAND commitments, compulsory licensing | Prior commitments, rate determinations |
 
 {% hint style="info" %}
 **Method box**
@@ -122,13 +126,15 @@ library(ggplot2)
 ```
 Use `tidyquant` with actual ticker lists; cite the docket (e.g., “Optis v. Apple FRAND decision”) in the narrative.
 
+---
+
 ## Pay-for-delay and reverse payments
 
 ### Entry timing and hazard models
 Reverse-payment settlements can delay generic entry and harm consumers (*FTC v. Actavis*, 2013). Analyze:
 
 - **Payment size:** Compare settlement payment to expected litigation costs and projected profits (Edlin & Hemphill, 2012).  
-- **Entry timing:** Use survival models or diff-in-diff to estimate delay relative to counterfactuals.  
+- **Entry timing:** Use survival models or DiD to estimate delay relative to counterfactuals.  
 - **Price effects:** Simulate price paths with and without generic entry (Scott Morton, 2000); (Hemphill & Sampat, 2012).
 
 ```r
@@ -146,7 +152,7 @@ data <- tibble::tribble(
 ```
 Replace with real pay-for-delay cases (Actavis-style) or EU decisions (Servier, Lundbeck). Use FDA Orange Book, EMA data, or South African SAMRC filings for entry timelines.
 
-### Diff-in-diff for price effects
+### DiD for price effects
 ```r
 library(fixest)
 
@@ -173,7 +179,11 @@ library(fixest)
 
 ### Killer acquisitions
 
-"Killer acquisitions" occur when an incumbent acquires a nascent competitor specifically to discontinue its innovation pipeline, eliminating a competitive threat rather than realizing synergies (Cunningham, Ederer & Ma, 2021). These transactions often fall below merger notification thresholds, allowing them to proceed without antitrust review.
+{% hint style="warning" %}
+**Below-threshold risk.** "Killer acquisitions" often fall below merger notification thresholds because the target is pre-revenue. Several jurisdictions now require notification based on transaction value (not just target revenue) to close this gap.
+{% endhint %}
+
+"Killer acquisitions" occur when an incumbent acquires a nascent competitor specifically to discontinue its innovation pipeline, eliminating a competitive threat rather than realizing synergies (Cunningham, Ederer & Ma, 2021).
 
 **Empirical identification:**
 
@@ -214,11 +224,12 @@ Analyze API access restrictions, data sharing, and interoperability constraints:
 ## Enhanced Visualizations
 
 ### Enhanced royalty stack waterfall
-A more detailed royalty stack showing how cumulative royalties build up across different technology components. This helps demonstrate potential royalty stack concerns in FRAND disputes.
+A more detailed royalty stack showing how cumulative royalties accumulate across different technology components, illustrating the royalty stacking problem central to FRAND disputes.
 
 ```r
 library(dplyr)
 library(ggplot2)
+source("program/R/helpers.R")
 
 # Royalty components for a smartphone
 # Replace with actual FRAND rate determinations or licensing data
@@ -321,12 +332,13 @@ Compare against FRAND rate determinations:
 - US Ericsson v. Samsung arbitration
 
 ### Generic entry survival curve
-Analyze the timing of generic pharmaceutical entry, with and without reverse payment settlements. Survival analysis shows whether settlements delay entry.
+Survival analysis of generic pharmaceutical entry timing, comparing drugs subject to reverse payment settlements against those resolved without such payments, tests whether settlements delay entry.
 
 ```r
 library(dplyr)
 library(ggplot2)
 library(survival)
+source("program/R/helpers.R")
 
 # Simulated generic entry data
 # Replace with FDA Orange Book data or European/South African equivalents
@@ -495,6 +507,7 @@ Evaluate whether mergers affect innovation incentives by tracking R&D spending b
 library(dplyr)
 library(ggplot2)
 library(fixest)
+source("program/R/helpers.R")
 
 # Simulated panel data: R&D spending around merger
 # Replace with Compustat, Orbis, or financial statement data
@@ -578,6 +591,7 @@ Track clinical trial progress for pharmaceutical innovation assessments.
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+source("program/R/helpers.R")
 
 # Simulated clinical trial pipeline
 # Replace with clinicaltrials.gov data or EMA/SAHPRA records
@@ -645,4 +659,4 @@ cat("\nUse these rates to model expected future approvals and consumer harm from
 Document data provenance and confidentiality in `data/README.md`, noting which visuals can ship publicly and which require synthetic placeholders until case data is approved for release.
 
 ## Looking ahead
-Archive all innovation analyses in `data/derived/innovation/` with clear metadata. When PatentsView bulk downloads or FDA Orange Book data become available, replace synthetic patent networks and entry curves with actual data. Cross-reference R&D event studies with Chapter 06 (mergers) and Chapter 08 (remedies) for remedy design templates. Document technical expert declarations and standards body submissions in case chronologies for litigation support.
+Archive innovation analyses in `data/derived/innovation/` with clear metadata. When PatentsView bulk downloads or FDA Orange Book data become available, replace synthetic patent networks and entry curves with actual data. R&D event studies connect to the merger analysis framework in **Chapter 6** and the remedy design templates in **Chapter 8**; document technical expert declarations and standards body submissions in case chronologies for litigation support in **Chapter 12** (Litigation Practice). The FRAND licensing disputes and SEP hold-up concerns discussed here also recur in **Chapter 9** (Digital Markets), where interoperability mandates and API access obligations raise analogous questions about the boundary between legitimate IP protection and exclusionary conduct. The Empirical Appendix (Chapter 13) provides reusable templates for the event study, survival analysis, and panel fixed-effects methods applied throughout this chapter.

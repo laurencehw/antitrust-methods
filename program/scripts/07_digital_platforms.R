@@ -74,8 +74,8 @@ months <- seq(as.Date("2015-01-01"), as.Date("2023-12-01"), by = "month")
 platform_usage <- tibble(
   date = rep(months, 2),
   platform = rep(c("Platform_A", "Platform_B"), each = length(months))
-) %>%
-  group_by(platform) %>%
+) |>
+  group_by(platform) |>
   mutate(
     # Users (side 1) - growth with network effects
     users_base = if_else(platform == "Platform_A", 1000000, 200000),
@@ -92,7 +92,7 @@ platform_usage <- tibble(
     
     # Transactions
     transactions = users * merchants * 0.0001 * rnorm(n(), 1, 0.1)
-  ) %>%
+  ) |>
   ungroup()
 
 write_csv(platform_usage, "data/derived/platform_two_sided_usage.csv")
@@ -107,7 +107,7 @@ search_results <- expand_grid(
   query_type = c("Product search", "Service search", "Local search"),
   position = 1:10,
   result_type = c("Platform own", "Third party")
-) %>%
+) |>
   mutate(
     # Platform preferencing: own results appear higher
     prob_platform = case_when(
@@ -166,7 +166,7 @@ multihoming <- tibble(
   uses_platform_a = rbinom(n_users, 1, 0.85),
   uses_platform_b = rbinom(n_users, 1, 0.40),
   uses_platform_c = rbinom(n_users, 1, 0.25)
-) %>%
+) |>
   mutate(
     total_platforms = uses_platform_a + uses_platform_b + uses_platform_c,
     multihoming = total_platforms > 1,
@@ -178,8 +178,8 @@ multihoming <- tibble(
     )
   )
 
-multihoming_summary <- multihoming %>%
-  group_by(primary_platform) %>%
+multihoming_summary <- multihoming |>
+  group_by(primary_platform) |>
   summarise(
     users = n(),
     pct = n() / nrow(multihoming) * 100

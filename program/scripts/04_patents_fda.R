@@ -61,8 +61,8 @@ cat("Querying PatentsView for pharmaceutical patents...\n")
 pharma_patents <- query_patents(pharma_query)
 
 if (!is.null(pharma_patents)) {
-  pharma_df <- pharma_patents$patents %>%
-    bind_rows() %>%
+  pharma_df <- pharma_patents$patents |>
+    bind_rows() |>
     as_tibble()
   
   write_csv(pharma_df, "data/raw/patents_pharma.csv")
@@ -97,8 +97,8 @@ cat("Querying PatentsView for tech/software patents...\n")
 tech_patents <- query_patents(tech_query)
 
 if (!is.null(tech_patents)) {
-  tech_df <- tech_patents$patents %>%
-    bind_rows() %>%
+  tech_df <- tech_patents$patents |>
+    bind_rows() |>
     as_tibble()
   
   write_csv(tech_df, "data/raw/patents_tech.csv")
@@ -178,21 +178,21 @@ if (file.exists("data/raw/fda_products.csv") &&
   exclusivity <- read_csv("data/raw/fda_exclusivity.csv", show_col_types = FALSE)
   
   # Identify brand vs generic drugs
-  entry_timing <- products %>%
-    filter(!is.na(Appl_No)) %>%
+  entry_timing <- products |>
+    filter(!is.na(Appl_No)) |>
     mutate(
       is_generic = Type == "ANDA",
       approval_date = as.Date(Approval_Date, format = "%b %d, %Y")
-    ) %>%
-    group_by(Ingredient, DF_Route) %>%
-    arrange(approval_date) %>%
+    ) |>
+    group_by(Ingredient, DF_Route) |>
+    arrange(approval_date) |>
     mutate(
       first_approval = min(approval_date, na.rm = TRUE),
       first_generic = min(approval_date[is_generic], na.rm = TRUE),
       entry_lag_years = as.numeric(difftime(first_generic, first_approval, units = "days")) / 365.25
-    ) %>%
-    ungroup() %>%
-    filter(!is.na(entry_lag_years), entry_lag_years >= 0) %>%
+    ) |>
+    ungroup() |>
+    filter(!is.na(entry_lag_years), entry_lag_years >= 0) |>
     distinct(Ingredient, DF_Route, .keep_all = TRUE)
   
   write_csv(entry_timing, "data/derived/generic_entry_timing.csv")

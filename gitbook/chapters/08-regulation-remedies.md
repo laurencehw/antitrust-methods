@@ -1,6 +1,6 @@
 # Regulation and Remedies
 
-The preceding chapters focused on diagnosing competitive harm---identifying cartels, predicting merger effects, and establishing exclusionary conduct. But identifying harm is only half the job. This chapter addresses what comes next: designing remedies that actually work and, in some cases, ongoing regulatory frameworks that substitute for competition where markets cannot be made competitive.
+The preceding chapters focused on diagnosing competitive harm---identifying cartels, predicting merger effects, and establishing exclusionary conduct. Identifying harm, however, is only half the job. The other half is designing remedies that actually work and, in some cases, ongoing regulatory frameworks that substitute for competition where markets cannot be made competitive.
 
 Remedy design requires different skills than liability analysis. You must think dynamically about how firms will respond to constraints, whether trustees can effectively monitor behavioral commitments, and whether structural relief will create viable competitors. The economic tools are familiar---cost analysis, benchmarking, causal inference for evaluation---but the application shifts from diagnosis to prescription.
 
@@ -9,11 +9,11 @@ Antitrust analysis often ends with a liability finding, but policy work begins t
 
 - Compare rate-of-return, price-cap, and incentive regulation, and pick the tool that matches industry fundamentals (cost structure, demand volatility, data availability).
 - Design structural and behavioral remedies that map directly to diagnosed harms, with clear monitoring and reporting plans.
-- Evaluate remedy effectiveness using retrospective econometrics (diff-in-diff, event studies) and benchmarking models.
+- Evaluate remedy effectiveness using retrospective econometrics (DiD, event studies) and benchmarking models.
 - Integrate qualitative evidence (compliance reports, trustee memos, stakeholder hearings) with quantitative indicators.
 
 ## Why regulation and remedies matter
-Competition authorities increasingly pair enforcement with sector inquiries that feed straight into regulatory design (e.g., the South African Data Services and Private Healthcare inquiries). Meanwhile, merger and monopolization cases frequently conclude with behavioral obligations or divestitures that require economic monitoring. Understanding regulatory levers ensures your recommendations remain credible after the headline settlement.
+Competition authorities increasingly pair enforcement with sector inquiries that feed directly into regulatory design---the South African Data Services and Private Healthcare inquiries are prime examples. Merger and monopolization cases frequently conclude with behavioral obligations or divestitures that require economic monitoring. Without a working knowledge of regulatory levers, recommendations lose credibility the moment the headline settlement is signed.
 
 ## Workflow overview
 
@@ -69,14 +69,28 @@ A typical engagement looks like this:
 
 ## Rate-of-return vs. price-cap regulation
 
+{% hint style="info" %}
+**Comparing regulatory regimes**
+
+| Feature | Rate-of-Return | Price-Cap (RPI-X) |
+|:--------|:---------------|:-------------------|
+| Revenue formula | RAB x allowed return + opex + depreciation | Price indexed to inflation minus X-factor |
+| Incentive | Weak cost discipline (gold-plating risk) | Strong cost reduction incentive |
+| Data needs | Audited capital costs, asset values, depreciation | Inflation series, productivity benchmarks |
+| Key risk | Over-investment in assets | Quality degradation, category gaming |
+| Common sectors | Energy, telecom infrastructure | Telecom, water, electricity distribution |
+{% endhint %}
+
 ### Rate-of-return (cost-plus) regime
-- **Mechanics:** Regulator sets allowable revenue = (Regulated Asset Base × allowed return) + operating costs + depreciation. Common in energy and telecom infrastructure.  
-- **Data needs:** Audited cost of capital, asset valuation, depreciation schedules, operating expense detail.  
+
+- **Mechanics:** Regulator sets allowable revenue = (Regulated Asset Base x allowed return) + operating costs + depreciation. Common in energy and telecom infrastructure.
+- **Data needs:** Audited cost of capital, asset valuation, depreciation schedules, operating expense detail.
 - **Risks:** Gold-plating, weak cost discipline. Mitigate via prudency tests and benchmarking.
 
 ### Price-cap (RPI-X) regime
-- **Mechanics:** Allowed price path indexed to inflation minus expected productivity (X-factor). Encourages cost reduction because firms keep savings between resets.  
-- **Data needs:** Inflation series, productivity benchmarks, quality metrics.  
+
+- **Mechanics:** Allowed price path indexed to inflation minus expected productivity (X-factor). Encourages cost reduction because firms keep savings between resets.
+- **Data needs:** Inflation series, productivity benchmarks, quality metrics.
 - **Risks:** Quality degradation, gaming of cost categories. Add service-quality penalties or deadbands.
 
 #### Access pricing and ECPR sketches
@@ -94,6 +108,7 @@ Benchmarking and yardstick competition compare regulated entities to peers to se
 ```r
 library(dplyr)
 library(ggplot2)
+source("program/R/helpers.R")
 
 utilities <- tibble::tribble(
   ~entity, ~opex_per_unit, ~quality_score,
@@ -135,7 +150,7 @@ When drafting behavioral remedies, specify:
 ### Monitoring and compliance
 Create compliance scorecards that align with the remedy’s logic. For example, if the remedy ensures rival access to APIs, track uptime, latency, and parity between internal and external developers. Use qualitative sources—monitor reports, public hearings, stakeholder interviews—to contextualize metrics.
 
-#### Retrospective diff-in-diff scaffold
+#### Retrospective DiD scaffold
 ```r
 library(dplyr)
 library(fixest)
@@ -156,10 +171,14 @@ summary(did_model)
 Swap the synthetic data with actual KPI panels (e.g., mobile data prices before/after the Data Services commitments, hospital tariffs after remedy adoption). Store sanitized versions in `data/derived/regulation/` with README files tracking provenance.
 
 ## Southern African market inquiries and remedy design
-- **Private Healthcare Market Inquiry (2014–2019).** Case-mix adjusted benchmarking across eight hospital groups supported recommendations for a Supply-Side Regulator for Health and shared data hubs.  
-- **Data Services Market Inquiry (2017–2019).** International price benchmarks and profitability models justified prepaid price cuts, open-access APN rules, and zero-rating obligations.  
-- **Public Passenger Transport Inquiry (2017–2020).** Route maps, tender records, and e-hailing logs fed subsidy formulas, fare transparency rules, and data-sharing standards tailored to formal and informal operators.  
-- **Sasol Gas and Telkom wholesale settlements.** Margin-squeeze tests combined with cost-plus access obligations illustrate how antitrust remedies can morph into quasi-regulatory regimes when enforcement alone cannot guarantee compliance.
+
+**Private Healthcare Market Inquiry (2014--2019).** Case-mix adjusted benchmarking across eight hospital groups supported recommendations for a Supply-Side Regulator for Health and shared data hubs.
+
+**Data Services Market Inquiry (2017--2019).** International price benchmarks and profitability models justified prepaid price cuts, open-access APN rules, and zero-rating obligations.
+
+**Public Passenger Transport Inquiry (2017--2020).** Route maps, tender records, and e-hailing logs fed subsidy formulas, fare transparency rules, and data-sharing standards tailored to formal and informal operators.
+
+**Sasol Gas and Telkom wholesale settlements.** Margin-squeeze tests combined with cost-plus access obligations illustrate how antitrust remedies can morph into quasi-regulatory regimes when enforcement alone cannot guarantee compliance.
 
 ## Callouts and qualitative evidence
 
@@ -168,7 +187,7 @@ Swap the synthetic data with actual KPI panels (e.g., mobile data prices before/
 
 - Benchmarking models and productivity comparisons.  
 - Remedy simulations (cost/pass-through projections).  
-- Retrospective diff-in-diff and event studies on post-remedy outcomes.
+- Retrospective DiD and event studies on post-remedy outcomes.
 {% endhint %}
 
 {% hint style="info" %}
@@ -190,7 +209,7 @@ Swap the synthetic data with actual KPI panels (e.g., mobile data prices before/
 ## Visualizations
 
 ### Remedy compliance timeline
-A timeline visualization helps communicate key milestones, deadlines, and compliance events for complex remedy packages. This is particularly useful for trustee reports, agency presentations, and public communications.
+A timeline visualization communicates milestones, deadlines, and compliance events for complex remedy packages---useful in trustee reports, agency presentations, and public communications.
 
 ```r
 source("program/R/helpers.R")
@@ -300,6 +319,7 @@ For complex remedies involving multiple workstreams (technical, legal, operation
 ```r
 library(ggplot2)
 library(dplyr)
+source("program/R/helpers.R")
 
 # Add swimlane assignments
 remedy_events_swim <- remedy_events |>
@@ -380,11 +400,11 @@ ggplot(remedy_events_swim, aes(x = date, y = as.numeric(swimlane))) +
 - Useful for program management and stakeholder coordination.
 
 ## Data and visualization plan
-- **Benchmarking scatter (Ch. 08 Visual 1):** Use regulator filings (Ofgem RIIO datasets, NERSA approved tariffs) or sanitized hospital benchmarking tables from public inquiries. If confidential, create synthetic replicas stored in `data/examples/benchmarking.csv`.
-- **Remedy compliance timeline (Visual 2):** Build from trustee reports and milestone trackers from public sources.
-- **Post-remedy diff-in-diff (Visual 3):** For telecom data, draw on public tariffs (ICASA reports) or TeleGeography archives; for energy, use Eskom/NERSA tariff series.
+- **Benchmarking scatter:** Use regulator filings (Ofgem RIIO datasets, NERSA approved tariffs) or sanitized hospital benchmarking tables from public inquiries. If confidential, create synthetic replicas stored in `data/examples/benchmarking.csv`.
+- **Remedy compliance timeline:** Build from trustee reports and milestone trackers from public sources.
+- **Post-remedy DiD:** For telecom data, draw on public tariffs (ICASA reports) or TeleGeography archives; for energy, use Eskom/NERSA tariff series.
 
 Document every dataset in `data/README.md` and note whether it can ship with the book (public) or must be replicated with synthetic values for open-source builds.
 
 ## Looking ahead
-Store remedy models, compliance timelines, and benchmarking outputs in `data/derived/remedies/` with detailed READMEs. When transitioning to the litigation chapter, reference which remedy types (structural, behavioral, hybrid) appeared most frequently in your jurisdiction's case law. Update the visualization tracker if you add new dashboard components (e.g., interactive Shiny apps for remedy monitoring) so future readers can replicate or extend the templates.
+Store remedy models, compliance timelines, and benchmarking outputs in `data/derived/remedies/` with detailed READMEs. The regulatory frameworks and remedy design principles from this chapter provide essential context for the domain-specific chapters that follow. **Chapter 9** (Digital Markets) applies access remedies, interoperability mandates, and platform-specific behavioral commitments to multi-sided markets where traditional structural relief may be insufficient. **Chapter 10** (Labor Markets) examines how remedy design adapts when the competitive harm falls on workers rather than consumers---including no-poach consent decrees and wage-floor commitments. **Chapter 11** (Innovation and IP) confronts the tension between FRAND licensing remedies and incentives to invest in R&D. **Chapter 12** (Litigation Practice) shows how to present remedy proposals alongside liability evidence and how to structure expert testimony on remedy effectiveness, drawing on the DiD and benchmarking tools introduced here. The Empirical Appendix (Chapter 13) provides reusable templates for the benchmarking and retrospective evaluation methods covered in this chapter.

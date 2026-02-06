@@ -82,7 +82,11 @@ fetch_fred <- function(series_id, start = as.Date("1990-01-01")) {
   if (!requireNamespace("fredr", quietly = TRUE)) {
     stop("Install fredr to fetch FRED series.")
   }
-  fredr::fredr_set_key(Sys.getenv("FRED_API_KEY"))
+  api_key <- Sys.getenv("FRED_API_KEY")
+  if (is.null(api_key) || nchar(api_key) == 0) {
+    stop("FRED_API_KEY not set. Add it to .Renviron (see .Renviron.example).")
+  }
+  fredr::fredr_set_key(api_key)
   fredr::fredr(series_id = series_id, observation_start = start)
 }
 
@@ -92,6 +96,14 @@ run_logit_sim <- function(products, merging_firms) {
   stopifnot(all(c("product", "firm", "price", "share") %in% names(products)))
   if (!"mc" %in% names(products)) {
     stop("Provide marginal costs in column `mc` (or add price * (1 - margin)).")
+  }
+  if (length(merging_firms) < 2) {
+    stop("merging_firms must contain at least two firm names.")
+  }
+  missing_firms <- setdiff(merging_firms, products$firm)
+  if (length(missing_firms) > 0) {
+    stop("merging_firms not found in products$firm: ",
+         paste(missing_firms, collapse = ", "))
   }
 
   # implied mean utility up to constant (outside share from 1 - sum shares)
@@ -127,9 +139,6 @@ run_logit_sim <- function(products, merging_firms) {
 # Timeline visualization for remedy compliance, merger milestones, etc.
 # events: data.frame with columns date, event, category (optional), description (optional)
 plot_timeline <- function(events, title = "Event Timeline", date_breaks = "3 months") {
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("Install ggplot2 to create timeline plots.")
-  }
   if (!all(c("date", "event") %in% names(events))) {
     stop("events must have columns 'date' and 'event'")
   }
@@ -156,9 +165,6 @@ plot_timeline <- function(events, title = "Event Timeline", date_breaks = "3 mon
 # Tornado chart for sensitivity analysis (UPP, damages, etc.)
 # sensitivity: data.frame with columns parameter, low, high, base (optional)
 plot_tornado <- function(sensitivity, base_value = NULL, title = "Sensitivity Analysis") {
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("Install ggplot2 to create tornado charts.")
-  }
   if (!all(c("parameter", "low", "high") %in% names(sensitivity))) {
     stop("sensitivity must have columns 'parameter', 'low', and 'high'")
   }
@@ -194,9 +200,8 @@ plot_tornado <- function(sensitivity, base_value = NULL, title = "Sensitivity An
 # Sankey diagram for multi-homing, switching matrices, etc.
 # flows: data.frame with columns from, to, value
 plot_sankey <- function(flows, title = "Flow Diagram") {
-  if (!requireNamespace("ggplot2", quietly = TRUE) ||
-      !requireNamespace("ggsankey", quietly = TRUE)) {
-    stop("Install ggplot2 and ggsankey to create Sankey diagrams.")
+  if (!requireNamespace("ggsankey", quietly = TRUE)) {
+    stop("Install ggsankey to create Sankey diagrams.")
   }
   if (!all(c("from", "to", "value") %in% names(flows))) {
     stop("flows must have columns 'from', 'to', and 'value'")
@@ -213,22 +218,30 @@ plot_sankey <- function(flows, title = "Flow Diagram") {
   p
 }
 
-# Quick BLS data pull
+# Quick BLS data pull.
+# BLS period field uses format "M01"..."M12" for monthly data; strip the "M" prefix
+# before converting to a numeric month for date construction.
 fetch_bls <- function(series_id, start_year = 2010, end_year = as.numeric(format(Sys.Date(), "%Y"))) {
   if (!requireNamespace("blsAPI", quietly = TRUE)) {
     stop("Install blsAPI to fetch BLS data.")
+  }
+  api_key <- Sys.getenv("BLS_KEY")
+  if (is.null(api_key) || nchar(api_key) == 0) {
+    stop("BLS_KEY not set. Add it to .Renviron (see .Renviron.example).")
   }
 
   payload <- list(
     seriesid = series_id,
     startyear = start_year,
     endyear = end_year,
-    registrationkey = Sys.getenv("BLS_KEY")
+    registrationkey = api_key
   )
 
   response <- blsAPI::blsAPI(payload, return_data_frame = TRUE)
+  # BLS period field is "M01", "M02", etc. -- strip the leading letter(s)
+  month_num <- as.numeric(gsub("[^0-9]", "", response$period))
   response$date <- as.Date(paste0(response$year, "-",
-                                  sprintf("%02d", as.numeric(response$period)), "-01"))
+                                  sprintf("%02d", month_num), "-01"))
   response$value <- as.numeric(response$value)
   response
 }
@@ -244,13 +257,17 @@ fetch_census <- function(dataset, vintage = 2021, vars, region = "us:*") {
   if (!requireNamespace("censusapi", quietly = TRUE)) {
     stop("Install censusapi to fetch Census data.")
   }
+  api_key <- Sys.getenv("CENSUS_API_KEY")
+  if (is.null(api_key) || nchar(api_key) == 0) {
+    stop("CENSUS_API_KEY not set. Add it to .Renviron (see .Renviron.example).")
+  }
 
   censusapi::getCensus(
     name = dataset,
     vintage = vintage,
     vars = vars,
     region = region,
-    key = Sys.getenv("CENSUS_API_KEY")
+    key = api_key
   )
 }
 
@@ -287,10 +304,6 @@ plot_waterfall <- function(data,
                            y_label = "Value",
                            show_connector = TRUE,
                            total_label = NULL) {
-
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("Install ggplot2 to create waterfall charts.")
-  }
 
   # Prepare data with cumulative values
   df <- data.frame(

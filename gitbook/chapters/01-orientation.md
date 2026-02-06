@@ -1,11 +1,17 @@
 # Orientation: Antitrust and Regulation
 
-Before diving into specific methods, we need to understand the institutional landscape where antitrust analysis occurs. This chapter provides that foundation. Economic analysis does not happen in a vacuum---it responds to legal standards, agency priorities, and procedural constraints that vary across jurisdictions. Understanding these institutions will help you frame your analyses to address the questions that actually matter in practice.
+Before turning to specific methods, we need to understand the institutional settings where antitrust analysis occurs. Economic analysis does not happen in a vacuum---it responds to legal standards, agency priorities, and procedural constraints that vary across jurisdictions. Understanding these institutions will help you frame your analyses to address the questions that actually matter in practice.
 
 ## Learning goals
-This opening chapter orients you to the institutional settings where economists, researchers, and lawyers work side by side. By the end you should be able to articulate how competition authorities define their objectives, how they translate statutes or guidelines into investigative hypotheses, and how evidentiary burdens shift between agencies and courts. You will also learn how to map economic questions—market definition, market power, theory of harm, efficiencies, and remedy selection—onto the specific legal elements regulators must prove or rebut.
 
-An equally important goal is judgment: when should you push for additional data work, and when is documentary, testimonial, or industry expertise the better marginal investment? Because this course serves practitioners in South Africa who often face multi-jurisdictional matters, we will continually compare US-led doctrines with approaches in the EU, UK, Asia, and regional African regulators. Expect a mix of narrative history, process walkthroughs, and applied examples from roughly 2005–2024.
+This opening chapter orients you to the institutional settings where economists, researchers, and lawyers work side by side. By the end you should be able to:
+
+- Articulate how competition authorities define their objectives and translate statutes or guidelines into investigative hypotheses.
+- Explain how evidentiary burdens shift between agencies and courts across jurisdictions.
+- Map economic questions---market definition, market power, theory of harm, efficiencies, and remedy selection---onto the specific legal elements regulators must prove or rebut.
+- Exercise judgment about when to push for additional data work versus documentary, testimonial, or industry expertise.
+
+Because this course serves practitioners in South Africa who often face multi-jurisdictional matters, we will continually compare US-led doctrines with approaches in the EU, UK, Asia, and regional African regulators. Expect a mix of narrative history, process walkthroughs, and applied examples from roughly 2005--2024.
 
 ## Core narrative
 ### Institutions and mandates
@@ -16,7 +22,7 @@ Post-2000 history matters for understanding current doctrine. The Clinton-era Mi
 
 Across the Atlantic, the European Commission's Directorate-General for Competition (DG COMP) pairs investigations with inquisitorial decision making, while national authorities like the UK Competition and Markets Authority (CMA) play an increasingly global role—for example, blocking Microsoft/Activision until remedies evolved. Asian agencies—including Japan's JFTC, Korea's KFTC, and China's SAMR—have expanded resources to scrutinize digital markets and cross-border conduct.
 
-For practitioners working in Southern Africa, the Competition Commission and Competition Tribunal are essential reference points. These bodies have expanded their focus to digital markets, food supply chains, and cartels affecting the Southern African Development Community (SADC). Understanding each body's statutory tests, procedural timelines, and evidentiary cultures is essential to crafting persuasive analyses.
+For practitioners working in Southern Africa, the Competition Commission and Competition Tribunal are essential reference points. These bodies have expanded their focus to digital markets, food supply chains, and cartels affecting the Southern African Development Community (SADC). Knowing each body's statutory tests, procedural timelines, and evidentiary expectations shapes how you build a persuasive analysis.
 
 {% hint style="success" %}
 **Definition: Key Antitrust Concepts**
@@ -60,7 +66,7 @@ When advising on multi-jurisdictional matters, map the same conduct to each regi
 
 ### Workflow from intake to remedies
 
-Having mapped these institutions and their statutory frameworks, practitioners must translate regulatory mandates into operational workflows. The section below outlines the typical arc from case intake through remedy selection, highlighting key decision points where economic analysis informs legal strategy.
+Translating these statutory frameworks into day-to-day practice requires an operational workflow. The section below outlines the typical arc from case intake through remedy selection, highlighting decision points where economic analysis informs legal strategy.
 
 {% hint style="info" %}
 **Investigation Workflow Overview**
@@ -92,10 +98,29 @@ INTAKE                 SCOPING                ANALYSIS               DECISION
 **Key decision points:** At each transition, evaluate whether additional data work or qualitative evidence offers the better marginal return given deadlines and burden of proof.
 {% endhint %}
 
-Regardless of jurisdiction, investigations follow a recognizable arc. Matters typically begin with a complaint, leniency application, or merger notification. Case teams triage with “hot docs” and quick descriptive analytics, draft a plan that allocates legal and economic workstreams, and establish preservation plus data-request protocols. The second phase is scoping: enumerating data systems, prioritizing custodians, negotiating production formats, and deciding whether to run early econometric screens—such as price-cost margins or diversion ratios—before collecting more costly qualitative evidence. In phase three the team synthesizes theory and evidence into statements of issues, white papers, or ultimately pleadings and testimony. Finally, remedies discussions integrate forward-looking modeling with institutional constraints: can the Competition Tribunal in Pretoria supervise behavioral commitments as effectively as US courts, or is divestiture the only reliable fix? Always document these choices so that tribunals (and future teams) can reconstruct the evidentiary chain.
+Regardless of jurisdiction, investigations follow a recognizable arc:
+
+1. **Intake.** Matters typically begin with a complaint, leniency application, or merger notification. Case teams triage with "hot docs" and quick descriptive analytics, then draft a plan that allocates legal and economic workstreams and establishes preservation plus data-request protocols.
+
+2. **Scoping.** Enumerate data systems, prioritize custodians, negotiate production formats, and decide whether to run early econometric screens---such as price-cost margins or diversion ratios---before collecting more costly qualitative evidence.
+
+3. **Synthesis.** The team combines theory and evidence into statements of issues, white papers, or ultimately pleadings and testimony.
+
+4. **Remedies.** Forward-looking modeling meets institutional constraints: can the Competition Tribunal in Pretoria supervise behavioral commitments as effectively as US courts, or is divestiture the only reliable fix?
+
+Always document these choices so that tribunals (and future teams) can reconstruct the evidentiary chain.
 
 ### Scoping data needs early
-Practitioners treat data, documents, and interviews as complements rather than substitutes. Intake meetings should generate inventories of transactional databases, billing systems, CRM extracts, internal forecasts, board presentations, and benchmark studies. The task is to identify what can be measured quickly (e.g., monthly price series, bidding outcomes, churn metrics) and what requires longitudinal assembly (e.g., claims-level healthcare data or network telemetry). Teams should simultaneously plan qualitative work: establish search terms for electronically stored information (ESI), design interview protocols, and identify third parties—customers, suppliers, former employees—whose perspectives sharpen or rebut economic priors. Missing this early sequencing is costly; see the Competition Commission South Africa’s review of Netcare/Community Hospital Group, where late-stage data disputes shortened the time available for substantive modeling.
+
+Practitioners treat data, documents, and interviews as complements rather than substitutes. Intake meetings should generate inventories of transactional databases, billing systems, CRM extracts, internal forecasts, board presentations, and benchmark studies.
+
+The task is to identify what can be measured quickly (e.g., monthly price series, bidding outcomes, churn metrics) and what requires longitudinal assembly (e.g., claims-level healthcare data or network telemetry).
+
+Teams should simultaneously plan qualitative work: establish search terms for electronically stored information (ESI), design interview protocols, and identify third parties---customers, suppliers, former employees---whose perspectives sharpen or rebut economic priors.
+
+{% hint style="warning" %}
+**Timing matters.** Missing this early sequencing is costly. In the Competition Commission South Africa's review of Netcare/Community Hospital Group, late-stage data disputes shortened the time available for substantive modeling.
+{% endhint %}
 
 ### Illustrative vignette: Search dominance diagnostics
 The 2020–2023 DOJ challenge to Google Search illustrates how process and substance intertwine. Economists combined browser default share calculations, auction revenue data, and margin analyses with interview testimony from handset makers and browser developers. Those fact narratives clarified why certain regression designs mattered (e.g., estimating counterfactual query volume absent default contracts). Compare that to the Competition Commission South Africa’s investigation into digital platforms and app stores, where documentary evidence about self-preferencing and ad-tech fee structures filled gaps in transaction data. The lesson: quantitative rigor carries the day only when tied to institutional detail about distribution agreements, switching costs, and remedy administrability.
@@ -103,7 +128,7 @@ The 2020–2023 DOJ challenge to Google Search illustrates how process and subst
 {% hint style="info" %}
 **Method box: Integrating empirics here**
 
-Early-stage screening rarely needs sophisticated econometrics. Build dashboards that pull together market shares, HHI trends, entry/exit indicators, and switching matrices from customer-level data. Combine transactional datasets with public sources (e.g., SEC filings, the FTC’s merger statistics, Stats SA tariff books) to benchmark plausible margins. When data are thin, like in new fintech or biotech markets pivot, quickly to qualitative or expert evidence rather than forcing underpowered regressions. Document these decisions in a running technical memo so litigators can later explain why the team prioritized one technique over another.
+Early-stage screening rarely needs sophisticated econometrics. Build dashboards that pull together market shares, Herfindahl-Hirschman Index (HHI) trends, entry/exit indicators, and switching matrices from customer-level data. Combine transactional datasets with public sources (e.g., SEC filings, the FTC’s merger statistics, Stats SA tariff books) to benchmark plausible margins. When data are thin, like in new fintech or biotech markets pivot, quickly to qualitative or expert evidence rather than forcing underpowered regressions. Document these decisions in a running technical memo so litigators can later explain why the team prioritized one technique over another.
 {% endhint %}
 
 {% hint style="info" %}
@@ -126,7 +151,7 @@ While the US emphasizes adversarial hearings and judicial precedent, DG COMP and
 
 ## Looking ahead
 
-Orientation work is only useful if it flows directly into research design. In **Chapter 02**, we translate the institutional map above into concrete analytical workplans—building case chronology templates, sketching data inventories, and establishing the evidence-integration frameworks that will structure every subsequent chapter.
+Orientation matters only insofar as it informs research design. In **Chapter 02**, we translate the institutional map above into concrete analytical workplans—building case chronology templates, sketching data inventories, and establishing the evidence-integration frameworks that will structure every subsequent chapter.
 
 **Before proceeding, prepare:**
 
@@ -134,7 +159,7 @@ Orientation work is only useful if it flows directly into research design. In **
 2. **Data inventory**: Sketch which datasets span US, EU, and SADC sources (e.g., FRED for HHI, Stats SA for market shares).
 3. **Flagship dataset**: Identify at least one dataset (claims-level healthcare data, national tender records) that will power the quantitative chapters.
 
-Keep a running list of figures—HHI trends, entry timelines, platform governance maps—that we will revisit throughout the book. This ensures the narrative remains visually anchored and cumulative, with each chapter building on artifacts from previous ones.
+Keep a running list of figures—HHI trends, entry timelines, platform governance maps—that we will revisit throughout the book. These visual artifacts accumulate across chapters, so maintaining them early pays off later.
 
 ## Visualizations
 

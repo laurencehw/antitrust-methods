@@ -1,11 +1,12 @@
 # Cartels and Collusion
 
-Cartels represent the clearest antitrust violations---competitors agreeing to fix prices, rig bids, or allocate markets cause direct and quantifiable harm to consumers. Yet proving collusion and measuring damages requires integrating the research design, market definition, and IO tools from earlier chapters into a coherent evidentiary package.
+Cartels represent the clearest antitrust violations---competitors agreeing to fix prices, rig bids, or allocate markets cause direct and quantifiable harm to consumers. Yet proving collusion and measuring damages demands integrating the research design tools from Chapter 2 (especially difference-in-differences and event studies), the market definition frameworks from Chapter 3, and the IO pass-through analysis from Chapter 4 into a coherent evidentiary package.
 
-This chapter shows how to detect collusion, measure its effects, and build cases that survive both economic and legal scrutiny. We emphasize the interplay between quantitative screens and qualitative evidence: econometric analysis can establish that prices were artificially elevated, but leniency statements and internal communications provide the smoking gun that confirms coordination. The two streams of evidence reinforce each other.
+This chapter covers detection, measurement of effects, and case construction that survives both economic and legal scrutiny. Econometric analysis can establish that prices were artificially elevated, but leniency statements and internal communications confirm the mechanism behind coordination. The two streams of evidence reinforce each other.
 
 ## Learning goals
-Cartel enforcement hinges on weaving together quantitative screens, econometric estimates, and documentary evidence. This chapter walks through that workflow using established methodologies from the OECD and academic literature on cartel detection.
+
+Cartel enforcement requires combining quantitative screens, econometric estimates, and documentary evidence. This chapter walks through that workflow using established methodologies from the OECD and academic literature on cartel detection.
 
 By the end you should be able to:
 
@@ -72,14 +73,17 @@ PHASE 1: DETECTION            PHASE 2: ESTIMATION          PHASE 3: LITIGATION
 Document every known communication, meeting, or enforcement action in a single table (date, event, evidence source, hypothesis). Update it as new statements arrive. Every regression or screen should cite the row(s) it tests—this discipline prevents “data dredging” and makes testimony easier.
 
 ## Descriptives and screens
+
 Start with `ggplot2` dashboards that overlay prices with cost indices, demand proxies, and competitor prices. Flag regimes where prices remain static despite volatile costs or where margins converge across firms.
 
-- **Variance/dispersion screens:** Check price spreads, standard deviations, and coefficents of variation across firms or regions (Abrantes-Mello, 2010).  
-- **Procurement rotation:** Rank bids chronologically to flag turn-taking, convenient price endings, or geographic allocations (Porter & Zona, 1993); (Conley & Decarolis, 2016).  
-- **Digit/Benford checks:** Use sparingly and only when invoice conventions support the assumptions.  
-- **Correlation screens:** High correlations in supposedly independent bids can justify deeper probes (Harrington, 2008).
+{% hint style="warning" %}
+**Screens are triage tools, not proof of collusion.** A positive screen justifies deeper investigation; a negative screen does not rule out coordination. Document screen logic following OECD guidance (OECD Cartel Screens, 2013) and note data limitations (missing bidders, net vs. list prices).
+{% endhint %}
 
-Document screen logic following OECD guidance on cartel screens (OECD Cartel Screens, 2013) and note data limitations (missing bidders, net vs. list prices).
+- **Variance/dispersion screens:** Check price spreads, standard deviations, and coefficients of variation across firms or regions (Abrantes-Mello, 2010).
+- **Procurement rotation:** Rank bids chronologically to flag turn-taking, convenient price endings, or geographic allocations (Porter & Zona, 1993); (Conley & Decarolis, 2016).
+- **Digit/Benford checks:** Use sparingly and only when invoice conventions support the assumptions.
+- **Correlation screens:** High correlations in supposedly independent bids can justify deeper probes (Harrington, 2008).
 
 ### Bid-rotation analysis
 Using cement procurement data to identify potential bid rotation patterns.
@@ -87,6 +91,7 @@ Using cement procurement data to identify potential bid rotation patterns.
 ```r
 library(dplyr)
 library(ggplot2)
+source("program/R/helpers.R")
 
 # Load real cartel bid data
 bids_df <- read.csv("data/derived/cartel_cement_bids.csv")
@@ -125,8 +130,9 @@ source("program/R/helpers.R")
 bids_df <- read.csv("data/derived/cartel_cement_bids.csv")
 
 # Create lagged winner variable for transition analysis
+# Note: column is project_id in cartel_cement_bids.csv
 transitions <- bids_df |>
-  arrange(tender_id) |>
+  arrange(project_id) |>
   mutate(
     prev_winner = lag(winner),
     period = if_else(cartel_period, "Cartel period", "Competitive period")
@@ -444,8 +450,11 @@ ggplot(panel, aes(x = period, y = price, color = product)) +
 - **Timing placebo fails** (fake date shows effect): Your data may have multiple structural breaks, or the cartel period definition is imprecise. Cross-check with documentary evidence.
 - **Both placebos pass**: Strengthens the causal interpretation that the raid/leniency event caused the observed price change.
 
+---
+
 ## Leniency, documents, and triangulation
-Leniency statements, chats, and board minutes pin down conduct mechanisms (rotation order, price floors, trigger strategies). Use them to:
+
+Leniency statements, messaging records, and board minutes pin down how the cartel operated---rotation order, price floors, trigger strategies. Use them to:
 
 - Set regression windows and sample selections.  
 - Validate that estimated start/stop dates match qualitative evidence.  
@@ -535,4 +544,4 @@ Replace the public FRED data with product-level transactions to present in litig
 {% endhint %}
 
 ## Looking ahead
-Archive every screen, regression, and figure in `data/derived` with READMEs so the damages and litigation chapters can reuse them. Push generic templates (rotation indices, break plots, overcharge tables) into `chapters/13-empirical-appendix.qmd`. When you shift to the mergers chapter, carry over demand estimates, diversion ratios, or pass-through results—post-cartel mergers frequently face heightened scrutiny, and reusing these diagnostics speeds up the next phase.
+Archive every screen, regression, and figure in `data/derived` with READMEs so the damages and litigation chapters can reuse them. Push generic templates (rotation indices, break plots, overcharge tables) into the Empirical Appendix (Chapter 13). Carry demand estimates, diversion ratios, and pass-through results forward into **Chapter 6** (Mergers)---post-cartel mergers frequently face heightened scrutiny, and reusing these diagnostics avoids redundant work. The coordinated-effects framework introduced here also feeds into the merger analysis: a key question in Chapter 6 is whether a merger facilitates the kind of tacit coordination that cartels achieve explicitly. Later, **Chapter 10** (Labor Markets) extends the cartel toolkit to wage-fixing and no-poach agreements, and **Chapter 12** (Litigation Practice) shows how to package overcharge estimates and screen results into court-ready expert reports.
