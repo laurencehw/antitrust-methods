@@ -68,9 +68,12 @@ format:
     fig-height: 4
     fig-dpi: 300
 
+lang: en
+
 execute:
   freeze: auto
   warning: false
+  message: false
   # Run code from project root so shared helpers are found
   execute-dir: project
 
@@ -78,8 +81,6 @@ knitr:
   opts_chunk:
     # Wrap long lines in code output
     tidy: false
-    tidy.opts:
-      width.cutoff: 60
     # Keep output readable
     R.options:
       width: 70

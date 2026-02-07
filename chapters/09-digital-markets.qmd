@@ -335,36 +335,10 @@ Use telemetry from choice screens (EU Android choice screen, DMA compliance repo
 - Flag differences in parity/MFN treatment and remedy preferences (EU fair-ranking obligations vs. US injunctive relief).
 :::
 
-## Visualizations and data sourcing
-- **Default impact chart:** Source DMA compliance reports (available at [ec.europa.eu/dma](https://ec.europa.eu/)), CMA choice-screen experiments, or sanitized telemetry. If unavailable, simulate from DMA summary stats.
-- **Multi-homing Sankey:** Use OIPMI survey microdata or replicate with local surveys; store in `data/examples/digital-sankey.csv` until live data arrive.
-- **Ranking change event analysis:** Combine OIPMI buy-box audits or platform-provided logs with the ranking scaffold above.
-- **Fee ladder diagrams:** Pull commission schedules from OIPMI appendices or global public filings (App Store, Play Store, Amazon Marketplace).
-
-Document each dataset in `data/README.md` with provenance, confidentiality notes, and instructions for swapping synthetic vs. production data. When we "fill with real data," replace the synthetic CSVs, re-render figures, and cache sanitized outputs for publication builds.
-
 ### Southern African digital enforcement snapshots
 - **Online Intermediation Platforms Market Inquiry (OIPMI, 2020–2023).** The Competition Commission collected transaction-level data from e-commerce marketplaces, app stores, food delivery apps, and travel platforms. Findings highlighted Google Search’s >90% share of general search queries, food-delivery commissions clustering at 25–30%, and marketplace buy-box algorithms that favored first-party listings (e.g., Takealot Retail) over third-party sellers with identical fulfillment metrics. Final remedies require fair-ranking reports, caps on marketplace storage/fulfillment fees for SMEs, and anti-steering relief that lets restaurants promote direct-order channels inside aggregator apps.
 - **Advertising and digital news media (Media and Digital Platforms Market Inquiry, 2023–ongoing).** Building on OIPMI data, the Commission is ingesting impression-level logs from Meta, Google, and local publishers to quantify revenue imbalances in display advertising. The interim statement reports that Google commands roughly 65% of display ad spend routed through programmatic channels, while local publishers face average take-rates below 30% after demand-side/platform fees—data points that frame prospective bargaining remedies for news publishers across Southern Africa.
 - **GovChat/Meta interim relief (Competition Commission v. Meta Platforms, 2021).** The Commission used WhatsApp Business API telemetry to demonstrate GovChat’s role in reaching 8+ million South African users for public-service messaging, and it showed how Meta’s proposed off-boarding would foreclose a civic-use case despite negligible incremental infrastructure cost. Interim relief preserved access while the Tribunal weighed the exclusion case, offering a blueprint for combining platform-side telemetry with public-interest arguments in developing markets.
-
-::: {.callout-note title="Method box"}
-- Platform price/fee pass-through; elasticity across sides.
-- Event studies on default changes or ranking tweaks.
-- Simple two-sided logit/bargaining sketches; diversion across sides.
-:::
-
-::: {.callout-note title="Qualitative evidence"}
-- Product requirement docs and experiments; governance and content policies.
-- Partner contracts (parity/MFN, exclusivity), API access terms.
-- User research surveys on multi-homing and switching.
-:::
-
-::: {.callout-note title="Citations and comparative note"}
-- Cite platform cases and regulations: US (e.g., Epic v. Apple, DOJ Google Search/Ad Tech), EU (Google Shopping/Android, [DMA](https://ec.europa.eu/info/strategy/priorities-2019-2024/europe-fit-digital-age/digital-markets-act-ensuring-fair-and-open-digital-markets_en)), UK ([CMA market investigations](https://www.gov.uk/cma-cases)), and other jurisdictions (e.g., Korea KFTC app stores where relevant).
-- Reference empirical studies on defaults and ranking effects, and any A/B or natural experiment evidence from platforms.
-- Note differences in treatment of MFNs/parity and self-preferencing across jurisdictions.
-:::
 
 ## Enhanced Visualizations
 
@@ -823,12 +797,4 @@ For the latest agency guidance, monitor CMA's AI Foundation Models work and FTC/
 
 ## Looking ahead
 
-Digital markets evolve rapidly, making data currency and documentation essential. In **Chapter 10 (Labor Markets)**, we apply similar monopsony frameworks to employer-side platform power—gig economy classification, wage-fixing algorithms, and no-poach agreements.
-
-**Before proceeding, prepare:**
-
-1. **Archive outputs**: Store digital platform analyses in `data/derived/digital/` with clear provenance notes (data source, extraction date, confidentiality status).
-2. **DMA monitoring**: When DMA compliance data become available, replace synthetic choice-screen impacts with actual telemetry.
-3. **API documentation**: Document any API access restrictions and data-sharing agreements in `data/README.md`.
-
-Cross-reference these visualizations with Chapter 12 (litigation practice) for expert report templates and Chapter 13 (empirical appendix) for diagnostic checklists. Many of the same event-study and difference-in-differences techniques apply when evaluating platform remedies as when assessing merger retrospectives.
+Digital markets evolve rapidly, making the frameworks in this chapter a starting point rather than a final word. In **Chapter 10 (Labor Markets)**, we apply similar monopsony frameworks to employer-side platform power---gig economy classification, wage-fixing algorithms, and no-poach agreements. **Chapter 12 (Litigation Practice)** covers how to package digital market evidence into expert reports and trial exhibits. Many of the same event-study and difference-in-differences techniques used here to evaluate platform conduct reappear when assessing remedy effectiveness and merger retrospectives.
