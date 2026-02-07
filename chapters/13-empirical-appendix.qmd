@@ -467,7 +467,11 @@ spec_results <- tibble(
     coefs[grepl("treatment", names(coefs))][1]
   }),
   se = sapply(specs, function(m) {
-    ses <- se(m)
+    if (inherits(m, "fixest")) {
+      ses <- fixest::se(m)
+    } else {
+      ses <- summary(m)$coefficients[, "Std. Error"]
+    }
     ses[grepl("treatment", names(ses))][1]
   })
 ) |>
@@ -628,6 +632,7 @@ power_grid <- expand.grid(
   n = sample_sizes,
   effect_size = effect_sizes
 ) |>
+  rowwise() |>
   mutate(
     power = pwr.t.test(n = n, d = effect_size, sig.level = 0.05,
                       type = "two.sample")$power,
@@ -636,7 +641,8 @@ power_grid <- expand.grid(
       effect_size == 0.5 ~ "Medium effect (d = 0.5)",
       effect_size == 0.8 ~ "Large effect (d = 0.8)"
     )
-  )
+  ) |>
+  ungroup()
 
 # Power curve
 ggplot(power_grid, aes(x = n, y = power, color = effect_label)) +
