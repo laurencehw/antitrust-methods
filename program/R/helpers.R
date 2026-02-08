@@ -77,7 +77,7 @@ scale_fill_antitrust <- function(...) {
   scale_fill_manual(values = unname(antitrust_colors), ...)
 }
 
-# Quick FRED pull with caching to data/raw.
+# Quick FRED pull (caching handled by data pipeline scripts in program/scripts/).
 fetch_fred <- function(series_id, start = as.Date("1990-01-01")) {
   if (!requireNamespace("fredr", quietly = TRUE)) {
     stop("Install fredr to fetch FRED series.")
@@ -175,6 +175,9 @@ plot_tornado <- function(sensitivity, base_value = NULL, title = "Sensitivity An
   sensitivity$parameter <- factor(sensitivity$parameter, levels = sensitivity$parameter)
 
   # Reshape for plotting
+  if (!requireNamespace("tidyr", quietly = TRUE)) {
+    stop("Install tidyr to use plot_tornado().")
+  }
   sens_long <- tidyr::pivot_longer(
     sensitivity,
     cols = c(low, high),
@@ -218,7 +221,7 @@ plot_sankey <- function(flows, title = "Flow Diagram") {
   p
 }
 
-# Quick BLS data pull.
+# Quick BLS data pull (caching handled by data pipeline scripts in program/scripts/).
 # BLS period field uses format "M01"..."M12" for monthly data; strip the "M" prefix
 # before converting to a numeric month for date construction.
 fetch_bls <- function(series_id, start_year = 2010, end_year = as.numeric(format(Sys.Date(), "%Y"))) {
@@ -310,6 +313,9 @@ plot_waterfall <- function(data,
     cat = data[[category_col]],
     val = data[[value_col]]
   )
+
+  # Handle NAs to prevent cumsum propagation
+  df$val[is.na(df$val)] <- 0
 
   # Calculate running totals for waterfall positioning
   df$end <- cumsum(df$val)

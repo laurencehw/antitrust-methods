@@ -60,6 +60,9 @@ Copy `.Renviron.example` to `.Renviron` and populate:
 - `fetch_fred()`, `fetch_bls()`, `fetch_census()` — API wrappers
 - `run_logit_sim()` — differentiated products merger simulation
 - `plot_timeline()`, `plot_tornado()`, `plot_sankey()` — specialized visualizations
+- `theme_antitrust_minimal()` — minimal variant of the ggplot2 theme for busy plots
+- `plot_waterfall()` — waterfall chart for price/cost decompositions and HHI changes
+- `calc_hhi_change()` — compute HHI and delta-HHI from market shares
 
 ### Quarto execution
 Code executes from project root (`execute-dir: project` in `_quarto.yml`), so relative paths like `data/derived/file.csv` work from any chapter.

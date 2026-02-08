@@ -60,6 +60,10 @@ Evidence sources:
 - **FTC v. Qualcomm (2019-2020):** The FTC alleged Qualcomm used its SEP position and chip monopoly to extract supracompetitive royalties through "no license, no chips" policies. The district court found antitrust violations, but the Ninth Circuit reversed, holding that Qualcomm's practices—even if anticompetitive in licensing markets—did not harm competition in chip markets. The case highlights difficulties in applying antitrust to SEP licensing and the importance of identifying the correct market for harm analysis.
 - **EC Qualcomm decisions (2018-2019):** The Commission fined Qualcomm for predatory pricing to exclude Icera and for exclusivity payments to Apple, demonstrating EU willingness to pursue SEP-adjacent conduct.
 
+:::{.callout-note title="Case box: FTC v. Qualcomm (2019--2020)"}
+The FTC alleged that Qualcomm leveraged its monopoly in CDMA and premium LTE modem chips to extract supracompetitive royalties through a "no license, no chips" policy---refusing to supply chips unless manufacturers accepted its SEP licensing terms [@us_qualcomm_2020]. Judge Koh's sweeping district court ruling found antitrust violations across licensing and chip markets, ordering Qualcomm to renegotiate agreements at FRAND rates. The Ninth Circuit reversed, holding that Qualcomm's licensing practices---even if they violated FRAND commitments---did not constitute anticompetitive conduct *in chip markets* because OEMs had no alternative chipset suppliers regardless of licensing terms. The decision effectively requires plaintiffs to show harm to competition (not just to competitors) in a properly defined market, raising the bar for SEP-based antitrust claims in the United States. The EU's parallel Qualcomm cases suggest a more receptive environment for such theories in European enforcement.
+:::
+
 These cases illustrate jurisdictional divergence: EU authorities more readily pursue SEP-related antitrust claims, while US courts after *Qualcomm* require clearer links between licensing conduct and competitive harm.
 
 ### Royalty stack analysis
@@ -111,21 +115,53 @@ Replace the illustrative stack with licensing data (often produced during litiga
 #| label: innovation-frand-event
 #| message: false
 #| warning: false
-#| eval: false
-library(tidyquant)
 library(dplyr)
 library(ggplot2)
+source("program/R/helpers.R")
 
-# Use tidyquant to pull SEP-holder and implementer stocks; measure CAR around injunction or settlement announcements
-# event_date <- as.Date("2021-08-27")
-# tickers <- c("QCOM","AAPL","SSNLF","SPY")
-# prices <- tq_get(tickers, from = event_date - 120, to = event_date + 60) |> ...
+# Synthetic event study: SEP holder and implementer stock returns around injunction ruling
+set.seed(321)
+event_window <- -60:30
+n_days <- length(event_window)
+
+event_data <- tibble(
+  day = rep(event_window, 2),
+  firm = rep(c("SEP Holder", "Implementer"), each = n_days),
+  # Normal daily returns plus event effect
+  daily_return = c(
+    rnorm(n_days, 0.0003, 0.015) + ifelse(event_window == 0, 0.04, 0),
+    rnorm(n_days, 0.0003, 0.015) + ifelse(event_window == 0, -0.03, 0)
+  )
+) |>
+  group_by(firm) |>
+  mutate(car = cumsum(daily_return - 0.0003)) |>  # CAR relative to market
+
+  ungroup()
+
+ggplot(event_data, aes(x = day, y = car, color = firm)) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray50") +
+  geom_line(linewidth = 1) +
+  annotate("text", x = 1, y = 0.05, label = "Injunction\nruling",
+           hjust = -0.1, size = 3.5, fontface = "italic") +
+  scale_color_manual(values = c("SEP Holder" = "#0072B2", "Implementer" = "#D55E00")) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(
+    title = "Cumulative abnormal returns around SEP injunction ruling",
+    subtitle = "Synthetic data; replace with tidyquant pulls for actual tickers",
+    x = "Trading days relative to ruling", y = "CAR", color = NULL,
+    caption = "Use tidyquant::tq_get() with QCOM, AAPL, or other SEP litigants."
+  ) +
+  theme_antitrust()
 ```
-Use `tidyquant` with actual ticker lists; cite the docket (e.g., “Optis v. Apple FRAND decision”) in the narrative.
+Replace synthetic returns with `tidyquant::tq_get()` using actual tickers and event dates from FRAND rulings (e.g., Optis v. Apple [@uk_optis_apple_2023], Unwired Planet [@uk_unwired_planet_2017]).
 
 ## Pay-for-delay and reverse payments
 
 ### Entry timing and hazard models
+:::{.callout-note title="Case box: FTC v. Actavis --- Pay-for-delay and the rule of reason (2013)"}
+The Supreme Court rejected the "scope of the patent" test that had shielded reverse payment settlements from antitrust scrutiny, holding instead that such agreements must be evaluated under the rule of reason [@us_actavis_2013]. The Court reasoned that a large unexplained payment from a brand-name manufacturer to a generic challenger suggests the patent holder has doubts about patent validity---and that paying to delay entry is an exercise of market power, not a legitimate exploitation of patent rights. The decision established that the *size of the payment* relative to litigation costs and saved royalties is the key indicator of anticompetitive harm. Post-Actavis, pharmaceutical companies restructured settlements to avoid explicit cash transfers, using instead "authorized generics," supply agreements, and co-promotion deals that obscure the economic equivalent of reverse payments. Enforcers must now trace the value of these non-cash transfers to demonstrate that settlements effectively compensate generics for staying out of the market.
+:::
+
 Reverse-payment settlements can delay generic entry and harm consumers [@us_actavis_2013]. Analyze:
 
 - **Payment size:** Compare settlement payment to expected litigation costs and projected profits [@edlin_hemphill_2012].  
@@ -156,10 +192,26 @@ Replace with real pay-for-delay cases (Actavis-style) or EU decisions (Servier, 
 #| message: false
 #| warning: false
 library(fixest)
+library(dplyr)
+source("program/R/helpers.R")
 
-# panel columns: market, year, treated (1 if affected by settlement), price_index
-# did_model <- feols(price_index ~ treated | market + year, data = panel)
-# summary(did_model)
+# Synthetic panel: drug markets with and without reverse payment settlements
+set.seed(555)
+n_markets <- 30
+n_years <- 10
+
+panel <- expand.grid(market = 1:n_markets, year = 2014:2023) |>
+  mutate(
+    treated = market <= 12,  # 12 markets had reverse payment settlements
+    generic_entry_year = ifelse(treated, 2020, 2018),  # Delayed entry
+    post_entry = year >= generic_entry_year,
+    # Price index: drops ~30% after generic entry
+    price_index = 100 - ifelse(post_entry, 30, 0) + rnorm(n(), 0, 4)
+  )
+
+did <- feols(price_index ~ i(treated, post_entry) | market + year, data = panel)
+cat("DiD: Effect of delayed generic entry on drug prices\n")
+summary(did)
 ```
 Data sources: IQVIA (if available), CMS reimbursement data, Stats SA medicine price data, or public price registries.
 
@@ -169,16 +221,28 @@ Data sources: IQVIA (if available), CMS reimbursement data, Stats SA medicine pr
 - **Pipeline probability models:** For pharmaceuticals, use clinical trial progression rates.  
 - **Product roadmaps:** Qualitative review of technical plans to confirm or rebut innovation harm narratives.
 
-### Panel FE scaffold
+### Panel FE for R&D effects
 ```{r}
 #| label: innovation-rd-panel
 #| message: false
 #| warning: false
 library(fixest)
+library(dplyr)
 
-# panel columns: firm, year, rd_spend, merger_dummy, controls
-# rd_model <- feols(log(rd_spend) ~ merger_dummy + controls | firm + year, data = panel)
-# summary(rd_model)
+# Synthetic panel: firm-level R&D before/after a policy change
+set.seed(777)
+rd_panel <- expand.grid(firm = 1:20, year = 2015:2024) |>
+  mutate(
+    acquired = firm <= 8,  # 8 firms were acquired
+    post = year >= 2020,
+    # R&D spending: acquired firms cut R&D by ~15% post-acquisition
+    log_rd = 4 + 0.05 * (year - 2015) + rnorm(n(), 0, 0.2) +
+      ifelse(acquired & post, -0.15, 0)
+  )
+
+rd_model <- feols(log_rd ~ i(acquired, post) | firm + year, data = rd_panel)
+cat("Panel FE: Effect of acquisition on R&D spending\n")
+summary(rd_model)
 ```
 
 ### Killer acquisitions
@@ -672,13 +736,6 @@ cat("\nUse these rates to model expected future approvals and consumer harm from
 - **WHO ICTRP**: International registry
 - **Company pipelines**: Annual reports and R&D presentations
 
-## Visualizations and data sourcing
-- **Royalty stack:** Use licensing disclosures from litigation or FRAND rate decisions. If unavailable, maintain illustrative stack in `data/examples/royalty_stack.csv`.
-- **Entry timing survival curves:** [FDA Orange Book](https://www.fda.gov/drugs/drug-approvals-and-databases/orange-book-data-files), EMA, SAHPRA, or competition-inquiry appendices.
-- **FRAND injunction event plots:** `tidyquant` stock data; ensure tickers are mapped to key SEP holders and implementers.
-- **Patent pipeline ridge plot:** Pull [PatentsView](https://patentsview.org/) or [EPO PATSTAT](https://www.epo.org/searching-for-patents/business/patstat.html) data; store sanitized extracts and scripts in `data/derived/innovation/`.
-
-Document data provenance and confidentiality in `data/README.md`, noting which visuals can ship publicly and which require synthetic placeholders until case data is approved for release.
-
 ## Looking ahead
-Archive all innovation analyses in `data/derived/innovation/` with clear metadata. When PatentsView bulk downloads or FDA Orange Book data become available, replace synthetic patent networks and entry curves with actual data. Cross-reference R&D event studies with Chapter 06 (mergers) and Chapter 08 (remedies) for remedy design templates. Document technical expert declarations and standards body submissions in case chronologies for litigation support.
+
+Innovation and IP issues are increasingly central to merger review and monopolization enforcement. The survival models, event studies, and patent network tools developed in this chapter carry forward into **@sec-litigation-practice**, where we cover how to present technical expert testimony alongside economic evidence. The killer acquisitions framework connects directly to **@sec-mergers** for transactions involving nascent competitors, and the SEP/FRAND analysis informs remedy design in **@sec-regulation-remedies**. When real data become available (PatentsView bulk downloads, FDA Orange Book, SAHPRA filings), replace the synthetic examples throughout with actual patent networks, entry timelines, and R&D panels.
