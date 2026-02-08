@@ -1,6 +1,6 @@
 # Mergers {#sec-mergers}
 
-Merger analysis brings together nearly everything from the preceding chapters. Market definition (Chapter 3) establishes the competitive boundaries. The IO toolkit (Chapter 4) provides the simulation machinery. The cartel chapter's (Chapter 5) coordinated effects framework informs our assessment of whether a merger facilitates tacit collusion. And the qualitative evidence protocols from Chapter 2 guide how we integrate internal documents, customer testimony, and efficiency claims.
+Merger analysis brings together nearly everything from the preceding chapters. Market definition (@sec-market-definition) establishes the competitive boundaries. The IO toolkit (@sec-io-toolkit) provides the simulation machinery. The cartel chapter's (@sec-cartels) coordinated effects framework informs our assessment of whether a merger facilitates tacit collusion. And the qualitative evidence protocols from @sec-research-design guide how we integrate internal documents, customer testimony, and efficiency claims.
 
 This chapter provides a practical workflow for merger review. We move from transaction overview through shares and concentration metrics, unilateral and coordinated effects analysis, vertical theories, efficiency evaluation, and finally to remedy design. Throughout, we emphasize the differences in legal standards and analytical approaches across the major jurisdictions---US, EU, UK, and South Africa---because merger practitioners increasingly operate in a multi-jurisdictional environment.
 

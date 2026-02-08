@@ -28,7 +28,7 @@ Digital platform analysis extends traditional IO tools to multi-sided markets wh
 - **Network effects**: Do more users on one side attract more users on other sides? How strong is the feedback loop?
 - **Switching costs and lock-in**: What prevents users from moving to rival platforms?
 
-**Platform conduct concerns** include:
+**Platform conduct concerns** [see @khan_2017 for the foundational critique of consumer welfare standards in platform markets; @stigler_committee_2019 for the policy reform agenda] include:
 
 - **Self-preferencing**: Does the platform favor its own products in search rankings or recommendations?
 - **Ranking manipulation**: Do algorithm changes benefit the platform at users' expense?
@@ -264,6 +264,14 @@ cat(paste0("Would monopolist profit? Depends on ad revenue vs. user loss tradeof
 3. Simulate: would a hypothetical monopolist profitably degrade quality by 5-10%?
 4. If users wouldn't switch despite degradation → market power concern
 
+:::{.callout-note title="Case box: European Commission v. Google Shopping (2017)"}
+The Commission found that Google systematically positioned its own comparison shopping service at the top of search results while demoting rival comparison shopping sites through algorithmic adjustments [@eu_google_shopping_2017]. Evidence showed click-through rates for Google's own service were 35 times higher than for organically listed rivals on the first page. The €2.42 billion fine---the largest antitrust penalty at the time---rested on empirical analysis of traffic differentials: rival comparison shopping sites lost 85% of their traffic after algorithmic changes, while Google Shopping's traffic increased 45-fold. The remedy required Google to give rival comparison services equal treatment through an auction-based mechanism for product listing ad slots. The General Court upheld the decision in 2021, confirming that self-preferencing by a dominant platform can constitute abuse even absent a traditional leveraging theory.
+:::
+
+:::{.callout-note title="Case box: Epic Games v. Apple (2021)"}
+Epic challenged Apple's 30% App Store commission and anti-steering rules that prevented developers from directing users to cheaper external payment options [@us_epic_apple_2021]. Judge Gonzalez Rogers found Apple was *not* a monopolist under the Sherman Act, partly because the relevant market was defined as "digital mobile gaming transactions"---a two-sided market where Apple competed with Google Play and console platforms. However, Apple violated California's Unfair Competition Law by preventing developers from communicating alternative payment methods to users. The injunction requiring Apple to allow external payment links reshaped app store economics globally. The case demonstrated the stakes of market definition in platform cases: a narrower single-sided market (iOS app distribution) might have yielded a monopoly finding, while the broader two-sided framing shielded Apple from Section 2 liability.
+:::
+
 ## Ranking, self-preferencing, and defaults
 
 ### Ranking impact visualization
@@ -301,19 +309,62 @@ ggplot(ranking, aes(slot, ctr, color = listing)) +
 ```
 Populate the tibble with actual ranking data (e.g., OIPMI buy-box audits, CMA Amazon Marketplace analysis) or maintain sanitized values in `data/examples/digital-ranking.csv`. The CMA's market studies are publicly available at [gov.uk/cma](https://www.gov.uk/government/organisations/competition-and-markets-authority).
 
-### Default-choice event study scaffold
+### Default-choice event study
 ```{r}
 #| label: digital-default-event
 #| message: false
 #| warning: false
-#| eval: false
 library(fixest)
+library(dplyr)
+library(ggplot2)
+source("program/R/helpers.R")
 
-# df requires: device_id, week, default_event (event date), share_rival
-# event_model <- feols(share_rival ~ i(week, default_event, ref = -1) | device_id + week, data = df)
-# etable(event_model)
+# Synthetic panel: 50 markets over 20 months, choice screen at month 11
+set.seed(42)
+n_markets <- 50
+n_periods <- 20
+treat_period <- 11
+
+panel <- expand.grid(market_id = 1:n_markets, month = 1:n_periods) |>
+  mutate(
+    treated = market_id <= 25,  # Half get choice screen
+    post = month >= treat_period,
+    rel_month = month - treat_period,
+    # Default search engine share: drops for treated markets post-intervention
+    default_share = 0.92 - 0.001 * month +
+      ifelse(treated & post, -0.07, 0) +
+      rnorm(n(), 0, 0.015)
+  )
+
+# Event study with market and period FEs
+es <- feols(default_share ~ i(rel_month, treated, ref = -1) |
+              market_id + month, data = panel)
+
+# Extract and plot coefficients
+coefs <- broom::tidy(es, conf.int = TRUE) |>
+  filter(grepl("rel_month", term)) |>
+  mutate(rel_month = as.numeric(gsub("rel_month::(.*):treated::TRUE", "\\1", term))) |>
+  bind_rows(tibble(rel_month = -1, estimate = 0, conf.low = 0, conf.high = 0))
+
+ggplot(coefs, aes(x = rel_month, y = estimate)) +
+  geom_hline(yintercept = 0, color = "gray40") +
+  geom_vline(xintercept = -0.5, linetype = "dashed", color = "gray50") +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, fill = "#0072B2") +
+  geom_line(color = "#0072B2", linewidth = 1) +
+  geom_point(color = "#0072B2", size = 2.5) +
+  annotate("text", x = 0, y = 0.01, label = "Choice screen\nintroduced",
+           hjust = -0.1, size = 3.5, fontface = "italic") +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(
+    title = "Default search engine share after choice screen",
+    subtitle = "Event study: treated vs. control markets (synthetic data)",
+    x = "Months relative to choice screen",
+    y = "Effect on default engine share",
+    caption = "Replace with DMA compliance data or CMA choice screen experiments."
+  ) +
+  theme_antitrust()
 ```
-Use telemetry from choice screens (EU Android choice screen, DMA compliance reports) or partner-provided logs. If live data are unavailable, build synthetic event panels mirroring DMA summary stats (store in `data/examples/digital-default.csv`).
+Replace the synthetic panel with DMA compliance reports, CMA choice screen experiments, or telemetry from browser/search default changes.
 
 ## Methodologies
 
@@ -330,8 +381,8 @@ Use telemetry from choice screens (EU Android choice screen, DMA compliance repo
 :::
 
 ::: {.callout-note title="Citations and comparative note"}
-- US cases (Epic v. Apple, DOJ Google Search and Ad Tech, FTC Amazon Marketplace), EU/DMA (Google Shopping/Android, DMA obligations), UK (CMA digital market studies), KFTC/JFTC app store cases, SAMR digital enforcement.  
-- Empirical studies on defaults, ranking effects, and multi-homing (e.g., Luca et al., 2016, "Does Google Content Degrade Google Search?," Harvard Business School Working Paper; Edelman & Lai, 2016, "Design of Search Engine Services," *Journal of Economics & Management Strategy* 25(1): 187-218).  
+- US cases [@us_epic_apple_2021; @us_google_search_2023; @us_google_adtech_2023], EU/DMA [@eu_google_shopping_2017; @eu_google_android_2018; @eu_dma_2022], UK (CMA digital market studies), KFTC/JFTC app store cases, SAMR digital enforcement.
+- Empirical studies on defaults, ranking effects, and multi-homing [e.g., @luca_2016; @edelman_lai_2016].
 - Flag differences in parity/MFN treatment and remedy preferences (EU fair-ranking obligations vs. US injunctive relief).
 :::
 
@@ -354,7 +405,6 @@ Multi-homing patterns reveal competitive constraints and switching costs. The fo
 #| fig-height: 6
 library(dplyr)
 library(ggplot2)
-library(ggalluvial)
 
 # Simulated multi-homing survey data
 # Replace with OIPMI survey data or DMA compliance reports
@@ -776,7 +826,7 @@ Large language models (LLMs) and generative AI introduce new competitive dynamic
 | **Training data exclusivity** | Exclusive licensing of high-quality datasets | Document analysis; entry barrier assessment |
 | **API pricing squeeze** | Below-cost API pricing to foreclose rivals | Margin analysis; comparison to standalone costs |
 | **Distribution bundling** | Tying AI features to dominant platforms | Default/pre-installation analysis (cf. browser cases) |
-| **Talent concentration** | Acqui-hires and non-competes limiting rival innovation | Labor market analysis (see Chapter 10) |
+| **Talent concentration** | Acqui-hires and non-competes limiting rival innovation | Labor market analysis (see @sec-labor-markets) |
 
 ### Emerging regulatory frameworks
 

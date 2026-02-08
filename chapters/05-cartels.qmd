@@ -491,9 +491,9 @@ Treat qualitative materials as structured data:
 :::
 
 ::: {.callout-note title="Case box: Illustrative matters"}
-**Apple eBooks (US).** Hub-and-spoke coordination with agency-model contracts and SSNDQ logic.  
-**Lysine & DRAM (US/EU).** Classic dawn-raid analyses (see Connor, 2007, "Price-Fixing Overcharges," American Antitrust Institute Working Paper; Levenstein & Suslow, 2006, "What Determines Cartel Success?," *Journal of Economic Literature* 44(1): 43-95).  
-**Construction bid-rigging (EU, SA, JFTC).** Rotation matrices and dawn raids aligned with procurement archives.  
+**Apple eBooks (US).** Hub-and-spoke coordination with agency-model contracts and SSNDQ logic [@us_apple_ebooks_2013].
+**Lysine & DRAM (US/EU).** Classic dawn-raid analyses with overcharge estimates of 17--20% (lysine) and 10--15% (DRAM), illustrating how leniency programs can expose sophisticated international price-fixing. These cases anchor the empirical literature on cartel overcharges.
+**Construction bid-rigging (EU, SA, JFTC).** Rotation matrices and dawn raids aligned with procurement archives.
 **Digital advertising (SAMR).** Algorithms and platform policies as qualitative evidence.
 :::
 

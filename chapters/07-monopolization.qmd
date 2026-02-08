@@ -640,7 +640,7 @@ p_bundle / (p_shares | p_correlation) +
 
 **Counterfactual analysis:** To isolate the causal effect of bundling from organic trends, estimate a difference-in-differences model comparing markets or time periods with and without the bundle. If the bundle rolled out in stages (e.g., different regions or OS versions), use the staggered rollout as a natural experiment. Document whether rival share losses coincide with reduced investment, product exits, or acquisition at distressed valuations.
 
-**Looking ahead:** For more on defaults and choice screens in digital markets, see Chapter 9. For damages estimation in tying cases, see Chapter 12.
+**Looking ahead:** For more on defaults and choice screens in digital markets, see @sec-digital-markets. For damages estimation in tying cases, see @sec-litigation-practice.
 
 ## Most-favored-nation clauses and parity agreements
 
@@ -814,7 +814,7 @@ p_passthrough <- fee_passthrough |>
 
 **Data replacement:** Use platform transaction data with hotel-level prices across multiple channels (incumbent platform, rival platforms, hotel direct booking). Estimate pass-through regressions to quantify the relationship between platform fees and retail prices before and after MFN adoption. Interview sellers to document contractual constraints on pricing flexibility.
 
-**Looking ahead:** For more on platform competition and two-sided markets, see Chapter 9 (Digital Markets). For MFN-related damages estimation, see Chapter 12 (Litigation Practice).
+**Looking ahead:** For more on platform competition and two-sided markets, see @sec-digital-markets. For MFN-related damages estimation, see @sec-litigation-practice.
 
 ## Refusal to deal and essential facilities
 
@@ -972,7 +972,7 @@ p_wholesale_compare <- margin_squeeze_data |>
 
 **Legal framework:** Margin squeeze is recognized as abusive under Article 102 TFEU (*Deutsche Telekom* [@eu_deutsche_telekom_2010], *Telefónica* [@eu_telefonica_2014]) and in Southern African competition law (Telkom SA case, 2013 settlement). In the United States, the *linkLine* decision [@us_linkline_2009] narrowed the scope of margin squeeze claims absent an antitrust duty to deal, but margin squeeze remains relevant where regulatory obligations to provide access exist.
 
-For FRAND-committed standard-essential patents (SEPs), the analysis shifts to whether licensing terms comply with the FRAND obligation and whether injunctions or threats thereof constitute hold-up. See Chapter 11 for detailed treatment of SEPs.
+For FRAND-committed standard-essential patents (SEPs), the analysis shifts to whether licensing terms comply with the FRAND obligation and whether injunctions or threats thereof constitute hold-up. See @sec-innovation-ip for detailed treatment of SEPs.
 
 ### Southern African exclusion case evidence
 - **Telkom wholesale broadband (Competition Commission v. Telkom SA, 2013 settlement).** Using bitstream and IPConnect price data from 2005–2009, the Commission demonstrated that Telkom’s effective wholesale prices exceeded its retail DSL tariffs for 91% of line-speed combinations once access and backhaul costs were included, yielding a classic margin squeeze. The Tribunal-approved settlement paired a R200 million administrative penalty with mandated price cuts (down to cost-plus 8%) and functional separation of wholesale and retail reporting lines, providing a replicable margin-test template for regulated utilities.
@@ -1076,21 +1076,16 @@ contracts[, c("customer", "marginal_units", "effective_marginal_price", "margin_
 - Customer interviews on switching frictions and coercion.
 :::
 
-::: {.callout-note title="Citations and comparative note"}
-- Cite Section 2/FTC Act standards and leading cases (e.g., Microsoft, Qualcomm) alongside Article 102 TFEU decisions (e.g., Intel rebates, Google Shopping/Android) for contrast.
-- For price-cost tests and rebates, reference agency guidance (e.g., EC Enforcement Priorities on exclusionary conduct) and economic literature on effective price tests.
-- Flag jurisdiction-specific burdens on effects vs. form and intent.
-:::
+::: {.callout-note title="Jurisdictional comparison: Monopolization standards"}
+**United States (Sherman Act Section 2):** Requires monopoly power *plus* willful acquisition or maintenance through exclusionary conduct. The rule of reason applies; courts weigh procompetitive justifications against anticompetitive effects. Key standards include *Brooke Group* (predation requires below-cost pricing + recoupment) [@us_brooke_group_1993], *Trinko* (no general duty to deal) [@us_trinko_2004], and *Amex* (two-sided platform analysis) [@us_amex_2018].
 
-::: {.callout-note title="Case box: Core exemplars"}
-- IBM (historic US monopolization framing) and Microsoft (tying/exclusion of browser/middleware).
-- Google Search and Ad Tech cases (US DOJ; EC Google Shopping/Android) — defaults, self-preferencing, data advantages.
-- Foreclosure and predation: United Brands (EU), Intel rebates (EU), Qualcomm (US/EU), predation tests (e.g., Brooke Group, AKZO).
-- IP vs. monopoly conduct: refusal to deal/essential facilities and licensing constraints; flag tensions between IP rights and exclusion analysis.
+**European Union (Article 102 TFEU):** Applies to firms in a "dominant position." The as-efficient competitor (AEC) test is the primary framework for pricing abuses post-*Intel* [@eu_intel_2017]. Explicit recoupment proof is not required for predatory pricing. Self-preferencing is recognized as a standalone theory of harm (*Google Shopping*) [@eu_google_shopping_2017]. Remedies tend toward behavioral obligations.
+
+**South Africa (Competition Act Section 8):** Prohibits abuse of dominance with explicit provisions for excessive pricing (Section 8(a)) and exclusionary acts (Section 8(c)/(d)). The Tribunal has applied both price-cost tests (*Media24*) and margin squeeze analyses (*Telkom*), with public-interest considerations (employment, SME development) shaping remedy design.
 :::
 
 ## Looking ahead
 
 Monopolization analysis produces artifacts---foreclosure calculations, effective price computations, margin squeeze tests---that reappear throughout the remaining chapters. **Chapter 8 (Regulation and Remedies)** addresses what happens after a liability finding: how to design remedies that actually cure the diagnosed harm and how to evaluate whether they work. Many monopolization cases end in consent decrees with behavioral obligations; the next chapter explains how to structure and monitor those commitments.
 
-The exclusionary conduct frameworks in this chapter also apply directly to **Chapter 9 (Digital Markets)**, where platform self-preferencing, default tying, and data leverage cases build on the same analytical foundations. Store your foreclosure share calculations, effective price templates, and event study code in `data/derived/` so they can be adapted for platform-specific applications.
+The exclusionary conduct frameworks in this chapter also apply directly to **@sec-digital-markets**, where platform self-preferencing, default tying, and data leverage cases build on the same analytical foundations.
