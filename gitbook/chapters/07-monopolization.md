@@ -1,36 +1,30 @@
-# Monopolization and Exclusion
+# Monopolization and Exclusion {#sec-monopolization}
 
 The previous chapter examined mergers---transactions that combine formerly independent firms. This chapter turns to conduct by firms that already possess substantial market power. How do dominant firms exclude rivals? When does aggressive competition cross the line into antitrust violation? And how do we measure the harm from exclusionary practices?
 
-These questions draw on every tool developed so far. Market definition establishes dominance. The IO toolkit provides pricing and foreclosure models. Research design principles guide empirical measurement of competitive effects. But monopolization cases also demand particular attention to intent evidence and business justifications, placing quantitative and qualitative evidence in direct tension more often than in merger review.
+These questions require us to integrate all the tools developed so far. Market definition establishes dominance. The IO toolkit provides pricing and foreclosure models. And research design principles guide our empirical measurement of competitive effects. But monopolization cases also demand particular attention to intent evidence and business justifications, making the interplay between quantitative and qualitative evidence especially critical.
 
 ## Learning goals
-
-By the end of this chapter you should be able to:
-
 - Analyze exclusionary conduct (predation, rebates, tying, MFNs, vertical restraints).
 - Connect theory to measurable foreclosure and consumer harm.
 - Use qualitative evidence to show strategy and intent, paired with empirical outcomes.
 
 ## Core topics
-
-| Conduct type | Key metrics | Primary tools |
-|:-------------|:------------|:--------------|
-| Predatory pricing | Price-cost tests (Areeda-Turner variants), effective price | Cost accounting, margin analysis |
-| Exclusive dealing / rebates | Foreclosure share, MES analysis, contract duration | Volume data, contract analysis |
-| Tying / bundling | Take-up rates, defaults, switching costs | Usage data, A/B tests |
-| MFNs / parity | Price dispersion, fee pass-through | Cross-platform pricing data |
-| Refusal to deal | Margin squeeze, indispensability | Regulatory cost data |
+- Price-cost tests (Areeda-Turner variants), effective price with rebates/loyalty programs.
+- Foreclosure metrics: share of market foreclosed, rivals' scale and entry conditions.
+- Tying/bundling: uptake, defaults, switching costs, interoperability constraints.
+- MFNs/parity: price dispersion effects, platform fee pass-through.
+- Workflow: (1) conduct and theory of harm; (2) market power assessment; (3) mechanism (exclusion/predation/raising rivals' costs); (4) empirical effects; (5) countervailing efficiencies/justifications; (6) remedy fit.
 
 ## Introduction
 
 Monopolization analysis sits at the intersection of conduct, market structure, and effects. Unlike merger review—which evaluates a prospective transaction—monopolization cases reconstruct historical patterns of behavior and ask whether a dominant firm has maintained or extended its position through exclusionary means rather than through competition on the merits. Section 2 of the Sherman Act in the United States and Article 102 of the Treaty on the Functioning of the European Union (TFEU) frame the legal standards, but enforcement priorities and evidentiary approaches differ substantially across jurisdictions.
 
-The analysis proceeds from market power assessment, drawing on tools from Chapter 3 (market definition) and Chapter 4 (IO toolkit), through specific conduct categories---predation, rebates and loyalty programs, tying and bundling, most-favored-nation clauses, vertical restraints, and refusal to deal. For each, theoretical mechanisms are paired with empirical measurement strategies and qualitative evidence that together build a coherent narrative, ending with remedy design and case exemplars from the United States, European Union, and Southern Africa.
+This chapter provides a structured workflow for analyzing monopolization claims. We begin with market power assessment, drawing on tools from Chapter 3 (market definition) and Chapter 4 (IO toolkit). We then turn to specific conduct categories—predation, rebates and loyalty programs, tying and bundling, most-favored-nation clauses, vertical restraints, and refusal to deal. For each, we pair theoretical mechanisms with empirical measurement strategies and qualitative evidence that together build a coherent narrative. The chapter concludes with remedy design considerations and a set of case exemplars that illustrate how different jurisdictions approach the same exclusionary practices.
 
-Code boxes demonstrate how to compute effective prices, assess foreclosure shares, and visualize event patterns around contract adoptions. Qualitative evidence boxes highlight the documentary and testimonial sources that complement quantitative analyses. Case boxes anchor abstract principles in real enforcement actions.
+Throughout, we emphasize reproducibility and transparency. Code boxes demonstrate how to compute effective prices, assess foreclosure shares, and visualize event patterns around contract adoptions. Qualitative evidence boxes highlight the documentary and testimonial sources that complement quantitative analyses. Case boxes anchor abstract principles in real enforcement actions, drawing on landmark decisions from the United States, European Union, and Southern Africa.
 
-For theoretical foundations on exclusionary conduct, see (Whinston, 2006) and (Salop & Scheffman, 1983) on raising rivals' costs. Key decisions include *United States v. Microsoft* (*United States v. Microsoft*, 2001) and the European Commission's Article 102 Guidance (Ec Article102 Guidance, 2009).
+For deeper context, consult the extensive case law on exclusionary conduct, including landmark decisions like *United States v. Microsoft* (*United States v. Microsoft*, 2001) and the European Commission's decisions on abuse of dominance (EC Article 102 Guidance, 2009). For theoretical foundations, see (Whinston, 2006) and (Salop & Scheffman, 1983) on raising rivals' costs.
 
 ## Market power and the monopolization workflow
 
@@ -44,7 +38,7 @@ STEP 1: MARKET POWER          STEP 2: CONDUCT               STEP 3: EFFECTS
 +----------------+           +----------------+           +----------------+
 | Market         |           | Identify       |           | Measure        |
 | definition     |           | conduct type:  |           | foreclosure &  |
-| (Chapter 3)    |---------->| - Predation    |---------->| harm:          |
+| (Ch 3)         |---------->| - Predation    |---------->| harm:          |
 |                |           | - Rebates      |           | - Share loss   |
 +----------------+           | - Tying        |           | - Entry/exit   |
        |                     | - MFNs         |           | - Price effects|
@@ -72,7 +66,6 @@ STEP 4: JUSTIFICATIONS    STEP 5: BALANCING         STEP 6: REMEDIES
 | - Quality      |        | reason / AEC)  |        | - Interop/API  |
 +----------------+        +----------------+        +----------------+
 ```
-
 **Key tests:** Sherman Act Section 2 (US) | Article 102 TFEU (EU) | SA Competition Act Section 8
 {% endhint %}
 
@@ -92,7 +85,7 @@ Monopolization liability begins with market power. In the United States, courts 
 - Customer interviews and surveys that reveal switching frictions or lack of acceptable alternatives.
 - Board materials and strategic memos that acknowledge or plan around market power (e.g., pricing flexibility, entry deterrence strategies).
 
-These elements establish the threshold condition: a firm with durable market power and the incentive to maintain or extend it.
+Together, these elements establish the baseline condition for monopolization: a firm with durable market power and the incentive to maintain or extend it.
 
 ### Two-sided platforms and the *Amex* framework
 
@@ -131,7 +124,7 @@ A complete monopolization analysis typically follows this sequence:
 5. **Efficiencies and justifications**: Evaluate procompetitive rationales (cost savings, quality improvements, incentive alignment) and whether less-restrictive alternatives are feasible.
 6. **Remedies**: Design conduct or structural remedies that target the exclusionary mechanism without unduly chilling procompetitive conduct; specify monitoring and compliance requirements.
 
-The sections that follow develop each conduct category, pairing theory with empirical methods and qualitative evidence.
+The remainder of this chapter elaborates on each conduct category, pairing theory with empirical methods and qualitative evidence.
 
 ## Exclusive dealing, loyalty rebates, and foreclosure
 
@@ -295,7 +288,7 @@ p_waterfall / p_evolution +
 
 ### Qualitative evidence for rebates and exclusivity
 
-Internal documents and customer testimony complement quantitative foreclosure metrics and often prove dispositive:
+Internal documents and customer testimony are critical complements to quantitative foreclosure metrics:
 
 - **Strategy memos**: Documents revealing intent to foreclose rivals or lock in customers (e.g., "ensure [Rival] cannot reach scale," "defend our share through loyalty programs").
 - **Contract negotiation histories**: Email chains and drafts showing how exclusivity or loyalty terms were introduced, customer resistance, and adjustments to overcome objections.
@@ -315,7 +308,7 @@ If exclusive contracts or loyalty programs were introduced or renewed in a stagg
 
 When data are thin, simpler before/after comparisons combined with robust documentary evidence can still be persuasive. The key is transparency about identification assumptions and potential confounders.
 
-> **Data tip:** For the visualizations in this chapter (effective price waterfall, foreclosure share, rollout event analysis), start with sanitized versions of the loyalty-contract spreadsheets and rolling rollout trackers. Where you lack live case data, use synthetic templates in `data/examples/` so the build renders without confidential inputs; swap in case data during litigation prep.
+> **Data tip:** For visuals in the roadmap (effective price waterfall, foreclosure share, rollout event analysis), start with sanitized versions of the loyalty-contract spreadsheets and rolling rollout trackers. Where you lack live case data, use synthetic templates in `data/examples/` so the Quarto build renders without confidential inputs; swap in case data during litigation prep.
 
 #### Contract rollout event study
 
@@ -327,7 +320,6 @@ library(tidyr)
 library(ggplot2)
 library(fixest)
 library(patchwork)
-source("program/R/helpers.R")
 
 # Simulate panel data: 20 customers observed for 24 periods
 # Treatment (exclusive contract) rolled out to 10 customers in period 13
@@ -436,15 +428,11 @@ p_event / p_timing +
 
 Predatory pricing claims allege that a dominant firm sets prices below an appropriate measure of cost to drive out rivals or deter entry, with the expectation of recouping losses through supracompetitive prices once competition is eliminated. The canonical legal test, articulated in *Brooke Group* (*Brooke Group v. Brown & Williamson*, 1993), requires (1) pricing below an appropriate measure of cost, and (2) a dangerous probability of recouping the investment in below-cost pricing. The foundational economic framework was established by (Areeda & Turner, 1975).
 
-{% hint style="info" %}
-**Key cost benchmarks for predation analysis**
+**Cost benchmarks** in antitrust analysis include:
 
-| Benchmark | Definition | Legal significance |
-|:----------|:-----------|:-------------------|
-| **AVC** (Average Variable Cost) | Costs that vary with output in the short run | Below AVC = presumptively predatory (*Areeda-Turner*) |
-| **AAC** (Average Avoidable Cost) | Costs avoidable by not producing (including some medium-term fixed) | Increasingly favored in US and EU practice |
-| **LRIC / ATC** (Long-Run Incremental / Average Total Cost) | Includes allocated fixed costs | Pricing between AAC and ATC may be exclusionary with intent evidence |
-{% endhint %}
+1. **Average variable cost (AVC)**: Costs that vary with output in the short run (materials, direct labor). Pricing below AVC is presumptively predatory under *Areeda-Turner* logic, as no rational profit-maximizing firm would price below AVC absent an exclusionary motive.
+2. **Average avoidable cost (AAC)**: Costs that could be avoided by not producing (similar to AVC but may include some fixed costs avoidable in the medium term). AAC is increasingly favored in both US and EU practice as a more accurate measure of incremental cost.
+3. **Long-run incremental cost (LRIC)** or **average total cost (ATC)**: Includes allocated fixed costs. Pricing between AAC and ATC may be exclusionary if combined with evidence of predatory intent and foreclosure effects, but is less likely to satisfy the *Brooke Group* standard in the United States.
 
 **Computing effective prices**: When rebates, bundling, or loyalty discounts are present, compute the effective price paid per unit:
 
@@ -639,7 +627,7 @@ p_bundle / (p_shares | p_correlation) +
 
 **Counterfactual analysis:** To isolate the causal effect of bundling from organic trends, estimate a difference-in-differences model comparing markets or time periods with and without the bundle. If the bundle rolled out in stages (e.g., different regions or OS versions), use the staggered rollout as a natural experiment. Document whether rival share losses coincide with reduced investment, product exits, or acquisition at distressed valuations.
 
-Defaults and choice screens in digital markets receive extended treatment in Chapter 9; damages estimation in tying cases appears in Chapter 12.
+**Looking ahead:** For more on defaults and choice screens in digital markets, see [Chapter 9](chapters/09-digital-markets.md). For damages estimation in tying cases, see [Chapter 12](chapters/12-litigation-practice.md).
 
 ## Most-favored-nation clauses and parity agreements
 
@@ -808,7 +796,7 @@ p_passthrough <- fee_passthrough |>
 
 **Data replacement:** Use platform transaction data with hotel-level prices across multiple channels (incumbent platform, rival platforms, hotel direct booking). Estimate pass-through regressions to quantify the relationship between platform fees and retail prices before and after MFN adoption. Interview sellers to document contractual constraints on pricing flexibility.
 
-Platform competition and two-sided markets receive fuller treatment in Chapter 9; MFN-related damages estimation appears in Chapter 12.
+**Looking ahead:** For more on platform competition and two-sided markets, see [Chapter 9](chapters/09-digital-markets.md). For MFN-related damages estimation, see [Chapter 12](chapters/12-litigation-practice.md).
 
 ## Refusal to deal and essential facilities
 
@@ -961,15 +949,12 @@ p_wholesale_compare <- margin_squeeze_data |>
 
 **Legal framework:** Margin squeeze is recognized as abusive under Article 102 TFEU (*Deutsche Telekom* (*Deutsche Telekom*, 2010), *Telefónica* (*Telefónica*, 2014)) and in Southern African competition law (Telkom SA case, 2013 settlement). In the United States, the *linkLine* decision (*Pacific Bell v. linkLine*, 2009) narrowed the scope of margin squeeze claims absent an antitrust duty to deal, but margin squeeze remains relevant where regulatory obligations to provide access exist.
 
-For Fair, Reasonable, and Non-Discriminatory (FRAND)-committed standard-essential patents (SEPs), the analysis shifts to whether licensing terms comply with the FRAND obligation and whether injunctions or threats thereof constitute hold-up. See Chapter 11 for detailed treatment of SEPs.
+For FRAND-committed standard-essential patents (SEPs), the analysis shifts to whether licensing terms comply with the FRAND obligation and whether injunctions or threats thereof constitute hold-up. See [Chapter 11](chapters/11-innovation-ip.md) for detailed treatment of SEPs.
 
 ### Southern African exclusion case evidence
-
-**Telkom wholesale broadband (Competition Commission v. Telkom SA, 2013 settlement).** Using bitstream and IPConnect price data from 2005--2009, the Commission demonstrated that Telkom's effective wholesale prices exceeded its retail DSL tariffs for 91% of line-speed combinations once access and backhaul costs were included, yielding a classic margin squeeze. The Tribunal-approved settlement paired a R200 million administrative penalty with mandated price cuts (down to cost-plus 8%) and functional separation of wholesale and retail reporting lines, providing a replicable margin-test template for regulated utilities.
-
-**Media24 community newspapers (Competition Commission v. Media24, Tribunal case 122/CR/Dec12).** Investigators constructed four-year panel data on advertising volumes, pagination, and production costs for Forum and Gold-Net News titles in Welkom. The Tribunal relied on an avoidable-cost test showing that Forum's ad rates sat 20--30% below incremental costs for 18 consecutive months, combined with internal documents targeting rival exit, to find predatory pricing. The remedy required cost-based pricing governance and quarterly reporting on advertising discounts.
-
-**Polypropylene feedstock (Competition Commission v. Sasol Chemical Industries, 2014 CAC judgment).** The Commission benchmarked Sasol's propylene prices against export parity and long-run incremental cost, revealing margins 41--47% above competitive levels despite surplus capacity. The Tribunal's excessive-pricing ruling---upheld by the Competition Appeal Court---ordered R534 million in penalties and compelled publication of a transparent pricing formula, underlining how cost benchmarking can support exploitation and exclusion theories simultaneously.
+- **Telkom wholesale broadband (Competition Commission v. Telkom SA, 2013 settlement).** Using bitstream and IPConnect price data from 2005–2009, the Commission demonstrated that Telkom’s effective wholesale prices exceeded its retail DSL tariffs for 91% of line-speed combinations once access and backhaul costs were included, yielding a classic margin squeeze. The Tribunal-approved settlement paired a R200 million administrative penalty with mandated price cuts (down to cost-plus 8%) and functional separation of wholesale and retail reporting lines, providing a replicable margin-test template for regulated utilities.
+- **Media24 community newspapers (Competition Commission v. Media24, Tribunal case 122/CR/Dec12).** Investigators constructed four-year panel data on advertising volumes, pagination, and production costs for Forum and Gold-Net News titles in Welkom. The Tribunal relied on an avoidable-cost test showing that Forum’s ad rates sat 20–30% below incremental costs for 18 consecutive months, combined with internal documents targeting rival exit, to find predatory pricing. The remedy required cost-based pricing governance and quarterly reporting on advertising discounts.
+- **Polypropylene feedstock (Competition Commission v. Sasol Chemical Industries, 2014 CAC judgment).** The Commission benchmarked Sasol’s propylene prices against export parity and long-run incremental cost, revealing margins 41–47% above competitive levels despite surplus capacity. The Tribunal’s excessive-pricing ruling—upheld by the Competition Appeal Court—ordered R534 million in penalties and compelled publication of a transparent pricing formula, underlining how cost benchmarking can support exploitation and exclusion theories simultaneously.
 
 {% hint style="info" %}
 **Method box: Foreclosure share calculation**
@@ -1073,28 +1058,17 @@ contracts[, c("customer", "marginal_units", "effective_marginal_price", "margin_
 {% endhint %}
 
 {% hint style="info" %}
-**Citations and comparative note**
+**Jurisdictional comparison: Monopolization standards**
 
-- Cite Section 2/FTC Act standards and leading cases (e.g., Microsoft, Qualcomm) alongside Article 102 TFEU decisions (e.g., Intel rebates, Google Shopping/Android) for contrast.
-- For price-cost tests and rebates, reference agency guidance (e.g., EC Enforcement Priorities on exclusionary conduct) and economic literature on effective price tests.
-- Flag jurisdiction-specific burdens on effects vs. form and intent.
-{% endhint %}
+**United States (Sherman Act Section 2):** Requires monopoly power *plus* willful acquisition or maintenance through exclusionary conduct. The rule of reason applies; courts weigh procompetitive justifications against anticompetitive effects. Key standards include *Brooke Group* (predation requires below-cost pricing + recoupment) (*Brooke Group v. Brown & Williamson*, 1993), *Trinko* (no general duty to deal) (*Verizon v. Trinko*, 2004), and *Amex* (two-sided platform analysis) (*Ohio v. American Express*, 2018).
 
-{% hint style="info" %}
-**Case box: Core exemplars**
+**European Union (Article 102 TFEU):** Applies to firms in a "dominant position." The as-efficient competitor (AEC) test is the primary framework for pricing abuses post-*Intel* (*Intel*, 2017). Explicit recoupment proof is not required for predatory pricing. Self-preferencing is recognized as a standalone theory of harm (*Google Shopping*) (*Google Shopping*, 2017). Remedies tend toward behavioral obligations.
 
-- IBM (historic US monopolization framing) and Microsoft (tying/exclusion of browser/middleware).
-- Google Search and Ad Tech cases (US DOJ; EC Google Shopping/Android) — defaults, self-preferencing, data advantages.
-- Foreclosure and predation: United Brands (EU), Intel rebates (EU), Qualcomm (US/EU), predation tests (e.g., Brooke Group, AKZO).
-- IP vs. monopoly conduct: refusal to deal/essential facilities and licensing constraints; flag tensions between IP rights and exclusion analysis.
+**South Africa (Competition Act Section 8):** Prohibits abuse of dominance with explicit provisions for excessive pricing (Section 8(a)) and exclusionary acts (Section 8(c)/(d)). The Tribunal has applied both price-cost tests (*Media24*) and margin squeeze analyses (*Telkom*), with public-interest considerations (employment, SME development) shaping remedy design.
 {% endhint %}
 
 ## Looking ahead
 
-The exclusionary conduct frameworks developed here---foreclosure measurement, effective-price tests, margin squeeze analysis, and MFN assessments---carry forward into several subsequent chapters. **Chapter 8** (Regulation and Remedies) examines how regulators design and monitor the structural and behavioral remedies that follow monopolization findings, including the functional separation and pricing commitments seen in the Telkom and Media24 cases above. **Chapter 9** (Digital Markets) extends tying, self-preferencing, and MFN analysis to multi-sided platforms, where network effects and data advantages amplify the exclusionary mechanisms discussed here. The tension between intellectual property rights and exclusionary conduct---particularly around FRAND-committed SEPs---receives dedicated treatment in **Chapter 11** (Innovation and IP). Finally, **Chapter 12** (Litigation Practice) shows how to package foreclosure analyses, price-cost tests, and event studies into expert reports and testimony.
+Monopolization analysis produces artifacts---foreclosure calculations, effective price computations, margin squeeze tests---that reappear throughout the remaining chapters. **[Chapter 8](chapters/08-regulation-remedies.md)** addresses what happens after a liability finding: how to design remedies that actually cure the diagnosed harm and how to evaluate whether they work. Many monopolization cases end in consent decrees with behavioral obligations; the next chapter explains how to structure and monitor those commitments.
 
-**Before proceeding, prepare:**
-
-1. **Foreclosure database**: Archive contract-level foreclosure calculations, effective-price waterfalls, and margin squeeze spreadsheets in `data/derived/` with clear documentation of data sources and assumptions.
-2. **Conduct timeline**: Maintain a dated chronology linking conduct events (contract rollouts, API changes, pricing moves) to measured competitive effects---this artifact travels directly into the remedies and litigation chapters.
-3. **Cross-jurisdictional mapping**: For each conduct type analyzed, note the applicable legal standard in US, EU, and South African law, including differences in burden of proof and remedy preferences.
+The exclusionary conduct frameworks in this chapter also apply directly to **[Chapter 9](chapters/09-digital-markets.md)**, where platform self-preferencing, default tying, and data leverage cases build on the same analytical foundations.

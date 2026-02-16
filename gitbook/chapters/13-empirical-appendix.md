@@ -1,21 +1,17 @@
-# Empirical Appendix and Templates {.unnumbered}
+# Empirical Appendix and Templates {#sec-empirical-appendix .unnumbered}
 
 ## Purpose
+This appendix is the shared workspace for reusable diagnostics, qualitative protocols, and data inventories referenced throughout the book. Treat it as the "operations manual" for the course: every code chunk or template lives here so you can drop it into chapter-specific notebooks, expert reports, or litigation memos without rewriting boilerplate.
 
-This appendix collects reusable diagnostics, qualitative protocols, and data inventories referenced throughout the book. Every code chunk and template lives here so it can be dropped into chapter-specific notebooks, expert reports, or litigation memos without rewriting boilerplate.
-
-{% hint style="success" %}
-**How to use this appendix**
-
+## How to use this appendix
 1. **Start here during scoping.** Clone the chronology, data inventory, and interview templates before diving into a matter so legal, economic, and qualitative teams stay synchronized.
 2. **Customize but keep provenance.** When you adapt a template, note the source so future readers can trace assumptions.
 3. **Feed updates back in.** If a later chapter develops a better diagnostic, link it here to avoid divergence.
-{% endhint %}
 
 ## Key resources for quick reference
 
 | Chapter focus | Key resources |
-|:-------------|:-------------|
+| --- | --- |
 | Orientation & institutions | Agency websites: [DOJ Antitrust](https://www.justice.gov/atr), [FTC](https://www.ftc.gov/), [EC Competition](https://ec.europa.eu/competition/), [CMA](https://www.gov.uk/cma) |
 | Research design & methods | [Causal Inference: The Mixtape](https://mixtape.scunning.com/), Angrist & Pischke papers |
 | Cartels & collusion | [OECD Cartel Guidance](https://www.oecd.org/daf/competition/cartels/) |
@@ -25,15 +21,12 @@ This appendix collects reusable diagnostics, qualitative protocols, and data inv
 
 Use this table alongside external references such as (Ashenfelter & Hosken, 2010) and agency guidelines.
 
----
-
 ## Case chronology template
-
 When building mixed-method narratives, start with a matrix that ties events to evidence and hypotheses. Duplicate the scaffold below into your project notebook:
 
 | Date | Event / document | Evidence type | Hypothesis link | Follow-ups |
-|:-----|:-----------------|:-------------|:----------------|:-----------|
-| 2018-04-12 | Board memo re: "price discipline" | Document (custodian: CFO) | Supports coordinated effects theory | Interview CFO; pull bid data |
+| --- | --- | --- | --- | --- |
+| 2018-04-12 | Board memo re: “price discipline” | Document (custodian: CFO) | Supports coordinated effects theory | Interview CFO; pull bid data |
 | 2019-02-01 | Customer interview (retailer) | Qualitative | Tests diversion/USP claims | Quantify share of wallet |
 | 2021-09-30 | Price spike (SKU 124) | Quantitative (transaction DB) | Flags potential capacity withholding | Overlay maintenance logs |
 
@@ -61,7 +54,7 @@ data_inventory
 Document locating instructions (sharepoint links, API keys) and legal restrictions. Store sanitized metadata in `data/README.md` so others can reproduce.
 
 ## Survey and interview kit
-Rigorous qualitative work follows established research standards:
+Follow established qualitative research standards to keep qualitative work rigorous:
 - **Screeners:** Define decision-maker roles, procurement thresholds, and geographic balance; record quotas in a simple CSV.
 - **Question bank:** Map each question to a legal element (market definition, competitive effects, efficiencies). Rotate order to reduce priming.
 - **Documentation:** Save audio or transcripts, then code responses using the lexicon below. Always log interviewer, location, and consent status.
@@ -97,7 +90,7 @@ Maintain the lexicon as a YAML or CSV in `data/derived`.
 
 ## Reusable diagnostics
 
-### DiD and event studies
+### Diff-in-diff and event studies
 - Run parallel-trend visuals, dynamic leads/lags, and placebo periods (`did::att_gt`, `fixest::sunab`). Reference (Cunningham, 2021) for intuition and cite (Ashenfelter & Hosken, 2010) for merger retrospectives. For staggered treatment timing, see (Callaway & Sant'Anna, 2021).
 - For South African matters with staggered regulatory actions, consider matrix-completion methods from recent econometrics literature (Athey & Imbens, 2017).
 
@@ -155,7 +148,6 @@ svymean(~switch_intent, design)
 ```r
 library(ggplot2)
 library(lubridate)
-source("program/R/helpers.R")
 
 chronology <- tibble::tribble(
   ~date, ~category, ~label,
@@ -174,17 +166,16 @@ ggplot(chronology, aes(x = date, y = category, color = category)) +
 
 ## Diagnostic Gallery
 
-The diagnostic visualizations below apply across chapters---use them to validate identification assumptions, assess robustness, and communicate uncertainty in expert reports.
+This section provides reusable diagnostic visualizations that apply across chapters. Use these templates to validate identification assumptions, assess robustness, and communicate uncertainty in expert reports.
 
 ### Pre-trends and parallel trends checks
-A prerequisite for any difference-in-differences design (mergers, labor, remedies).
+Essential for difference-in-differences designs (mergers, labor, remedies).
 
 ```r
 library(dplyr)
 library(ggplot2)
 library(fixest)
 library(patchwork)
-source("program/R/helpers.R")
 
 # Simulated panel data with treatment in period 10
 # Replace with your actual panel data
@@ -289,16 +280,15 @@ cat(paste0("Joint F-test p-value: [run wald_test on event_study model]\n"))
 - **Pre-trends near zero**: Validates parallel trends assumption
 - **Post-treatment divergence**: Confirms treatment effect
 - **Confidence intervals**: Should include zero in pre-period
-- **Use this**: Merger retrospectives (Chapter 6), cartel overcharge estimation (Chapter 5), remedy evaluation (Chapter 8), labor market policy shocks (Chapter 10), and R&D event studies (Chapter 11)
+- **Use this**: Mergers ([Chapter 6](chapters/06-mergers.md)), remedies ([Chapter 8](chapters/08-regulation-remedies.md)), labor ([Chapter 10](chapters/10-labor-markets.md))
 
 ### Balance plots for matching/weighting
-Covariate balance before and after matching or weighting should be inspected visually.
+Show covariate balance before and after matching or weighting.
 
 ```r
 library(dplyr)
 library(ggplot2)
 library(tidyr)
-source("program/R/helpers.R")
 
 # Simulated covariate data (treatment and control groups)
 set.seed(234)
@@ -411,13 +401,12 @@ balance_combined |>
 - **Use this**: Merger retrospectives, labor market studies, remedy evaluations
 
 ### Regression specification curve
-Robustness across multiple reasonable specifications guards against results driven by a single modeling choice.
+Show robustness across multiple reasonable specifications.
 
 ```r
 library(dplyr)
 library(ggplot2)
 library(fixest)
-source("program/R/helpers.R")
 
 # Simulated data for multiple specifications
 set.seed(345)
@@ -453,7 +442,11 @@ spec_results <- tibble(
     coefs[grepl("treatment", names(coefs))][1]
   }),
   se = sapply(specs, function(m) {
-    ses <- se(m)
+    if (inherits(m, "fixest")) {
+      ses <- fixest::se(m)
+    } else {
+      ses <- summary(m)$coefficients[, "Std. Error"]
+    }
     ses[grepl("treatment", names(ses))][1]
   })
 ) |>
@@ -510,7 +503,6 @@ Check model assumptions and identify influential observations.
 library(dplyr)
 library(ggplot2)
 library(patchwork)
-source("program/R/helpers.R")
 
 # Fit model (use your actual model)
 model_data <- panel_spec |>
@@ -590,13 +582,12 @@ p4 <- ggplot(diagnostics, aes(x = residual)) +
 - **Histogram**: Bell-shaped, centered at zero
 
 ### Power analysis visualization
-Statistical power varies with sample size and effect size; plotting the relationship exposes the tradeoffs inherent in study design.
+Show statistical power across different sample sizes and effect sizes.
 
 ```r
 library(dplyr)
 library(ggplot2)
 library(pwr)
-source("program/R/helpers.R")
 
 # Calculate power for different scenarios
 sample_sizes <- seq(50, 500, by = 25)
@@ -606,6 +597,7 @@ power_grid <- expand.grid(
   n = sample_sizes,
   effect_size = effect_sizes
 ) |>
+  rowwise() |>
   mutate(
     power = pwr.t.test(n = n, d = effect_size, sig.level = 0.05,
                       type = "two.sample")$power,
@@ -614,7 +606,8 @@ power_grid <- expand.grid(
       effect_size == 0.5 ~ "Medium effect (d = 0.5)",
       effect_size == 0.8 ~ "Large effect (d = 0.8)"
     )
-  )
+  ) |>
+  ungroup()
 
 # Power curve
 ggplot(power_grid, aes(x = n, y = power, color = effect_label)) +
@@ -668,5 +661,5 @@ print(power_summary, n = Inf)
 - **Causal Inference: The Mixtape** ([mixtape.scunning.com](https://mixtape.scunning.com/)) for causal estimators and diagnostics.
 - **OECD cartel guidance:** See [oecd.org/competition](https://www.oecd.org/daf/competition/) for screening methodologies.
 
-Return to this appendix whenever a chapter references its templates. In particular: **Chapter 2** (Research Design) introduces the causal identification strategies whose diagnostics appear above; **Chapter 3** (Market Definition) uses the critical-loss and diversion templates; **Chapter 5** (Cartels) applies the structural-break and overcharge estimation scaffolds; **Chapter 6** (Mergers) draws on the simulation and event-study code; **Chapter 8** (Regulation and Remedies) uses the benchmarking and retrospective DiD frameworks; **Chapter 10** (Labor Markets) applies the concentration measurement and policy-shock DiD templates; **Chapter 11** (Innovation and IP) uses the survival analysis and patent network code; and **Chapter 12** (Litigation Practice) relies on the specification curve, power analysis, and residual diagnostics for Daubert readiness. Keeping this appendix as the single source of truth ensures consistency across teams and jurisdictions.
+Return to this appendix whenever a chapter references "see appendix template" so the workflow stays consistent across teams and jurisdictions.
 

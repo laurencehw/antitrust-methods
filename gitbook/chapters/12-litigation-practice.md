@@ -1,17 +1,18 @@
-# Litigation Practice: Evidence and Expert Work
+# Litigation Practice: Evidence and Expert Work {#sec-litigation-practice}
 
-The preceding chapters developed the analytical methods; this chapter addresses how to present them in litigation. The audience shifts from academic reviewers or agency staff to judges, juries, and opposing counsel armed with their own experts. The standard shifts from "interesting and well-identified" to "reliable and relevant under Daubert" (in US courts) or comparable evidentiary frameworks elsewhere.
+The methods chapters taught you how to analyze competition questions. This chapter teaches you how to present that analysis in litigation. The audience changes from academic reviewers or agency staff to judges, juries, and opposing counsel armed with their own experts. The standards shift from "interesting and well-identified" to "reliable and relevant under Daubert" (in US courts) or comparable evidentiary frameworks elsewhere. As (Baker & Rubinfeld, 1999) emphasize, the bridge between academic econometrics and courtroom evidence requires careful attention to both statistical rigor and legal admissibility.
 
-Expert work demands more than technical competence. The analysis must be structured for reproducibility, the methodology must withstand adversarial challenge, uncertainty must be communicated honestly, and the whole must tell a coherent story connecting evidence to legal standards. What follows covers the workflow from initial data handling through expert report preparation, deposition, and trial testimony.
+Effective expert work requires more than technical competence. You must structure your analysis for reproducibility, anticipate challenges to your methodology, communicate uncertainty honestly, and tell a coherent story that connects evidence to legal standards (Dickey & Rubinfeld, 2014). The quantitative techniques introduced throughout this book---from demand estimation ([Chapter 3](chapters/03-market-definition.md)) to merger simulation ([Chapter 6](chapters/06-mergers.md)) to cartel screening ([Chapter 5](chapters/05-cartels.md))---all take on new dimensions when subjected to adversarial testing. This chapter covers the workflow from initial data handling through expert report preparation, deposition, and trial testimony, drawing on the methodological foundations in (Davis & Garcés, 2010) and the evidentiary standards codified in the *Reference Manual on Scientific Evidence* (FJC Reference Manual, 2011).
 
 ## Learning goals
-
-Drawing on agency guidance (US DOJ/FTC, EC best practices) and established expert practice standards, this chapter focuses on:
+This chapter translates all prior analytics into courtroom-ready workflows. Drawing on agency guidance (US DOJ/FTC, EC best practices) and established expert practice standards (FJC Reference Manual, 2011); (Rubinfeld, 2010), we focus on:
 
 - Structuring investigations so every exhibit and code run is reproducible.
 - Designing class certification analyses (common impact, damages) that withstand Daubert/Kumho challenges.
 - Integrating empirical, qualitative, and documentary evidence in expert reports, depositions, and testimony.
 - Communicating uncertainty, sensitivity, and alternative specifications to judges and juries.
+
+The econometric methods that underpin expert testimony in antitrust cases---difference-in-differences, instrumental variables, regression discontinuity---are the same tools covered in standard causal inference texts (Angrist & Pischke, 2009); (Cunningham, 2021). What distinguishes litigation work is the adversarial context: every modeling choice will be scrutinized, every data limitation exploited, and every assumption challenged. The expert must be prepared to defend not only the preferred specification but also to explain why reasonable alternatives do not undermine the central conclusions.
 
 ## Core topics
 
@@ -19,34 +20,33 @@ Drawing on agency guidance (US DOJ/FTC, EC best practices) and established exper
 **Expert Work Workflow**
 
 ```
-ENGAGEMENT               ANALYSIS                  REPORTS & TESTIMONY
-     |                       |                            |
-     v                       v                            v
-+------------+         +------------+              +------------+
-| Scoping &  |         | Common     |              | Draft      |
-| data       |-------->| impact &   |------------->| expert     |
-| inventory  |         | damages    |              | report     |
-+------------+         +------------+              +------------+
-     |                       |                            |
-     v                       v                            v
-+------------+         +------------+              +------------+
-| Evidence   |         | Sensitivity|              | Deposition |
-| mapping:   |         | & Daubert  |              | prep &     |
-| - Docs     |         | readiness: |              | testimony: |
-| - Data     |         | - Validate |              | - Q&A      |
-| - Testimony|         | - Altern.  |              | - Exhibits |
-+------------+         +------------+              +------------+
+ENGAGEMENT               ANALYSIS                 REPORTS & TESTIMONY
+     |                       |                           |
+     v                       v                           v
++------------+         +------------+             +------------+
+| Scoping &  |         | Common     |             | Draft      |
+| data       |-------->| impact &   |------------>| expert     |
+| inventory  |         | damages    |             | report     |
++------------+         +------------+             +------------+
+     |                       |                           |
+     v                       v                           v
++------------+         +------------+             +------------+
+| Evidence   |         | Sensitivity|             | Deposition |
+| mapping:   |         | & Daubert  |             | prep &     |
+| - Docs     |         | readiness: |             | testimony  |
+| - Data     |         | - Validation             | - Q&A outline
+| - Testimony|         | - Alternatives           | - Exhibits |
++------------+         +------------+             +------------+
      |                       |
      v                       v
 +------------+         +------------+
 | Reproducible         | Scenario   |
-| code bundle:  |      | tables &   |
-| - Git/renv    |      | tornado    |
-| - README      |      | charts     |
-| - Doc IDs     |      +------------+
-+---------------+
+| code bundle:         | tables &   |
+| - Git/renv           | tornado    |
+| - README             | charts     |
+| - Doc IDs            +------------+
++------------+
 ```
-
 **Deliverables:** Expert report | Rebuttal report | Deposition testimony | Trial testimony | Exhibit package
 {% endhint %}
 
@@ -84,14 +84,14 @@ ENGAGEMENT               ANALYSIS                  REPORTS & TESTIMONY
 
 ### Evidence map
 
-Create an evidence map linking:
+A well-organized evidence map is the backbone of any litigation engagement. It ensures that every opinion in the expert report can be traced back to specific data, documents, and testimony---a requirement that courts have increasingly emphasized in evaluating expert reliability (Dickey & Rubinfeld, 2014). Create an evidence map linking:
 
-1. **Data sources:** Production IDs, custodians, time periods, transformations.  
-2. **Documentary evidence:** Bates numbers, key quotes, translation status.  
-3. **Witness testimony:** Depositions, declarations, trial testimony, and their linkage to quantitative claims.  
+1. **Data sources:** Production IDs, custodians, time periods, transformations.
+2. **Documentary evidence:** Bates numbers, key quotes, translation status.
+3. **Witness testimony:** Depositions, declarations, trial testimony, and their linkage to quantitative claims.
 4. **Model outputs:** Code, inputs, parameters, and versions stored in reproducible folders.
 
-A typical structure (`/data/raw`, `/data/derived`, `/scripts`, `/reports`) mirrors earlier chapters; maintain `README` files and `renv`/`requirements` snapshots.
+A typical structure (`/data/raw`, `/data/derived`, `/scripts`, `/reports`) mirrors earlier chapters; maintain `README` files and `renv`/`requirements` snapshots. This organizational discipline is not merely good practice---it is often a prerequisite for surviving a Daubert challenge, because courts evaluate whether the expert's methodology can be (and has been) tested and replicated (FJC Reference Manual, 2011).
 
 ### Reproducible bundle checklist
 
@@ -102,27 +102,59 @@ A typical structure (`/data/raw`, `/data/derived`, `/scripts`, `/reports`) mirro
 
 ## Class certification and common impact
 
+In US antitrust litigation, class certification under Federal Rule of Civil Procedure 23(b)(3) requires plaintiffs to demonstrate that "questions of law or fact common to class members predominate over any questions affecting only individual members." Economic evidence plays a central role in this determination. The expert must show that the alleged conduct had a **common impact** on class members---that is, the anticompetitive effect can be demonstrated through evidence common to the class rather than requiring individualized proof for each member (Baker & Rubinfeld, 1999).
+
+The predominance requirement was sharpened by two landmark Supreme Court decisions. In *Wal-Mart Stores, Inc. v. Dukes*, 564 U.S. 338 (2011), the Court emphasized that commonality requires plaintiffs to identify a common contention whose resolution will "drive the resolution of the litigation"---a mere claim that class members suffered a violation is insufficient. In *Comcast Corp. v. Behrend*, 569 U.S. 27 (2013), the Court held that at the class certification stage, a damages model must be consistent with the theory of liability and capable of measuring damages on a class-wide basis. This means the economic expert must demonstrate not only that impact is common but that damages can be calculated using a common methodology, even if the dollar amounts differ across class members.
+
+In practice, common impact analysis typically involves showing that prices in the affected market moved together during the violation period and that the overcharge (or other harm) was transmitted to all or nearly all class members. Regression-based approaches---including the difference-in-differences framework---are the standard tool, often supplemented by randomization inference or permutation tests when sample sizes are small (Davis & Garcés, 2010). The defendant's expert will typically argue that individual variation in impact is too great for class-wide treatment, pointing to differences in negotiation power, contract terms, or product mix. The plaintiff's expert must rebut these arguments by showing that individual variation does not defeat commonality---the question is whether impact can be shown through common proof, not whether every class member was harmed by exactly the same amount.
+
 ### Sampling and aggregation decisions
 
-- Align sampling frames with class definitions (time, geography, product).  
-- Document random sampling pr OCED images? (no)  
+- Align sampling frames with class definitions (time, geography, product).
 - For opt-out classes, track individual damages calculations.
 
 ### Common impact tests
 
 ```r
 library(fixest)
+library(dplyr)
 
-# panel columns: class_member, period, treatment, outcome, controls
-# Example DiD for common impact
-# ci_model <- feols(outcome ~ treatment | class_member + period, data = panel)
-# summary(ci_model)
+# Simulate panel data for common impact analysis
+# 200 class members observed over 20 periods; treatment begins at period 11
+set.seed(42)
+n_members <- 200
+n_periods <- 20
+treatment_start <- 11
+
+panel <- expand.grid(
+  class_member = 1:n_members,
+  period = 1:n_periods
+) |>
+  mutate(
+    # Treatment indicator: post-period for all class members
+    post = as.integer(period >= treatment_start),
+    # Treated group (80% of class affected; 20% comparison group)
+    treated = as.integer(class_member <= 160),
+    # Interaction: DiD treatment variable
+    treatment = post * treated,
+    # Simulate outcome: member FE + period FE + treatment effect + noise
+    member_fe = rep(rnorm(n_members, mean = 100, sd = 10), each = n_periods),
+    period_fe = rep(seq(0, 2, length.out = n_periods), times = n_members),
+    outcome = member_fe + period_fe + 8.5 * treatment + rnorm(n_members * n_periods, sd = 5)
+  )
+
+# Estimate DiD model with two-way fixed effects and clustered SEs
+ci_model <- feols(outcome ~ treatment | class_member + period,
+                  data = panel, cluster = ~class_member)
+summary(ci_model)
 ```
-Add clustered SEs (e.g., `cluster = ~class_member`) or randomization inference for small N. Consult academic literature on class certification econometrics for methodological guidance.
+
+The estimated treatment effect represents the common overcharge (or other harm) experienced by class members during the violation period. The coefficient on `treatment` is the DiD estimate of common impact, with standard errors clustered at the class-member level to account for serial correlation within individuals (Angrist & Pischke, 2009). A statistically significant and positive coefficient supports the plaintiff's argument that the conduct had a common effect amenable to class-wide proof.
 
 ### Randomization inference scaffold
 ```r
 library(fixest)
+library(magrittr)
 
 # After estimating ci_model, permute treatment labels to compute empirical p-values
 # ri_p <- permute_plm(ci_model, treat = "treatment", cluster = "class_member", reps = 1000)
@@ -130,10 +162,17 @@ library(fixest)
 
 ## Damages modeling
 
-- **Before/after:** Baseline for cartel or monopolization; control for costs/demand.  
-- **Yardstick:** Compare to unaffected markets or products.  
-- **DiD:** For mergers, supply shocks, or wage suppression cases.  
-- **Hedonic/regression models:** When product characteristics matter (tech, pharma).
+Antitrust damages quantify the difference between what actually happened and what would have happened absent the anticompetitive conduct---the "but-for world" (Baker & Rubinfeld, 1999). Constructing a credible but-for scenario is the central challenge, and courts have developed a rich body of law evaluating competing damages models. The three foundational approaches---before/after, yardstick, and difference-in-differences---each exploit different sources of variation to identify the counterfactual.
+
+The **before/after method** compares outcomes during the violation period to outcomes outside that period (typically before the conduct began or after it ceased). For example, in a price-fixing case, one might compare the average price during the cartel period to the average price during a competitive benchmark period, controlling for cost shifts, demand changes, and other confounders using regression analysis (Rubinfeld, 2010). The key assumption is that, after conditioning on observable factors, any remaining price difference is attributable to the violation. This method works well when the violation has clear start and end dates and when the analyst can identify a clean comparison period unaffected by anticipatory behavior or lingering effects.
+
+The **yardstick method** takes a different approach: rather than comparing across time, it compares the affected market to a comparable unaffected market during the same period. In cartel cases, this might mean comparing prices in cartelized regions to prices in regions where the cartel did not operate. In monopolization cases, it might involve comparing the defendant's market to a structurally similar market with more competition. The challenge is finding a true comparator---a market similar enough in cost structure, demand conditions, and competitive dynamics that observed price differences can be attributed to the conduct rather than to unobserved market differences (Davis & Garcés, 2010).
+
+**Difference-in-differences** combines both dimensions, comparing changes over time between affected and unaffected groups (Angrist & Pischke, 2009); (Cunningham, 2021). This approach is particularly powerful because it controls for both time-invariant differences between groups and common time trends affecting all groups. As discussed in [Chapter 5](chapters/05-cartels.md) and [Chapter 6](chapters/06-mergers.md), the parallel trends assumption is critical: absent the violation, the treatment and control groups would have followed similar trajectories. When this assumption holds, DiD provides a credible estimate of the causal effect of the conduct on prices, quantities, or other outcomes. Retrospective merger studies like (Ashenfelter & Hosken, 2010) exemplify this approach in practice.
+
+Beyond the core estimation, practitioners must address several additional issues. Courts evaluate whether a damages model is consistent with the theory of liability---a principle reinforced by the Supreme Court in *Comcast Corp. v. Behrend*, 569 U.S. 27 (2013), which held that a damages model must measure damages attributable to the specific theory of harm. **Prejudgment interest** compensates plaintiffs for the time value of money between the injury and the award, and its calculation (simple vs. compound, choice of rate) can substantially affect total damages. **Present value adjustments** are necessary when damages span multiple years, requiring the analyst to select an appropriate discount rate and justify the discounting methodology to the court.
+
+- **Hedonic/regression models:** When product characteristics matter (as in technology or pharmaceutical markets), hedonic regression can isolate the price effect of the anticompetitive conduct by controlling for quality differences across products and time periods.
 
 ### Scenario/sensitivity tables
 ```r
@@ -147,27 +186,32 @@ Use tornado charts or tables to present ranges; highlight the “central” assu
 
 ## Daubert/Kumho readiness
 
-{% hint style="success" %}
-**Practitioner checklist for admissibility.** Before finalizing an expert report, confirm that each of the four pillars below is documented. Courts increasingly exclude experts who cannot demonstrate all four.
-{% endhint %}
-
-1. **Validation:** Compare model outputs to raw data; show that code replicates known benchmarks (FJC Reference Manual, 2011).
-2. **Sensitivity:** Document how results change with different controls, clustering levels, or sample definitions (Rubinfeld, 2010).
-3. **Alternative specifications:** Provide at least one alternative consistent with the theory of harm; explain why it does or does not materially change outcomes (Baker & Rubinfeld, 1999).
+1. **Validation:** Compare model outputs to raw data; show that code replicates known benchmarks (FJC Reference Manual, 2011).  
+2. **Sensitivity:** Document how results change with different controls, clustering levels, or sample definitions (Rubinfeld, 2010).  
+3. **Alternative specifications:** Provide at least one alternative consistent with the theory of harm; explain why it does or does not materially change outcomes (Baker & Rubinfeld, 1999).  
 4. **Error checking:** Peer review within the expert team; code audits; reproducibility scripts (Dickey & Rubinfeld, 2014).
 
 ## Presentation and storytelling
 
-- **Exhibits:** Keep figures clean; highlight key numbers; avoid jargon. Use `ggplot2` themes consistent with earlier chapters.  
-- **Timelines:** Combine quantitative and qualitative milestones (evidence triad).  
-- **Deposition prep:** Build Q&A outlines linking each opinion to evidence.  
-- **Trial graphics:** Build layered presentations (overview, methodology, results, robustness).
+Effective expert testimony is as much about communication as it is about analysis. The most technically sound model is worthless if the trier of fact cannot understand it. Structuring expert reports and trial presentations for clarity requires deliberate choices about organization, visual design, and narrative arc (Dickey & Rubinfeld, 2014).
+
+**Expert reports** should follow a clear progression: begin with a summary of opinions, then describe the data and methodology, present the results, and conclude with sensitivity analyses and rebuttals. Each opinion should be stated concisely and linked to specific evidence---courts increasingly expect reports to be organized so that every factual claim can be traced to its source. Avoid unnecessary technical jargon; where econometric terminology is unavoidable, provide plain-language explanations. The *Reference Manual on Scientific Evidence* recommends that experts explain not only what their model shows but why the chosen methodology is appropriate and what alternatives were considered (FJC Reference Manual, 2011).
+
+**Visual aids and demonstrative exhibits** are particularly important at trial. Well-designed graphics can convey in seconds what pages of regression output cannot. Timelines that overlay key events (cartel meetings, price increases, market entry) with quantitative data (price series, market shares) are especially effective because they connect the economic evidence to the factual narrative. Use consistent color schemes, label axes clearly, and highlight the key numbers the trier of fact should remember. In bench trials, judges appreciate precision and methodological transparency---include confidence intervals, specification details, and references to underlying data. In jury trials, simplicity is paramount: focus on the bottom line, use analogies, and build the story incrementally from simple concepts to the final conclusion.
+
+**Deposition and cross-examination preparation** is equally critical. Opposing counsel will probe the boundaries of the expert's analysis: what data was excluded and why, what happens when assumptions change, whether the expert considered alternative explanations. Build Q&A outlines that link each opinion to its evidentiary foundation, and rehearse responses to challenges on sensitivity, data limitations, and methodological choices. Common cross-examination strategies include asking the expert to concede that individual specifications differ from the preferred model, then arguing that the results are "fragile." The best defense is a thorough sensitivity analysis presented proactively in the report itself (Rubinfeld, 2010); (Baker & Rubinfeld, 1999).
+
+{% hint style="info" %}
+**Case box: Expert testimony in DOJ v. Google (Search)**
+
+The *United States v. Google LLC* search distribution trial (2023--2024) showcased the central role of economic expert testimony in modern monopolization cases (*United States v. Google (Search)*, 2023). The DOJ argued that Google maintained its search monopoly through exclusive default agreements with Apple, Android device manufacturers, and browser developers, paying over $26 billion annually to foreclose rival search engines from critical distribution channels. The government's economic expert presented regression analyses showing that default status dramatically increased search engine usage share, and that these agreements raised barriers to entry by denying rivals the query volume needed to improve search quality. Google's expert countered that users could easily switch search engines with a few clicks, arguing that revealed preference---not default status---explained Google's dominance. The court's 2024 ruling found that Google held monopoly power and that the exclusive agreements constituted unlawful maintenance of that monopoly. The case illustrates how competing experts can examine the same market data and reach opposite conclusions about whether consumer behavior reflects genuine preference or the stickiness of default settings---a distinction with enormous implications for the remedy.
+{% endhint %}
 
 ## Southern African litigation practice notes
 
-- **Bread cartel damages (Tribunal hearings 2007–2010):** Combined CPI microdata, mill cost studies, and consumer testimony; damages model anchored to structural break analysis.  
-- **Sasol polypropylene appeal:** Extensive documentation of export parity benchmarks, incremental cost models, and technical expert testimony on production processes.  
-- **Vodacom/MTN data services commitments:** Monitoring trustees reported quarterly KPIs; Commission used DiD to show compliance with price-reduction commitments.
+- **Bread cartel damages (Tribunal hearings 2007--2010):** Combined CPI microdata, mill cost studies, and consumer testimony; damages model anchored to structural break analysis.
+- **Sasol polypropylene appeal:** Extensive documentation of export parity benchmarks, incremental cost models, and technical expert testimony on production processes.
+- **Vodacom/MTN data services commitments:** Monitoring trustees reported quarterly KPIs; Commission used diff-in-diff to show compliance with price-reduction commitments.
 
 ## Enhanced Visualizations for Expert Reports
 
@@ -178,7 +222,6 @@ Demonstrate that the alleged conduct had a common effect across class members, a
 library(dplyr)
 library(ggplot2)
 library(patchwork)
-source("program/R/helpers.R")
 
 # Simulated individual-level treatment effects
 # Replace with actual class member data from your damages model
@@ -259,7 +302,7 @@ p2 <- ggplot(class_data, aes(x = geographic_region,
 - Link to documentary evidence (pricing data, expert testimony, econometric estimates)
 
 ### Evidence provenance network
-The evidence provenance network traces how different sources feed into specific expert opinions and damages calculations.
+Map how different evidence sources support specific expert opinions and damages calculations.
 
 ```r
 library(dplyr)
@@ -421,13 +464,12 @@ expert_timeline |>
 ```
 
 ### Individual vs. aggregate damages
-Individual class member damages must aggregate to total class damages---a requirement for both class certification and final damages calculation.
+Show how individual class member damages aggregate to total class damages, important for both class certification and damages calculation.
 
 ```r
 library(dplyr)
 library(ggplot2)
 library(patchwork)
-source("program/R/helpers.R")
 
 # Simulated individual damages for class members
 # Replace with actual damages calculations
@@ -558,17 +600,5 @@ cat(paste0("Top 10% of class accounts for ",
 - Address potential administrative feasibility concerns
 - Prepare for de minimis exclusion arguments
 
-## Visualizations and data plan
-- **Common impact distribution plot:** Use class-member residuals or individual damages estimates; store sanitized dataset in `data/examples/common-impact.csv`.
-- **Scenario/sensitivity tornado charts:** Build from `litigation-sensitivity` scaffold.
-- **Evidence provenance diagram:** Use `DiagrammeR` or `ggplot2` to map data sources to opinions; data from evidence map spreadsheet.
-
-## Checklist for "fill with real data"
-
-- Link every figure/code chunk to a dataset entry in `data/README.md`.
-- Maintain sanitized or synthetic datasets for public builds; swap in confidential data before expert report filing.
-- Capture hashed outputs (`.rds`, `.parquet`) so exhibits can be regenerated quickly.
-- Coordinate with litigation support to ensure document IDs and privilege status are preserved.
-
 ## Looking ahead
-Archive litigation outputs in `data/derived/litigation/` with version control and privilege markings. Expert opinions should cross-reference the substantive analytical chapters for methodological support: cartel overcharge models from **Chapter 5**, merger simulation and UPP/GUPPI analysis from **Chapter 6**, monopolization foreclosure tests from **Chapter 7**, remedy evaluation frameworks from **Chapter 8**, platform self-preferencing evidence from **Chapter 9**, and labor market wage suppression analyses from **Chapter 10**. For innovation-related cases involving SEPs, FRAND disputes, or killer acquisitions, the methods in **Chapter 11** provide the relevant econometric templates. The **Empirical Appendix (Chapter 13)** collects the reusable diagnostics---pre-trends checks, specification curves, residual plots, and power analyses---that underpin Daubert readiness across all case types. Document all code reviews and sensitivity analyses in appendices to expert reports, and coordinate with the legal team on discovery timelines and protective orders for confidential data.
+The litigation tools in this chapter---reproducible code bundles, Daubert-ready sensitivity analyses, and evidence provenance mapping---apply across every substantive area covered in this book. Whether you are presenting cartel damages (Chapter 5), merger simulations (Chapter 6), or labor market harm (Chapter 10), the workflow remains the same: link every opinion to specific evidence, document all assumptions transparently, and prepare for cross-examination by stress-testing your results. The **Empirical Appendix (Chapter 13)** collects reusable diagnostic checklists and code templates that complement the expert report frameworks introduced here.

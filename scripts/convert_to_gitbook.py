@@ -75,6 +75,11 @@ CITATION_MAP = {
     'naidu_posner_weyl_2018': '(Naidu, Posner & Weyl, 2018)',
     'dube_lester_reich_2016': '(Dube, Lester & Reich, 2016)',
 
+    # Additional methods
+    'angrist_pischke_2015': '(Angrist & Pischke, 2015)',
+    'goodman_bacon_2021': '(Goodman-Bacon, 2021)',
+    'sun_abraham_2021': '(Sun & Abraham, 2021)',
+
     # US Guidelines and cases
     'doj_ftc_hmg_2010': '(DOJ/FTC Horizontal Merger Guidelines, 2010)',
     'doj_ftc_hmg_2023': '(DOJ/FTC Merger Guidelines, 2023)',
@@ -86,6 +91,19 @@ CITATION_MAP = {
     'us_grinnell_1966': '(*United States v. Grinnell*, 1966)',
     'us_linkline_2009': '(*Pacific Bell v. linkLine*, 2009)',
     'us_tampa_electric_1961': '(*Tampa Electric v. Nashville Coal*, 1961)',
+    'us_apple_ebooks_2013': '(*United States v. Apple Inc.*, 2013)',
+    'us_amex_2018': '(*Ohio v. American Express*, 2018)',
+    'us_epic_apple_2021': '(*Epic Games v. Apple*, 2021)',
+    'us_google_search_2023': '(*United States v. Google (Search)*, 2023)',
+    'us_google_adtech_2023': '(*United States v. Google (Ad Tech)*, 2023)',
+    'us_alcoa_1945': '(*United States v. Alcoa*, 1945)',
+    'us_brown_shoe_1962': '(*Brown Shoe v. United States*, 1962)',
+    'us_trinko_2004': '(*Verizon v. Trinko*, 2004)',
+    'us_qualcomm_2020': '(*FTC v. Qualcomm*, 2020)',
+    'us_jindal_2021': '(*United States v. Jindal*, 2021)',
+    'us_davita_2022': '(*United States v. DaVita*, 2022)',
+    'us_connell_1975': '(*Connell Construction v. Plumbers Local 100*, 1975)',
+    'ftc_noncompete_2023': '(FTC Non-Compete Clause Rule, 2023)',
 
     # EU Guidelines and cases
     'ec_hmg_2004': '(EC Horizontal Merger Guidelines, 2004)',
@@ -99,14 +117,57 @@ CITATION_MAP = {
     'eu_deutsche_telekom_2010': '(*Deutsche Telekom*, 2010)',
     'eu_telefonica_2014': '(*Telefónica*, 2014)',
     'eu_google_android_2018': '(*Google Android*, 2018)',
+    'eu_google_shopping_2017': '(*Google Shopping*, 2017)',
+    'eu_huawei_zte_2015': '(*Huawei v. ZTE*, 2015)',
+    'eu_dma_2022': '(Digital Markets Act, 2022)',
+    'ec_article102_guidance_2009': '(EC Article 102 Guidance, 2009)',
+    'ec_market_definition_1997': '(EC Market Definition Notice, 1997)',
 
     # UK
     'cma_merger_assessment_2021': '(CMA Merger Assessment Guidelines, 2021)',
+    'cma_market_definition_2018': '(CMA Market Definition, 2018)',
+
+    # South Africa
+    'sa_competition_act_1998': '(SA Competition Act, 1998)',
+    'sa_oipmi_2023': '(SA OIPMI Final Report, 2023)',
+    'sa_telkom_2013': '(*Competition Commission v. Telkom*, 2013)',
+    'sa_media24_2012': '(*Competition Commission v. Media24*, 2012)',
+    'sa_sasol_2014': '(*Competition Commission v. Sasol*, 2014)',
 
     # OECD
     'oecd_cartel_screens_2013': '(OECD Cartel Screens, 2013)',
     'oecd_leniency_2015': '(OECD Leniency Programmes, 2015)',
 }
+
+
+# Quarto @sec- cross-reference to GitBook link mapping
+CROSSREF_MAP = {
+    'sec-orientation': ('Chapter 1', 'chapters/01-orientation.md'),
+    'sec-research-design': ('Chapter 2', 'chapters/02-research-design.md'),
+    'sec-market-definition': ('Chapter 3', 'chapters/03-market-definition.md'),
+    'sec-io-toolkit': ('Chapter 4', 'chapters/04-io-toolkit.md'),
+    'sec-cartels': ('Chapter 5', 'chapters/05-cartels.md'),
+    'sec-mergers': ('Chapter 6', 'chapters/06-mergers.md'),
+    'sec-monopolization': ('Chapter 7', 'chapters/07-monopolization.md'),
+    'sec-regulation-remedies': ('Chapter 8', 'chapters/08-regulation-remedies.md'),
+    'sec-digital-markets': ('Chapter 9', 'chapters/09-digital-markets.md'),
+    'sec-labor-markets': ('Chapter 10', 'chapters/10-labor-markets.md'),
+    'sec-innovation-ip': ('Chapter 11', 'chapters/11-innovation-ip.md'),
+    'sec-litigation-practice': ('Chapter 12', 'chapters/12-litigation-practice.md'),
+    'sec-empirical-appendix': ('Empirical Appendix', 'chapters/13-empirical-appendix.md'),
+}
+
+
+def convert_crossrefs(content: str) -> str:
+    """Convert Quarto @sec- cross-references to GitBook markdown links."""
+    def replace_crossref(match):
+        key = match.group(1)
+        if key in CROSSREF_MAP:
+            label, path = CROSSREF_MAP[key]
+            return f'[{label}]({path})'
+        return match.group(0)
+
+    return re.sub(r'@(sec-[a-zA-Z0-9-]+)', replace_crossref, content)
 
 
 def convert_citations(content: str) -> str:
@@ -151,7 +212,10 @@ def convert_citations(content: str) -> str:
                 return f'({authors}, {year})'
             return f'({key})'
 
-    content = re.sub(r'(?<!\[)@([a-zA-Z0-9_]+)(?!\])', replace_inline_citation, content)
+    # Match inline @key not already inside a [@...] bracket (which was handled above).
+    # Don't restrict on trailing ] — the bracketed pass already consumed [@key] patterns,
+    # and mixed brackets like [text, @key] need the @key converted too.
+    content = re.sub(r'(?<!\[)@([a-zA-Z][a-zA-Z0-9_]+)', replace_inline_citation, content)
 
     return content
 
@@ -249,9 +313,10 @@ def convert_chapter(input_path: Path, output_path: Path) -> None:
     title_match = re.match(r'^# (.+?)(?:\s*\{[^}]*\})?\s*$', content, re.MULTILINE)
     title = title_match.group(1) if title_match else input_path.stem
 
-    # Apply conversions
+    # Apply conversions (crossrefs before citations so @sec- doesn't get mangled)
     content = convert_r_chunks(content)
     content = convert_callouts(content)
+    content = convert_crossrefs(content)
     content = convert_citations(content)
     content = fix_math_delimiters(content)
 

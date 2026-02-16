@@ -1,6 +1,6 @@
-# Regulation and Remedies
+# Regulation and Remedies {#sec-regulation-remedies}
 
-The preceding chapters focused on diagnosing competitive harm---identifying cartels, predicting merger effects, and establishing exclusionary conduct. Identifying harm, however, is only half the job. The other half is designing remedies that actually work and, in some cases, ongoing regulatory frameworks that substitute for competition where markets cannot be made competitive.
+The preceding chapters focused on diagnosing competitive harm---identifying cartels, predicting merger effects, and establishing exclusionary conduct. But identifying harm is only half the job. This chapter addresses what comes next: designing remedies that actually work and, in some cases, ongoing regulatory frameworks that substitute for competition where markets cannot be made competitive.
 
 Remedy design requires different skills than liability analysis. You must think dynamically about how firms will respond to constraints, whether trustees can effectively monitor behavioral commitments, and whether structural relief will create viable competitors. The economic tools are familiar---cost analysis, benchmarking, causal inference for evaluation---but the application shifts from diagnosis to prescription.
 
@@ -9,11 +9,11 @@ Antitrust analysis often ends with a liability finding, but policy work begins t
 
 - Compare rate-of-return, price-cap, and incentive regulation, and pick the tool that matches industry fundamentals (cost structure, demand volatility, data availability).
 - Design structural and behavioral remedies that map directly to diagnosed harms, with clear monitoring and reporting plans.
-- Evaluate remedy effectiveness using retrospective econometrics (DiD, event studies) and benchmarking models.
+- Evaluate remedy effectiveness using retrospective econometrics---diff-in-diff, event studies (Angrist & Pischke, 2009)---and benchmarking models.
 - Integrate qualitative evidence (compliance reports, trustee memos, stakeholder hearings) with quantitative indicators.
 
 ## Why regulation and remedies matter
-Competition authorities increasingly pair enforcement with sector inquiries that feed directly into regulatory design---the South African Data Services and Private Healthcare inquiries are prime examples. Merger and monopolization cases frequently conclude with behavioral obligations or divestitures that require economic monitoring. Without a working knowledge of regulatory levers, recommendations lose credibility the moment the headline settlement is signed.
+Competition authorities increasingly pair enforcement with sector inquiries that feed straight into regulatory design (e.g., the South African Data Services and Private Healthcare inquiries, conducted under the broad market inquiry powers of the Competition Act (SA Competition Act, 1998)). Meanwhile, merger and monopolization cases frequently conclude with behavioral obligations or divestitures that require economic monitoring. Understanding regulatory levers ensures your recommendations remain credible after the headline settlement.
 
 ## Workflow overview
 
@@ -55,7 +55,6 @@ DIAGNOSIS                 DESIGN                    IMPLEMENTATION
                        | Price-cap   |
                        +-------------+
 ```
-
 **Key principle:** Remedies must be verifiable, enforceable, and tied directly to the diagnosed harm.
 {% endhint %}
 
@@ -69,37 +68,48 @@ A typical engagement looks like this:
 
 ## Rate-of-return vs. price-cap regulation
 
-{% hint style="info" %}
-**Comparing regulatory regimes**
-
-| Feature | Rate-of-Return | Price-Cap (RPI-X) |
-|:--------|:---------------|:-------------------|
-| Revenue formula | RAB x allowed return + opex + depreciation | Price indexed to inflation minus X-factor |
-| Incentive | Weak cost discipline (gold-plating risk) | Strong cost reduction incentive |
-| Data needs | Audited capital costs, asset values, depreciation | Inflation series, productivity benchmarks |
-| Key risk | Over-investment in assets | Quality degradation, category gaming |
-| Common sectors | Energy, telecom infrastructure | Telecom, water, electricity distribution |
-{% endhint %}
+The economic theory of regulation is well developed [for textbook treatments, see (Tirole, 1988); (Motta, 2004)]. Two dominant approaches---rate-of-return and price-cap---each present distinct trade-offs for practitioners.
 
 ### Rate-of-return (cost-plus) regime
 
-- **Mechanics:** Regulator sets allowable revenue = (Regulated Asset Base x allowed return) + operating costs + depreciation. Common in energy and telecom infrastructure.
-- **Data needs:** Audited cost of capital, asset valuation, depreciation schedules, operating expense detail.
-- **Risks:** Gold-plating, weak cost discipline. Mitigate via prudency tests and benchmarking.
+Under rate-of-return regulation, a regulator determines the firm's allowable revenue using the basic formula: *Revenue = (Rate Base × Allowed Rate of Return) + Operating Expenses + Depreciation*. The rate base consists of the firm's prudently incurred capital investments (plant, equipment, network infrastructure), valued at either historical cost or replacement cost depending on the jurisdiction. The allowed rate of return is set to cover the firm's weighted average cost of capital, giving investors a fair return without enabling supranormal profits. This approach remains common in energy distribution, water utilities, and some telecommunications infrastructure, particularly in the United States where state public utility commissions regulate electricity and natural gas distribution using variants of this framework.
+
+The central weakness of rate-of-return regulation is the Averch-Johnson effect, first formalized by (Averch Johnson, 1962). Because the firm earns a return on its rate base, it has an incentive to overinvest in capital---a phenomenon often called "gold-plating." If the allowed rate of return exceeds the true cost of capital, the firm can increase profits by expanding its asset base, even when the additional investment is socially wasteful. For example, a utility might build excess generation capacity or install unnecessarily expensive equipment because each dollar added to the rate base generates additional regulated revenue. This creates a systematic bias toward capital-intensive solutions over potentially more efficient alternatives, such as demand-side management or leasing arrangements that would not enter the rate base.
+
+Despite these well-documented inefficiencies, rate-of-return regulation persists in many jurisdictions for practical reasons. It provides regulators with detailed visibility into firm costs, which can be valuable when information asymmetries are severe or when regulated firms operate in politically sensitive sectors where price shocks are unacceptable. The approach also offers investors regulatory certainty: because costs are passed through, the firm faces less earnings volatility, which reduces the cost of capital. For antitrust practitioners, understanding rate-of-return regulation matters because remedies in regulated industries often interact with the regulatory framework. A divestiture or access mandate imposed by a competition authority must be compatible with the existing rate-setting process, and the data generated by rate cases---cost studies, asset valuations, depreciation schedules---can be valuable inputs for competition analysis.
 
 ### Price-cap (RPI-X) regime
 
-- **Mechanics:** Allowed price path indexed to inflation minus expected productivity (X-factor). Encourages cost reduction because firms keep savings between resets.
-- **Data needs:** Inflation series, productivity benchmarks, quality metrics.
-- **Risks:** Quality degradation, gaming of cost categories. Add service-quality penalties or deadbands.
+Price-cap regulation, developed by Stephen Littlechild in the early 1980s for the privatization of British Telecom, takes a fundamentally different approach. Instead of scrutinizing costs and setting a fair return, the regulator caps the prices the firm can charge using the formula: *Price~t+1~ = Price~t~ × (1 + RPI - X)*, where RPI is the retail price index (a measure of inflation) and X is an expected productivity improvement factor. The X-factor is typically set at the beginning of a multi-year regulatory period (often four to five years) based on engineering studies, efficiency benchmarking, and consultation with the regulated firm. During the cap period, the firm retains any cost savings it achieves beyond the X-factor target, creating a powerful incentive to cut costs and innovate. At each regulatory reset, the regulator can adjust X to reflect new information about achievable efficiency gains, partially passing accumulated savings through to consumers.
 
-#### Access pricing and ECPR sketches
-Essential facilities (e.g., telecom loops, pipelines) often require access pricing. The Efficient Component Pricing Rule (ECPR) sets access price = incumbent downstream price − incumbent downstream cost + incremental cost of access. Critics note that ECPR can entrench monopoly margins; regulators frequently adopt cost-plus (LRIC) or benchmarked access tariffs instead. When designing access remedies, document:
+The incentive properties of price-cap regulation contrast sharply with rate-of-return. Because the firm keeps the difference between its actual costs and the price cap, it has a strong incentive to minimize expenditure---the opposite of the Averch-Johnson gold-plating problem. This model was adopted across UK utility regulation, with Ofcom (telecommunications), Ofwat (water and sewerage), and Ofgem (energy networks) each operating variants of the RPI-X framework. Ofgem's RIIO model (Revenue = Incentives + Innovation + Outputs) represents a modern evolution that sets caps based on outputs (reliability, customer satisfaction, environmental targets) rather than simple cost trajectories, rewarding firms that outperform on quality as well as efficiency.
 
-- Incremental cost of providing access.  
-- Margin squeeze tests (wholesale price vs. retail price minus downstream cost).  
-- Capacity constraints and queue management.  
-- Quality and operational KPIs (fault rates, installation times).
+However, price-cap regulation carries its own risks. The most significant is quality degradation: a firm under a tight price cap may cut costs by reducing maintenance, delaying investment, or degrading service quality in ways that are difficult for the regulator to observe immediately. To address this, most price-cap regimes incorporate explicit quality-of-service metrics with financial penalties (or "deadbands" that define acceptable ranges). A second concern is gaming at the reset: firms may inflate costs in the years leading up to a regulatory review to secure a more favorable baseline, a problem known as the "ratchet effect." For antitrust practitioners, price-cap frameworks are relevant because they demonstrate how incentive-compatible regulation can be designed---principles that carry over directly to the design of behavioral remedies with pricing commitments, where the goal is similarly to constrain prices while preserving incentives for efficient operation.
+
+#### Access pricing and the Efficient Component Pricing Rule (ECPR)
+
+Essential facilities (e.g., telecom local loops, gas pipelines, rail track) often require access pricing rules that allow rivals to use the incumbent's bottleneck infrastructure at a regulated charge. The legal foundations differ across jurisdictions: the EU's essential facilities doctrine, shaped by (*Bronner*, 1998) and (*IMS Health*, 2004), imposes access obligations more readily than US law, where (*Verizon v. Trinko*, 2004) significantly narrowed the scope of forced dealing under Section 2 of the Sherman Act.
+
+The Efficient Component Pricing Rule (ECPR), associated with the work of William Baumol and J. Gregory Sidak, provides a simple formula for setting the access charge:
+
+> **Access Charge = Retail Price - Avoidable Downstream Costs of the Incumbent**
+
+The logic is that the access charge should compensate the incumbent for the *opportunity cost* of providing access---that is, the profit it forgoes when an entrant serves a customer the incumbent would otherwise have served. The avoidable costs are those the incumbent no longer incurs when it loses the downstream sale (e.g., retail staff, billing, marketing).
+
+**Worked example.** Suppose a vertically integrated telecommunications incumbent provides local loop access to a rival long-distance carrier. The incumbent's retail price for an end-to-end call is \$1.00 per minute. Its avoidable downstream costs---switching, billing, customer service, and retail marketing---amount to \$0.60 per minute. Under ECPR, the access charge for use of the local loop would be:
+
+> Access Charge = \$1.00 - \$0.60 = **\$0.40 per minute**
+
+At this access charge, a rival can profitably enter the downstream market only if its own downstream costs are below \$0.60---that is, only if it is at least as efficient as the incumbent in the contestable segment. If the rival's downstream costs are \$0.50, it pays \$0.40 for access and \$0.50 for its own operations, for a total cost of \$0.90, allowing it to undercut the incumbent's \$1.00 retail price while still earning a margin.
+
+**The critical limitation of ECPR** is that it preserves the incumbent's existing profit margin on the bottleneck facility. If the incumbent's retail price already reflects monopoly rents---that is, if \$1.00 is above the competitive level---then the ECPR access charge of \$0.40 embeds those rents. The entrant can compete on the downstream segment but cannot challenge the incumbent's upstream market power. For this reason, many regulators reject ECPR in favor of cost-based approaches such as Long-Run Incremental Cost (LRIC), which sets the access charge based on the forward-looking efficient cost of providing the bottleneck service, stripping out monopoly rents entirely. The European Commission's approach in cases like (*Deutsche Telekom*, 2010) and (*Telefónica*, 2014) effectively requires margin squeeze tests that go beyond ECPR by ensuring the access charge allows a reasonably efficient competitor to operate profitably downstream [contrast with the US approach in (*Pacific Bell v. linkLine*, 2009), where the Supreme Court rejected a standalone price-squeeze claim under Section 2].
+
+When designing access remedies in practice, the economist should document:
+
+- The incremental cost of providing access, ideally using a bottom-up LRIC model.
+- Margin squeeze tests comparing the wholesale access price to the retail price minus the downstream cost of a reasonably efficient operator.
+- Capacity constraints and queue management rules, especially where the bottleneck facility has limited throughput.
+- Quality and operational KPIs---fault rates, provisioning times, repair response---to ensure the incumbent does not degrade access quality as a form of non-price discrimination.
 
 ## Incentive regulation and benchmarking
 Benchmarking and yardstick competition compare regulated entities to peers to set targets without micromanaging costs. Examples include Ofgem’s RIIO model and the planned South African Supply-Side Regulator for Health.
@@ -108,7 +118,6 @@ Benchmarking and yardstick competition compare regulated entities to peers to se
 ```r
 library(dplyr)
 library(ggplot2)
-source("program/R/helpers.R")
 
 utilities <- tibble::tribble(
   ~entity, ~opex_per_unit, ~quality_score,
@@ -137,8 +146,14 @@ Replace the illustrative tibble with regulator filings (e.g., NERSA, Ofgem, FERC
 ## Remedy design after antitrust findings
 
 ### Structural vs. behavioral
-- **Structural:** Divestitures, ownership separation, asset swaps. Pros: self-enforcing; cons: disruption, valuation disputes.  
-- **Behavioral:** Access commitments, MFN bans, parity obligations, algorithm transparency, zero-rating requirements. Pros: flexible; cons: monitoring burden.
+
+Merger guidelines in major jurisdictions discuss both structural and behavioral remedies (DOJ/FTC Merger Guidelines, 2023); (CMA Merger Assessment Guidelines, 2021); (EC Horizontal Merger Guidelines, 2004). Vertical mergers, covered separately by (DOJ/FTC Vertical Merger Guidelines, 2020), often raise remedy design questions involving access and non-discrimination commitments rather than divestitures. The choice between structural and behavioral remedies depends on the diagnosed harm, the feasibility of monitoring, and the institutional capacity of the enforcing agency.
+
+**Structural remedies**---divestitures, ownership separation, and asset swaps---are generally preferred by competition authorities when the competitive concern is horizontal overlap. The logic is straightforward: by transferring assets to a new or existing competitor, a divestiture creates a self-enforcing remedy that does not require ongoing regulatory oversight. Once the divested business is operating independently, market forces discipline pricing and innovation without the need for a compliance trustee or periodic review. For this reason, both the DOJ and the European Commission have expressed a strong preference for structural relief in horizontal merger cases. The DOJ's merger remedies guidance states that structural remedies are "preferred to conduct remedies" because they are "clean and certain" and avoid the costs of ongoing supervision. However, structural remedies carry their own risks: the divested assets must be viable as a standalone business, the buyer must have the capability and incentive to compete effectively, and the divestiture process itself---which may take 6--12 months---can create transitional disruptions that erode the value of the divested business.
+
+**Behavioral (or conduct) remedies**---access commitments, most-favored-nation (MFN) bans, parity obligations, algorithm transparency requirements, firewall provisions, and anti-retaliation clauses---are more common in vertical merger cases and in abuse-of-dominance proceedings where the competitive concern relates to foreclosure or discrimination rather than the elimination of a direct rival. The consent decree in (*United States v. Microsoft*, 2001) is a canonical example: rather than breaking up Microsoft, the final judgment imposed interoperability and non-discrimination obligations that required sustained monitoring over a decade-long compliance period. Behavioral remedies offer flexibility---they can be tailored to address specific theories of harm without the disruption of asset sales---but they impose significant monitoring costs on the enforcing agency. The compliance trustee must verify adherence, interpret ambiguous provisions, and respond to complaints from rivals who may have incentives to game the process. These challenges have led the FTC's Bureau of Competition to express skepticism about behavioral remedies in several retrospective studies, finding that conduct conditions in merger settlements have a mixed track record: some succeed in preserving competition, while others are evaded through creative compliance or become obsolete as market conditions evolve.
+
+The empirical evidence on remedy effectiveness reinforces the importance of matching the remedy to the theory of harm. FTC retrospective studies of merger remedies have found that divestitures are more likely to maintain competition when the buyer is an existing market participant with operational expertise, and less likely to succeed when the divested assets require ongoing transitional services from the merged firm. Behavioral remedies, meanwhile, tend to work best when the obligations are specific, measurable, and time-limited, and when the enforcing agency has sufficient resources to monitor compliance. In the South African context, the Competition Tribunal frequently attaches public interest conditions to merger approvals---employment guarantees, local procurement requirements, and commitments to maintain operations in underserved areas---alongside conventional competition conditions. These hybrid remedy packages reflect the broader mandate of the South African competition framework, which explicitly incorporates public interest factors into merger review (SA Competition Act, 1998). For the practitioner, the lesson is that remedy design must account for the institutional environment: a remedy that works well in a jurisdiction with a well-resourced monitoring agency may fail where enforcement capacity is limited.
 
 When drafting behavioral remedies, specify:
 
@@ -147,10 +162,13 @@ When drafting behavioral remedies, specify:
 3. **Trustee authority** (independent monitor credentials, escalation paths).  
 4. **Sunset or reassessment triggers.**
 
+:::{.callout-note title="Case box: AT&T/Time Warner --- The limits of behavioral remedies in vertical mergers"}
+In 2018, AT&T acquired Time Warner (owner of HBO, CNN, and Warner Bros.) for \$85 billion, creating a vertically integrated firm controlling both content production and distribution infrastructure. The DOJ challenged the merger, arguing that AT&T would have the incentive and ability to raise the price of Time Warner content to rival distributors (such as Dish Network and cable companies), or to withhold it entirely, thereby harming competition in the pay-television market. The district court rejected the DOJ's challenge, and the merger proceeded without structural or behavioral conditions. Judge Leon found that the government's bargaining-model evidence was insufficient to establish likely competitive harm. Critics of the decision argued that the court underweighted the dynamic effects of vertical integration, including the risk that AT&T would use Time Warner content to favor its own streaming platform (which later launched as HBO Max) at the expense of rival distributors. Within three years, AT&T unwound the acquisition, spinning off WarnerMedia to merge with Discovery---suggesting that the anticipated vertical synergies failed to materialize. The case is widely cited as illustrating the difficulty of predicting vertical merger effects and the limitations of relying on court-imposed behavioral remedies (or, in this case, no remedy at all) when vertical integration creates ongoing incentives for foreclosure.
+
 ### Monitoring and compliance
 Create compliance scorecards that align with the remedy’s logic. For example, if the remedy ensures rival access to APIs, track uptime, latency, and parity between internal and external developers. Use qualitative sources—monitor reports, public hearings, stakeholder interviews—to contextualize metrics.
 
-#### Retrospective DiD scaffold
+#### Retrospective diff-in-diff scaffold
 ```r
 library(dplyr)
 library(fixest)
@@ -172,22 +190,23 @@ Swap the synthetic data with actual KPI panels (e.g., mobile data prices before/
 
 ## Southern African market inquiries and remedy design
 
-**Private Healthcare Market Inquiry (2014--2019).** Case-mix adjusted benchmarking across eight hospital groups supported recommendations for a Supply-Side Regulator for Health and shared data hubs.
+South Africa's Competition Act (SA Competition Act, 1998) grants the Competition Commission broad market inquiry powers that sit between traditional antitrust enforcement and sector regulation. These inquiries allow the Commission to investigate the general state of competition in a market without requiring evidence of a specific contravention, producing recommendations that can range from voluntary commitments to binding orders. Several landmark inquiries illustrate how empirical methods translate into remedy design.
 
-**Data Services Market Inquiry (2017--2019).** International price benchmarks and profitability models justified prepaid price cuts, open-access APN rules, and zero-rating obligations.
+The **Private Healthcare Market Inquiry (2014--2019)** used case-mix adjusted benchmarking across eight hospital groups to demonstrate significant price variation that could not be explained by patient acuity or facility quality alone. Its central recommendation---the creation of a Supply-Side Regulator for Health---represents a shift from one-off enforcement to ongoing regulatory oversight, drawing on the benchmarking and yardstick competition principles discussed above.
 
-**Public Passenger Transport Inquiry (2017--2020).** Route maps, tender records, and e-hailing logs fed subsidy formulas, fare transparency rules, and data-sharing standards tailored to formal and informal operators.
+The **Data Services Market Inquiry (2017--2019)** combined international price benchmarking with profitability analysis to show that South African prepaid mobile data prices were high relative to comparable markets. The resulting commitments from Vodacom and MTN included mandatory reductions in sub-1GB prepaid data prices, open-access APN rules, and zero-rating of public benefit websites. The **Public Passenger Transport Inquiry (2017--2020)** used route maps, tender records, and e-hailing platform data to design subsidy formulas and fare transparency rules for both formal and informal operators. Meanwhile, the **Sasol Gas and Telkom wholesale settlements** illustrate how antitrust remedies can morph into quasi-regulatory regimes: margin-squeeze tests combined with cost-plus access obligations created ongoing pricing frameworks that function much like sector regulation (*Competition Commission v. Sasol*, 2014); (*Competition Commission v. Telkom*, 2013).
 
-**Sasol Gas and Telkom wholesale settlements.** Margin-squeeze tests combined with cost-plus access obligations illustrate how antitrust remedies can morph into quasi-regulatory regimes when enforcement alone cannot guarantee compliance.
+:::{.callout-note title="Case box: South Africa's Data Services Market Inquiry (2017--2019)"}
+In 2017, the South African Competition Commission launched a market inquiry into the cost of data services, responding to public concern that mobile data prices were unaffordable for low-income consumers. The Commission's economic team assembled international price benchmarks covering over 70 countries, controlling for income levels, network costs, and market structure. Profitability analysis using publicly reported financials showed that Vodacom and MTN earned returns on capital significantly above their weighted average cost of capital, consistent with the exercise of market power in a concentrated duopoly. The inquiry's final report (December 2019) recommended that both operators reduce the headline price of sub-1GB prepaid data bundles---the packages most used by low-income consumers---within defined timeframes. Both operators agreed to price reductions, with Vodacom cutting its 500MB bundle price by over 30 percent. The Commission also mandated open-access APN regulations to lower barriers for MVNOs and required zero-rating of essential public websites (e.g., government services, job portals). This inquiry demonstrates how competition authorities can use benchmarking and profitability analysis to design targeted, consumer-facing remedies without resorting to full-scale price regulation.
 
 ## Callouts and qualitative evidence
 
 {% hint style="info" %}
 **Method box**
 
-- Benchmarking models and productivity comparisons.  
-- Remedy simulations (cost/pass-through projections).  
-- Retrospective DiD and event studies on post-remedy outcomes.
+- Benchmarking models and productivity comparisons.
+- Remedy simulations (cost/pass-through projections); see (Davis & Garcés, 2010) for quantitative implementation.
+- Retrospective diff-in-diff and event studies on post-remedy outcomes (Angrist & Pischke, 2009); (Cunningham, 2021).
 {% endhint %}
 
 {% hint style="info" %}
@@ -201,15 +220,16 @@ Swap the synthetic data with actual KPI panels (e.g., mobile data prices before/
 {% hint style="info" %}
 **Citations and comparative note**
 
-- Sector-specific regulators: FCC/Ofcom (telecom), FERC/Ofgem (energy), NERSA/ICASA (South Africa).  
-- Classic references: Kahn’s *Economics of Regulation*, Vogelsang’s work on price-cap regulation, OECD remedy guidelines.  
-- Antitrust remedies: US DOJ/FTC remedy manuals, EC notice on remedies, CMA remedy guidance.
+- **Sector-specific regulators:** FCC/Ofcom (telecom), FERC/Ofgem (energy), NERSA/ICASA (South Africa). The South African regulatory framework operates under the Competition Act (SA Competition Act, 1998).
+- **Theoretical foundations:** (Tirole, 1988) provides the industrial organization theory underlying regulation; (Motta, 2004) bridges theory and competition policy practice. Classic practitioner references include Kahn's *Economics of Regulation* and Vogelsang's work on price-cap design.
+- **Merger remedy frameworks:** The US merger guidelines (DOJ/FTC Merger Guidelines, 2023); (DOJ/FTC Horizontal Merger Guidelines, 2010) and vertical merger guidelines (DOJ/FTC Vertical Merger Guidelines, 2020) discuss remedy design. The CMA's merger assessment guidelines (CMA Merger Assessment Guidelines, 2021) and EC horizontal merger guidelines (EC Horizontal Merger Guidelines, 2004) provide the UK and EU frameworks, respectively.
+- **Abuse-of-dominance guidance:** The EC's Article 102 enforcement priorities guidance (EC Article 102 Guidance, 2009) is relevant to access and pricing remedies.
 {% endhint %}
 
 ## Visualizations
 
 ### Remedy compliance timeline
-A timeline visualization communicates milestones, deadlines, and compliance events for complex remedy packages---useful in trustee reports, agency presentations, and public communications.
+A timeline visualization helps communicate key milestones, deadlines, and compliance events for complex remedy packages. This is particularly useful for trustee reports, agency presentations, and public communications.
 
 ```r
 source("program/R/helpers.R")
@@ -319,7 +339,6 @@ For complex remedies involving multiple workstreams (technical, legal, operation
 ```r
 library(ggplot2)
 library(dplyr)
-source("program/R/helpers.R")
 
 # Add swimlane assignments
 remedy_events_swim <- remedy_events |>
@@ -399,12 +418,5 @@ ggplot(remedy_events_swim, aes(x = date, y = as.numeric(swimlane))) +
 - Shows dependencies and sequencing across different teams.
 - Useful for program management and stakeholder coordination.
 
-## Data and visualization plan
-- **Benchmarking scatter:** Use regulator filings (Ofgem RIIO datasets, NERSA approved tariffs) or sanitized hospital benchmarking tables from public inquiries. If confidential, create synthetic replicas stored in `data/examples/benchmarking.csv`.
-- **Remedy compliance timeline:** Build from trustee reports and milestone trackers from public sources.
-- **Post-remedy DiD:** For telecom data, draw on public tariffs (ICASA reports) or TeleGeography archives; for energy, use Eskom/NERSA tariff series.
-
-Document every dataset in `data/README.md` and note whether it can ship with the book (public) or must be replicated with synthetic values for open-source builds.
-
 ## Looking ahead
-Store remedy models, compliance timelines, and benchmarking outputs in `data/derived/remedies/` with detailed READMEs. The regulatory frameworks and remedy design principles from this chapter provide essential context for the domain-specific chapters that follow. **Chapter 9** (Digital Markets) applies access remedies, interoperability mandates, and platform-specific behavioral commitments to multi-sided markets where traditional structural relief may be insufficient. **Chapter 10** (Labor Markets) examines how remedy design adapts when the competitive harm falls on workers rather than consumers---including no-poach consent decrees and wage-floor commitments. **Chapter 11** (Innovation and IP) confronts the tension between FRAND licensing remedies and incentives to invest in R&D. **Chapter 12** (Litigation Practice) shows how to present remedy proposals alongside liability evidence and how to structure expert testimony on remedy effectiveness, drawing on the DiD and benchmarking tools introduced here. The Empirical Appendix (Chapter 13) provides reusable templates for the benchmarking and retrospective evaluation methods covered in this chapter.
+The remedy design and evaluation tools developed here connect directly to the chapters ahead. **Chapter 9 (Digital Markets)** applies access mandates, fair-ranking obligations, and interoperability remedies to platform markets---obligations codified in instruments such as the EU Digital Markets Act (Digital Markets Act, 2022)---contexts where behavioral remedies and ongoing monitoring are especially important. **Chapter 12 (Litigation Practice)** covers how to present remedy compliance evidence in expert reports and how retrospective evaluations feed into damages proceedings. As you encounter new cases, consider which remedy type---structural, behavioral, or hybrid---best matches the diagnosed harm, and how the benchmarking and diff-in-diff frameworks from this chapter can assess whether the remedy is working.
