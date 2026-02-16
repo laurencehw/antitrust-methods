@@ -36,7 +36,7 @@ STEP 1: MARKET POWER          STEP 2: CONDUCT               STEP 3: EFFECTS
 +----------------+           +----------------+           +----------------+
 | Market         |           | Identify       |           | Measure        |
 | definition     |           | conduct type:  |           | foreclosure &  |
-| (Chapter 3)    |---------->| - Predation    |---------->| harm:          |
+| (Ch 3)         |---------->| - Predation    |---------->| harm:          |
 |                |           | - Rebates      |           | - Share loss   |
 +----------------+           | - Tying        |           | - Entry/exit   |
        |                     | - MFNs         |           | - Price effects|
@@ -1086,6 +1086,6 @@ contracts[, c("customer", "marginal_units", "effective_marginal_price", "margin_
 
 ## Looking ahead
 
-Monopolization analysis produces artifacts---foreclosure calculations, effective price computations, margin squeeze tests---that reappear throughout the remaining chapters. **Chapter 8 (Regulation and Remedies)** addresses what happens after a liability finding: how to design remedies that actually cure the diagnosed harm and how to evaluate whether they work. Many monopolization cases end in consent decrees with behavioral obligations; the next chapter explains how to structure and monitor those commitments.
+Monopolization analysis produces artifacts---foreclosure calculations, effective price computations, margin squeeze tests---that reappear throughout the remaining chapters. **@sec-regulation-remedies** addresses what happens after a liability finding: how to design remedies that actually cure the diagnosed harm and how to evaluate whether they work. Many monopolization cases end in consent decrees with behavioral obligations; the next chapter explains how to structure and monitor those commitments.
 
 The exclusionary conduct frameworks in this chapter also apply directly to **@sec-digital-markets**, where platform self-preferencing, default tying, and data leverage cases build on the same analytical foundations.

@@ -1,6 +1,6 @@
 # Market Definition and Competitive Landscape {#sec-market-definition}
 
-With the research design principles from Chapter 2 in hand, we now turn to one of the foundational tasks in antitrust analysis: defining the relevant market. Market definition is often the first substantive question in any competition matter, and the answer shapes everything that follows---from market share calculations to theories of harm to remedy design.
+With the research design principles from @sec-research-design in hand, we now turn to one of the foundational tasks in antitrust analysis: defining the relevant market. Market definition is often the first substantive question in any competition matter, and the answer shapes everything that follows---from market share calculations to theories of harm to remedy design.
 
 This chapter builds on the causal inference toolkit introduced earlier, showing how to combine quantitative analysis with qualitative evidence to draw market boundaries that will withstand scrutiny from regulators and courts.
 
@@ -79,11 +79,11 @@ Now that we've established why market definition remains essential, this section
 3. **Critical-loss vs. actual-loss.** Compare hypothetical post-SSNIP losses to observed switching, stating margin assumptions and capacity constraints. Highlight when brand repositioning or supply limits break the classic calculations.
 4. **Geographic screens.** Shipment flows, travel-time analyses, or catchment-area heatmaps built from loyalty data, mobile location pings, or Stats SA transport datasets. Pair with qualitative evidence on delivery commitments or regulatory boundaries.
 
-The workflow mirrors Chapter 02’s research design steps: scoping memo → data inventory → qualitative plan → estimation → memo/slide deck. Revisit `chapters/13-empirical-appendix.qmd` for templates.
+The workflow mirrors @sec-research-design's research design steps: scoping memo → data inventory → qualitative plan → estimation → memo/slide deck. Revisit `chapters/13-empirical-appendix.qmd` for templates.
 
 ## Core diagnostic tools
 
-The workflow above identifies *what* to do; this section shows *how* to do it. Each diagnostic below produces artifacts that feed directly into merger simulations (Chapter 06) and cartel analysis (Chapter 05). Use these specific diagnostics to anchor your analysis:
+The workflow above identifies *what* to do; this section shows *how* to do it. Each diagnostic below produces artifacts that feed directly into merger simulations (@sec-mergers) and cartel analysis (@sec-cartels). Use these specific diagnostics to anchor your analysis:
 
 - **Price/quantity dashboards.** Track cointegration, variance ratios, and shock responses to see which products move together.
 - **Elasticities/diversion.** Estimate log-log or `fixest` panel regressions; or use choice data (`mlogit`, `apollo`) when products are differentiated.
@@ -431,7 +431,7 @@ In practice, combine this with:
 
 **What diversion measures:** Diversion ratios quantify where customers go when their first choice becomes unavailable or more expensive. If Product A loses 100 customers and 35 of them switch to Product B, the diversion ratio from A to B is 35%.
 
-**Why it matters:** High diversion between products suggests they compete closely. In merger analysis, high diversion between merging parties signals unilateral effects concerns (more in Chapter 06). For market definition, diversion patterns reveal which products belong in the same market.
+**Why it matters:** High diversion between products suggests they compete closely. In merger analysis, high diversion between merging parties signals unilateral effects concerns (more in @sec-mergers). For market definition, diversion patterns reveal which products belong in the same market.
 
 This example shows how to compute diversion from customer-level switching or choice data.
 
@@ -613,12 +613,12 @@ A lively debate centers on whether formal market definition remains essential in
 
 ## Looking ahead
 
-With market boundaries now defined, we turn in **Chapter 04** to the **Industrial Organization Toolkit**: quantifying market power *within* those boundaries using concentration measures (HHI), pricing relationships, and entry barriers. Market definition answers "which products compete?"; IO analysis answers "how much pricing power does each firm have?"
+With market boundaries now defined, we turn in **@sec-io-toolkit** to the **Industrial Organization Toolkit**: quantifying market power *within* those boundaries using concentration measures (HHI), pricing relationships, and entry barriers. Market definition answers "which products compete?"; IO analysis answers "how much pricing power does each firm have?"
 
 **Before proceeding, prepare:**
 
 1. **Product labels**: Ensure switching matrices and elasticity estimates use the same product names you'll use in IO models (don't rename later—it creates errors).
-2. **Geographic definitions**: Confirm that shipment-flow maps and customer testimony align with the geographic markets you'll assume in Chapter 04.
+2. **Geographic definitions**: Confirm that shipment-flow maps and customer testimony align with the geographic markets you'll assume in @sec-io-toolkit.
 3. **Data artifacts**: Export cleaned switching matrices, elasticity estimates, and qualitative chronologies to the shared appendix so the IO, merger, and cartels chapters can reuse them.
 
-In Chapter 04, we'll assume market definitions are fixed and focus on what happens *inside* those markets: how firms set prices, whether entry threatens incumbents, and what evidence suggests market power. You'll use the switching matrices from this chapter to compute diversion ratios for merger simulations in Chapter 06.
+In @sec-io-toolkit, we'll assume market definitions are fixed and focus on what happens *inside* those markets: how firms set prices, whether entry threatens incumbents, and what evidence suggests market power. You'll use the switching matrices from this chapter to compute diversion ratios for merger simulations in @sec-mergers.

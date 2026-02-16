@@ -159,8 +159,6 @@ Replace the synthetic `panel` with sanitized telemetry (monthly active users/mer
 
 **What this model shows:** We estimate how user engagement (daily active users) responds to "attention costs" like ad load and data collection, as well as quality metrics like load time and content relevance. This lets us simulate whether a hypothetical monopolist could profitably degrade quality.
 
-When users pay with attention rather than money, standard fee-based demand models need adaptation. Replace monetary fees with **attention costs**: ad load, time spent, or quality degradation metrics. This aligns with the SSNDQ (Small but Significant Non-transitory Decrease in Quality) framework used by competition authorities.
-
 ```{r}
 #| label: digital-zero-price
 #| message: false

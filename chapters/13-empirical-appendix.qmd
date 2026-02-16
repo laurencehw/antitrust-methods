@@ -295,7 +295,7 @@ cat(paste0("Joint F-test p-value: [run wald_test on event_study model]\n"))
 - **Pre-trends near zero**: Validates parallel trends assumption
 - **Post-treatment divergence**: Confirms treatment effect
 - **Confidence intervals**: Should include zero in pre-period
-- **Use this**: Mergers (Ch. 06), remedies (Ch. 08), labor (Ch. 10)
+- **Use this**: Mergers (@sec-mergers), remedies (@sec-regulation-remedies), labor (@sec-labor-markets)
 
 ### Balance plots for matching/weighting
 Show covariate balance before and after matching or weighting.
