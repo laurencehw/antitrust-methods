@@ -74,7 +74,7 @@ PHASE 1: SCREENING              PHASE 2: DEEP DIVE              PHASE 3: DECISIO
 - Upstream/downstream definitions depend on the theory of harm: be explicit about the vertical chain and platform sides.
 - Ground definitions in agency guidance (US Merger Guidelines [@doj_ftc_hmg_2023; @doj_ftc_hmg_2010], EC/CMA guidance [@ec_hmg_2004; @cma_merger_assessment_2021]) and adjust for platform/digital contexts.
 
-**Practical tips:** keep a data inventory (chapter 13 template) noting which datasets inform shares (transaction data, Nielsen panels, loyalty cards). Align product labels with the IO models you plan to run later so you avoid remapping midstream.
+**Practical tips:** keep a data inventory (@sec-empirical-appendix template) noting which datasets inform shares (transaction data, Nielsen panels, loyalty cards). Align product labels with the IO models you plan to run later so you avoid remapping midstream.
 
 ### Unilateral effects: UPP/GUPPI and sim
 - Use UPP/GUPPI as a screen [@farrell_shapiro_2010_merger; @jaffe_weyl_2013]; report inputs (diversion, margins) transparently. Sensitivity to margin measurement and diversion estimates should be shown.
@@ -1000,7 +1000,7 @@ Replace simulated values with outputs from your actual merger simulation model (
 
 ## Looking ahead
 
-Merger analysis produces artifacts—simulation outputs, UPP tables, event-study results—that feed directly into **Chapter 07 (Monopolization)** and **Chapter 12 (Litigation Practice)**. The same frameworks apply when assessing whether a dominant firm's conduct harms competition.
+Merger analysis produces artifacts—simulation outputs, UPP tables, event-study results—that feed directly into **@sec-monopolization** and **@sec-litigation-practice**. The same frameworks apply when assessing whether a dominant firm's conduct harms competition.
 
 **Before proceeding, prepare:**
 
@@ -1008,4 +1008,4 @@ Merger analysis produces artifacts—simulation outputs, UPP tables, event-study
 2. **Data refresh plan**: Note which datasets (Nielsen panels, loyalty data, procurement archives) need anonymization or refreshed pulls for teaching or publication.
 3. **Retrospective benchmarks**: Keep a reference list of merger retrospectives (airlines, hospitals, beer) with their effect-size estimates—useful for validating your simulations against real-world outcomes.
 
-In Chapter 07, we apply similar diversion and foreclosure frameworks to unilateral conduct by dominant firms. The simulation and screening tools from this chapter transfer directly—the key difference is that we're analyzing conduct by a single firm rather than a transaction between two firms.
+In @sec-monopolization, we apply similar diversion and foreclosure frameworks to unilateral conduct by dominant firms. The simulation and screening tools from this chapter transfer directly—the key difference is that we're analyzing conduct by a single firm rather than a transaction between two firms.

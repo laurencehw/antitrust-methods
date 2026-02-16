@@ -1,28 +1,22 @@
-# Orientation: Antitrust and Regulation
+# Orientation: Antitrust and Regulation {#sec-orientation}
 
-Before turning to specific methods, we need to understand the institutional settings where antitrust analysis occurs. Economic analysis does not happen in a vacuum---it responds to legal standards, agency priorities, and procedural constraints that vary across jurisdictions. Understanding these institutions will help you frame your analyses to address the questions that actually matter in practice.
+Before diving into specific methods, we need to understand the institutional landscape where antitrust analysis occurs. This chapter provides that foundation. Economic analysis does not happen in a vacuum---it responds to legal standards, agency priorities, and procedural constraints that vary across jurisdictions. Understanding these institutions will help you frame your analyses to address the questions that actually matter in practice.
 
 ## Learning goals
+This opening chapter orients you to the institutional settings where economists, researchers, and lawyers work side by side. By the end you should be able to articulate how competition authorities define their objectives, how they translate statutes or guidelines into investigative hypotheses, and how evidentiary burdens shift between agencies and courts. You will also learn how to map economic questions—market definition, market power, theory of harm, efficiencies, and remedy selection—onto the specific legal elements regulators must prove or rebut.
 
-This opening chapter orients you to the institutional settings where economists, researchers, and lawyers work side by side. By the end you should be able to:
-
-- Articulate how competition authorities define their objectives and translate statutes or guidelines into investigative hypotheses.
-- Explain how evidentiary burdens shift between agencies and courts across jurisdictions.
-- Map economic questions---market definition, market power, theory of harm, efficiencies, and remedy selection---onto the specific legal elements regulators must prove or rebut.
-- Exercise judgment about when to push for additional data work versus documentary, testimonial, or industry expertise.
-
-Because this course serves practitioners in South Africa who often face multi-jurisdictional matters, we will continually compare US-led doctrines with approaches in the EU, UK, Asia, and regional African regulators. Expect a mix of narrative history, process walkthroughs, and applied examples from roughly 2005--2024.
+An equally important goal is judgment: when should you push for additional data work, and when is documentary, testimonial, or industry expertise the better marginal investment? Because this course serves practitioners in South Africa who often face multi-jurisdictional matters, we will continually compare US-led doctrines with approaches in the EU, UK, Asia, and regional African regulators. Expect a mix of narrative history, process walkthroughs, and applied examples from roughly 2005–2024.
 
 ## Core narrative
 ### Institutions and mandates
 
 Modern antitrust work is anchored by a handful of institutions with overlapping mandates. In the United States, the Department of Justice (DOJ) Antitrust Division and the Federal Trade Commission (FTC) share merger and conduct jurisdiction, aided by state attorneys general and sector regulators such as the Federal Communications Commission or Surface Transportation Board.
 
-Post-2000 history matters for understanding current doctrine. The Clinton-era Microsoft litigation cemented exclusionary conduct frameworks. The 2010 Horizontal Merger Guidelines elevated unilateral effects analysis. Most recently, the 2023 Merger Guidelines re-centered structural presumptions and addressed platform dynamics head-on.
+Post-2000 history matters for understanding current doctrine. The Clinton-era Microsoft litigation cemented exclusionary conduct frameworks (*United States v. Microsoft*, 2001). The 2010 Horizontal Merger Guidelines (DOJ/FTC Horizontal Merger Guidelines, 2010) elevated unilateral effects analysis. Most recently, the 2023 Merger Guidelines (DOJ/FTC Merger Guidelines, 2023) re-centered structural presumptions and addressed platform dynamics head-on.
 
 Across the Atlantic, the European Commission's Directorate-General for Competition (DG COMP) pairs investigations with inquisitorial decision making, while national authorities like the UK Competition and Markets Authority (CMA) play an increasingly global role—for example, blocking Microsoft/Activision until remedies evolved. Asian agencies—including Japan's JFTC, Korea's KFTC, and China's SAMR—have expanded resources to scrutinize digital markets and cross-border conduct.
 
-For practitioners working in Southern Africa, the Competition Commission and Competition Tribunal are essential reference points. These bodies have expanded their focus to digital markets, food supply chains, and cartels affecting the Southern African Development Community (SADC). Knowing each body's statutory tests, procedural timelines, and evidentiary expectations shapes how you build a persuasive analysis.
+For practitioners working in Southern Africa, the Competition Commission and Competition Tribunal are essential reference points. These bodies have expanded their focus to digital markets, food supply chains, and cartels affecting the Southern African Development Community (SADC). Understanding each body's statutory tests, procedural timelines, and evidentiary cultures is essential to crafting persuasive analyses.
 
 {% hint style="success" %}
 **Definition: Key Antitrust Concepts**
@@ -55,7 +49,7 @@ For multi-jurisdictional practitioners, the table below maps common conduct type
 
 - **Standards**: US uses "monopoly power" (typically >70% share); EU/SA use "dominance" (typically >40-50% share with barriers).
 - **Effects vs. object**: EU Art. 101 distinguishes "object" restrictions (per se illegal) from "effects" analysis; US separates per se from rule of reason.
-- **Public interest**: South Africa uniquely incorporates public interest factors (employment, SME participation, ownership) in merger review under §12A(3).
+- **Public interest**: South Africa uniquely incorporates public interest factors (employment, SME participation, ownership) in merger review under §12A(3) (SA Competition Act, 1998).
 - **Private enforcement**: US allows treble damages; EU/SA have more limited private action frameworks.
 
 {% hint style="info" %}
@@ -66,7 +60,7 @@ When advising on multi-jurisdictional matters, map the same conduct to each regi
 
 ### Workflow from intake to remedies
 
-Translating these statutory frameworks into day-to-day practice requires an operational workflow. The section below outlines the typical arc from case intake through remedy selection, highlighting decision points where economic analysis informs legal strategy.
+Having mapped these institutions and their statutory frameworks, practitioners must translate regulatory mandates into operational workflows. The section below outlines the typical arc from case intake through remedy selection, highlighting key decision points where economic analysis informs legal strategy.
 
 {% hint style="info" %}
 **Investigation Workflow Overview**
@@ -94,53 +88,33 @@ INTAKE                 SCOPING                ANALYSIS               DECISION
                     | - Margins    |    | - Documents  |
                     +--------------+    +--------------+
 ```
-
 **Key decision points:** At each transition, evaluate whether additional data work or qualitative evidence offers the better marginal return given deadlines and burden of proof.
 {% endhint %}
 
-Regardless of jurisdiction, investigations follow a recognizable arc:
-
-1. **Intake.** Matters typically begin with a complaint, leniency application, or merger notification. Case teams triage with "hot docs" and quick descriptive analytics, then draft a plan that allocates legal and economic workstreams and establishes preservation plus data-request protocols.
-
-2. **Scoping.** Enumerate data systems, prioritize custodians, negotiate production formats, and decide whether to run early econometric screens---such as price-cost margins or diversion ratios---before collecting more costly qualitative evidence.
-
-3. **Synthesis.** The team combines theory and evidence into statements of issues, white papers, or ultimately pleadings and testimony.
-
-4. **Remedies.** Forward-looking modeling meets institutional constraints: can the Competition Tribunal in Pretoria supervise behavioral commitments as effectively as US courts, or is divestiture the only reliable fix?
-
-Always document these choices so that tribunals (and future teams) can reconstruct the evidentiary chain.
+Regardless of jurisdiction, investigations follow a recognizable arc. Matters typically begin with a complaint, leniency application, or merger notification. Case teams triage with “hot docs” and quick descriptive analytics, draft a plan that allocates legal and economic workstreams, and establish preservation plus data-request protocols. The second phase is scoping: enumerating data systems, prioritizing custodians, negotiating production formats, and deciding whether to run early econometric screens—such as price-cost margins or diversion ratios—before collecting more costly qualitative evidence. In phase three the team synthesizes theory and evidence into statements of issues, white papers, or ultimately pleadings and testimony. Finally, remedies discussions integrate forward-looking modeling with institutional constraints: can the Competition Tribunal in Pretoria supervise behavioral commitments as effectively as US courts, or is divestiture the only reliable fix? Always document these choices so that tribunals (and future teams) can reconstruct the evidentiary chain.
 
 ### Scoping data needs early
-
-Practitioners treat data, documents, and interviews as complements rather than substitutes. Intake meetings should generate inventories of transactional databases, billing systems, CRM extracts, internal forecasts, board presentations, and benchmark studies.
-
-The task is to identify what can be measured quickly (e.g., monthly price series, bidding outcomes, churn metrics) and what requires longitudinal assembly (e.g., claims-level healthcare data or network telemetry).
-
-Teams should simultaneously plan qualitative work: establish search terms for electronically stored information (ESI), design interview protocols, and identify third parties---customers, suppliers, former employees---whose perspectives sharpen or rebut economic priors.
-
-{% hint style="warning" %}
-**Timing matters.** Missing this early sequencing is costly. In the Competition Commission South Africa's review of Netcare/Community Hospital Group, late-stage data disputes shortened the time available for substantive modeling.
-{% endhint %}
+Practitioners treat data, documents, and interviews as complements rather than substitutes. Intake meetings should generate inventories of transactional databases, billing systems, CRM extracts, internal forecasts, board presentations, and benchmark studies. The task is to identify what can be measured quickly (e.g., monthly price series, bidding outcomes, churn metrics) and what requires longitudinal assembly (e.g., claims-level healthcare data or network telemetry). Teams should simultaneously plan qualitative work: establish search terms for electronically stored information (ESI), design interview protocols, and identify third parties—customers, suppliers, former employees—whose perspectives sharpen or rebut economic priors. Missing this early sequencing is costly; see the Competition Commission South Africa’s review of Netcare/Community Hospital Group, where late-stage data disputes shortened the time available for substantive modeling.
 
 ### Illustrative vignette: Search dominance diagnostics
-The 2020–2023 DOJ challenge to Google Search illustrates how process and substance intertwine. Economists combined browser default share calculations, auction revenue data, and margin analyses with interview testimony from handset makers and browser developers. Those fact narratives clarified why certain regression designs mattered (e.g., estimating counterfactual query volume absent default contracts). Compare that to the Competition Commission South Africa’s investigation into digital platforms and app stores, where documentary evidence about self-preferencing and ad-tech fee structures filled gaps in transaction data. The lesson: quantitative rigor carries the day only when tied to institutional detail about distribution agreements, switching costs, and remedy administrability.
+The 2020–2023 DOJ challenge to Google Search (*United States v. Google (Search)*, 2023) illustrates how process and substance intertwine. Economists combined browser default share calculations, auction revenue data, and margin analyses with interview testimony from handset makers and browser developers. Those fact narratives clarified why certain regression designs mattered (e.g., estimating counterfactual query volume absent default contracts). Compare that to the Competition Commission South Africa's investigation into digital platforms and app stores (SA OIPMI Final Report, 2023), where documentary evidence about self-preferencing and ad-tech fee structures filled gaps in transaction data. The lesson: quantitative rigor carries the day only when tied to institutional detail about distribution agreements, switching costs, and remedy administrability.
 
 {% hint style="info" %}
 **Method box: Integrating empirics here**
 
-Early-stage screening rarely needs sophisticated econometrics. Build dashboards that pull together market shares, Herfindahl-Hirschman Index (HHI) trends, entry/exit indicators, and switching matrices from customer-level data. Combine transactional datasets with public sources (e.g., SEC filings, the FTC’s merger statistics, Stats SA tariff books) to benchmark plausible margins. When data are thin, like in new fintech or biotech markets pivot, quickly to qualitative or expert evidence rather than forcing underpowered regressions. Document these decisions in a running technical memo so litigators can later explain why the team prioritized one technique over another.
+Early-stage screening rarely needs sophisticated econometrics. Build dashboards that pull together market shares, HHI trends, entry/exit indicators, and switching matrices from customer-level data. Combine transactional datasets with public sources (e.g., SEC filings, the FTC’s merger statistics, Stats SA tariff books) to benchmark plausible margins. When data are thin, like in new fintech or biotech markets pivot, quickly to qualitative or expert evidence rather than forcing underpowered regressions. Document these decisions in a running technical memo so litigators can later explain why the team prioritized one technique over another.
 {% endhint %}
 
 {% hint style="info" %}
 **Qualitative evidence**
 
-Treat qualitative work as disciplined research, not anecdote hunting. Begin with an interview guide that connects each theory of harm to specific questions, and pair every interview with contemporaneous notes plus sourcing metadata (custodian, date, privilege status). For document review, align search strings with economic hypotheses—for example, pairing “capacity discipline” with “shutdown” when probing fertilizer cartel allegations in the US Midwest and South Africa’s Sasol case. Create chronologies that marry documentary excerpts with data milestones; these become invaluable when explaining to a tribunal why a particular conduct pattern aligns with measured price changes or customer churn.
+Treat qualitative work as disciplined research, not anecdote hunting. Begin with an interview guide that connects each theory of harm to specific questions, and pair every interview with contemporaneous notes plus sourcing metadata (custodian, date, privilege status). For document review, align search strings with economic hypotheses—for example, pairing “capacity discipline” with “shutdown” when probing fertilizer cartel allegations in the US Midwest and South Africa's Sasol case (*Competition Commission v. Sasol*, 2014). Create chronologies that marry documentary excerpts with data milestones; these become invaluable when explaining to a tribunal why a particular conduct pattern aligns with measured price changes or customer churn.
 {% endhint %}
 
 {% hint style="info" %}
 **Case box: Quick tour**
 
-Recent matters illustrate the diversity of evidentiary mixes. The US v. Microsoft legacy is still instructive for tying and exclusion, but newer platform cases—US v. Google Search and the FTC’s Meta/Within suit—highlight how product design data and third-party developer testimony reinforce each other. Airline collaborations such as DOJ v. American Airlines/JetBlue (NEA) show how scheduling data, revenue management simulations, and traveler surveys combine to test unilateral and coordinated effects. Global cartel work remains vibrant: the EU Trucks cartel decisions, the KFTC’s memory chip probes, and South Africa’s construction and bread cartels each turned on leniency statements corroborated by bidding records and cost analyses. Labor markets are now front-page antitrust: US wage-fixing cases in healthcare and the 2023 consent orders in the poultry industry relied on HR databases and interview evidence from recruiters.
+Recent matters illustrate the diversity of evidentiary mixes. The *US v. Microsoft* (*United States v. Microsoft*, 2001) legacy is still instructive for tying and exclusion, but newer platform cases—*US v. Google Search* (*United States v. Google (Search)*, 2023) and the FTC's Meta/Within suit—highlight how product design data and third-party developer testimony reinforce each other. Airline collaborations such as DOJ v. American Airlines/JetBlue (NEA) show how scheduling data, revenue management simulations, and traveler surveys combine to test unilateral and coordinated effects. Global cartel work remains vibrant: the EU Trucks cartel decisions, the KFTC’s memory chip probes, and South Africa’s construction and bread cartels each turned on leniency statements corroborated by bidding records and cost analyses. Labor markets are now front-page antitrust: US wage-fixing cases in healthcare and the 2023 consent orders in the poultry industry relied on HR databases and interview evidence from recruiters.
 {% endhint %}
 
 {% hint style="info" %}
@@ -151,7 +125,7 @@ While the US emphasizes adversarial hearings and judicial precedent, DG COMP and
 
 ## Looking ahead
 
-Orientation matters only insofar as it informs research design. In **Chapter 02**, we translate the institutional map above into concrete analytical workplans—building case chronology templates, sketching data inventories, and establishing the evidence-integration frameworks that will structure every subsequent chapter.
+Orientation work is only useful if it flows directly into research design. In **Chapter 02**, we translate the institutional map above into concrete analytical workplans—building case chronology templates, sketching data inventories, and establishing the evidence-integration frameworks that will structure every subsequent chapter.
 
 **Before proceeding, prepare:**
 
@@ -159,7 +133,7 @@ Orientation matters only insofar as it informs research design. In **Chapter 02*
 2. **Data inventory**: Sketch which datasets span US, EU, and SADC sources (e.g., FRED for HHI, Stats SA for market shares).
 3. **Flagship dataset**: Identify at least one dataset (claims-level healthcare data, national tender records) that will power the quantitative chapters.
 
-Keep a running list of figures—HHI trends, entry timelines, platform governance maps—that we will revisit throughout the book. These visual artifacts accumulate across chapters, so maintaining them early pays off later.
+Keep a running list of figures—HHI trends, entry timelines, platform governance maps—that we will revisit throughout the book. This ensures the narrative remains visually anchored and cumulative, with each chapter building on artifacts from previous ones.
 
 ## Visualizations
 
@@ -262,7 +236,7 @@ ggplot(milestones, aes(x = year, y = y)) +
 {% hint style="info" %}
 **Timeline interpretation**
 
-The timeline shows convergence in competition enforcement approaches: South Africa's 1998 Competition Act drew heavily on EU precedent, while the 2023 US Merger Guidelines moved closer to EU-style structural presumptions. Note how major cases (Microsoft, Google) often span jurisdictions with related but distinct theories of harm.
+The timeline shows convergence in competition enforcement approaches: South Africa's 1998 Competition Act (SA Competition Act, 1998) drew heavily on EU precedent, while the 2023 US Merger Guidelines (DOJ/FTC Merger Guidelines, 2023) moved closer to EU-style structural presumptions. Note how major cases (Microsoft (*United States v. Microsoft*, 2001), Google (*United States v. Google (Search)*, 2023); (*Google Shopping*, 2017)) often span jurisdictions with related but distinct theories of harm.
 {% endhint %}
 
 ### HHI trend example

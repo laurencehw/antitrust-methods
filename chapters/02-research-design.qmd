@@ -21,10 +21,10 @@ Before estimating anything, write a pre-analysis plan that documents main outcom
 
 ## The Modern Causal Toolkit: The Credibility Revolution
 
-Modern antitrust economics increasingly relies on the "credibility revolution" in applied microeconomics—a shift from complex structural adjustments to transparent research designs that mimic randomized experiments. As championed by Angrist and Pischke (2010) and popularized in *Causal Inference: The Mixtape* (Cunningham, 2021), the goal is to identify a "natural experiment" where treatment (e.g., a merger, a cartel breakdown, or a regulation) is as good as randomly assigned.
+Modern antitrust economics increasingly relies on the "credibility revolution" in applied microeconomics—a shift from complex structural adjustments to transparent research designs that mimic randomized experiments. As championed by @angrist_pischke_2009 and popularized in *Causal Inference: The Mixtape* [@cunningham_2021], the goal is to identify a "natural experiment" where treatment (e.g., a merger, a cartel breakdown, or a regulation) is as good as randomly assigned.
 
 ### The "Design-Based" Philosophy
-Instead of asking "what controls do I need to fix my model?", design-based thinking asks "where does the variation come from?" If you cannot draw a Directed Acyclic Graph (DAG) showing how the treatment was assigned independent of the outcome, no amount of regression control will save the analysis. This "reduced form" approach contrasts with the "structural" methods used in merger simulation (see Chapter 4), which rely on theoretical models to estimate "deep parameters".
+Instead of asking "what controls do I need to fix my model?", design-based thinking asks "where does the variation come from?" If you cannot draw a Directed Acyclic Graph (DAG) showing how the treatment was assigned independent of the outcome, no amount of regression control will save the analysis. This "reduced form" approach contrasts with the "structural" methods used in merger simulation (see @sec-io-toolkit), which rely on theoretical models to estimate "deep parameters".
 
 This approach prioritizes:
 1.  **Clean Identification:** Finding shocks (institutional details, policy boundaries, timing quirks) that separate treated and control groups.
@@ -91,7 +91,7 @@ While the toolkit is vast, antitrust practitioners lean heavily on a few workhor
 ### The Evolution of DiD
 A critical development in recent years is the realization that the standard Two-Way Fixed Effects (TWFE) estimator can be biased when treatment timing varies (staggered adoption). If you are analyzing a rollup strategy where a firm buys competitors in 2018, 2019, and 2020, standard regressions might compare early-treated units to late-treated units in ways that invert the sign of the effect.
 
-Modern estimators like Callaway & Sant'Anna or Sun & Abraham (implemented in R packages `did` and `fixest`) explicitly handle this heterogeneity. In litigation, relying on "old" TWFE without robustness checks is now a vulnerability.
+Modern estimators like @callaway_santanna_2021 or @sun_abraham_2021 (implemented in R packages `did` and `fixest`) explicitly handle this heterogeneity. In litigation, relying on "old" TWFE without robustness checks is now a vulnerability.
 
 ::: {.callout-tip title="Getting Up to Speed"}
 For a practical guide to these methods, we recommend three complementary resources:
@@ -99,7 +99,7 @@ For a practical guide to these methods, we recommend three complementary resourc
 2.  **"The Effect"** [@huntington_klein_2021]: A highly accessible introduction to design-based thinking. [theeffectbook.net](https://theeffectbook.net/)
 3.  **"Causal Inference for the Brave and True"** [@alves_2022]: Covers intermediate topics including machine-learning approaches to interference. [matheusfacure.github.io/python-causality-handbook](https://matheusfacure.github.io/python-causality-handbook/)
 
-For the academic foundations, see Angrist & Pischke (2010), "The Credibility Revolution in Empirical Economics" ([AEA link](https://www.aeaweb.org/articles?id=10.1257/jep.24.2.3)).
+For the academic foundations, see @angrist_pischke_2009 and their companion *Mastering 'Metrics* [@angrist_pischke_2015].
 :::
 
 ::: {.callout-note title="Method box: Causal tools"}

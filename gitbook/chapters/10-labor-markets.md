@@ -1,11 +1,10 @@
-# Antitrust and Labor Markets
+# Antitrust and Labor Markets {#sec-labor-markets}
 
-The preceding chapters analyzed product markets---markets where firms sell goods and services to customers. Labor markets invert the question: instead of asking whether sellers have market power to raise prices, we ask whether employers have market power to suppress wages.
+The preceding chapters focused primarily on product markets---markets where firms sell goods and services to customers. This chapter turns to labor markets, where firms buy the services of workers. The economic logic is parallel but inverted: instead of asking whether sellers have market power to raise prices, we ask whether employers have market power to suppress wages.
 
-Labor antitrust has become a front-line enforcement priority. The DOJ has brought criminal wage-fixing and no-poach cases; the FTC attempted a nationwide ban on noncompete agreements; and empirical research has documented substantial labor market concentration across many occupations and regions. The tools---concentration measurement (Chapter 3), causal inference (Chapter 2, especially DiD and event studies), and qualitative evidence protocols---carry over from product market analysis, and the cartel detection methods from Chapter 5 adapt directly to wage-fixing and no-poach agreements. But input markets raise distinctive issues, from the statutory labor exemption to the measurement of commuting zones and occupational boundaries.
+Labor antitrust has emerged as a major enforcement priority. The DOJ has brought criminal wage-fixing and no-poach cases; the FTC attempted a nationwide ban on noncompete agreements; and academics have documented substantial labor market concentration in many occupations and regions. The tools are familiar---concentration measurement, causal inference, qualitative evidence---but the application to input markets raises distinctive issues, from the statutory labor exemption to the measurement of commuting zones and occupational boundaries.
 
 ## Learning goals
-
 Labor cases now sit alongside mergers and cartels in agency priorities. This chapter blends empirical tools from recent academic research on labor market power with practical guidance on using BLS and Census data. You will learn to:
 
 - Measure labor market power (concentration, labor supply elasticity, pass-through).
@@ -39,12 +38,11 @@ MARKET DEFINITION          CONDUCT ANALYSIS          EFFECTS & DAMAGES
 | - Elasticity |           | - Comms      |           | - Mobility   |
 +--------------+           +--------------+           +--------------+
 ```
-
 **Key data sources:** BLS QCEW/OES | Census LEHD/LODES | Stats SA QLFS | Platform APIs | HR records
 {% endhint %}
 
 - Labor concentration (HHI, Herfindahl-Hirschman Index for labor markets) and labor supply elasticity estimates.
-- Event studies and DiD around policy shocks (noncompete bans, wage disclosure laws, franchise no-poach settlements).
+- Event studies and diff-in-diff around policy shocks (noncompete bans, wage disclosure laws, franchise no-poach settlements).
 - Wage-posting vs. realized wage analysis; vacancy scraping; platform data for gig markets.
 - Mobility, retention, and heterogeneity by occupation, region, and worker demographics.
 - Qualitative evidence from HR documents, franchise agreements, and worker testimony.
@@ -53,8 +51,8 @@ MARKET DEFINITION          CONDUCT ANALYSIS          EFFECTS & DAMAGES
 **Method box**
 
 **Monopsony elasticities:** Estimate labor supply elasticity using quits, recruitment response, or equilibrium wage-setting models (e.g., inverse labor supply).  
-**Policy DiD:** Evaluate wage or mobility effects after noncompete bans or franchise no-poach settlements.  
-**Synthetic control:** Single-state reforms (e.g., Washington franchise no-poach settlement) can be assessed via synthetic control or staggered DiD.
+**Policy diff-in-diff:** Evaluate wage or mobility effects after noncompete bans or franchise no-poach settlements.  
+**Synthetic control:** Single-state reforms (e.g., Washington franchise no-poach settlement) can be assessed via synthetic control or staggered diff-in-diff.
 {% endhint %}
 
 {% hint style="info" %}
@@ -68,24 +66,19 @@ MARKET DEFINITION          CONDUCT ANALYSIS          EFFECTS & DAMAGES
 {% hint style="info" %}
 **Citations and comparative note**
 
-Reference US DOJ/FTC criminal wage-fixing cases, state AG settlements, the FTC's 2024 noncompete ban (finalized April 2024 but later enjoined by federal court in August 2024; see [ftc.gov](https://www.ftc.gov/)), and international enforcement (e.g., Portugal's wage-fixing fines, Japan's OTA cases). Cite key empirical papers from recent labor economics literature. Highlight differences where EU/UK enforcement is nascent but evolving (e.g., CMA's focus on noncompetes shorter than 3 months, EC guidelines on HR collusion).
+Key references: US DOJ/FTC criminal wage-fixing cases (*United States v. Jindal*, 2021); (*United States v. DaVita*, 2022), the FTC's noncompete rule (FTC Non-Compete Clause Rule, 2023) (finalized April 2024 but enjoined by federal court in August 2024), and DOJ/FTC HR guidance (DOJ/FTC HR Guidance, 2016). For empirical evidence on labor market concentration, see (Azar, Marinescu & Steinbaum, 2020) and (Benmelech, Bergman & Kim, 2020). On franchise no-poach clauses, see (Krueger & Ashenfelter, 2018). For monopsony theory, see (Manning, 2003) and (Naidu, Posner & Weyl, 2018). International enforcement is evolving: the CMA focuses on noncompetes shorter than 3 months, and the EC is developing guidelines on HR collusion.
 {% endhint %}
 
 {% hint style="danger" %}
 **Statutory labor exemption**
 
-**Labor antitrust enforcement targets employer conduct, not worker organizing.** The Clayton Act (Section 6, 1914) declares that "the labor of a human being is not a commodity or article of commerce" and exempts legitimate labor union activities from antitrust. The Norris-LaGuardia Act (1932) further shields collective bargaining, strikes, and boycotts. Thus, while employers agreeing to fix wages or not poach workers violates antitrust, workers collectively bargaining for higher wages through unions does not. The exemption covers union organizing, collective bargaining, and coordinated labor action—but not agreements between unions and employers designed to harm competition in product markets (*Connell Construction v. Plumbers Local 100*, 1975).
+**Labor antitrust enforcement targets employer conduct, not worker organizing.** The Clayton Act (Section 6, 1914) declares that "the labor of a human being is not a commodity or article of commerce" and exempts legitimate labor union activities from antitrust. The Norris-LaGuardia Act (1932) further shields collective bargaining, strikes, and boycotts. Thus, while employers agreeing to fix wages or not poach workers violates antitrust, workers collectively bargaining for higher wages through unions does not. The exemption covers union organizing, collective bargaining, and coordinated labor action—but not agreements between unions and employers designed to harm competition in product markets [*Connell Construction v. Plumbers Local 100*, (*Connell Construction v. Plumbers Local 100*, 1975)].
 {% endhint %}
 
 ## Measuring labor market power
 
 ### Concentration indices
-
-{% hint style="info" %}
-**Defining the labor market.** Labor markets are typically defined by the intersection of **occupation** (SOC code) and **geography** (commuting zone or metro area). The choice of granularity matters: too broad and you miss pockets of monopsony; too narrow and sample sizes are unreliable.
-{% endhint %}
-
-Compute HHI or concentration ratios for labor markets defined by occupation x geography (e.g., SOC x commuting zone). Use BLS QCEW, Census LODES/LEHD Origin-Destination Employment Statistics, or Stats SA labour force microdata. For empirical evidence on labor market concentration, see (Azar, Marinescu & Steinbaum, 2020) and (Benmelech, Bergman & Kim, 2020).
+Compute HHI or concentration ratios for labor markets defined by occupation × geography (e.g., SOC × commuting zone). Use BLS QCEW, Census LODES/LEHD Origin-Destination Employment Statistics, or Stats SA labour force microdata. For empirical evidence on labor market concentration, see (Azar, Marinescu & Steinbaum, 2020) and (Benmelech, Bergman & Kim, 2020).
 
 ```r
 library(dplyr)
@@ -112,24 +105,45 @@ Estimate inverse labor supply using panel data on wages and employment:
 
 ```r
 library(fixest)
+library(dplyr)
 
-# panel columns: firm, occupation, period, wage, employment, controls
-# elasticity_model <- feols(log(wage) ~ log(employment) + controls | firm + occupation + period, data = panel)
-# summary(elasticity_model)
+# Simulate panel data: 20 employers observed over 10 periods
+set.seed(2024)
+n_firms <- 20
+n_periods <- 10
+
+panel <- expand.grid(firm_id = 1:n_firms, period = 1:n_periods) |>
+  mutate(
+    # Firm-level fixed productivity (unobserved heterogeneity)
+    firm_fe = rep(rnorm(n_firms, 0, 0.3), each = n_periods),
+    # Time trend
+    time_fe = rep(0.02 * (1:n_periods), times = n_firms),
+    # Log wage set by employer (varies by firm and period)
+    log_wage = 2.8 + firm_fe + time_fe + rnorm(n(), 0, 0.1),
+    # Log employment as function of wage (inverse labor supply)
+    # Elasticity ~ 1.5 implies substantial monopsony power
+    log_employment = 3.0 + 1.5 * log_wage + firm_fe + time_fe + rnorm(n(), 0, 0.2),
+    # Control variable: local unemployment rate
+    local_unemp = runif(n(), 3, 9)
+  )
+
+# Estimate labor supply elasticity with firm and period fixed effects
+elasticity_model <- feols(
+  log(log_employment) ~ log(log_wage) + local_unemp | firm_id + period,
+  data = panel
+)
+summary(elasticity_model)
 ```
-Use matched employer-employee data (LEHD, SSA, UI wage records) or firm-level HR exports. Elasticities below 2–3 indicate meaningful monopsony power (Manning, 2003); (Ashenfelter, Farber & Ransom, 2010). For policy implications, see (Naidu, Posner & Weyl, 2018).
 
----
+The coefficient on log wages in the employment equation estimates the firm-level labor supply elasticity. Use matched employer-employee data (LEHD, SSA, UI wage records) or firm-level HR exports for production estimates. Elasticities below 2--3 indicate meaningful monopsony power: the firm can reduce wages without losing most of its workforce (Manning, 2003); (Ashenfelter, Farber & Ransom, 2010). For policy implications, see (Naidu, Posner & Weyl, 2018).
 
 ## Noncompetes, no-poach, and wage fixing
 
-### Policy shock DiD
+### Policy shock diff-in-diff
 ```r
 library(dplyr)
 library(fixest)
 
-# Synthetic panel for illustration; replace with actual BLS/CPS wage data
-set.seed(99)
 panel <- expand.grid(state = c("WA","OR","ID","MT"), year = 2014:2022) |>
   mutate(
     treated = if_else(state == "WA" & year >= 2019, 1, 0),
@@ -142,14 +156,27 @@ summary(did_model)
 ```
 Substitute actual wage data (BLS Occupational Employment and Wage Statistics, CPS microdata, Stats SA QLFS) when available. Additional controls might include occupation mix, unemployment rates, or cost-of-living indices.
 
+### The FTC noncompete ban and its aftermath
+
+In April 2024, the FTC finalized a rule (FTC Non-Compete Clause Rule, 2023) banning most noncompete agreements nationwide, concluding that these clauses constitute unfair methods of competition under Section 5 of the FTC Act. The rule would have voided existing noncompetes for all workers except senior executives and prohibited new noncompetes going forward. Before it could take effect, federal courts in *Ryan LLC v. FTC* (N.D. Texas, August 2024) enjoined the rule nationwide, holding that the FTC likely exceeded its statutory authority. As of this writing the rule's future remains uncertain pending appellate review. Regardless of the rule's legal fate, the episode is significant for empirical researchers. The FTC's rulemaking process generated extensive public comments and economic analysis estimating that noncompetes suppress wages by roughly 3--4% on average and reduce job-to-job mobility by 8--10%. More importantly, the brief period between the rule's announcement (January 2023 proposed rule, April 2024 final rule) and its injunction created a natural experiment: some employers preemptively dropped noncompetes in anticipation of the ban, while others retained them. Researchers can exploit this staggered, voluntary compliance as an instrument for studying the causal effects of noncompete removal on wages, mobility, and entrepreneurship---a before-and-after design that is more credible than cross-state comparisons because it operates within the same regulatory environment.
+
 ### Franchise no-poach analysis
-- **Contract review:** Extract no-poach clauses, duration, and scope from franchise agreements (fast-food, fitness, healthcare).  
-- **Transaction data:** Use payroll or scheduling data to track cross-franchise transfers before/after clause removal.  
-- **Event study:** Evaluate hiring and wage patterns after the no-poach ban (Washington fast-food settlements, South African retail franchise commitments). For empirical evidence on franchise no-poach agreements, see (Krueger & Ashenfelter, 2018). See also (DOJ/FTC HR Guidance, 2016) for enforcement guidance.
+
+No-poach agreements between franchisees---where one franchise location agrees not to hire or solicit workers from another location of the same brand---have come under intense scrutiny as a form of horizontal wage suppression. The DOJ has treated naked no-poach agreements (those not ancillary to a legitimate collaboration) as per se illegal under Section 1 of the Sherman Act, applying the same framework used for bid-rigging and price-fixing. This distinction matters: a no-poach clause that is reasonably necessary to protect a franchisor's investment in training may survive rule-of-reason analysis, but a blanket prohibition on hiring across franchise locations that serves no purpose other than suppressing worker mobility is treated as a criminal offense. The DOJ's prosecution of *United States v. Jindal* (*United States v. Jindal*, 2021), involving a healthcare staffing company executive who agreed with competitors to fix nurses' pay rates and allocate markets, marked a milestone as one of the first criminal no-poach cases to go to trial, even though the jury acquitted on the allocation count. The DaVita prosecutions (*United States v. DaVita*, 2022) in the dialysis industry further underscored the government's willingness to bring criminal charges against corporate officers for no-poach and non-solicitation agreements (see the case box below).
+
+From an empirical standpoint, franchise no-poach analysis requires careful contract review to extract the scope, duration, and geographic reach of restrictive clauses. Researchers should examine franchise disclosure documents (FDDs), which are publicly filed and contain the relevant contractual provisions. (Krueger & Ashenfelter, 2018) documented that a majority of major fast-food franchisors included no-poach clauses in their franchise agreements, effectively preventing workers at one McDonald's or Burger King location from moving to another location of the same brand---even when owned by a different franchisee. The empirical consequence is reduced outside options for low-wage workers who may have limited occupational mobility to begin with.
+
+Evaluating the effects of no-poach removal requires transaction-level data. Payroll or scheduling records can track cross-franchise transfers before and after clause removal, while event-study designs can assess wage and hiring patterns following state enforcement actions. The Washington State Attorney General's settlements with major fast-food chains (2018--2019), which required the removal of no-poach clauses nationwide, provide a natural experiment. Researchers can compare wage trajectories and worker turnover at affected franchise brands against unaffected employers in the same local labor markets. See (DOJ/FTC HR Guidance, 2016) for the DOJ and FTC's joint guidance on human resources professionals and antitrust compliance.
+
+{% hint style="info" %}
+**Case box: United States v. DaVita Inc. --- Criminal No-Poach in Dialysis**
+
+In 2021, the DOJ indicted DaVita Inc., the largest dialysis services provider in the United States, and its former CEO Kent Thiry on charges of conspiring with competing healthcare companies to suppress competition for employees. The government alleged that from 2012 to 2019, DaVita entered into agreements with at least three competitors---including Surgical Care Affiliates and two unnamed co-conspirators---not to solicit each other's senior employees. These were not ancillary to any joint venture or legitimate collaboration; they were standalone agreements to divide the labor market. In April 2022, a federal jury in the District of Colorado acquitted Thiry and DaVita on the criminal charges, dealing a setback to the DOJ's strategy of pursuing no-poach agreements under per se criminal liability. Nevertheless, the case reshaped compliance practices across the healthcare industry: DaVita separately paid $53.6 million to settle a related civil class action brought by affected employees, and major health systems began auditing and removing informal no-poach arrangements from their HR practices. The case illustrates the evidentiary challenges of proving criminal intent in labor market allocation cases.
+{% endhint %}
 
 ### Synthetic control for single-state reforms
 
-When only one state implements a policy change (e.g., California's noncompete ban, Washington's franchise no-poach settlement), standard DiD may lack a valid control group. Synthetic control constructs a weighted combination of untreated states that matches the treated state's pre-treatment trajectory.
+When only one state implements a policy change (e.g., California's noncompete ban, Washington's franchise no-poach settlement), standard diff-in-diff may lack a valid control group. Synthetic control constructs a weighted combination of untreated states that matches the treated state's pre-treatment trajectory.
 
 ```r
 library(Synth)
@@ -194,17 +221,19 @@ For the `Synth` package, see (Abadie, Diamond & Hainmueller, 2010). For applicat
 
 ## Wage posting vs. realized wages
 
-Combine vacancy data (Indeed, Burning Glass, Pnet) with payroll data to evaluate pass-through and wage compression:
+A growing body of empirical work exploits job posting data to study labor market competition, but practitioners must understand the gap between posted wages and realized compensation. Posted wages---the salary ranges listed in job advertisements---reflect employers' initial offers and are shaped by competitive pressures, pay transparency laws, and internal compensation bands. Realized wages, by contrast, reflect the outcome of a bargaining process (explicit or implicit) and include negotiated base pay, signing bonuses, equity grants, overtime, and the value of non-wage amenities such as health insurance, schedule flexibility, and remote work options. When labor markets are competitive, posted and realized wages tend to converge because employers must offer attractive terms to fill vacancies. Under monopsony conditions, however, the gap can widen: employers post higher wages to attract applicants but use individualized bargaining, opaque pay structures, or delayed benefits vesting to suppress realized compensation below the posted range.
 
-- **Posting premium vs. realized wage:** Compare posted wages to actual accepted wages; measure dispersion and adjustments post-policy.  
-- **Vacancy response:** Study vacancy duration and volume changes after noncompete bans or wage transparency laws.  
-- **Platform/gig economy:** Leverage public APIs (Uber, Deliveroo) or FOIA responses for driver payout distributions.
+This distinction has direct implications for monopsony measurement. Studies that rely solely on posted wages---such as those using data from Burning Glass/Lightcast, Indeed, or Glassdoor---may understate the degree of wage suppression if employers systematically offer less than advertised. Conversely, posted wage data can be valuable precisely because it captures employers' revealed beliefs about the competitive wage: a firm that posts a wage well below the market rate may be exercising monopsony power, confident that workers lack sufficient outside options to reject the offer. Practitioners can use job posting databases to construct measures of wage dispersion within narrowly defined occupation-by-geography cells, track how posting behavior changes after policy shocks (such as pay transparency mandates in Colorado, New York City, or Washington state), and compare posting patterns between concentrated and unconcentrated labor markets.
+
+For empirical analysis, the recommended approach is to combine vacancy data with payroll or survey data wherever possible. Burning Glass/Lightcast provides near-universe coverage of online job postings with detailed occupation codes, geographic identifiers, posted salary ranges, and required qualifications. Matching these records to BLS Occupational Employment and Wage Statistics (OES) or employer-reported payroll data allows researchers to quantify the posting-to-realized wage gap and assess how it varies with market concentration. In the gig economy context, similar analysis can leverage public APIs or FOIA responses for platform payout distributions (e.g., Uber driver earnings data), comparing advertised earning potential against actual weekly take-home pay after fees, wait times, and expenses. Vacancy duration and volume changes after noncompete bans or wage transparency laws provide additional outcome measures for policy evaluation.
 
 ## Mobility and retention analytics
 
-- **Mobility matrices:** Use LEHD/LODES or internal HR data to compute transition probabilities between firms/regions.  
-- **Retention KPIs:** Track tenure, quit rates, and rehire rates; evaluate changes post-remedy.  
-- **Heterogeneity:** Segment results by occupation, gender, race, and visa status to show differential effects and public-interest considerations.
+Worker mobility data provides some of the most direct evidence of labor market boundaries and employer market power. If workers rarely transition between two sets of employers---whether because of geographic distance, occupational specialization, noncompete enforcement, or informal no-poach norms---those employer groups may constitute separate labor markets, each with its own concentration profile. Conversely, high rates of job-to-job transition between employers suggest a competitive labor market where workers can credibly threaten to leave. Mobility matrices, which tabulate the probability that a worker at employer A in period $t$ moves to employer B in period $t+1$, are the core empirical tool. These can be constructed from the Census Bureau's LEHD/LODES data (which links workers to employers over time using unemployment insurance records), from state-level UI wage records obtained under research agreements, or from internal HR data in litigation settings. LinkedIn profile data and resume databases offer additional sources, though they skew toward white-collar occupations.
+
+Retention metrics complement mobility analysis by capturing the employer side of the relationship. Key performance indicators include median tenure, voluntary quit rates, rehire rates (boomerang employees), and the share of separations followed by extended non-employment spells. In a competitive labor market, voluntary quit rates should be responsive to outside wage offers: when a competitor raises wages, quit rates at non-adjusting firms should increase. Under monopsony, quit rates are less responsive because workers face high switching costs---whether from noncompetes, pension forfeiture, visa sponsorship ties, or thin local labor markets. Practitioners evaluating mergers or restraints can use pre- and post-event changes in these retention KPIs to measure the competitive effects of the conduct at issue.
+
+Heterogeneity analysis is essential for both economic rigor and public interest considerations. Worker mobility and the effects of labor market restraints vary substantially by occupation, education level, gender, race, immigration status, and geography. For example, noncompete agreements may bind most tightly on mid-career workers with specialized skills and limited geographic mobility, while having little practical effect on entry-level workers in thick urban labor markets. Commuting pattern data (from LEHD Origin-Destination statistics or the American Community Survey) can reveal how geographic constraints define effective labor market boundaries differently for workers with and without access to reliable transportation. Segmenting results along these dimensions ensures that concentration measures and policy evaluations capture the full distributional impact of employer conduct.
 
 ## Southern African enforcement snapshots
 - **Healthcare wage-fixing (Competition Commission v. Netcare & Mediclinic investigations).** HR data and negotiation emails showed coordinated caps on agency nurse rates during pandemic surges; the Commission paired payroll analysis with worker interviews to craft remedial guidelines.
@@ -214,7 +243,7 @@ Combine vacancy data (Indeed, Burning Glass, Pnet) with payroll data to evaluate
 ## Visualizations
 
 ### Labor market concentration choropleth
-Geographic visualization of labor market concentration pinpoints regions and occupations with potential monopsony concerns. The example below uses synthetic data but adapts directly to BLS QCEW, Census LEHD, or Stats SA QLFS data.
+A geographic visualization of labor market concentration helps identify regions and occupations with potential monopsony concerns. This example uses synthetic data but can be adapted for BLS QCEW, Census LEHD, or Stats SA QLFS data.
 
 ```r
 library(dplyr)
@@ -326,7 +355,6 @@ Compare HHI across multiple occupations to identify which labor markets face gre
 library(dplyr)
 library(ggplot2)
 library(forcats)
-source("program/R/helpers.R")
 
 # Simulated HHI data across occupations and regions
 # Replace with actual QCEW/LEHD/QLFS data
@@ -407,7 +435,6 @@ Combine concentration data with wage outcomes to show the relationship between H
 ```r
 library(dplyr)
 library(ggplot2)
-source("program/R/helpers.R")
 
 # Simulated data showing HHI vs. wage gap
 # Replace with actual QCEW/OES wage data matched to HHI calculations
@@ -471,19 +498,8 @@ summary(wage_model)
 - **Stats SA QLFS**: [statssa.gov.za](http://www.statssa.gov.za/)
 - **Commuting zone definitions**: USDA ERS or Census Geography
 
-## Visualizations and data sourcing
-- **Labor HHI choropleths:** Source [BLS QCEW](https://www.bls.gov/cew/) (US), Stats SA, or EU Labour Force Survey; for publication, provide a template script plus sanitized shapefiles.
-- **Noncompete DiD plots:** Use state-level CPS microdata, WA Dept. of Labor wage records, or Stats SA sectoral wages; fallback to synthetic data until approvals land.
-- **Mobility transition matrices:** Build from [LEHD/LODES](https://lehd.ces.census.gov/) or anonymized HR exports; include aggregated gig-platform transitions.
-
-Document each dataset in `data/README.md`, tagging whether it is public, sanitized, or confidential. When substituting real data, replace the synthetic CSVs in `data/examples/` with actual extracts, rerun the figures, and cache redacted outputs for broader distribution.
-
 ## Looking ahead
 
-Labor market antitrust is increasingly intertwined with innovation policy and litigation strategy. **Chapter 11** (Innovation and IP) examines how noncompete agreements interact with innovation incentives---the tension between protecting trade secrets and enabling worker mobility that drives knowledge spillovers. The wage-fixing and no-poach frameworks developed here also appear in **Chapter 12** (Litigation Practice), which covers damages calculation for labor antitrust claims (lost wages, reduced mobility, benefits suppression) and the procedural challenges of class certification in worker cases. For practitioners working in Southern Africa, the public-interest considerations in labor cases---employment effects, worker welfare, and equity concerns---connect directly to the merger remedy frameworks in Chapter 8.
+Labor antitrust connects to several threads in the remaining chapters. **[Chapter 11](chapters/11-innovation-ip.md)** examines how employment contracts---particularly noncompete clauses and trade secret provisions---interact with innovation incentives. The same monopsony frameworks apply when analyzing how labor market restrictions affect the pace of technical change.
 
-**Before proceeding, prepare:**
-
-1. **Labor market database**: Archive HHI calculations, wage panel data, and mobility matrices in `data/derived/labor/` with documentation of occupation codes (SOC/ISCO), geographic definitions (commuting zones, MSAs, or districts), and data vintages.
-2. **Policy event calendar**: Maintain a timeline of noncompete bans, no-poach settlements, and wage transparency laws that can serve as treatment events in future DiD or synthetic control analyses.
-3. **Cross-market links**: Note where labor market concentration overlaps with product market concentration---for example, hospital mergers that raise both patient prices and suppress nurse wages may require integrated analysis across Chapters 6, 7, and 10.
+The labor market methods also feed into **[Chapter 12](chapters/12-litigation-practice.md)**. Wage-fixing and no-poach cases increasingly proceed as criminal matters or class actions, requiring the damages estimation and class certification analysis covered there. The concentration calculations and policy event studies introduced in this chapter will reappear in damages proceedings and remedy compliance evaluations.
