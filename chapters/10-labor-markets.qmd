@@ -105,7 +105,56 @@ hhi <- employment |>
   summarise(hhi = sum((share * 100)^2))
 hhi
 ```
-Replace synthetic data with QCEW/LEHD or Stats SA microdata aggregated to protect confidentiality. Document any weighting or commuting zone definitions in `data/README.md`.
+The illustrative tribble above demonstrates the mechanics of HHI calculation. For real-world analysis, use QCEW/LEHD or Stats SA microdata aggregated to protect confidentiality. The following chart uses real BLS employment data to show how industry-level employment concentration has evolved:
+
+```{r}
+#| label: labor-bls-employment
+#| message: false
+#| warning: false
+#| echo: true
+#| fig-width: 9
+#| fig-height: 5
+library(dplyr)
+library(ggplot2)
+library(readr)
+source("program/R/helpers.R")
+
+# Real BLS industry employment data (pulled via blscrapeR)
+bls_emp <- tryCatch({
+  read_csv("data/raw/bls_industry_employment.csv", show_col_types = FALSE) |>
+    filter(period != "M13") |>  # Remove annual averages
+    mutate(
+      date = as.Date(paste(year, gsub("M", "", period), "01", sep = "-")),
+      employment = as.numeric(value),
+      industry = case_when(
+        seriesID == "CES0000000001" ~ "Total nonfarm",
+        seriesID == "CES6500000001" ~ "Education & health",
+        seriesID == "CES6000000001" ~ "Professional services",
+        seriesID == "CES7000000001" ~ "Leisure & hospitality",
+        seriesID == "CES4142000001" ~ "Retail trade",
+        TRUE ~ "Other"
+      )
+    ) |>
+    filter(industry != "Other", industry != "Total nonfarm",
+           date >= as.Date("2015-01-01"))
+}, error = function(e) NULL)
+
+if (!is.null(bls_emp)) {
+  ggplot(bls_emp, aes(x = date, y = employment, color = industry)) +
+    geom_line(linewidth = 0.9) +
+    scale_y_continuous(labels = scales::comma) +
+    labs(
+      title = "US Employment by Major Industry (BLS Data)",
+      subtitle = "Thousands of employees, seasonally adjusted",
+      x = NULL, y = "Employment (thousands)", color = NULL,
+      caption = "Source: BLS Current Employment Statistics (CES). Real API data."
+    ) +
+    theme_antitrust() +
+    theme(legend.position = "bottom")
+} else {
+  cat("BLS data not available. Run program/scripts/03_bls_labor.R first.\n")
+}
+```
 
 ### Labor supply elasticity
 Estimate inverse labor supply using panel data on wages and employment:
