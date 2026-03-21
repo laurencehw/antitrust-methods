@@ -141,32 +141,6 @@ In practice, analysts address endogeneity by instrumenting for price with cost s
 Upward Pricing Pressure (UPP) is a quick screen to assess whether a merger creates incentives to raise prices. It combines diversion ratios (where do customers go?) and margins (how profitable are those diverted sales?). High UPP suggests competitive concerns; low or negative UPP (when efficiencies exceed pricing pressure) suggests the merger may be benign.
 
 ### Basic UPP calculation
-```r
-library(dplyr)
-library(ggplot2)
-
-upp <- function(diversion, margin, efficiency = 0) {
-  (diversion * margin) - efficiency
-}
-
-upp_results <- tibble::tribble(
-  ~pair, ~diversion, ~margin, ~efficiency,
-  "Product A -> B", 0.35, 0.45, 0.05,
-  "Product B -> A", 0.28, 0.40, 0.02
-) |>
-  mutate(
-    upp = upp(diversion, margin, efficiency),
-    guppi = diversion * margin,  # Gross UPP (before efficiencies)
-    interpretation = case_when(
-      upp > 0.10 ~ "High pricing pressure",
-      upp > 0.05 ~ "Moderate pricing pressure",
-      upp > 0 ~ "Low pricing pressure",
-      TRUE ~ "No pricing pressure (efficiencies dominate)"
-    )
-  )
-
-upp_results
-```
 
 ### UPP/GUPPI sensitivity tornado chart
 A tornado chart shows how UPP changes as we vary key inputs (diversion, margin, efficiencies) one at a time. This helps communicate uncertainty and identify which parameters matter most for the competitive assessment.
@@ -264,6 +238,8 @@ sensitivity |>
   print(n = Inf)
 ```
 
+![](../images/upp-tornado-1.png)
+
 **How to use this chart:**
 - **Longest bars** = most sensitive parameters. Focus data collection and robustness checks on these.
 - **Base case** (dashed orange line): Your central UPP estimate.
@@ -304,103 +280,7 @@ A 3.6% GUPPI is below the 5% rule-of-thumb threshold, but this is sensitive to i
 ### Pass-through diagnostic using public price indices
 Pass-through analysis estimates how much of a cost change flows through to consumer prices. This is critical for cartel damages (upstream overcharge → downstream harm), merger analysis (will cost savings benefit consumers?), and vertical restraints. This example uses real FRED data for gasoline prices.
 
-```r
-library(fredr)
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-library(patchwork)
-
-fredr_set_key(Sys.getenv("FRED_API_KEY"))
-
-# Producer Price Index: Petroleum refining
-ppi <- fredr(
-  series_id = "PCU324110324110",
-  observation_start = as.Date("2015-01-01")
-) |>
-  transmute(date, ppi = value)
-
-# Consumer Price Index: Gasoline (all types)
-cpi <- fredr(
-  series_id = "CUSR0000SETB01",
-  observation_start = as.Date("2015-01-01")
-) |>
-  transmute(date, cpi = value)
-
-pass_df <- inner_join(ppi, cpi, by = "date") |>
-  arrange(date) |>
-  mutate(
-    ppi_index = ppi / first(ppi) * 100,
-    cpi_index = cpi / first(cpi) * 100,
-    # Calculate changes for pass-through regression
-    ppi_change = (ppi - lag(ppi)) / lag(ppi),
-    cpi_change = (cpi - lag(cpi)) / lag(cpi)
-  ) |>
-  drop_na()
-
-# Time series plot
-pass_long <- pass_df |>
-  select(date, Producer = ppi_index, Consumer = cpi_index) |>
-  pivot_longer(-date, names_to = "series", values_to = "index")
-
-p1 <- ggplot(pass_long, aes(x = date, y = index, color = series)) +
-  geom_line(linewidth = 1.1) +
-  scale_color_manual(values = c("Producer" = "#D55E00", "Consumer" = "#0072B2")) +
-  labs(
-    title = "Producer vs. Consumer Gasoline Price Indices",
-    subtitle = "Tracking cost pass-through from refineries to retail",
-    x = NULL,
-    y = "Index (Jan 2015 = 100)",
-    color = NULL
-  ) +
-  theme_antitrust() +
-  theme(
-    legend.position = "bottom",
-    plot.title.position = "plot"
-  )
-
-# Scatter plot with regression line
-pass_model <- lm(cpi_index ~ ppi_index, data = pass_df)
-pass_coef <- coef(pass_model)[["ppi_index"]]
-pass_r2 <- summary(pass_model)$r.squared
-
-p2 <- ggplot(pass_df, aes(x = ppi_index, y = cpi_index)) +
-  geom_point(alpha = 0.5, color = "#0072B2") +
-  geom_smooth(method = "lm", se = TRUE, color = "#D55E00", linewidth = 1.2) +
-  annotate("text", x = min(pass_df$ppi_index) + 5, y = max(pass_df$cpi_index) - 5,
-           label = paste0("Pass-through rate: ", round(pass_coef, 3),
-                         "\nR² = ", round(pass_r2, 3)),
-           hjust = 0, size = 4, fontface = "bold") +
-  labs(
-    title = "Pass-Through Regression",
-    subtitle = "1 unit increase in PPI → ? unit increase in CPI",
-    x = "Producer Price Index",
-    y = "Consumer Price Index"
-  ) +
-  theme_antitrust() +
-  theme(plot.title.position = "plot")
-
-# Combined plot
-p1 / p2 + plot_annotation(
-  caption = "Data: FRED series PCU324110324110 (PPI: Petroleum Refining) and CUSR0000SETB01 (CPI: Gasoline)"
-)
-
-# Summary statistics
-pass_summary <- tibble::tibble(
-  metric = c("Pass-through coefficient", "R-squared", "Observations", "Interpretation"),
-  value = c(
-    round(pass_coef, 3),
-    round(pass_r2, 3),
-    nrow(pass_df),
-    ifelse(pass_coef < 0.5, "Incomplete pass-through",
-           ifelse(pass_coef < 1.0, "Substantial pass-through",
-                  "Over-shifting (pass-through > 100%)"))
-  )
-)
-
-cat("\nPass-through analysis summary:\n")
-knitr::kable(pass_summary, digits=3, caption="Pass-Through Analysis Results")
-```
+![](../images/cost-pass-through-1.png)
 
 **Interpretation:**
 - **Pass-through coefficient**: Measures how much a 1% increase in producer prices flows through to consumer prices. Values < 1 indicate incomplete pass-through (firms absorb some cost increases); values > 1 indicate over-shifting (firms amplify cost increases, possibly due to market power).

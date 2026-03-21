@@ -110,6 +110,9 @@ ggplot(rotation, aes(x = reorder(winner, wins), y = wins)) +
        x = NULL, y = "Contract wins") +
   theme_antitrust()
 ```
+
+![](../images/cartel-rotation-1.png)
+
 Pair charts with tables showing consecutive wins, geographic patterns, or unexplained bid withdrawals.
 
 ### Transition matrix for rotation detection
@@ -126,7 +129,7 @@ bids_df <- read.csv("data/derived/cartel_cement_bids.csv")
 
 # Create lagged winner variable for transition analysis
 transitions <- bids_df |>
-  arrange(tender_id) |>
+  arrange(project_id) |>
   mutate(
     prev_winner = lag(winner),
     period = if_else(cartel_period, "Cartel period", "Competitive period")
@@ -174,6 +177,8 @@ cat(paste0("Diagonal (repeat win) share: ", scales::percent(diag_prob, accuracy 
 cat(paste0("Off-diagonal (rotation) share: ", scales::percent(1 - diag_prob, accuracy = 0.1), "\n"))
 cat("Note: Competitive markets typically show >50% diagonal; rotation schemes show <30%.\n")
 ```
+
+![](../images/cartel-transition-matrix-1.png)
 
 **How to interpret the transition matrix:**
 
@@ -311,6 +316,8 @@ cat("High eigenvector + high in-degree = receives wins from many firms\n")
 cat("High betweenness = potential coordinator bridging subgroups\n")
 ```
 
+![](../images/cartel-rotation-network-1.png)
+
 **How to interpret this graph:**
 - **Hub-spoke patterns**: If one firm is at the center with many arrows pointing to it, that firm may be the "ringleader" coordinating bids.
 - **Circular patterns**: Arrows forming a circle (A→B→C→D→A) suggest systematic rotation where firms take turns winning.
@@ -397,18 +404,18 @@ panel <- expand.grid(
    )
  )
 
-# Main regression: cartel product
+# Main regression: cartel product (single product, no FE or clustering needed)
 main_model <- feols(
- log(price) ~ post_raid + cost | product,
+ log(price) ~ post_raid + cost,
  data = filter(panel, cartel_product),
- cluster = ~product
+ vcov = "hetero"
 )
 
 # Placebo 1: Control product (should show NO effect)
 placebo_product <- feols(
- log(price) ~ post_raid + cost | product,
+ log(price) ~ post_raid + cost,
  data = filter(panel, !cartel_product),
- cluster = ~product
+ vcov = "hetero"
 )
 
 # Placebo 2: Fake raid date (period 20 instead of 36)
@@ -416,9 +423,9 @@ panel_fake <- panel |>
  mutate(post_fake_raid = period >= 20)
 
 placebo_timing <- feols(
- log(price) ~ post_fake_raid + cost | product,
+ log(price) ~ post_fake_raid + cost,
  data = filter(panel_fake, cartel_product),
- cluster = ~product
+ vcov = "hetero"
 )
 
 # Display results
@@ -449,6 +456,8 @@ ggplot(panel, aes(x = period, y = price, color = product)) +
  theme_antitrust() +
  theme(legend.position = "bottom")
 ```
+
+![](../images/cartel-placebo-test-1.png)
 
 **Interpreting placebo results:**
 
@@ -538,6 +547,9 @@ ggplot(gas, aes(date, price, color = regime)) +
   theme_antitrust() +
   guides(color = guide_legend(nrow = 1))
 ```
+
+![Structural break detection in gasoline prices](../images/cartel-break-gasoline-1.png)
+
 Replace the public FRED data with product-level transactions to present in litigation.
 
 {% hint style="info" %}

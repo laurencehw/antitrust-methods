@@ -282,6 +282,8 @@ p_waterfall / p_evolution +
   )
 ```
 
+![](../images/monopoly-effective-price-waterfall-1.png)
+
 **Data replacement:** Use actual customer purchase data and contract terms from litigation discovery. Calculate effective prices per customer segment; overlay rival cost estimates from cost studies or public financial statements. For share evolution, use market monitoring data or customer panel data tracking purchases before/after contract adoption.
 
 **As-efficient competitor (AEC) test:** The waterfall shows that even an equally efficient rival (cost = $75) cannot profitably compete for the marginal units that trigger the rebate, as the effective price faced by the customer is deeply negative. This satisfies the AEC framework established in *Intel* (*Intel*, 2017) and subsequent EU enforcement.
@@ -417,6 +419,8 @@ p_event / p_timing +
     caption = "Data: Synthetic panel with staggered contract adoption. Replace with actual customer purchase data and contract start dates."
   )
 ```
+
+![](../images/monopoly-contract-rollout-event-1.png)
 
 **Interpretation:** The event study coefficients show no pre-trend (flat estimates in periods -11 to -1), providing support for the parallel trends assumption. Post-adoption, rival share drops by ~8 percentage points, consistent with foreclosure. The individual trajectories confirm the aggregate pattern and reveal heterogeneity in treatment effects across customers.
 
@@ -621,6 +625,8 @@ p_bundle / (p_shares | p_correlation) +
   )
 ```
 
+![](../images/monopoly-tying-bundling-impacts-1.png)
+
 **Interpretation:** The bundle was introduced in Q8, and penetration ramped quickly to 80-90% by Q16 as new OS installations included the bundled media player by default. Rival A's market share dropped from ~40% to ~10% over the same period, while Rival B's share fell from ~20% to ~5%. The strong negative correlation (-0.95+) between bundle penetration and rival share supports the foreclosure theory. The stacked area chart shows the incumbent's bundled product capturing share predominantly from the leading standalone rival.
 
 **Data replacement:** Use OS installation data (OEM shipments, enterprise deployments) to measure bundle penetration. Track media player usage via telemetry, market surveys (e.g., StatCounter, NetMarketShare), or download statistics. For technical tying (defaults, API restrictions), collect user switching data and A/B test results on choice screen interventions.
@@ -792,6 +798,8 @@ p_passthrough <- fee_passthrough |>
   )
 ```
 
+![](../images/monopoly-mfn-price-dispersion-1.png)
+
 **Interpretation:** Before the MFN, hotels priced differently across platforms, reflecting variation in platform fees (Incumbent 20%, Rival A 15%, Rival B 12%, Direct 0%). Price dispersion (coefficient of variation) averaged 0.05-0.08. After the MFN binds, prices converge across all platforms to near the Incumbent's level, collapsing dispersion to near zero. The fee pass-through test shows that pre-MFN, hotels on lower-fee platforms charged correspondingly lower prices (gap of ~$4.60), consistent with partial pass-through of fee savings. Post-MFN, the price gap shrinks to near zero, as hotels cannot undercut on rival platforms without violating parity.
 
 **Data replacement:** Use platform transaction data with hotel-level prices across multiple channels (incumbent platform, rival platforms, hotel direct booking). Estimate pass-through regressions to quantify the relationship between platform fees and retail prices before and after MFN adoption. Interview sellers to document contractual constraints on pricing flexibility.
@@ -943,6 +951,8 @@ p_wholesale_compare <- margin_squeeze_data |>
   )
 ```
 
+![](../images/monopoly-margin-squeeze-1.png)
+
 **Interpretation:** The margin squeeze test shows that an equally efficient rival—one with the same downstream costs as the incumbent—cannot break even when paying the incumbent's wholesale access price and competing at the incumbent's retail price. The waterfall reveals that the rival margin ($6) is well below the minimum required to sustain operations (~$10). The wholesale price comparison shows that the incumbent implicitly transfers wholesale access to its own retail arm at a lower price than charged to rivals, violating the non-discrimination principle.
 
 **Data replacement:** Use regulatory cost accounting data, interconnection agreements, and retail tariff schedules. For telecommunications, water, electricity, or transport access cases, request separated accounts showing upstream and downstream cost allocations. Cross-check implicit transfer prices against actual wholesale prices charged to third parties.
@@ -1002,6 +1012,8 @@ contracts_data |>
   ) +
   theme_antitrust()
 ```
+
+![](../images/monopoly-foreclosure-shares-1.png)
 
 Interpretation: If the foreclosed share (here 58%) exceeds the threshold needed for rivals to reach minimum efficient scale, and contracts are long-duration with staggered renewals, foreclosure concerns are substantial.
 {% endhint %}

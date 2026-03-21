@@ -218,82 +218,7 @@ The *United States v. Google LLC* search distribution trial (2023--2024) showcas
 ### Common impact distribution
 Demonstrate that the alleged conduct had a common effect across class members, a key requirement for class certification.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(patchwork)
-
-# Simulated individual-level treatment effects
-# Replace with actual class member data from your damages model
-set.seed(789)
-n_members <- 500
-
-class_data <- tibble(
-  member_id = 1:n_members,
-  treatment_effect = rnorm(n_members, mean = 15, sd = 4),  # Common positive impact
-  baseline_damages = runif(n_members, 50, 200),
-  geographic_region = sample(c("Region A", "Region B", "Region C"),
-                             n_members, replace = TRUE),
-  purchase_frequency = sample(c("Low", "Medium", "High"),
-                              n_members, replace = TRUE,
-                              prob = c(0.3, 0.5, 0.2))
-) |>
-  mutate(
-    total_damages = baseline_damages + treatment_effect,
-    purchase_frequency = factor(purchase_frequency,
-                                levels = c("Low", "Medium", "High"))
-  )
-
-# Plot 1: Distribution of treatment effects
-p1 <- ggplot(class_data, aes(x = treatment_effect)) +
-  geom_histogram(bins = 30, fill = "#0072B2", alpha = 0.8,
-                color = "white") +
-  geom_vline(xintercept = mean(class_data$treatment_effect),
-            linetype = "dashed", color = "#D55E00", linewidth = 1.2) +
-  annotate("text",
-          x = mean(class_data$treatment_effect),
-          y = Inf,
-          label = paste0("Mean effect: $",
-                        round(mean(class_data$treatment_effect), 2)),
-          hjust = -0.1, vjust = 2, size = 4, fontface = "bold") +
-  scale_x_continuous(labels = scales::dollar_format()) +
-  labs(
-    title = "Distribution of Individual Treatment Effects",
-    subtitle = "Common impact across class members (positive mean effect)",
-    x = "Treatment Effect ($)",
-    y = "Number of Class Members",
-    caption = "Illustrative data. Replace with actual class member damages calculations."
-  ) +
-  theme_antitrust() +
-  theme(plot.title.position = "plot")
-
-# Plot 2: Treatment effect by subgroup
-p2 <- ggplot(class_data, aes(x = geographic_region,
-                              y = treatment_effect,
-                              fill = geographic_region)) +
-  geom_boxplot(alpha = 0.7, outlier.alpha = 0.3) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
-  scale_y_continuous(labels = scales::dollar_format()) +
-  scale_fill_brewer(palette = "Set2") +
-  labs(
-    title = "Treatment Effect by Geographic Region",
-    subtitle = "Effect is positive across all subgroups (common impact)",
-    x = NULL,
-    y = "Treatment Effect ($)"
-  ) +
-  theme_antitrust() +
-  theme(
-    legend.position = "none",
-    plot.title.position = "plot"
-  )
-
-# Combine plots
-(p1 | p2) + plot_annotation(
-  title = "Common Impact Analysis for Class Certification",
-  subtitle = "Demonstrating that conduct had common effect across class members",
-  caption = "Illustrative data. Replace with actual class member impact calculations."
-)
-```
+![](../images/litigation-common-impact-dist-1.png)
 
 **Expert report presentation:**
 - Present central estimate prominently
@@ -415,6 +340,8 @@ cat(paste0("Expert opinions: ",
           sum(nodes$category == "Expert opinion"), "\n"))
 ```
 
+![](../images/litigation-evidence-network-1.png)
+
 **Daubert/Kumho preparation:**
 - Each opinion traceable to specific evidence
 - Multiple independent sources support key findings
@@ -462,6 +389,8 @@ expert_timeline |>
   select(date, event, category) |>
   print(n = Inf)
 ```
+
+![](../images/litigation-expert-timeline-1.png)
 
 ### Individual vs. aggregate damages
 Show how individual class member damages aggregate to total class damages, important for both class certification and damages calculation.
@@ -593,6 +522,8 @@ cat(paste0("Top 10% of class accounts for ",
             sum(individual_damages$damages), accuracy = 0.1),
           " of total damages\n"))
 ```
+
+![](../images/litigation-individual-damages-1.png)
 
 **Class certification considerations:**
 - Show damages are calculable on class-wide basis

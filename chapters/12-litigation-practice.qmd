@@ -226,6 +226,7 @@ Demonstrate that the alleged conduct had a common effect across class members, a
 #| fig-height: 7
 library(dplyr)
 library(ggplot2)
+source("program/R/helpers.R")
 library(patchwork)
 
 # Simulated individual-level treatment effects

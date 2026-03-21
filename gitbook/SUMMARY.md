@@ -17,5 +17,5 @@
 * [Antitrust and Labor Markets](chapters/10-labor-markets.md)
 * [Innovation, Intellectual Property, and Antitrust](chapters/11-innovation-ip.md)
 * [Litigation Practice: Evidence and Expert Work](chapters/12-litigation-practice.md)
-* [Closing](chapters/14-closing.md)
 * [Empirical Appendix and Templates](chapters/13-empirical-appendix.md)
+* [Closing](chapters/14-closing.md)

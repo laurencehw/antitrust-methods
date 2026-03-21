@@ -110,6 +110,9 @@ ggplot(stack, aes(xmin = start, xmax = end, ymin = 0, ymax = 1, fill = component
         axis.ticks.y = element_blank(),
         legend.position = "none")
 ```
+
+![](../images/innovation-royalty-stack-1.png)
+
 Replace the illustrative stack with licensing data (often produced during litigation) or sanitized aggregates from public FRAND rate determinations. Cite FRAND rate determinations (e.g., UK Unwired Planet, Optis) for benchmarking, which are available through court records.
 
 ### Event study for injunction announcements
@@ -152,6 +155,9 @@ ggplot(event_data, aes(x = day, y = car, color = firm)) +
   ) +
   theme_antitrust()
 ```
+
+![](../images/innovation-frand-event-1.png)
+
 Replace synthetic returns with `tidyquant::tq_get()` using actual tickers and event dates from FRAND rulings (e.g., Optis v. Apple (Uk Optis Apple, 2023), Unwired Planet (Uk Unwired Planet, 2017)).
 
 ## Pay-for-delay and reverse payments
@@ -307,6 +313,8 @@ tryCatch({
           "data/raw/patents_by_sector_year.csv exist.")
 })
 ```
+
+![Source: PatentsView (USPTO bulk download). Real data.](../images/innovation-patent-trends-1.png)
 
 The acceleration in patent grants since 2000---driven particularly by computer/electronics, telecommunications, and biotech---coincides with the period of most active antitrust scrutiny of innovation markets. Rising patent density increases the risk of patent thickets and royalty stacking (see the royalty stack visualization above), while sector-level trends help identify where killer acquisition concerns are most acute.
 
@@ -468,6 +476,8 @@ cat(paste0("Net to manufacturer: ",
           round(royalty_components$royalty_pct[
             royalty_components$component == "Net to manufacturer"], 1), "%\n"))
 ```
+
+![](../images/innovation-royalty-waterfall-1.png)
 
 **Key concerns:**
 - **Royalty stacking**: Multiple SEP holders each claiming a "reasonable" royalty can collectively make manufacturing unprofitable.
@@ -643,6 +653,8 @@ patents |>
   print()
 ```
 
+![](../images/innovation-patent-network-1.png)
+
 **Key insights:**
 - **Central patents**: High betweenness centrality indicates "bottleneck" patents that many others depend on.
 - **Patent thickets**: Dense clusters suggest overlapping IP that may impede innovation.
@@ -721,6 +733,8 @@ cat("\nDifference-in-differences estimate:\n")
 summary(did_model)
 ```
 
+![](../images/innovation-rd-event-1.png)
+
 **Interpretation:**
 - **Pre-trends**: Parallel trends before merger support DiD identification.
 - **Treatment effect**: Negative coefficient suggests merger reduced R&D.
@@ -784,6 +798,8 @@ cat("Phase II to Phase III: ~30-40%\n")
 cat("Phase III to Approval: ~60-70%\n")
 cat("\nUse these rates to model expected future approvals and consumer harm from delays.\n")
 ```
+
+![](../images/innovation-clinical-pipeline-1.png)
 
 **Applications:**
 - **Merger review**: Compare pipeline depth before/after transaction.

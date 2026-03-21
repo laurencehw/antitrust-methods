@@ -157,6 +157,8 @@ if (!is.null(bls_emp)) {
 }
 ```
 
+![](../images/labor-bls-employment-1.png)
+
 The following analysis uses real BLS Quarterly Census of Employment and Wages (QCEW) data to measure employment concentration at the county level---a proxy for the labor market vulnerability that monopsony analysis seeks to capture.
 
 ```r
@@ -309,6 +311,8 @@ if (!is.null(qcew_result)) {
       "Place qcew_county_employment.csv in data/raw/.\n")
 }
 ```
+
+![](../images/labor-qcew-hhi-1.png)
 
 Counties with high industry concentration are more vulnerable to monopsony power: when a small number of employers dominate local employment, workers have fewer outside options, giving employers greater wage-setting leverage. This pattern is especially pronounced in rural counties dominated by healthcare, manufacturing, or resource extraction. The uniform-size proxy shown here is a lower bound on true HHI---actual employer-size inequality would push these figures higher still, reinforcing the concern that many local labor markets are "highly concentrated" by the same standards applied in product-market merger review.
 
@@ -466,77 +470,7 @@ South Africa's Competition Commission has emerged as one of the more active comp
 ### Labor market concentration choropleth
 A geographic visualization of labor market concentration helps identify regions and occupations with potential monopsony concerns. This example uses synthetic data but can be adapted for BLS QCEW, Census LEHD, or Stats SA QLFS data.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(maps)
-library(viridis)
-
-# Simulated labor market HHI data by state/province and occupation
-# Replace with BLS QCEW or Census LEHD data aggregated to commuting zones
-set.seed(456)
-us_states <- map_data("state")
-
-# Create synthetic HHI data for states (illustrative)
-labor_hhi <- tibble(
-  region = unique(us_states$region),
-  hhi = runif(length(unique(us_states$region)), 800, 4500),
-  occupation = "Registered Nurses"
-) |>
-  mutate(
-    concentration_level = case_when(
-      hhi < 1000 ~ "Unconcentrated",
-      hhi < 1800 ~ "Moderately concentrated",
-      TRUE ~ "Highly concentrated"
-    ),
-    concentration_level = factor(
-      concentration_level,
-      levels = c("Unconcentrated", "Moderately concentrated",
-                 "Highly concentrated")
-    )
-  )
-
-# Join with map data
-us_map <- us_states |>
-  left_join(labor_hhi, by = "region")
-
-# Choropleth map
-ggplot(us_map, aes(x = long, y = lat, group = group, fill = hhi)) +
-  geom_polygon(color = "white", linewidth = 0.2) +
-  scale_fill_viridis_c(
-    option = "plasma",
-    direction = -1,
-    breaks = c(1000, 1800, 3000),
-    labels = c("1,000\n(Unconcentrated)",
-               "1,800\n(Presumption)",
-               "3,000\n(High)")
-  ) +
-  labs(
-    title = "Labor Market Concentration by State",
-    subtitle = "HHI for Registered Nurses (Illustrative Data)",
-    fill = "HHI",
-    caption = "Replace with BLS QCEW/LEHD data. Commuting zones provide more granular analysis than states."
-  ) +
-  theme_void(base_size = 12) +
-  theme(
-    plot.title = element_text(face = "bold", hjust = 0.5),
-    plot.subtitle = element_text(hjust = 0.5),
-    legend.position = "right"
-  ) +
-  coord_map()
-
-# Summary statistics by concentration level
-cat("\nConcentration distribution:\n")
-labor_summary <- labor_hhi |>
-  group_by(concentration_level) |>
-  summarise(
-    count = n(),
-    mean_hhi = mean(hhi),
-    median_hhi = median(hhi),
-    .groups = "drop"
-  )
-print(labor_summary, n = Inf)
-```
+![](../images/labor-hhi-static-map-1.png)
 
 **Interpretation:**
 - **HHI < 1,000**: Competitive labor markets; multiple employers compete for workers.
@@ -645,6 +579,8 @@ labor_occ |>
   knitr::kable(digits = 0, caption = "Occupations with Highest Concentration")
 ```
 
+![](../images/labor-hhi-comparison-1.png)
+
 **Key insights:**
 - **Rural areas** typically show higher concentration due to fewer employers.
 - **Low-skill occupations** (fast food, warehouse) often face more concentration than high-skill occupations with remote work options.
@@ -705,6 +641,8 @@ wage_model <- lm(wage_gap ~ hhi, data = wage_impact)
 cat("\nRegression: Wage gap ~ HHI\n")
 summary(wage_model)
 ```
+
+![](../images/labor-hhi-wage-impact-1.png)
 
 **How to use these visualizations:**
 - **Enforcement priorities**: Focus investigations on high-HHI markets.

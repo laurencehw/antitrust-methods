@@ -719,7 +719,7 @@ bids <- read.csv("data/derived/cartel_cement_bids.csv")
 
 # Feature engineering
 features <- bids |>
-  group_by(tender_id) |>
+  group_by(project_id) |>
   summarise(
     cv_bids = sd(winning_bid) / mean(winning_bid),
     n_bidders = n(),

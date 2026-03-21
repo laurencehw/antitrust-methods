@@ -1,6 +1,7 @@
 project:
   type: book
   output-dir: _book
+  execute-dir: project
 
 book:
   title: "Antitrust Methods: Research and Practice"
@@ -76,8 +77,7 @@ execute:
   freeze: auto
   warning: false
   message: false
-  # Run code from project root so shared helpers are found
-  execute-dir: project
+  # execute-dir is set at project level above
 
 knitr:
   opts_chunk:

@@ -118,6 +118,7 @@ Benchmarking and yardstick competition compare regulated entities to peers to se
 ```r
 library(dplyr)
 library(ggplot2)
+source("program/R/helpers.R")
 
 utilities <- tibble::tribble(
   ~entity, ~opex_per_unit, ~quality_score,
@@ -141,6 +142,9 @@ ggplot(utilities, aes(x = opex_per_unit, y = quality_score, label = entity)) +
   ) +
   theme_antitrust()
 ```
+
+![](../images/regulation-benchmark-1.png)
+
 Replace the illustrative tibble with regulator filings (e.g., NERSA, Ofgem, FERC Form 1), which are typically publicly available from regulatory agencies.
 
 ## Remedy design after antitrust findings
@@ -325,6 +329,8 @@ remedy_summary <- remedy_events |>
 print(remedy_summary, n = Inf)
 ```
 
+![](../images/regulation-remedy-timeline-1.png)
+
 **How to use this timeline:**
 - **Decision events** (blue): Key regulatory or tribunal decisions establishing or modifying remedies.
 - **Technical milestones** (green): System launches, API deployments, portal go-lives.
@@ -424,6 +430,8 @@ ggplot(remedy_events_swim, aes(x = date, y = as.numeric(swimlane))) +
   ) +
   guides(fill = "none")
 ```
+
+![](../images/regulation-remedy-swimlane-1.png)
 
 **Swimlane benefits:**
 - Separates legal, technical, and operational workstreams for clarity.

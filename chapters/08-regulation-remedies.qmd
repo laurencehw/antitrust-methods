@@ -119,6 +119,7 @@ Benchmarking and yardstick competition compare regulated entities to peers to se
 #| warning: false
 library(dplyr)
 library(ggplot2)
+source("program/R/helpers.R")
 
 utilities <- tibble::tribble(
   ~entity, ~opex_per_unit, ~quality_score,

@@ -136,54 +136,7 @@ Three debates recur in nearly every case. First, **stated vs. revealed preferenc
 ### Event study around a merger announcement
 This figure uses publicly available equity data to demonstrate how to structure an event-study diagnostic for merger retrospectives or policy shocks. Replace tickers and the `event_date` to align with a specific matter; the scaffold keeps everything tidy for quick reporting.
 
-```r
-library(tidyquant)
-library(dplyr)
-library(ggplot2)
-source("program/R/helpers.R")
-
-event_date <- as.Date("2013-02-14") # American Airlines/US Airways announcement
-tickers <- c("AAL", "DAL", "LUV", "SPY") # SPY proxy for market return
-
-prices <- tq_get(
-  tickers,
-  from = event_date - lubridate::days(180),
-  to   = event_date + lubridate::days(180)
-) |>
-  dplyr::group_by(symbol) |>
-  dplyr::arrange(date) |>
-  dplyr::mutate(ret = log(adjusted) - log(dplyr::lag(adjusted))) |>
-  dplyr::ungroup()
-
-market <- prices |>
-  dplyr::filter(symbol == "SPY") |>
-  dplyr::select(date, mkt_ret = ret)
-
-cars <- prices |>
-  dplyr::filter(symbol != "SPY") |>
-  dplyr::left_join(market, by = "date") |>
-  dplyr::mutate(
-    abnormal_ret = ret - mkt_ret,
-    rel_day = as.integer(date - event_date)
-  ) |>
-  dplyr::filter(rel_day >= -30, rel_day <= 30, !is.na(abnormal_ret)) |>
-  dplyr::group_by(symbol) |>
-  dplyr::arrange(rel_day) |>
-  dplyr::mutate(car = cumsum(abnormal_ret))
-
-ggplot(cars, aes(x = rel_day, y = car, color = symbol)) +
-  geom_hline(yintercept = 0, linewidth = 0.3, color = "gray65") +
-  geom_line(linewidth = 0.9) +
-  labs(
-    title = "Cumulative Abnormal Returns Around Merger Announcement",
-    subtitle = "Airline equities vs. SPY benchmark (±30 trading days)",
-    x = "Event time (days relative to 2013-02-14)",
-    y = "Cumulative abnormal return",
-    color = NULL
-  ) +
-  theme_antitrust() +
-  theme(legend.position = "bottom")
-```
+![](../images/research-design-merger-event-1.png)
 
 ## Exercises
 

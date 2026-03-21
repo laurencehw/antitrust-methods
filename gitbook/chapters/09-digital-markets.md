@@ -309,6 +309,9 @@ ggplot(ranking, aes(slot, ctr, color = listing)) +
   theme_antitrust() +
   theme(legend.position = "bottom")
 ```
+
+![](../images/digital-ranking-1.png)
+
 Populate the tibble with actual ranking data (e.g., OIPMI buy-box audits, CMA Amazon Marketplace analysis) or maintain sanitized values in `data/examples/digital-ranking.csv`. The CMA's market studies are publicly available at [gov.uk/cma](https://www.gov.uk/government/organisations/competition-and-markets-authority).
 
 ### Default-choice event study
@@ -363,6 +366,9 @@ ggplot(coefs, aes(x = rel_month, y = estimate)) +
   ) +
   theme_antitrust()
 ```
+
+![](../images/digital-default-event-1.png)
+
 Replace the synthetic panel with DMA compliance reports, CMA choice screen experiments, or telemetry from browser/search default changes.
 
 ## Methodologies
@@ -401,82 +407,7 @@ Replace the synthetic panel with DMA compliance reports, CMA choice screen exper
 ### Multi-homing patterns
 Multi-homing patterns reveal competitive constraints and switching costs. The following visualization shows the distribution of users across platform combinations, helping identify whether platforms compete head-to-head or serve distinct niches.
 
-```r
-library(dplyr)
-library(ggplot2)
-
-# Simulated multi-homing survey data
-# Replace with OIPMI survey data or DMA compliance reports
-set.seed(234)
-n_users <- 1000
-
-multihoming <- tibble(
-  user_id = 1:n_users,
-  platform_a = sample(c("Active", "Inactive"), n_users, replace = TRUE,
-                     prob = c(0.7, 0.3)),
-  platform_b = sample(c("Active", "Inactive"), n_users, replace = TRUE,
-                     prob = c(0.5, 0.5)),
-  platform_c = sample(c("Active", "Inactive"), n_users, replace = TRUE,
-                     prob = c(0.3, 0.7))
-) |>
-  mutate(
-    pattern = case_when(
-      platform_a == "Active" & platform_b == "Active" & platform_c == "Active" ~ "All three",
-      platform_a == "Active" & platform_b == "Active" ~ "A + B",
-      platform_a == "Active" & platform_c == "Active" ~ "A + C",
-      platform_b == "Active" & platform_c == "Active" ~ "B + C",
-      platform_a == "Active" ~ "A only",
-      platform_b == "Active" ~ "B only",
-      platform_c == "Active" ~ "C only",
-      TRUE ~ "None"
-    )
-  )
-
-# Aggregate flows
-flows <- multihoming |>
-  count(pattern) |>
-  mutate(
-    pct = n / sum(n),
-    pattern = factor(pattern,
-                    levels = c("A only", "B only", "C only",
-                              "A + B", "A + C", "B + C", "All three", "None"))
-  ) |>
-  arrange(pattern)
-
-# Bar chart showing multi-homing patterns
-p1 <- ggplot(flows, aes(x = pattern, y = pct, fill = pattern)) +
-  geom_col(width = 0.7) +
-  geom_text(aes(label = scales::percent(pct, accuracy = 0.1)),
-            vjust = -0.5, size = 3.5) +
-  scale_y_continuous(labels = scales::percent_format(),
-                     expand = expansion(mult = c(0, 0.1))) +
-  scale_fill_brewer(palette = "Set2") +
-  labs(
-    title = "Multi-homing Patterns Across Platforms",
-    subtitle = "User activity across Platform A, B, and C",
-    x = NULL,
-    y = "Share of Users",
-    caption = "Illustrative data. Replace with OIPMI survey or DMA compliance reports."
-  ) +
-  theme_antitrust() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "none",
-    plot.title.position = "plot"
-  )
-
-p1
-
-# Summary statistics
-cat("\nMulti-homing summary:\n")
-cat(paste0("Single-homing (one platform only): ",
-          scales::percent(sum(flows$pct[flows$pattern %in%
-                              c("A only", "B only", "C only")]),
-                         accuracy = 0.1), "\n"))
-cat(paste0("Multi-homing (2+ platforms): ",
-          scales::percent(sum(flows$pct[grepl("\\+|three", flows$pattern)]),
-                         accuracy = 0.1), "\n"))
-```
+![](../images/digital-multihoming-plot-1.png)
 
 **Interpretation:**
 -   **High single-homing**: Suggests strong lock-in, switching costs, or network effects. Platforms may have market power.
@@ -492,107 +423,7 @@ cat(paste0("Multi-homing (2+ platforms): ",
 ### Choice screen / default effect visualization
 Quantify how defaults affect market shares using difference-in-differences or event studies around choice screen implementations.
 
-```r
-library(fixest)
-library(dplyr)
-library(ggplot2)
-library(patchwork)
-
-# Simulated data: Android choice screen impact (EU DMA context)
-# Replace with actual DMA compliance data or CMA experiments
-set.seed(345)
-weeks <- -24:24
-countries <- c("Control (no choice screen)", "Treatment (choice screen)")
-
-default_data <- expand.grid(
-  week = weeks,
-  country = countries
-) |>
-  mutate(
-    # Pre-intervention: both countries similar
-    # Post-intervention: treatment shows rival gain
-    rival_share = case_when(
-      country == "Control (no choice screen)" ~ 0.05 + 0.0005 * week + rnorm(n(), 0, 0.01),
-      week < 0 ~ 0.05 + 0.0005 * week + rnorm(n(), 0, 0.01),
-      TRUE ~ 0.05 + 0.0005 * week + 0.08 + rnorm(n(), 0, 0.01)
-    ),
-    rival_share = pmax(0.01, pmin(0.25, rival_share))
-  )
-
-# Time series plot
-p1 <- ggplot(default_data, aes(x = week, y = rival_share,
-                                color = country, linetype = country)) +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40",
-             linewidth = 1) +
-  stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
-  annotate("text", x = 0, y = 0.22, label = "Choice screen\nintroduced",
-           hjust = -0.1, size = 3.5, fontface = "italic") +
-  scale_color_manual(values = c("Control (no choice screen)" = "#999999",
-                                 "Treatment (choice screen)" = "#0072B2")) +
-  scale_linetype_manual(values = c("Control (no choice screen)" = "dashed",
-                                   "Treatment (choice screen)" = "solid")) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  labs(
-    title = "Impact of Choice Screen on Rival Search Engine Share",
-    subtitle = "Difference-in-Differences: Treatment vs. Control Countries",
-    x = "Weeks relative to choice screen introduction",
-    y = "Rival search engine share",
-    color = NULL,
-    linetype = NULL
-  ) +
-  theme_antitrust() +
-  theme(
-    legend.position = "bottom",
-    plot.title.position = "plot"
-  )
-
-# Coefficient plot (event study coefficients)
-# Simulated DiD estimates
-did_coefs <- tibble(
-  week = weeks[weeks != -1]  # reference period
-) |>
-  mutate(
-    estimate = 0.08 * as.numeric(week >= 0) + rnorm(n(), 0, 0.01),
-    ci_lower = estimate - 1.96 * 0.01,
-    ci_upper = estimate + 1.96 * 0.01
-  )
-
-p2 <- ggplot(did_coefs, aes(x = week, y = estimate)) +
-  geom_hline(yintercept = 0, linetype = "solid", color = "gray40") +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40",
-             linewidth = 1) +
-  geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper),
-              alpha = 0.2, fill = "#0072B2") +
-  geom_line(color = "#0072B2", linewidth = 1) +
-  geom_point(color = "#0072B2", size = 2) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  labs(
-    title = "Event Study Coefficients",
-    subtitle = "Treatment effect by week (relative to week -1)",
-    x = "Weeks relative to choice screen",
-    y = "Effect on rival share (percentage points)",
-    caption = "Illustrative data. Replace with DMA compliance reports or CMA experiments."
-  ) +
-  theme_antitrust() +
-  theme(plot.title.position = "plot")
-
-# Combined plot
-p1 / p2
-
-# Summary statistics
-pre_treatment <- mean(default_data$rival_share[
-  default_data$country == "Treatment (choice screen)" & default_data$week < 0])
-post_treatment <- mean(default_data$rival_share[
-  default_data$country == "Treatment (choice screen)" & default_data$week >= 0])
-effect <- post_treatment - pre_treatment
-
-cat("\nChoice screen impact summary:\n")
-tibble::tibble(
-  metric = c("Pre-treatment share", "Post-treatment share", "Treatment Effect"),
-  value = c(pre_treatment, post_treatment, effect)
-) |>
-  knitr::kable(digits = 3, caption = "Impact of Choice Screen")
-```
+![](../images/digital-default-plot-1.png)
 
 **How to use this analysis:**
 - **Pre-trends**: Check parallel trends before intervention to validate DiD assumptions.
@@ -675,6 +506,8 @@ fees |>
   mutate(total_fee = scales::percent(total_fee, accuracy = 0.1)) |>
   print(n = Inf)
 ```
+
+![](../images/digital-fee-structure-1.png)
 
 **Key insights:**
 - **App stores**: 30% standard (15% for small developers under $1M revenue).
@@ -769,6 +602,8 @@ cat(paste0("\nPlatform A share trend: ",
             market_evolution$platform == "Platform A"], accuracy = 0.1),
           " (2023)\n"))
 ```
+
+![](../images/digital-market-evolution-1.png)
 
 **Data sources:**
 - **StatCounter**: Global browser, OS, search engine stats

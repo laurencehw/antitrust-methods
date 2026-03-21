@@ -164,6 +164,8 @@ ggplot(chronology, aes(x = date, y = category, color = category)) +
   theme(legend.position = "none")
 ```
 
+![](../images/chronology-viz-1.png)
+
 ## Diagnostic Gallery
 
 This section provides reusable diagnostic visualizations that apply across chapters. Use these templates to validate identification assumptions, assess robustness, and communicate uncertainty in expert reports.
@@ -275,6 +277,8 @@ cat(paste0("Mean pre-period coefficient: ",
           round(mean(pre_period_coefs$estimate), 3), "\n"))
 cat(paste0("Joint F-test p-value: [run wald_test on event_study model]\n"))
 ```
+
+![](../images/diagnostic-pretrends-1.png)
 
 **Interpretation:**
 - **Pre-trends near zero**: Validates parallel trends assumption
@@ -395,6 +399,8 @@ balance_combined |>
   print()
 ```
 
+![](../images/diagnostic-balance-1.png)
+
 **Interpretation:**
 - **SMD < 0.1**: Acceptable balance (Austin, 2009)
 - **Matching improves balance**: Lines should move toward zero
@@ -491,6 +497,8 @@ cat(paste0("All specifications significant? ",
 cat(paste0("Median estimate: ", round(median(spec_results$estimate), 2), "\n"))
 ```
 
+![](../images/diagnostic-spec-curve-1.png)
+
 **Interpretation:**
 - **Stable across specs**: Effect robust to model choices
 - **All CIs exclude zero**: Consistent significance
@@ -575,6 +583,8 @@ p4 <- ggplot(diagnostics, aes(x = residual)) +
 )
 ```
 
+![](../images/diagnostic-residuals-1.png)
+
 **What to look for:**
 - **Residuals vs. Fitted**: No pattern (confirms linearity)
 - **Q-Q Plot**: Points follow line (confirms normality)
@@ -651,6 +661,8 @@ cat("\nMinimum sample size for 80% power:\n")
 print(power_summary, n = Inf)
 ```
 
+![](../images/diagnostic-power-1.png)
+
 **Use this for:**
 - Study design and sample size planning
 - Explaining null results (underpowered?)
@@ -682,7 +694,7 @@ bids <- read.csv("data/derived/cartel_cement_bids.csv")
 
 # Feature engineering
 features <- bids |>
-  group_by(tender_id) |>
+  group_by(project_id) |>
   summarise(
     cv_bids = sd(winning_bid) / mean(winning_bid),
     n_bidders = n(),

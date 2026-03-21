@@ -249,18 +249,67 @@ def convert_callouts(content: str) -> str:
     return re.sub(callout_pattern, replace_callout, content, flags=re.DOTALL)
 
 
-def convert_r_chunks(content: str) -> str:
-    """Convert Quarto R code chunks to fenced code blocks."""
-    # Pattern for R chunks with options
-    chunk_pattern = r'```\{r\}\n(#\|[^\n]*\n)*'
+def convert_r_chunks(content: str, available_images: set = None) -> str:
+    """Convert Quarto R code chunks to fenced code blocks.
 
-    def replace_chunk_start(match):
-        return '```r\n'
+    Extracts chunk labels and fig-caps from #| options before stripping them.
+    For chunks that produce figures (matching an image in available_images),
+    inserts a markdown image reference. For echo: false chunks, the code block
+    is removed entirely and only the figure is shown.
+    """
+    if available_images is None:
+        available_images = set()
 
-    # First pass: simple chunk starts
-    content = re.sub(r'```\{r\}', '```r', content)
+    # Match full R code chunks: ```{r} ... ```
+    chunk_pattern = re.compile(
+        r'```\{r\}\n((?:#\|[^\n]*\n)*)' +  # opening + chunk options
+        r'(.*?)' +                            # code body
+        r'\n```',                              # closing
+        re.DOTALL
+    )
 
-    # Remove #| chunk options (Quarto-specific)
+    def replace_chunk(match):
+        options_block = match.group(1)
+        code_body = match.group(2)
+
+        # Parse chunk options
+        label = None
+        fig_cap = None
+        echo = True
+        eval_opt = True
+        for line in options_block.strip().split('\n'):
+            line = line.strip()
+            if line.startswith('#| label:'):
+                label = line.split(':', 1)[1].strip().strip('"').strip("'")
+            elif line.startswith('#| fig-cap:'):
+                fig_cap = line.split(':', 1)[1].strip().strip('"').strip("'")
+            elif line.startswith('#| echo:'):
+                val = line.split(':', 1)[1].strip().lower()
+                echo = val not in ('false', 'no')
+            elif line.startswith('#| eval:'):
+                val = line.split(':', 1)[1].strip().lower()
+                eval_opt = val not in ('false', 'no')
+
+        # Check if this chunk has a rendered figure
+        image_name = f"{label}-1.png" if label else None
+        has_figure = image_name and image_name in available_images
+
+        parts = []
+
+        # Include code block unless echo: false
+        if echo:
+            parts.append(f"```r\n{code_body}\n```")
+
+        # Insert figure reference if available
+        if has_figure:
+            caption = fig_cap or ''
+            parts.append(f'\n![{caption}](../images/{image_name})\n')
+
+        return '\n'.join(parts) if parts else ''
+
+    content = chunk_pattern.sub(replace_chunk, content)
+
+    # Clean up any remaining #| lines (from chunks that didn't match the pattern)
     content = re.sub(r'^#\| .*$\n', '', content, flags=re.MULTILINE)
 
     return content
@@ -302,7 +351,8 @@ def convert_yaml_frontmatter(content: str) -> tuple:
     return '', content
 
 
-def convert_chapter(input_path: Path, output_path: Path) -> None:
+def convert_chapter(input_path: Path, output_path: Path,
+                    available_images: set = None) -> None:
     """Convert a single chapter from .qmd to .md."""
     print(f"Converting: {input_path.name}")
 
@@ -314,7 +364,7 @@ def convert_chapter(input_path: Path, output_path: Path) -> None:
     title = title_match.group(1) if title_match else input_path.stem
 
     # Apply conversions (crossrefs before citations so @sec- doesn't get mangled)
-    content = convert_r_chunks(content)
+    content = convert_r_chunks(content, available_images=available_images)
     content = convert_callouts(content)
     content = convert_crossrefs(content)
     content = convert_citations(content)
@@ -384,9 +434,15 @@ def main():
     chapters_dir = base_dir / 'chapters'
     output_dir = base_dir / 'gitbook'
     output_chapters = output_dir / 'chapters'
+    images_dir = output_dir / 'images'
 
     # Ensure output directories exist
     output_chapters.mkdir(parents=True, exist_ok=True)
+    images_dir.mkdir(parents=True, exist_ok=True)
+
+    # Collect available rendered images
+    available_images = {p.name for p in images_dir.glob('*.png')}
+    print(f"Found {len(available_images)} rendered images in gitbook/images/")
 
     # Get all .qmd files
     qmd_files = sorted(chapters_dir.glob('*.qmd'))
@@ -398,13 +454,15 @@ def main():
 
     # Convert index to README
     if index_qmd.exists():
-        title = convert_chapter(index_qmd, output_dir / 'README.md')
+        title = convert_chapter(index_qmd, output_dir / 'README.md',
+                                available_images=available_images)
         print("Converted index.qmd to README.md")
 
     # Convert each chapter
     for qmd_file in qmd_files:
         output_file = output_chapters / qmd_file.with_suffix('.md').name
-        title = convert_chapter(qmd_file, output_file)
+        title = convert_chapter(qmd_file, output_file,
+                                available_images=available_images)
         chapters.append((output_file.name, title))
 
     # Create GitBook configuration files

@@ -100,33 +100,6 @@ The workflow above identifies *what* to do; this section shows *how* to do it. E
 
 We can calculate critical loss thresholds for various hypothetical segments (e.g., Commercial, Government, SMB) to test if a price increase would be profitable.
 
-```r
-library(dplyr)
-library(ggplot2)
-source("program/R/helpers.R")
-
-critical_loss <- function(margin, price_increase) {
-  price_increase / (price_increase + margin)
-}
-
-margin <- 0.25
-price_increase <- 0.05
-cl_threshold <- critical_loss(margin, price_increase)
-
-observed <- tibble::tribble(
-  ~segment, ~observed_share_loss,
-  "Commercial group", 0.08, # Hypothetical segments
-  "Government", 0.03,
-  "SMB", 0.12
-) |>
-  mutate(
-    critical_loss = cl_threshold,
-    passes_test = observed_share_loss > critical_loss
-  )
-
-knitr::kable(observed, caption="Illustrative Critical Loss by Customer Segment")
-```
-
 ### Critical-loss vs. actual-loss curve
 This visualization compares the theoretical critical loss threshold to observed share losses across different margin assumptions. It helps communicate whether a candidate market "passes" the SSNIP test.
 
@@ -200,6 +173,8 @@ p1
 cat("\nCritical loss decision table:\n")
 knitr::kable(cl_table, digits=3, caption="Critical Loss Decision Table")
 ```
+
+![](../images/critical-loss-curve-1.png)
 
 **How to use this chart:** For a given margin estimate (horizontal axis), find the critical loss threshold (the curve). If your observed or estimated actual loss (from switching data, surveys, or diversion ratios) falls *above* the curve, customers switch too readily for a hypothetical monopolist to profitably raise prices by 5-10%, suggesting the candidate market is too narrow and should be expanded. Conversely, if actual loss is *below* the curve, the market definition may be defensible.
 
@@ -303,6 +278,8 @@ route_hhi |>
   head(10) |>
   knitr::kable(caption = "Top Route Concentration Stats")
 ```
+
+![](../images/nyc-route-heatmap-1.png)
 
 **Interpretation:** Routes with HHI > 1,800 (2023 US Merger Guidelines structural presumption threshold) may warrant closer scrutiny. The visualization shows that many NYC routes are served by only 1-2 carriers with dominant shares, which could support narrow route-level market definitions in merger analysis. In practice, you would supplement this with pricing data, switching patterns, and qualitative evidence about entry barriers.
 
@@ -433,6 +410,8 @@ self_sufficiency |>
   knitr::kable(digits=2, caption="Regional Self-Sufficiency Scores")
 ```
 
+![](../images/geographic-flows-1.png)
+
 **How to use this analysis:**
 - **High self-sufficiency** (diagonal dominance): If 70-80%+ of shipments from a region stay within that region, it suggests the region may be a distinct geographic market.
 - **Low cross-flows**: Minimal shipments between distant regions (e.g., Northeast <-> West) suggest they don't constrain each other's pricing.
@@ -554,6 +533,8 @@ diversion_matrix |>
   select(to, diversion_ratio, switchers, interpretation) |>
   print(n = Inf)
 ```
+
+![](../images/diversion-ratios-1.png)
 
 **Interpretation for merger analysis:**
 - **High diversion between merger parties** (e.g., 25-35% from A→B): Strong evidence products compete closely; supports narrow market definition and raises UPP concerns.

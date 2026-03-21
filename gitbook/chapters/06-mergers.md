@@ -276,6 +276,8 @@ cat(paste0("Combined firm post-merger share: ",
            scales::percent(sum(products$share), accuracy = 0.1), "\n"))
 ```
 
+![](../images/merger-sim-example-1.png)
+
 **Key takeaways from this simulation:**
 
 1. **Diversion ratios** determine how much pricing pressure the merger creates. Higher diversion between merging products = higher UPP.
@@ -433,6 +435,8 @@ p3 <- pricing_data |>
   caption = "Synthetic data for illustration. Replace with actual pricing and capacity data."
 )
 ```
+
+![](../images/maverick-detection-1.png)
 
 **Interpreting maverick screens:**
 
@@ -593,6 +597,8 @@ ggplot(scenarios, aes(x = edm_magnitude, y = vupp_effect, fill = net_effect)) +
   theme_antitrust()
 ```
 
+![](../images/merger-vertical-balance-1.png)
+
 **Data sources for vertical analysis:**
 - **Input pricing**: Contracts, invoices, internal transfer pricing documents
 - **Diversion estimates**: Customer surveys, switching data, or structural demand estimation
@@ -650,6 +656,9 @@ ggplot(cars, aes(rel_day, car, color = symbol)) +
   theme_antitrust() +
   theme(legend.position = "bottom")
 ```
+
+![](../images/merger-stock-event-1.png)
+
 Use CAR patterns as suggestive evidence of coordination or efficiency expectations, but always pair with operational data (capacity, contracts).
 
 ### Southern African merger evidence
@@ -866,6 +875,8 @@ cat(paste0("\nCombined entity share: ",
                           accuracy = 0.1), "\n"))
 ```
 
+![](../images/merger-hhi-dashboard-1.png)
+
 **Interpretation:**
 - **HHI thresholds**: The 2023 US Merger Guidelines establish a structural presumption of illegality when post-merger HHI > 1,800 and the merger increases HHI by more than 100 points.
 - **Delta HHI**: Changes above 100 in concentrated markets (HHI > 1,800) trigger the structural presumption.
@@ -971,6 +982,8 @@ cat(paste0("Price increase: ",
                            sim_components$value[1]) - 1, accuracy = 0.1),
            ")\n"))
 ```
+
+![](../images/merger-sim-waterfall-1.png)
 
 **How to use this waterfall:**
 - **First-order UPP**: Direct pricing pressure from internalizing diversion.
