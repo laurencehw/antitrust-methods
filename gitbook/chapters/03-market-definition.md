@@ -126,8 +126,8 @@ cl_curves <- expand.grid(
 # In practice, these come from loyalty data, surveys, or econometric diversion estimates
 actual_loss_examples <- tibble::tribble(
   ~margin, ~actual_loss, ~scenario,
-  0.20, 0.12, "Observed switching (loyalty data)",
-  0.30, 0.08, "Survey-based diversion",
+  0.20, 0.12, "Observed switching",
+  0.30, 0.08, "Survey diversion",
   0.40, 0.06, "Econometric estimate"
 )
 

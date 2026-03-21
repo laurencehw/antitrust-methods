@@ -534,13 +534,19 @@ gas <- fredr(series_id = "GASREGW", observation_start = as.Date("2015-01-01")) |
   rename(price = value) |>
   mutate(week = row_number())
 
-bp <- breakpoints(price ~ week, data = gas, h = 26)
-gas$regime <- factor(cut(gas$week, c(0, bp$breakpoints, Inf)))
+bp_full <- breakpoints(price ~ week, data = gas, h = 26)
+bp <- breakpoints(bp_full, breaks = 4)
+breaks <- c(0, bp$breakpoints, nrow(gas))
+gas$regime <- factor(cut(gas$week, breaks, labels = paste("Regime", seq_len(length(breaks) - 1))))
 
 ggplot(gas, aes(date, price, color = regime)) +
   geom_line(linewidth = 0.8) +
+  geom_vline(
+    xintercept = gas$date[bp$breakpoints],
+    linetype = "dashed", color = "grey40", linewidth = 0.4
+  ) +
   labs(
-    title = "Regular Gasoline Prices: Structural Break Illustration",
+    title = "Gasoline Prices: Structural Break Detection",
     subtitle = "FRED series GASREGW (weekly, US average)",
     x = NULL,
     y = "USD per gallon",

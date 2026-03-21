@@ -620,7 +620,7 @@ p_correlation <- ggplot(correlation_data, aes(x = bundle_penetration, y = rival_
                                    correlation_data$rival_A_share), 2)),
            size = 4, fontface = "bold", color = "gray30") +
   labs(
-    title = "Strong negative correlation: Bundle penetration vs. Rival A share",
+    title = "Bundle penetration vs. rival share",
     subtitle = "Post-bundle introduction (Q8-Q20)",
     x = "Bundle penetration (%)",
     y = "Rival A market share (%)"
