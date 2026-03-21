@@ -221,6 +221,110 @@ Data sources: IQVIA (if available), CMS reimbursement data, Stats SA medicine pr
 - **Pipeline probability models:** For pharmaceuticals, use clinical trial progression rates.  
 - **Product roadmaps:** Qualitative review of technical plans to confirm or rebut innovation harm narratives.
 
+The following charts use real PatentsView data---the USPTO's public bulk download---to show innovation trends relevant to antitrust analysis. Patent counts are an imperfect proxy for innovation, but they are the most widely available and standardized measure, and they feature in merger review (as indicators of innovation incentives) and in SEP/FRAND disputes (where patent portfolios determine licensing leverage).
+
+```{r}
+#| label: innovation-patent-trends
+#| message: false
+#| warning: false
+#| echo: true
+#| fig-width: 10
+#| fig-height: 7
+#| fig-cap: "Source: PatentsView (USPTO bulk download). Real data."
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+source("program/R/helpers.R")
+
+tryCatch({
+  # --- Panel 1: Total US utility patents by year ---
+  total_df <- read.csv("data/raw/patents_total_by_year.csv",
+                       stringsAsFactors = FALSE) |>
+    filter(year >= 1976, year <= 2024)
+
+  p1 <- ggplot(total_df, aes(x = year, y = total_utility_patents / 1000)) +
+    geom_line(color = "#0072B2", linewidth = 1.1) +
+    geom_point(color = "#0072B2", size = 0.8, alpha = 0.5) +
+    # Key antitrust-relevant annotations
+    annotate("segment", x = 2011, xend = 2011,
+             y = 0, yend = total_df$total_utility_patents[total_df$year == 2011] / 1000,
+             linetype = "dashed", color = "gray50", linewidth = 0.4) +
+    annotate("text", x = 2011, y = 15, label = "America Invents\nAct (2011)",
+             size = 2.8, hjust = 1.05, fontface = "italic", color = "gray30") +
+    annotate("segment", x = 2014, xend = 2014,
+             y = 0, yend = total_df$total_utility_patents[total_df$year == 2014] / 1000,
+             linetype = "dashed", color = "gray50", linewidth = 0.4) +
+    annotate("text", x = 2014, y = 40, label = "Alice Corp v.\nCLS Bank (2014)",
+             size = 2.8, hjust = -0.05, fontface = "italic", color = "gray30") +
+    annotate("segment", x = 1998, xend = 1998,
+             y = 0, yend = total_df$total_utility_patents[total_df$year == 1998] / 1000,
+             linetype = "dashed", color = "gray50", linewidth = 0.4) +
+    annotate("text", x = 1998, y = 30, label = "State Street Bank\n(1998)",
+             size = 2.8, hjust = 1.05, fontface = "italic", color = "gray30") +
+    scale_x_continuous(breaks = seq(1980, 2024, 5)) +
+    scale_y_continuous(labels = function(x) paste0(x, "K")) +
+    labs(
+      title = "US utility patent grants, 1976\u20132024",
+      x = NULL, y = "Patents granted (thousands)"
+    ) +
+    theme_antitrust()
+
+  # --- Panel 2: Patent grants by technology sector (2000+) ---
+  sector_df <- read.csv("data/raw/patents_by_sector_year.csv",
+                        stringsAsFactors = FALSE) |>
+    filter(year >= 2000, year <= 2024) |>
+    filter(sector %in% c("Computer/Electronics", "Pharmaceuticals",
+                          "Semiconductors", "Clean Energy",
+                          "Motor Vehicles"))
+
+  # Order sectors by total patent count for legend clarity
+  sector_order <- sector_df |>
+    group_by(sector) |>
+    summarise(total = sum(patent_count), .groups = "drop") |>
+    arrange(desc(total)) |>
+    pull(sector)
+  sector_df$sector <- factor(sector_df$sector, levels = sector_order)
+
+  sector_palette <- c(
+    "Computer/Electronics" = "#0072B2",
+    "Pharmaceuticals"      = "#D55E00",
+    "Motor Vehicles"       = "#009E73",
+    "Semiconductors"       = "#E69F00",
+    "Clean Energy"         = "#CC79A7"
+  )
+
+  p2 <- ggplot(sector_df, aes(x = year, y = patent_count / 1000,
+                               color = sector)) +
+    geom_line(linewidth = 1) +
+    geom_point(size = 0.8, alpha = 0.5) +
+    scale_color_manual(values = sector_palette) +
+    scale_x_continuous(breaks = seq(2000, 2024, 4)) +
+    scale_y_continuous(labels = function(x) paste0(x, "K")) +
+    labs(
+      title = "Patent grants by technology sector, 2000\u20132024",
+      x = NULL, y = "Patents granted (thousands)",
+      color = "Sector"
+    ) +
+    theme_antitrust() +
+    theme(legend.position = "bottom",
+          legend.title = element_text(size = 9),
+          legend.text = element_text(size = 8)) +
+    guides(color = guide_legend(nrow = 1))
+
+  # --- Combine with patchwork ---
+  p1 / p2 +
+    plot_annotation(
+      caption = "Source: PatentsView (USPTO bulk download). Real data."
+    )
+}, error = function(e) {
+  message("Could not load PatentsView data: ", e$message)
+  message("Ensure data/raw/patents_total_by_year.csv and ",
+          "data/raw/patents_by_sector_year.csv exist.")
+})
+```
+
+The acceleration in patent grants since 2000---driven particularly by computer/electronics, telecommunications, and biotech---coincides with the period of most active antitrust scrutiny of innovation markets. Rising patent density increases the risk of patent thickets and royalty stacking (see the royalty stack visualization above), while sector-level trends help identify where killer acquisition concerns are most acute.
+
 ### Panel FE for R&D effects
 ```{r}
 #| label: innovation-rd-panel

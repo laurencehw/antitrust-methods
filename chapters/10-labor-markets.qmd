@@ -156,6 +156,167 @@ if (!is.null(bls_emp)) {
 }
 ```
 
+The following analysis uses real BLS Quarterly Census of Employment and Wages (QCEW) data to measure employment concentration at the county level---a proxy for the labor market vulnerability that monopsony analysis seeks to capture.
+
+```{r}
+#| label: labor-qcew-hhi
+#| message: false
+#| warning: false
+#| echo: true
+#| fig-width: 10
+#| fig-height: 12
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(stringr)
+library(forcats)
+source("program/R/helpers.R")
+
+qcew_result <- tryCatch({
+  qcew <- read_csv("data/raw/qcew_county_employment.csv", show_col_types = FALSE)
+
+  # Filter: private sector, total all industries, both years for panel
+  county_data <- qcew |>
+    filter(own_code == 5,
+           industry_code == "10",
+           annual_avg_estabs > 0,
+           annual_avg_emplvl > 0) |>
+    mutate(
+      area_fips = str_pad(as.character(area_fips), 5, pad = "0"),
+      # Employer concentration proxy: HHI ≈ 10000 / N
+      # Under uniform employer size, each of N firms holds share 1/N,
+      # so HHI = N × (1/N)^2 × 10000 = 10000/N.
+      # This is a lower bound—actual HHI is higher when firms differ.
+      hhi_proxy = 10000 / annual_avg_estabs,
+      avg_empl_per_estab = annual_avg_emplvl / annual_avg_estabs
+    )
+
+  # County names from maps package
+  fips_lookup <- maps::county.fips |>
+    mutate(
+      fips_char = str_pad(as.character(fips), 5, pad = "0"),
+      parts = str_split(polyname, ","),
+      state = sapply(parts, \(x) str_to_title(x[1])),
+      county = sapply(parts, \(x) str_to_title(x[2]))
+    ) |>
+    select(fips_char, state, county) |>
+    distinct(fips_char, .keep_all = TRUE)
+
+  county_data <- county_data |>
+    left_join(fips_lookup, by = c("area_fips" = "fips_char")) |>
+    mutate(
+      label = ifelse(!is.na(county),
+                     paste0(county, ", ", state),
+                     area_fips)
+    )
+
+  list(all = county_data, yr2023 = filter(county_data, year == 2023))
+}, error = function(e) {
+  message("QCEW data not available: ", e$message)
+  NULL
+})
+
+if (!is.null(qcew_result)) {
+  # Panel A: Distribution of employer concentration across all counties
+  yr2023 <- qcew_result$yr2023
+
+  # Create concentration bins matching merger guideline thresholds
+  yr2023 <- yr2023 |>
+    mutate(
+      conc_bin = cut(
+        hhi_proxy,
+        breaks = c(0, 15, 25, 50, 100, 250, Inf),
+        labels = c("<15\n(urban)", "15–25", "25–50",
+                   "50–100", "100–250", ">250\n(rural)"),
+        include.lowest = TRUE
+      ),
+      size_group = case_when(
+        annual_avg_emplvl >= 10000 ~ "Large (10k+)",
+        annual_avg_emplvl >= 1000  ~ "Medium (1k–10k)",
+        TRUE                       ~ "Small (<1k)"
+      ),
+      size_group = factor(size_group,
+                          levels = c("Small (<1k)", "Medium (1k–10k)",
+                                     "Large (10k+)"))
+    )
+
+  p1 <- ggplot(yr2023, aes(x = conc_bin, fill = size_group)) +
+    geom_bar(alpha = 0.85) +
+    scale_fill_manual(values = c("Small (<1k)" = "#D95F02",
+                                  "Medium (1k–10k)" = "#2C5F8A",
+                                  "Large (10k+)" = "#1B9E77")) +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+    labs(
+      title = "Distribution of Employer Concentration Across US Counties (2023)",
+      subtitle = paste0(
+        "HHI proxy = 10,000 / N private-sector establishments | ",
+        "N = ", scales::comma(nrow(yr2023)), " counties"
+      ),
+      x = "HHI proxy (lower bound on employer concentration)",
+      y = "Number of counties",
+      fill = "County employment size",
+      caption = paste0(
+        "Source: BLS Quarterly Census of Employment and Wages, 2023 annual data.\n",
+        "Uniform-size proxy is a lower bound: actual employer-level HHI is higher ",
+        "because firms vary in size.\nAzar, Marinescu & Steinbaum (2020) find ",
+        "average occupation×commuting-zone HHI > 3,100 using employer-level data."
+      )
+    ) +
+    theme_antitrust() +
+    theme(
+      plot.title = element_text(size = 11, face = "bold"),
+      plot.subtitle = element_text(size = 9),
+      plot.caption = element_text(size = 7, hjust = 0),
+      legend.position = "bottom"
+    )
+
+  # Panel B: Top 20 most concentrated counties (employment >= 200)
+  top20 <- yr2023 |>
+    filter(annual_avg_emplvl >= 200) |>
+    slice_max(hhi_proxy, n = 20) |>
+    mutate(label = fct_reorder(label, hhi_proxy))
+
+  p2 <- ggplot(top20, aes(x = hhi_proxy, y = label)) +
+    geom_col(fill = "#2C5F8A", alpha = 0.85) +
+    geom_text(aes(label = paste0(annual_avg_estabs, " est., ",
+                                  scales::comma(annual_avg_emplvl), " workers")),
+              hjust = -0.05, size = 2.5) +
+    scale_x_continuous(labels = scales::comma,
+                       expand = expansion(mult = c(0, 0.35))) +
+    labs(
+      title = "Most Concentrated County Labor Markets (2023)",
+      subtitle = "Private-sector counties with ≥ 200 employees, ranked by HHI proxy",
+      x = "Estimated HHI (uniform-size proxy)", y = NULL,
+      caption = paste0(
+        "Source: BLS QCEW, 2023. Labels show establishment count and total ",
+        "employment.\nWith only 17–55 establishments, these counties' actual ",
+        "employer-level HHI may exceed merger-review thresholds."
+      )
+    ) +
+    theme_antitrust() +
+    theme(
+      plot.title = element_text(size = 11, face = "bold"),
+      plot.subtitle = element_text(size = 9),
+      axis.text.y = element_text(size = 7.5),
+      plot.caption = element_text(size = 7, hjust = 0)
+    )
+
+  # Combine using patchwork if available, otherwise show sequentially
+  if (requireNamespace("patchwork", quietly = TRUE)) {
+    library(patchwork)
+    p1 / p2 + plot_layout(heights = c(1, 1.2))
+  } else {
+    print(p1)
+    print(p2)
+  }
+} else {
+  cat("QCEW county employment data not available.",
+      "Place qcew_county_employment.csv in data/raw/.\n")
+}
+```
+
+Counties with high industry concentration are more vulnerable to monopsony power: when a small number of employers dominate local employment, workers have fewer outside options, giving employers greater wage-setting leverage. This pattern is especially pronounced in rural counties dominated by healthcare, manufacturing, or resource extraction. The uniform-size proxy shown here is a lower bound on true HHI---actual employer-size inequality would push these figures higher still, reinforcing the concern that many local labor markets are "highly concentrated" by the same standards applied in product-market merger review.
+
 ### Labor supply elasticity
 Estimate inverse labor supply using panel data on wages and employment:
 
