@@ -1084,6 +1084,18 @@ contracts[, c("customer", "marginal_units", "effective_marginal_price", "margin_
 **South Africa (Competition Act Section 8):** Prohibits abuse of dominance with explicit provisions for excessive pricing (Section 8(a)) and exclusionary acts (Section 8(c)/(d)). The Tribunal has applied both price-cost tests (*Media24*) and margin squeeze analyses (*Telkom*), with public-interest considerations (employment, SME development) shaping remedy design.
 :::
 
+## Exercises
+
+1. **Conceptual.** Explain the as-efficient competitor (AEC) test for loyalty rebates. Using the effective price waterfall example in this chapter, calculate the effective price of the last 5 units if the rebate threshold were 90% (instead of 95%) of requirements. How does the threshold level affect the foreclosure analysis?
+
+2. **Case discussion.** Compare the US *Brooke Group* standard for predatory pricing with the EU's approach in *AKZO*. Under which framework is it easier for a plaintiff to establish predation? Why?
+
+3. **Conceptual.** The *Amex* decision requires plaintiffs to show net harm across both sides of a transaction platform. Critique this requirement: when might it protect genuinely procompetitive conduct, and when might it immunize anticompetitive conduct from scrutiny?
+
+4. **Data/code.** Design an event study to measure the effect of exclusive contract adoption on rival market share, using the staggered rollout framework from the chapter. Specify: the unit of observation, the treatment variable, the outcome, and at least two controls.
+
+5. **Case discussion.** A dominant platform charges third-party sellers a 30% commission while its own retail arm pays no commission. Is this self-preferencing? What additional evidence would you need to determine whether this practice harms competition vs. reflects legitimate vertical integration efficiencies?
+
 ## Looking ahead
 
 Monopolization analysis produces artifacts---foreclosure calculations, effective price computations, margin squeeze tests---that reappear throughout the remaining chapters. **@sec-regulation-remedies** addresses what happens after a liability finding: how to design remedies that actually cure the diagnosed harm and how to evaluate whether they work. Many monopolization cases end in consent decrees with behavioral obligations; the next chapter explains how to structure and monitor those commitments.

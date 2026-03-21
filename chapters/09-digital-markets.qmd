@@ -843,6 +843,18 @@ When analyzing AI market competition:
 
 For the latest agency guidance, monitor CMA's AI Foundation Models work and FTC/DOJ statements on AI competition.
 
+## Exercises
+
+1. **Data/code.** Load `data/derived/platform_search_ranking.csv` and estimate a regression of click-through rate on ranking position, with separate slopes for first-party vs. third-party listings. Is the ranking advantage for first-party listings statistically significant? What would this imply for a self-preferencing theory of harm?
+
+2. **Conceptual.** Explain the SSNDQ framework. A social media platform increases ad load from 5 to 7 ads per session. Using the zero-price demand model from this chapter, estimate the predicted effect on daily active users. Under what conditions would this quality degradation constitute an exercise of market power?
+
+3. **Case discussion.** Compare the EU's DMA approach (ex ante regulation of designated gatekeepers) with the US approach (case-by-case antitrust enforcement). What are the advantages and disadvantages of each for addressing self-preferencing by dominant platforms?
+
+4. **Data/code.** Using `data/derived/platform_multihoming_users.csv`, compute multi-homing rates for each platform. If Platform A appears in 80% of multi-homing combinations while Platform B appears in only 30%, what does this asymmetry suggest about competitive constraints and market power?
+
+5. **Conceptual.** A ride-hailing platform argues that high multi-homing rates among drivers prove the market is competitive. Evaluate this argument. Under what conditions could high multi-homing coexist with significant market power on the rider side?
+
 ## Looking ahead
 
 Digital markets evolve rapidly, making the frameworks in this chapter a starting point rather than a final word. In **Chapter 10 (Labor Markets)**, we apply similar monopsony frameworks to employer-side platform power---gig economy classification, wage-fixing algorithms, and no-poach agreements. **Chapter 12 (Litigation Practice)** covers how to package digital market evidence into expert reports and trial exhibits. Many of the same event-study and difference-in-differences techniques used here to evaluate platform conduct reappear when assessing remedy effectiveness and merger retrospectives.

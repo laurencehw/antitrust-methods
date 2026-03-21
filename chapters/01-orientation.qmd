@@ -109,6 +109,18 @@ Recent matters illustrate the diversity of evidentiary mixes. The *US v. Microso
 While the US emphasizes adversarial hearings and judicial precedent, DG COMP and the CMA operate administrative processes where agencies both investigate and decide. This affects research timing: EU cases often allow broader use of compelled internal data but require detailed written submissions early, whereas South African proceedings feature public-interest considerations that demand additional qualitative evidence (jobs, ownership, regional development). Asian agencies have diverse discovery rules—SAMR can request granular consumer data with little advance notice—so plan modular analyses that adapt as production obligations change. Throughout the book, sidebar notes will flag where legal standards (dominance vs. monopoly), burdens of proof, or remedy preferences diverge.
 :::
 
+## Exercises
+
+1. **Conceptual.** Compare how the same conduct (e.g., exclusive dealing) would be analyzed under US Sherman Act §1, EU Article 101, and SA Competition Act §4. What differences in burden of proof and legal standard would affect your research design?
+
+2. **Conceptual.** A client brings you a potential merger notification. Draft a one-page scoping memo identifying: (a) the likely relevant markets, (b) data sources you would request, (c) which jurisdiction's timeline is most binding, and (d) whether the evidence triad suggests prioritizing quantitative, qualitative, or documentary evidence first.
+
+3. **Case discussion.** Read the comparative statute table. Identify one conduct type where the US and EU approaches diverge most sharply. How would this divergence affect an economist advising a multi-jurisdictional client?
+
+4. **Conceptual.** What is the significance of South Africa's public-interest test for antitrust analysis? Give an example of how it might change the outcome of a merger review compared to a pure consumer-welfare standard.
+
+5. **Data/research.** Using publicly available data from agency websites (DOJ, FTC, EC, SA Competition Commission), compile a table of the 5 most recent merger challenges in each jurisdiction. What patterns do you observe in terms of industries targeted, theories of harm, and remedies imposed?
+
 ## Looking ahead
 
 Orientation work is only useful if it flows directly into research design. In **Chapter 02**, we translate the institutional map above into concrete analytical workplans—building case chronology templates, sketching data inventories, and establishing the evidence-integration frameworks that will structure every subsequent chapter.

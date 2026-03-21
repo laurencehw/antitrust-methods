@@ -291,6 +291,16 @@ cat(paste0("Combined firm post-merger share: ",
 
 Before presenting results, show calibration diagnostics: how well the model reproduces pre-merger shares, whether price elasticities fall in plausible ranges, and how sensitive predictions are to alternative marginal-cost assumptions.
 
+::: {.callout-tip title="Running example: Simulating the AA/US Airways merger"}
+The AA/US Airways merger (announced February 2013, completed December 2013) provides an ideal case for calibrating the simulation framework above to a real transaction. The demand estimates from @sec-io-toolkit and the route-level market definitions from @sec-market-definition supply the key inputs.
+
+**Calibration.** To simulate the merger on a given route, we need three ingredients: (1) carrier market shares (from DOT T-100 or DB1B data, as in the route-share heatmap), (2) an outside share representing passengers who would choose alternative transport (driving, rail) or forgo travel entirely---typically 20--40% on short-haul routes like DCA--LGA but much higher on long-haul routes with no driving substitute, and (3) carrier-level margins derived from DOT Form 41 cost reports, which provide operating expenses by carrier and stage length. Legacy carriers like AA and US Airways typically reported operating margins of 8--15% in this period, while low-cost carriers like Southwest operated at 12--18%.
+
+**Where the DOJ focused.** The government's challenge centered on routes where the merging carriers had combined nonstop shares exceeding 50%, particularly at hub airports: DCA (where AA and US together held the vast majority of slots), LGA (a slot-controlled airport with significant overlap), ORD (an AA hub where US Airways offered connecting competition), and PHL (the primary US Airways hub). On routes like DCA--LGA, the merger would have combined the two largest carriers, raising HHI well above the 2,500 threshold of the structural presumption.
+
+**The remedy.** Rather than blocking the merger outright, the DOJ required divestitures of 104 slot pairs at DCA and 34 slot pairs at LGA to low-cost carriers---primarily Southwest Airlines---to preserve competitive entry on the most concentrated routes. The logic was straightforward: if the competitive harm came from eliminating head-to-head overlap at slot-constrained airports, then transferring slots to an aggressive competitor could restore the lost competition. Whether the remedy succeeded is an empirical question that the retrospective tools from @sec-research-design can answer, and the broader question of remedy design is taken up in @sec-regulation.
+:::
+
 ### Coordinated effects
 - Look for increased symmetry, transparency, or capacity alignment post-merger; include bidding/auction context where relevant.
 - Event studies around merger announcements can show rivals' stock price reactions (coordination signal) but should be paired with real-world capacity/contract evidence.
@@ -997,6 +1007,18 @@ Replace simulated values with outputs from your actual merger simulation model (
 
 7. **Remedies must fix the diagnosed harm.** A divestiture that creates a non-viable competitor is worse than none. Match remedy design to the specific theory of harm identified.
 :::
+
+## Exercises
+
+1. **Data/code.** Using the merger simulation example in this chapter, change the outside share from 0.25 to 0.40 (more elastic market). How do the predicted price effects change? Explain intuitively why outside share matters for merger simulation.
+
+2. **Conceptual.** Define the "maverick" concept in coordinated effects analysis. How would you quantitatively identify a maverick using pricing data? What additional qualitative evidence would strengthen or weaken the maverick argument?
+
+3. **Case discussion.** Compare the EDM (elimination of double marginalization) defense in a vertical merger with the efficiencies defense in a horizontal merger. What evidence would you need to present for each, and why are agencies generally more skeptical of the vertical version?
+
+4. **Data/code.** Using `data/derived/airline_route_shares.csv`, compute pre-merger HHI and delta-HHI for a hypothetical merger between the two largest carriers on the top 5 NYC routes. Which routes would exceed the 2023 Merger Guidelines structural presumption threshold (HHI > 1,800 and delta > 100)?
+
+5. **Conceptual.** Explain the difference between a first-order price effect approximation (from UPP) and a full equilibrium merger simulation. When is the approximation likely to overstate or understate the actual price effect?
 
 ## Looking ahead
 

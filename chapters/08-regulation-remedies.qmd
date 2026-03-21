@@ -428,5 +428,17 @@ ggplot(remedy_events_swim, aes(x = date, y = as.numeric(swimlane))) +
 - Shows dependencies and sequencing across different teams.
 - Useful for program management and stakeholder coordination.
 
+## Exercises
+
+1. **Conceptual.** Explain the Averch-Johnson effect. A regulated electric utility proposes a $500 million capital investment in smart grid technology. What questions should the regulator ask to determine whether the investment is prudent or gold-plating?
+
+2. **Data/code.** Using the benchmarking scatter code in this chapter, add 5 more hypothetical utilities with varying opex and quality scores. Fit a frontier (linear regression) and identify which utilities are "above the line" (efficient) vs. "below the line" (inefficient). How could a regulator use this information to set X-factors?
+
+3. **Case discussion.** The South African Data Services Market Inquiry resulted in voluntary price commitments rather than binding regulation. What are the advantages and disadvantages of voluntary commitments vs. formal price-cap regulation? Under what conditions might commitments be more effective?
+
+4. **Conceptual.** Design a compliance scorecard for a behavioral remedy requiring a dominant platform to provide API access to third-party developers on non-discriminatory terms. Specify: 4 KPIs, reporting frequency, escalation triggers, and sunset conditions.
+
+5. **Conceptual.** Compare structural vs. behavioral remedies for a horizontal hospital merger that would create a must-have system in a metropolitan area. What are the key considerations for each approach, and which would you recommend? Justify your answer.
+
 ## Looking ahead
 The remedy design and evaluation tools developed here connect directly to the chapters ahead. **Chapter 9 (Digital Markets)** applies access mandates, fair-ranking obligations, and interoperability remedies to platform markets---obligations codified in instruments such as the EU Digital Markets Act [@eu_dma_2022]---contexts where behavioral remedies and ongoing monitoring are especially important. **Chapter 12 (Litigation Practice)** covers how to present remedy compliance evidence in expert reports and how retrospective evaluations feed into damages proceedings. As you encounter new cases, consider which remedy type---structural, behavioral, or hybrid---best matches the diagnosed harm, and how the benchmarking and diff-in-diff frameworks from this chapter can assess whether the remedy is working.

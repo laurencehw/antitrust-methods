@@ -182,6 +182,18 @@ ggplot(cars, aes(x = rel_day, y = car, color = symbol)) +
   theme(legend.position = "bottom")
 ```
 
+## Exercises
+
+1. **Conceptual.** Draw a DAG for a hospital merger analysis where the treatment is the merger, the outcome is price, and potential confounders include local demand shocks and insurer network changes. Identify at least one valid instrument and explain why it satisfies the exclusion restriction.
+
+2. **Data/code.** Using the event study code scaffold in this chapter, modify the tickers to analyze the cumulative abnormal returns around a different merger announcement of your choosing. Compare the pattern for the merging parties vs. rivals vs. the market index.
+
+3. **Conceptual.** Explain why standard two-way fixed effects (TWFE) can produce biased estimates under staggered treatment timing. Sketch a scenario in antitrust (e.g., a serial acquirer buying firms in 2018, 2019, 2020) where this bias would be particularly severe.
+
+4. **Case discussion.** The DOJ's Google Search case relied on both quantitative evidence (auction data, default share calculations) and qualitative evidence (executive testimony, internal documents). How would you structure a pre-analysis plan that integrates both streams? What would you specify ex ante?
+
+5. **Conceptual.** A South African Competition Commission investigation has access to 18 months of transaction data from two grocery chains but no natural experiment or policy shock. What research design options are available? Discuss the tradeoffs between before/after, cross-sectional, and structural approaches.
+
 ## Looking ahead
 Document every decision from scoping memo to estimation so later chapters can layer on industry-specific models. Begin compiling a reusable appendix that includes sample interview protocols, diversion survey templates, and code snippets for data validation. We will lean on these assets when we turn to market definition, industrial-organization toolkits, and merger simulation, so note any gaps (e.g., need a telecom-grade cost index or South African procurement benchmark) while the evidence record is still flexible.
 

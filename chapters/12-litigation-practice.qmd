@@ -622,5 +622,17 @@ cat(paste0("Top 10% of class accounts for ",
 - Address potential administrative feasibility concerns
 - Prepare for de minimis exclusion arguments
 
+## Exercises
+
+1. **Conceptual.** Explain the Daubert standard for expert testimony admissibility. What are the four factors a court considers, and how would you ensure an econometric damages model satisfies each?
+
+2. **Data/code.** Using the scenario/sensitivity scaffold in this chapter, expand the table to include 4 pass-through rates (0.3, 0.5, 0.7, 0.9) and 4 overcharge estimates (5%, 10%, 15%, 20%). Create a tornado chart showing which parameter has the larger impact on total damages. What does this tell you about where to focus your data collection?
+
+3. **Case discussion.** You are retained as a testifying expert in a cartel damages case. The plaintiff's model estimates \$50M in overcharges using a before/after approach, while the defendant's expert argues the estimate is \$10M using a yardstick approach with a different control market. How would you evaluate and critique each model? What common-impact test would you run?
+
+4. **Conceptual.** Explain why reproducibility is both a scientific best practice and a litigation necessity. What specific steps would you take to ensure your analysis can be replicated by opposing counsel's expert?
+
+5. **Case discussion.** Compare evidentiary standards for expert testimony across the US (Daubert), EU (EC best practices), and South Africa (Competition Tribunal rules). How do these differences affect the way you structure an expert report for each jurisdiction?
+
 ## Looking ahead
 The litigation tools in this chapter---reproducible code bundles, Daubert-ready sensitivity analyses, and evidence provenance mapping---apply across every substantive area covered in this book. Whether you are presenting cartel damages (Chapter 5), merger simulations (Chapter 6), or labor market harm (Chapter 10), the workflow remains the same: link every opinion to specific evidence, document all assumptions transparently, and prepare for cross-examination by stress-testing your results. The **Empirical Appendix (Chapter 13)** collects reusable diagnostic checklists and code templates that complement the expert report frameworks introduced here.

@@ -518,6 +518,18 @@ summary(wage_model)
 - **Stats SA QLFS**: [statssa.gov.za](http://www.statssa.gov.za/)
 - **Commuting zone definitions**: USDA ERS or Census Geography
 
+## Exercises
+
+1. **Data/code.** Using the labor HHI code scaffold in this chapter, compute HHI for registered nurses in a hypothetical market with 5 employers of sizes 500, 400, 300, 200, and 100 employees. Would this market trigger the 2023 Merger Guidelines structural presumption? Now suppose the two largest employers merge---what is the new HHI and delta-HHI?
+
+2. **Conceptual.** Explain why a firm can be small in its product market but dominant in its local labor market. Give a specific example and describe how you would define the relevant labor market (geography x occupation) for analysis.
+
+3. **Case discussion.** The FTC's 2024 noncompete ban was enjoined by a federal court. Design a difference-in-differences study to estimate the wage effects of noncompete bans, using California's longstanding ban as the treatment and comparable states as controls. What is the key identification challenge?
+
+4. **Conceptual.** Franchise no-poach agreements prevent workers at one franchise location from being hired by another location of the same brand. Are these horizontal agreements (between competing employers) or vertical agreements (between franchisor and franchisee)? Why does the characterization matter for legal analysis?
+
+5. **Data/code.** The synthetic control scaffold in this chapter estimates the effect of Washington's no-poach settlement. Describe how you would construct the donor pool (which states to include/exclude and why) and what pre-treatment variables you would match on. What placebo tests would you run?
+
 ## Looking ahead
 
 Labor antitrust connects to several threads in the remaining chapters. **@sec-innovation-ip** examines how employment contracts---particularly noncompete clauses and trade secret provisions---interact with innovation incentives. The same monopsony frameworks apply when analyzing how labor market restrictions affect the pace of technical change.
