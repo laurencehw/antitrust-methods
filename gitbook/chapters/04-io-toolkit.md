@@ -15,6 +15,9 @@ By the end you should be able to:
 - Explain each model’s intuition, diagnostics, and jurisdictional track record.
 
 ## Core components
+
+The IO toolkit is a layered architecture. Each layer builds on the one below: demand estimation feeds supply modeling, which informs bargaining analysis, which connects to the multi-sided dynamics that characterize modern platform markets. Diagnostics sit atop the stack, cross-checking every layer against observable data. The list below outlines each component; the sections that follow develop them in detail.
+
 1. **Demand estimation.** Start with logit/BLP-lite intuition (shares vs. prices and characteristics) (Nevo, 2000); (Berry, Levinsohn & Pakes, 1995). Add nested logit or random coefficients when differentiation is material, and report diversion matrices.  
 2. **Supply modeling & pass-through.** Recover marginal costs via first-order conditions (FOCs) or reduced-form models, and estimate pass-through elasticities (see code below).  
 3. **Bargaining frameworks.** Nash-in-Nash approximations for platform or healthcare negotiations. For theoretical foundations, see (Tirole, 1988) and (Motta, 2004).  
@@ -72,11 +75,13 @@ In modern practice, these approaches reinforce each other. You might use a **red
 **Simulation scaffolds.** When time is short, build a logit demand system with constant marginal costs to approximate unilateral effects, then refine later.
 {% endhint %}
 
+Structural models are only as credible as the institutional knowledge embedded in their assumptions. Contracts, governance documents, and field interviews don't just provide courtroom narrative---they inform the modeling choices that drive simulation results. A pass-through estimate that ignores contractual price adjustment clauses, or a demand model that overlooks loyalty programs, will produce numbers that feel precise but rest on sand. The qualitative evidence below is not a supplement to the quantitative toolkit; it is a prerequisite for using it well.
+
 {% hint style="info" %}
 **Qualitative evidence**
 
-**Contracts & governance.** MFNs, parity clauses, data-sharing obligations, and service-level agreements indicate how flexible margins are; tie them to modeling assumptions.  
-**Design choices.** Product defaults, API throttling, or app-store ranking algorithms signal platform steering and inform multi-sided parameters.  
+**Contracts & governance.** MFNs, parity clauses, data-sharing obligations, and service-level agreements indicate how flexible margins are; tie them to modeling assumptions.
+**Design choices.** Product defaults, API throttling, or app-store ranking algorithms signal platform steering and inform multi-sided parameters.
 **Field interviews.** Operations or procurement leads can explain capacity constraints, switching costs, or negotiation cycles—use these insights to set priors for bargaining power or cost recovery.
 {% endhint %}
 
@@ -411,6 +416,8 @@ knitr::kable(pass_summary, digits=3, caption="Pass-Through Analysis Results")
 Swap series IDs for your industry (e.g., `WPUSI012011` for steel PPI, `CPIAUCSL` for overall CPI) or use firm-specific cost and price data when available.
 
 ## Bargaining frameworks {#sec-bargaining}
+
+Pass-through analysis assumes price-taking behavior downstream: firms receive a cost shock and adjust prices mechanically. But in many antitrust-relevant markets---hospital-insurer negotiations, platform-merchant relationships, franchisor-franchisee arrangements---prices emerge from bilateral bargaining where both sides have leverage. The pass-through coefficient tells you how costs flow through a supply chain; it says nothing about how those costs were determined in the first place, or how a merger might shift the balance of power at the negotiating table. The bargaining frameworks below capture these dynamics.
 
 Many antitrust-relevant markets do not feature posted prices. Instead, prices emerge from bilateral negotiations: hospitals bargain with insurers over reimbursement rates, content studios negotiate licensing fees with distributors, and pharmaceutical manufacturers set prices with pharmacy benefit managers. In these settings, standard Bertrand or Cournot models---which assume firms unilaterally set prices or quantities---miss the fundamental economics. Bargaining models fill that gap.
 

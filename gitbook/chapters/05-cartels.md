@@ -325,6 +325,9 @@ cat("High betweenness = potential coordinator bridging subgroups\n")
 Replace simulated data with actual procurement records (World Bank, TED, US DOT, Stats SA infrastructure tenders). Document bid amounts, dates, and project characteristics in `data/raw/procurement/` with provenance notes.
 
 ## Event and break tests
+
+When a cartel is disrupted---by a dawn raid, a leniency application, or a regulatory intervention---prices often shift abruptly. These disruptions create natural experiments: the timing is typically exogenous to market conditions (raids are secret until executed; leniency filings are triggered by internal decisions, not demand shocks), making them attractive for causal inference. Event studies around these breaks test whether price levels, spreads, or quantities change in ways consistent with a transition from collusive to competitive equilibrium. The challenge is isolating the cartel effect from coincident cost or demand changes, which is why pairing econometric break tests with documentary evidence about the timing and mechanism of cartel dissolution is essential.
+
 When raids or leniency filings occur, run event studies on prices, spreads, or quantities. Check both cartel participants and outsiders; in public procurement you can also evaluate engineers’ estimates or cost indices.
 
 Structural break tests (Bai–Perron, CUSUM) highlight regime shifts. Always incorporate costs so you do not misattribute cost-driven changes to conduct. Present break plots next to relevant timeline entries (e.g., WhatsApp thread confirming a January 2019 meeting).
@@ -350,7 +353,8 @@ The NEA case illustrates how the same empirical toolkit applies across the merge
 {% endhint %}
 
 ## Overcharge and pass-through
-Pick a counterfactual that matches data availability:
+
+Selecting a counterfactual is the single most consequential methodological choice in cartel damages estimation. Every approach embeds assumptions about what the world would have looked like absent the conspiracy, and opposing experts will attack those assumptions relentlessly. The choice depends on data availability, the structure of the affected market, and jurisdictional precedent---US courts tend to favor before/after and yardstick approaches that rely on observable comparators, while EU practice has been more receptive to econometric models with extensive controls. South African Tribunal proceedings have drawn on both traditions, with the bread and construction cases relying heavily on before/after comparisons buttressed by cost data from Stats SA. The menu below outlines the main options, ranked roughly by data intensity.
 
 - **Before/after:** Include product, customer, and time fixed effects plus cost controls.  
 - **Difference-in-differences:** Compare cartel markets to unaffected regions or product classes; test pre-trends.  
@@ -460,11 +464,13 @@ Leniency statements, chats, and board minutes pin down conduct mechanisms (rotat
 - Explain residuals—if econometrics show little effect where documents admit coordination, revisit product mapping or data coverage.  
 - Clarify what is fact (documented) vs. inference (econometric patterns), citing (OECD Leniency Programmes, 2015) or agency policies.
 
+The preceding sections have covered the analytical pipeline from screening through estimation. What remains is to integrate these elements into a coherent evidentiary package---one that connects econometric findings to documentary evidence and presents the result in a form that tribunals and courts can evaluate. The boxes below summarize the key methodological, qualitative, and case-based resources that practitioners should assemble when building a cartel matter.
+
 {% hint style="info" %}
 **Method box: econometric toolkit**
 
-**Event studies:** Evaluate raid/leniency impact on prices or spreads.  
-**Overcharge regressions:** `feols(log(price) ~ cartel_period + cost + demand | product + customer + time)` with clustered SEs and placebo checks.  
+**Event studies:** Evaluate raid/leniency impact on prices or spreads.
+**Overcharge regressions:** `feols(log(price) ~ cartel_period + cost + demand | product + customer + time)` with clustered SEs and placebo checks.
 **Pass-through:** Dynamic regressions or VECMs linking upstream and downstream prices to trace harm along the chain.
 {% endhint %}
 
