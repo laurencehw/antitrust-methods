@@ -285,6 +285,18 @@ cat(paste0("Combined firm post-merger share: ",
 
 Before presenting results, show calibration diagnostics: how well the model reproduces pre-merger shares, whether price elasticities fall in plausible ranges, and how sensitive predictions are to alternative marginal-cost assumptions.
 
+{% hint style="success" %}
+**Running example: Simulating the AA/US Airways merger**
+
+The AA/US Airways merger (announced February 2013, completed December 2013) provides an ideal case for calibrating the simulation framework above to a real transaction. The demand estimates from [Chapter 4](chapters/04-io-toolkit.md) and the route-level market definitions from [Chapter 3](chapters/03-market-definition.md) supply the key inputs.
+
+**Calibration.** To simulate the merger on a given route, we need three ingredients: (1) carrier market shares (from DOT T-100 or DB1B data, as in the route-share heatmap), (2) an outside share representing passengers who would choose alternative transport (driving, rail) or forgo travel entirely---typically 20--40% on short-haul routes like DCA--LGA but much higher on long-haul routes with no driving substitute, and (3) carrier-level margins derived from DOT Form 41 cost reports, which provide operating expenses by carrier and stage length. Legacy carriers like AA and US Airways typically reported operating margins of 8--15% in this period, while low-cost carriers like Southwest operated at 12--18%.
+
+**Where the DOJ focused.** The government's challenge centered on routes where the merging carriers had combined nonstop shares exceeding 50%, particularly at hub airports: DCA (where AA and US together held the vast majority of slots), LGA (a slot-controlled airport with significant overlap), ORD (an AA hub where US Airways offered connecting competition), and PHL (the primary US Airways hub). On routes like DCA--LGA, the merger would have combined the two largest carriers, raising HHI well above the 2,500 threshold of the structural presumption.
+
+**The remedy.** Rather than blocking the merger outright, the DOJ required divestitures of 104 slot pairs at DCA and 34 slot pairs at LGA to low-cost carriers---primarily Southwest Airlines---to preserve competitive entry on the most concentrated routes. The logic was straightforward: if the competitive harm came from eliminating head-to-head overlap at slot-constrained airports, then transferring slots to an aggressive competitor could restore the lost competition. Whether the remedy succeeded is an empirical question that the retrospective tools from [Chapter 2](chapters/02-research-design.md) can answer, and the broader question of remedy design is taken up in (sec)-regulation.
+{% endhint %}
+
 ### Coordinated effects
 - Look for increased symmetry, transparency, or capacity alignment post-merger; include bidding/auction context where relevant.
 - Event studies around merger announcements can show rivals' stock price reactions (coordination signal) but should be paired with real-world capacity/contract evidence.
@@ -436,6 +448,20 @@ p3 <- pricing_data |>
 **Practitioner tip**
 
 Combine quantitative screens with qualitative evidence: internal documents referencing the target as a "disruptor" or "price leader," customer testimony about switching patterns, and board materials discussing competitive responses to the target. Courts and agencies look for convergence across evidence types.
+{% endhint %}
+
+{% hint style="success" %}
+**Extended example: Hospital merger analysis**
+
+Hospital mergers are among the most actively litigated in US antitrust, with the FTC challenging roughly one per year. The stakes are high: commercial insurance prices can rise 20--40% after consummation of anticompetitive hospital mergers, as documented in retrospective studies by Dafny (2009) and Gaynor and Town (2012). The analytical framework combines elements of differentiated-products merger analysis---hospitals compete on quality, location, and reputation---with bilateral bargaining models, because hospitals negotiate rates with insurers rather than individual patients. This makes hospital mergers a natural application of the UPP/simulation toolkit from this chapter, but with an important twist: the "price" is not set in a standard posted-price market.
+
+Unlike standard product markets, hospital "prices" emerge from bilateral negotiations between hospital systems and insurance networks. The key metric is the hospital's willingness-to-pay (WTP) value---how much an insurer's enrollees would pay to have the hospital included in their network. A merger that combines two hospitals with high WTP increases the merged system's bargaining leverage, because the insurer cannot drop both hospitals without losing a large share of its enrollees. The change in WTP (delta-WTP) serves as the hospital-market analog of UPP/GUPPI: it quantifies how much additional bargaining power the merger confers. The FTC has deployed WTP models in cases including *Advocate Health Care* (7th Cir. 2017), *Penn State Hershey/PinnacleHealth* (3rd Cir. 2016), and *Hackensack Meridian/Englewood* (2021), establishing WTP analysis as a standard tool in the agency's hospital merger playbook.
+
+Hospital market definition is perennially contentious. Defendants typically argue for broad geographic markets on the grounds that patients can and do travel for care, while the FTC argues for narrower markets based on patient flow data showing that most patients travel less than 15--20 miles for inpatient services. The hypothetical monopolist framework adapts to this setting: instead of asking whether a price increase would be profitable, the relevant question is whether an insurer could market a viable plan excluding the merged system. Patient origin data, insurer testimony, and claims-level analysis of where patients actually receive care constitute the key evidence. The 2023 Merger Guidelines' emphasis on practical market realities---rather than theoretical substitution possibilities---has generally supported the FTC's narrower market definitions in recent hospital cases.
+
+The South African Private Healthcare Market Inquiry (2014--2019) examined similar dynamics in a very different institutional setting. The Commission found HHIs above 4,000 in several provinces and documented limited patient switching despite tariff differentials across hospital groups. The inquiry's central recommendation---the creation of a Supply-Side Regulator for Health---represents a regulatory response to the same market power problem that the FTC addresses through case-by-case merger enforcement. The contrast is instructive: the US approach relies on ex ante merger control to prevent the accumulation of hospital market power, while South Africa's proposed approach would impose ongoing oversight of an already-concentrated sector. Cross-reference [Chapter 8](chapters/08-regulation-remedies.md) for the remedy design implications.
+
+For US hospital mergers, the principal data sources include CMS claims data (Medicare), FAIR Health (commercial claims), state all-payer claims databases (available in roughly 18 states), and the AHA Annual Survey for structural variables such as bed counts, service lines, and system affiliations. For South Africa, the Council for Medical Schemes, SAMRC databases, and provincial hospital utilization records provide analogous information. In both jurisdictions, the key challenge is obtaining commercially insured price data, which is often confidential and requires litigation discovery or regulatory compulsion to access. Practitioners should budget significant time for data acquisition and cleaning---hospital claims data is notoriously messy, with inconsistent coding, missing fields, and complex case-mix adjustment requirements.
 {% endhint %}
 
 ### Vertical and mixed effects
@@ -976,6 +1002,18 @@ Replace simulated values with outputs from your actual merger simulation model (
 
 7. **Remedies must fix the diagnosed harm.** A divestiture that creates a non-viable competitor is worse than none. Match remedy design to the specific theory of harm identified.
 {% endhint %}
+
+## Exercises
+
+1. **Data/code.** Using the merger simulation example in this chapter, change the outside share from 0.25 to 0.40 (more elastic market). How do the predicted price effects change? Explain intuitively why outside share matters for merger simulation.
+
+2. **Conceptual.** Define the "maverick" concept in coordinated effects analysis. How would you quantitatively identify a maverick using pricing data? What additional qualitative evidence would strengthen or weaken the maverick argument?
+
+3. **Case discussion.** Compare the EDM (elimination of double marginalization) defense in a vertical merger with the efficiencies defense in a horizontal merger. What evidence would you need to present for each, and why are agencies generally more skeptical of the vertical version?
+
+4. **Data/code.** Using `data/derived/airline_route_shares.csv`, compute pre-merger HHI and delta-HHI for a hypothetical merger between the two largest carriers on the top 5 NYC routes. Which routes would exceed the 2023 Merger Guidelines structural presumption threshold (HHI > 1,800 and delta > 100)?
+
+5. **Conceptual.** Explain the difference between a first-order price effect approximation (from UPP) and a full equilibrium merger simulation. When is the approximation likely to overstate or understate the actual price effect?
 
 ## Looking ahead
 

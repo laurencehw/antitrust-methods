@@ -656,10 +656,96 @@ print(power_summary, n = Inf)
 - Explaining null results (underpowered?)
 - Justifying sample selection in expert reports
 
+## AI and Machine Learning in Antitrust
+
+Machine learning is, at its core, a prediction technology. Its power lies in finding complex patterns in high-dimensional data and generating accurate out-of-sample forecasts — tasks at which it routinely outperforms traditional parametric models. In antitrust work, prediction tasks arise more often than practitioners sometimes recognize: classifying markets as potentially collusive, forecasting demand systems for merger simulation, identifying anomalous bidding patterns in procurement data, and clustering millions of documents for efficient review. These are all settings where ML methods can deliver genuine improvements over conventional approaches.
+
+But prediction is not causation, and antitrust enforcement ultimately depends on causal claims. Estimating the overcharge from a cartel conspiracy, measuring the price effect of a consummated merger, or attributing competitive harm to exclusionary conduct — these tasks require the design-based econometric methods developed in earlier chapters of this book. No amount of predictive accuracy can substitute for a credible identification strategy when the question is "what would have happened absent the challenged conduct?" The key insight for practitioners is that ML can substantially improve the *inputs* to causal analysis — better demand estimates, more precisely matched control groups, sharper variable selection — without replacing the causal framework itself. Researchers who treat ML as a complement to, rather than a substitute for, the methods in [Chapter 2](chapters/02-research-design.md) will find the most productive applications.
+
+### ML for cartel screening
+
+One of the most promising applications of machine learning in competition enforcement is the automated screening of markets for collusive behavior. Traditional cartel screens, discussed in [Chapter 5](chapters/05-cartels.md), rely on structural and behavioral markers — bid rotation patterns, price parallelism, variance reductions — applied to individual markets. ML methods can scale these screens across hundreds or thousands of markets simultaneously, flagging those that warrant deeper investigation by enforcement agencies.
+
+**Supervised approaches** train classifiers on markets where cartel activity has been established (through leniency applications, successful prosecutions, or agency decisions) and use the learned patterns to score unscreened markets. Random forests and gradient-boosted trees are particularly well suited to this task because they handle nonlinear interactions among features naturally and provide variable importance measures that aid interpretability. Useful features include the coefficient of variation of bids, the number of bidders per tender, the bid spread (difference between highest and lowest bids), price-cost margins, market concentration indices, and indicators of bidder rotation. The challenge, as with any supervised method, is that the training data is censored: we only observe cartels that were detected, and detected cartels may differ systematically from undetected ones.
+
+**Unsupervised approaches** — clustering algorithms, isolation forests, autoencoders — sidestep the labeling problem by identifying markets whose pricing patterns are anomalous relative to the broader population, without requiring prior knowledge of which markets were cartelized. These methods are valuable precisely when labeled training data is scarce, though they require careful calibration to avoid overwhelming investigators with false positives.
+
+Several competition authorities have begun piloting ML screening tools in practice. Brazil's CADE has experimented with algorithmic screens for public procurement cartels. Korea's KFTC has developed machine-learning-based bid-rigging detection systems. The OECD has published guidance on computational screening methodologies, emphasizing that these tools are investigative aids — they identify candidates for investigation, not substitutes for the evidentiary standard required to establish an infringement.
+
+The following code scaffold illustrates a basic random forest classifier for cartel screening:
+
+```r
+library(ranger)
+library(dplyr)
+
+bids <- read.csv("data/derived/cartel_cement_bids.csv")
+
+# Feature engineering
+features <- bids |>
+  group_by(tender_id) |>
+  summarise(
+    cv_bids = sd(winning_bid) / mean(winning_bid),
+    n_bidders = n(),
+    spread = max(winning_bid) - min(winning_bid),
+    cartel = first(cartel_period)  # label
+  )
+
+# Train random forest
+rf_model <- ranger(
+  cartel ~ cv_bids + n_bidders + spread,
+  data = features,
+  probability = TRUE,
+  num.trees = 500
+)
+
+# Variable importance
+importance(rf_model)
+```
+
+### Algorithmic collusion
+
+A distinct and increasingly urgent concern is that pricing algorithms may themselves facilitate collusion — not through explicit coordination among firms, but through the autonomous convergence of algorithmic pricing strategies on supracompetitive equilibria. When competing firms deploy reinforcement-learning or Q-learning algorithms to set prices in repeated market interactions, experimental research has shown that these algorithms can learn to sustain prices above competitive levels without any direct communication between them (OECD 2017). The algorithms effectively discover and implement tacit collusion strategies that would be difficult for human managers to coordinate.
+
+This possibility poses a fundamental challenge for antitrust enforcement. Traditional cartel law requires evidence of an agreement or concerted practice — the "smoking gun" communications, meeting records, or parallel conduct plus facilitating factors that investigators rely on to establish liability. When an algorithm arrives at collusive pricing through autonomous learning, there may be no human agreement to discover. The algorithm's pricing behavior *is* the evidence, and interpreting that behavior requires new empirical tools.
+
+Researchers have proposed several approaches to detecting algorithmic collusion empirically. Granger causality tests can assess whether one firm's algorithmic pricing adjustments predict a competitor's subsequent price changes beyond what market fundamentals would explain. Structural break detection methods can identify whether the deployment of pricing algorithms coincided with a regime change in pricing patterns — a sudden increase in price levels, reduction in price variance, or acceleration of price adjustment speed. And A/B testing frameworks, where algorithmic pricing is deployed in some markets but not others, can provide quasi-experimental variation to estimate the causal effect of algorithmic pricing on market outcomes.
+
+The enforcement gap remains significant. Most jurisdictions lack clear legal frameworks for addressing algorithmic tacit collusion that falls short of an explicit agreement. This is an area where the empirical methods will likely develop faster than the legal doctrine.
+
+### NLP and document review
+
+Natural language processing has become an indispensable tool for managing the enormous document productions that characterize modern antitrust investigations. A single merger review or cartel prosecution can generate millions of documents, and traditional manual review is prohibitively expensive and slow.
+
+Topic modeling algorithms (such as Latent Dirichlet Allocation) can automatically organize large document collections into thematic clusters — grouping documents that discuss capacity planning, pricing strategy, competitor intelligence, or supply agreements. Named entity recognition can extract and link references to specific firms, executives, products, and markets across thousands of documents. Semantic search, powered by transformer-based language models, allows investigators to find documents that are conceptually related to a query even when they do not share exact keywords — for instance, finding documents that discuss "price discipline" even when the phrase used is "market stability" or "rational pricing."
+
+These tools are particularly powerful when linked to econometric findings. If a structural break analysis identifies a specific date range when pricing behavior changed (see [Chapter 5](chapters/05-cartels.md)), NLP-assisted search can prioritize documents from that period, looking for contemporaneous discussions of competitor contacts, pricing agreements, or capacity restrictions. This integration of quantitative and qualitative evidence embodies the triangulation principle emphasized throughout this book.
+
+A critical caveat: NLP-assisted review is a triage and prioritization tool, not a replacement for human expert judgment. Privilege review, assessment of document authenticity, and the interpretive work of connecting documentary evidence to legal theories of harm all require experienced lawyers and economists. The technology accelerates the process of finding the needle in the haystack; it does not eliminate the need for expertise in understanding what the needle means.
+
+### Evidentiary challenges
+
+The use of ML methods in antitrust raises important questions about admissibility and transparency, particularly in U.S. litigation governed by the *Daubert* standard and in other jurisdictions with analogous reliability requirements (see (sec)-litigation for the broader framework of expert testimony standards).
+
+ML models face heightened scrutiny because of "black box" concerns — the worry that a model's predictions cannot be meaningfully explained or challenged. This concern is not merely theoretical: opposing counsel will argue, often persuasively, that a model whose internal logic cannot be articulated in plain language should not form the basis of a damages estimate or a liability finding. For this reason, practitioners should favor interpretable models when the output will face judicial scrutiny. Random forests with variable importance rankings, gradient-boosted trees with SHAP (SHapley Additive exPlanations) values, and regularized regression methods all provide mechanisms for explaining which features drive predictions and by how much. Deep neural networks, by contrast, are harder to defend in adversarial proceedings, however strong their predictive performance.
+
+Documentation practices matter as much as model choice. Practitioners should maintain detailed records of model selection rationale, hyperparameter tuning procedures, cross-validation protocols, and out-of-sample performance metrics. The goal is to demonstrate that the modeling choices were principled rather than result-driven — that the analyst did not simply try dozens of specifications and report the one most favorable to their client's position.
+
+The distinction between screening and estimation carries particular legal significance. Using ML to prioritize markets for investigation or to identify relevant documents is relatively uncontroversial — these are internal workflow decisions that do not directly determine liability or damages. Using ML to *estimate* an overcharge or to *quantify* competitive harm places the model's output squarely at issue in the proceedings and invites much more rigorous challenge. Practitioners should be clear about which role their ML tools are playing and adjust their transparency and validation practices accordingly.
+
+Finally, the regulatory landscape itself is evolving. The EU's AI Act, which entered into force in 2024, may impose additional transparency and documentation requirements on algorithmic tools used in public enforcement proceedings, including competition investigations. Practitioners operating across jurisdictions should monitor these developments and ensure that their ML workflows satisfy not only evidentiary standards but also emerging regulatory obligations for algorithmic accountability.
+
 ## Additional references
 - **FTC resources:** See [ftc.gov](https://www.ftc.gov/) for expert guidance and econometric standards.
 - **Causal Inference: The Mixtape** ([mixtape.scunning.com](https://mixtape.scunning.com/)) for causal estimators and diagnostics.
 - **OECD cartel guidance:** See [oecd.org/competition](https://www.oecd.org/daf/competition/) for screening methodologies.
 
 Return to this appendix whenever a chapter references "see appendix template" so the workflow stays consistent across teams and jurisdictions.
+
+## Closing
+
+Antitrust methods will continue to evolve. New data sources — platform telemetry, algorithmic audit trails, matched employer-employee records, real-time transaction feeds — are expanding what analysts can observe. New econometric tools — machine-learning estimators for heterogeneous treatment effects, synthetic control methods for single-treated-unit cases, causal forests for high-dimensional moderator analysis — are expanding what analysts can credibly estimate. And new institutional challenges — global platform regulation, labor monopsony enforcement, innovation-market theories of harm, the intersection of competition policy with AI governance — are expanding what analysts are asked to address.
+
+Yet the core principles that anchor this book will remain the foundation of credible antitrust analysis regardless of how the toolkit grows. Transparent identification — being honest about what variation drives your estimates and what assumptions are required — is not a methodological fashion but an epistemic commitment. Triangulation across evidence types — combining quantitative estimation with qualitative industry knowledge, documentary evidence, and institutional detail — reflects the reality that no single method is sufficient to establish competitive harm in complex markets. And honest communication of uncertainty — reporting confidence intervals, documenting sensitivity to specification choices, and acknowledging the limits of available data — is what distinguishes expert analysis from advocacy.
+
+The field's capacity to adapt has been one of its most striking features. The antitrust economics of the 1960s would be barely recognizable to a modern practitioner, and the methods of the 2020s will no doubt look incomplete to analysts working a generation from now. That is as it should be. The aspiration is not to reach a final, settled methodology but to keep refining our tools so that competition enforcement rests on the best available evidence, interpreted with intellectual honesty and communicated with clarity. If this book has equipped its readers to contribute to that ongoing project, it has served its purpose.
 

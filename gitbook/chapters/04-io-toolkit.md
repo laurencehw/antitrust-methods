@@ -280,6 +280,20 @@ Tie the efficiency term to documented synergies or cost savings (procurement eco
 The DOJ's 2011 challenge to AT&T's proposed $39 billion acquisition of T-Mobile provides a landmark application of UPP/GUPPI analysis in merger review. The complaint alleged that T-Mobile was a particularly disruptive competitor---its aggressive pricing and unlimited data plans constrained the pricing of AT&T and Verizon. Internal documents showed high diversion between AT&T and T-Mobile: when customers left one carrier, a substantial fraction switched to the other. Combined with wireless margins of 40--55%, GUPPI estimates implied significant upward pricing pressure. The DOJ's economic analysis also estimated diversion ratios at the local market level, since wireless competition varies by geography. AT&T argued that network efficiencies and spectrum synergies would offset pricing pressure, but the claimed efficiencies were not merger-specific (AT&T could expand capacity independently). The merger was abandoned after the DOJ filed suit. The case cemented UPP as a practical screening tool and demonstrated how diversion-based analysis could substitute for formal market definition in differentiated-product mergers (Farrell & Shapiro, 2010).
 {% endhint %}
 
+{% hint style="success" %}
+**Running example: Airline demand and UPP**
+
+Airline demand is typically estimated using a **nested logit** model, with nests defined by airport (e.g., all flights from DCA in one nest, all flights from IAD in another) or by service type (nonstop vs. connecting). The nesting structure relaxes the IIA assumption of the plain logit: passengers choosing among nonstop options at the same airport substitute more readily with each other than with connecting flights from a different airport. This matters because the diversion ratios that drive UPP depend on the substitution pattern.
+
+For the American Airlines/US Airways merger (2013), consider a route like DCA--LGA where both carriers offered nonstop service. Using plausible parameters from the airline literature---diversion ratios of 0.25--0.35 between the merging carriers (reflecting their large combined slot holdings at DCA) and operating margins of 10--15% (typical for legacy carriers on competitive routes)---we can compute a rough GUPPI:
+
+$$
+\text{GUPPI}_{AA \to US} = D_{AA \to US} \times M_{US} \approx 0.30 \times 0.12 = 3.6\%
+$$
+
+A 3.6% GUPPI is below the 5% rule-of-thumb threshold, but this is sensitive to input assumptions. If diversion is at the high end (0.35, reflecting limited alternatives at slot-constrained DCA) and margins are 15%, GUPPI rises to 5.3%---crossing into the concern zone. The tornado chart above shows exactly this kind of sensitivity. In practice, different data sources yield different diversion estimates: DOT booking data captures actual itineraries, frequent-flyer program data reveals loyalty-driven switching, and customer surveys measure stated preferences. The DOJ's economic experts would have triangulated across these sources, weighting each by reliability. The market definitions from [Chapter 3](chapters/03-market-definition.md) determine which routes to screen, and the simulation framework in [Chapter 6](chapters/06-mergers.md) translates these UPP estimates into predicted price effects.
+{% endhint %}
+
 ## Visualizations
 
 ### Pass-through diagnostic using public price indices
@@ -437,6 +451,18 @@ Bargaining models have become standard tools in several contexts:
 - **Media and content licensing.** Disputes between cable distributors and content providers (e.g., blackout threats during carriage negotiations) are naturally modeled as bilateral bargaining problems.
 - **Pharmaceutical negotiations.** PBM-manufacturer negotiations over formulary placement and rebates involve bargaining dynamics that standard posted-price models cannot capture.
 - **Digital platforms.** App store commission disputes (e.g., Epic v. Apple) and news publisher negotiations with platforms involve bargaining over revenue shares where outside options are asymmetric.
+
+## Exercises
+
+1. **Data/code.** Using the logit demand skeleton in this chapter, add a fourth product ("D") with price=$8, share=0.10, and feature_score=0.3. Re-estimate the model and compute the full 4x4 diversion matrix. How does adding a budget product change the diversion ratios for the existing products?
+
+2. **Conceptual.** Explain the difference between UPP and GUPPI. When would you present one vs. the other to an agency? What are the advantages of each for communicating merger effects to non-economists?
+
+3. **Data/code.** The pass-through regression uses gasoline PPI and CPI data. Replace the series IDs with steel PPI (`WPUSI012011`) and overall CPI (`CPIAUCSL`). Run the pass-through regression and compare the coefficient to the gasoline result. What might explain any differences?
+
+4. **Conceptual.** A structural merger simulation predicts a 3% price increase, but a retrospective DiD study of a similar past merger found a 7% increase. How would you reconcile these findings? What does each method's assumptions imply about the source of the discrepancy?
+
+5. **Case discussion.** Describe how you would adapt the UPP/GUPPI tornado chart for a presentation to a non-technical audience (e.g., a judge or commission panel). Which parameters would you emphasize and why?
 
 ## Looking ahead
 The demand estimates, diversion matrices, and pass-through diagnostics introduced here form the quantitative backbone of the chapters ahead. In **[Chapter 5](chapters/05-cartels.md)**, we apply variance screens and structural break tests to detect collusion, while in **[Chapter 6](chapters/06-mergers.md)** we feed these IO primitives directly into merger simulations. The same bargaining and pass-through tools reappear in **[Chapter 7](chapters/07-monopolization.md)** and **[Chapter 9](chapters/09-digital-markets.md)**, where multi-sided platform dynamics add further complexity.

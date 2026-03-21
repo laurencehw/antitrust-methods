@@ -308,6 +308,47 @@ route_hhi |>
 
 Replace `nycflights13` with live data (slot allocation, loyalty records, booking data, or Stats SA shipment records) when presenting evidence in actual matters.
 
+{% hint style="success" %}
+**Running example: Airline market definition**
+
+Airline mergers illustrate how market definition choices can determine a case's outcome. The central question is geographic scope: should the relevant market be defined as an airport-pair (e.g., DCA--LGA), a city-pair (e.g., Washington--New York), or a broader corridor? Product scope matters too: are nonstop flights a separate market from connecting service?
+
+The heatmap above shows that many NYC-origin routes are served by only one or two carriers with dominant shares---exactly the pattern that motivates route-level market definition. In the DOJ's 2013 challenge to the American Airlines/US Airways merger, the government defined relevant markets at the **airport-pair level with nonstop service** as the relevant product. This narrow definition was critical: on many routes the merging carriers' combined shares exceeded the structural presumption thresholds, whereas a broader city-pair definition that pooled all three NYC-area airports would have diluted concentration.
+
+We can compute route-level HHI directly from the flight data to identify which routes would trigger scrutiny under the 2023 Merger Guidelines:
+
+```r
+library(dplyr)
+
+route_shares <- read.csv("data/derived/airline_route_shares.csv")
+
+# Identify routes where AA and US both operate, compute HHI and delta-HHI
+aa_us_routes <- route_shares |>
+  group_by(route) |>
+  filter(any(carrier == "AA") & any(carrier == "US")) |>
+  summarise(
+    hhi = first(hhi),
+    aa_share = sum(share[carrier == "AA"]) * 100,
+    us_share = sum(share[carrier == "US"]) * 100,
+    combined = aa_share + us_share,
+    delta_hhi = 2 * aa_share * us_share,
+    .groups = "drop"
+  ) |>
+  filter(delta_hhi > 100) |>
+  arrange(desc(delta_hhi))
+
+# Top overlap routes — those exceeding structural presumption
+cat("Routes where AA/US Airways overlap triggers scrutiny (HHI > 1800, delta > 100):\n")
+aa_us_routes |>
+  head(10) |>
+  mutate(across(c(aa_share, us_share, combined), ~round(., 1)),
+         hhi = round(hhi), delta_hhi = round(delta_hhi)) |>
+  knitr::kable(caption = "AA/US Airways Overlap Routes (Top 10 by Delta-HHI)")
+```
+
+The DOJ's case focused on precisely these high-overlap routes, particularly at hub airports like DCA, LGA, ORD, and PHL where both carriers held significant slot portfolios. This market-definition exercise feeds directly into the merger simulation in [Chapter 6](chapters/06-mergers.md), where we calibrate demand models to predict post-merger price effects on the most concentrated routes.
+{% endhint %}
+
 ### Geographic market definition: Shipment flows
 Understanding where products physically flow helps define geographic markets. This visualization shows the intensity of shipments between regions, which can reveal natural market boundaries, trade patterns, and whether distant regions constrain local pricing.
 
@@ -599,6 +640,18 @@ A lively debate centers on whether formal market definition remains essential in
 
 6. **Document your process.** Future teams---and opposing experts---will scrutinize your choices. Keep a record of candidate markets screened, data sources consulted, and assumptions made.
 {% endhint %}
+
+## Exercises
+
+1. **Data/code.** Using the `nycflights13` package (already used in the chapter), redefine the geographic market as all NYC-area airports combined vs. individual airports (JFK, LGA, EWR). Compute HHI under both definitions for the top 10 routes by volume. How does the choice of geographic market affect the concentration picture?
+
+2. **Conceptual.** A 5% SSNIP test with a margin of 30% yields a critical loss of 14.3%. If loyalty-card data shows 12% actual switching, what do you conclude about the candidate market? Now suppose the margin is actually 40%---how does the conclusion change?
+
+3. **Case discussion.** Compare the market definition approaches used in the South African Grocery Retail Market Inquiry and the US Google Search case. How did the availability of data (loyalty cards vs. telemetry) shape the methodological choices?
+
+4. **Conceptual.** Explain the SSNDQ (quality degradation) framework and when it is preferable to SSNIP. Give an example of a zero-price market where SSNDQ would be the appropriate test.
+
+5. **Data/code.** Using the diversion ratio code scaffold in this chapter, modify the simulation to create asymmetric diversion (A to B = 35%, B to A = 15%). Compute UPP for both directions and explain why asymmetric diversion matters for merger analysis.
 
 ## Looking ahead
 

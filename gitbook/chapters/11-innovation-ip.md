@@ -699,6 +699,18 @@ cat("\nUse these rates to model expected future approvals and consumer harm from
 - **WHO ICTRP**: International registry
 - **Company pipelines**: Annual reports and R&D presentations
 
+## Exercises
+
+1. **Conceptual.** Explain the tension between patent rights (which grant temporary monopolies to incentivize innovation) and antitrust enforcement (which seeks to prevent monopoly abuse). When should a patent holder's refusal to license trigger antitrust scrutiny?
+
+2. **Data/code.** Using the royalty stack visualization in this chapter, calculate the total royalty burden if each SEP holder demands a "reasonable" 2% royalty and there are 8 essential patent holders. At what point does royalty stacking make manufacturing unprofitable (assuming a 15% target margin)?
+
+3. **Case discussion.** Compare the outcomes in *FTC v. Qualcomm* (US, reversed on appeal) and the *EC Qualcomm* decisions (fines upheld). What does the divergence tell us about jurisdictional differences in applying antitrust to SEP licensing?
+
+4. **Conceptual.** Define "killer acquisitions" and explain the empirical identification strategy from Cunningham, Ederer, and Ma (2021). What data would you need to test whether a specific pharmaceutical acquisition was a killer acquisition?
+
+5. **Data/code.** The clinical trial pipeline visualization compares three firms. Suppose Firm A acquires Firm B. Using the pipeline data, calculate: (a) the combined pipeline, (b) the overlap in development stages, and (c) which stages are most vulnerable to post-acquisition discontinuation based on the killer acquisitions framework.
+
 ## Looking ahead
 
 Innovation and IP issues are increasingly central to merger review and monopolization enforcement. The survival models, event studies, and patent network tools developed in this chapter carry forward into **[Chapter 12](chapters/12-litigation-practice.md)**, where we cover how to present technical expert testimony alongside economic evidence. The killer acquisitions framework connects directly to **[Chapter 6](chapters/06-mergers.md)** for transactions involving nascent competitors, and the SEP/FRAND analysis informs remedy design in **[Chapter 8](chapters/08-regulation-remedies.md)**. When real data become available (PatentsView bulk downloads, FDA Orange Book, SAHPRA filings), replace the synthetic examples throughout with actual patent networks, entry timelines, and R&D panels.

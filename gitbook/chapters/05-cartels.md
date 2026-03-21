@@ -341,6 +341,14 @@ Structural break tests (Bai–Perron, CUSUM) highlight regime shifts. Always inc
 ```
 {% endhint %}
 
+{% hint style="success" %}
+**Running example: Airlines --- coordination vs. collusion**
+
+The AA/US Airways merger analyzed in [Chapter 6](chapters/06-mergers.md) should be distinguished from a different airline enforcement action that straddles the merger--cartel boundary: the DOJ's 2021 challenge to the **American Airlines/JetBlue Northeast Alliance (NEA)**. The NEA was not a merger but a revenue-sharing and scheduling coordination agreement covering roughly 70 routes out of Boston and New York. Under the NEA, AA and JetBlue jointly managed capacity, coordinated schedules, and shared revenue on overlapping routes---conduct that a federal judge found amounted to a de facto merger of their competitive operations in the Northeast, ordering dissolution in 2023.
+
+The NEA case illustrates how the same empirical toolkit applies across the merger--cartel boundary. The route-share data and event-study methods introduced in [Chapter 2](chapters/02-research-design.md) and [Chapter 3](chapters/03-market-definition.md) can screen for coordinated effects: for instance, one could test whether price correlations between AA and JetBlue increased on NEA routes relative to non-NEA routes after the alliance took effect, or whether fare dispersion fell on routes subject to revenue sharing. These are precisely the variance and correlation screens discussed earlier in this chapter. The case is a reminder that coordination need not involve secret meetings or bid-rigging to raise antitrust concerns---formal joint ventures and alliances can produce similar competitive harm when they eliminate independent decision-making between rivals.
+{% endhint %}
+
 ## Overcharge and pass-through
 Pick a counterfactual that matches data availability:
 
@@ -549,6 +557,18 @@ Replace the public FRED data with product-level transactions to present in litig
 
 6. **Document everything.** Cartel analysis often leads to litigation. Keep code reproducible, data hashed, and methodology memos contemporaneous.
 {% endhint %}
+
+## Exercises
+
+1. **Data/code.** Load `data/derived/cartel_cement_bids.csv` and compute the coefficient of variation (CV) of winning bids separately for the cartel period and competitive period. Is the CV lower during the cartel period, consistent with price compression? Plot histograms of bid amounts for each period.
+
+2. **Conceptual.** Explain why variance/dispersion screens are prioritization tools, not dispositive proof of collusion. What alternative explanations could produce low price dispersion in a competitive market?
+
+3. **Case discussion.** The South African bread cartel involved synchronized price increases of 30--40 cents. Design a difference-in-differences analysis to estimate the overcharge, specifying: treatment and control groups, the key identifying assumption, and at least one placebo test.
+
+4. **Data/code.** Using the structural break code scaffold with FRED gasoline data (`GASREGW`), test whether the number and timing of breaks change if you adjust the minimum segment length (`h` parameter) from 26 to 13 weeks. What does this sensitivity tell you about the reliability of break detection?
+
+5. **Conceptual.** A leniency applicant provides a statement claiming cartel meetings occurred quarterly from 2015 to 2019, but your price data shows a structural break in 2017 rather than 2015. How would you reconcile this discrepancy? What additional evidence would you seek?
 
 ## Looking ahead
 The detection screens, overcharge regressions, and pass-through analyses developed here carry forward throughout the book. **[Chapter 6](chapters/06-mergers.md)** builds on the same demand estimates and diversion ratios---post-cartel mergers frequently face heightened scrutiny, and the diagnostic tools overlap substantially. **[Chapter 12](chapters/12-litigation-practice.md)** revisits damages modeling and expert report preparation, showing how to package cartel evidence for courtroom presentation. The rotation indices, structural break plots, and overcharge tables introduced here will serve as templates you can adapt to new cases and jurisdictions.

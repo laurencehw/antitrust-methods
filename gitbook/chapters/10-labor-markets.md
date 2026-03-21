@@ -236,9 +236,9 @@ Retention metrics complement mobility analysis by capturing the employer side of
 Heterogeneity analysis is essential for both economic rigor and public interest considerations. Worker mobility and the effects of labor market restraints vary substantially by occupation, education level, gender, race, immigration status, and geography. For example, noncompete agreements may bind most tightly on mid-career workers with specialized skills and limited geographic mobility, while having little practical effect on entry-level workers in thick urban labor markets. Commuting pattern data (from LEHD Origin-Destination statistics or the American Community Survey) can reveal how geographic constraints define effective labor market boundaries differently for workers with and without access to reliable transportation. Segmenting results along these dimensions ensures that concentration measures and policy evaluations capture the full distributional impact of employer conduct.
 
 ## Southern African enforcement snapshots
-- **Healthcare Market Inquiry (Competition Commission, 2014--2019).** The Commission's sector-wide inquiry found that Netcare, Mediclinic, and Life Healthcare collectively held over 80% of private hospital beds and 90% of admissions, enabling sustained above-competitive pricing. It examined facility fees, specialist practitioner competition, and funder-provider bargaining dynamics, recommending supply-side regulation and a health sector regulator to address the lack of competitive constraints.
+- **Healthcare Market Inquiry (Competition Commission, 2014--2019).** The Commission's sector-wide inquiry found that Netcare, Mediclinic, and Life Healthcare collectively held over 80% of private hospital beds and 90% of admissions, enabling sustained above-competitive pricing. It examined facility fees, specialist practitioner competition, and funder-provider bargaining dynamics, recommending supply-side regulation and a health sector regulator to address the lack of competitive constraints (Sa Hmi, 2019).
 - **Grocery Retail Market Inquiry (Competition Commission, 2019).** The GRMI examined exclusive lease agreements between major retailers (Shoprite, Pick n Pay, Spar, Woolworths) and shopping-mall landlords, finding that long-term exclusivity clauses entrenched incumbent market power and raised barriers to entry for smaller competitors. While not a labor-market case per se, the inquiry's findings on buyer power and supplier squeeze documented how concentrated retail markets compress margins for small suppliers and their workforces.
-- **Online Intermediation Platforms Market Inquiry (Competition Commission, 2023).** The OIPMI examined platform competition across food delivery, e-commerce, software app stores, travel, and online classifieds. The inquiry found that Uber Eats and Mr D Food imposed opaque commission structures and menu surcharges on independent restaurants, and required these platforms to adopt standardised tiered commission fee structures. Although the inquiry excluded ride-hailing (e-hailing) services from its scope, its findings on platform transparency and commission practices have implications for gig-economy labor conditions more broadly.
+- **Online Intermediation Platforms Market Inquiry (Competition Commission, 2023).** The OIPMI examined platform competition across food delivery, e-commerce, software app stores, travel, and online classifieds (SA OIPMI Final Report, 2023). The inquiry found that Uber Eats and Mr D Food imposed opaque commission structures and menu surcharges on independent restaurants, and required these platforms to adopt standardised tiered commission fee structures. Although the inquiry excluded ride-hailing (e-hailing) services from its scope, its findings on platform transparency and commission practices have implications for gig-economy labor conditions more broadly.
 
 ## Visualizations
 
@@ -497,6 +497,18 @@ summary(wage_model)
 - **BLS OES**: [bls.gov/oes](https://www.bls.gov/oes/) (for wage data)
 - **Stats SA QLFS**: [statssa.gov.za](http://www.statssa.gov.za/)
 - **Commuting zone definitions**: USDA ERS or Census Geography
+
+## Exercises
+
+1. **Data/code.** Using the labor HHI code scaffold in this chapter, compute HHI for registered nurses in a hypothetical market with 5 employers of sizes 500, 400, 300, 200, and 100 employees. Would this market trigger the 2023 Merger Guidelines structural presumption? Now suppose the two largest employers merge---what is the new HHI and delta-HHI?
+
+2. **Conceptual.** Explain why a firm can be small in its product market but dominant in its local labor market. Give a specific example and describe how you would define the relevant labor market (geography x occupation) for analysis.
+
+3. **Case discussion.** The FTC's 2024 noncompete ban was enjoined by a federal court. Design a difference-in-differences study to estimate the wage effects of noncompete bans, using California's longstanding ban as the treatment and comparable states as controls. What is the key identification challenge?
+
+4. **Conceptual.** Franchise no-poach agreements prevent workers at one franchise location from being hired by another location of the same brand. Are these horizontal agreements (between competing employers) or vertical agreements (between franchisor and franchisee)? Why does the characterization matter for legal analysis?
+
+5. **Data/code.** The synthetic control scaffold in this chapter estimates the effect of Washington's no-poach settlement. Describe how you would construct the donor pool (which states to include/exclude and why) and what pre-treatment variables you would match on. What placebo tests would you run?
 
 ## Looking ahead
 
