@@ -20,6 +20,7 @@ book:
     - chapters/10-labor-markets.qmd
     - chapters/11-innovation-ip.qmd
     - chapters/12-litigation-practice.qmd
+    - chapters/14-closing.qmd
     - chapters/13-empirical-appendix.qmd
 
 bibliography: references/references.bib
