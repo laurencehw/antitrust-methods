@@ -20,6 +20,10 @@ Expect to combine telemetry, clickstream data, partner contracts, and qualitativ
 
 ## Core topics
 
+In June 2017, the European Commission fined Google 2.42 billion euros for systematically favoring its own comparison-shopping service in search results---a decision that launched a decade of platform antitrust. The case turned on a deceptively simple empirical question: did Google's algorithmic ranking decisions steer traffic away from rival comparison-shopping sites and toward Google Shopping? The answer required analyzing terabytes of clickstream data, modeling user behavior across search result positions, and disentangling algorithmic design choices from organic quality differences.
+
+The South African Competition Commission's OIPMI inquiry (2020--2023) confronted parallel questions in a developing-market context: whether Takealot's marketplace algorithm favored its own retail arm, whether food-delivery commission structures foreclosed small restaurants, and whether Google's search dominance warranted the same remedies in Johannesburg as in Brussels. These cases---and the US DOJ's subsequent monopolization suits against Google in search and advertising technology---illustrate that digital platform enforcement is now a global phenomenon, with common empirical challenges that recur across jurisdictions even as legal standards diverge. The tools in this chapter equip you to engage with all of them.
+
 Digital platform analysis extends traditional IO tools to multi-sided markets where network effects, data advantages, and zero-price business models create distinct competitive dynamics. This section covers the key mechanisms and evidence types.
 
 **Multi-sided markets** connect different user groups (buyers/sellers, users/advertisers, drivers/riders) who value each other's participation:
@@ -87,7 +91,7 @@ SCOPING                   ANALYSIS                  REMEDIES
 
 ## Theory-to-metric mapping
 
-The table below maps common platform theories of harm to measurable metrics and appropriate empirical tests. Use this as a checklist when scoping digital market investigations.
+The table below maps common platform theories of harm to measurable metrics and appropriate empirical tests. Use it as an investigation scoping checklist when you first encounter a digital markets matter. Not every column will be relevant---prioritize tests where identification is strongest given the data you can actually obtain, and note where platform telemetry (which requires cooperation or compulsion to access) is essential versus where publicly available data suffices.
 
 | Theory of Harm | Key Metric | Empirical Test | Data Sources |
 |:---------------|:-----------|:---------------|:-------------|
@@ -153,7 +157,9 @@ Replace the synthetic `panel` with sanitized telemetry (monthly active users/mer
 
 ### Zero-price demand model (attention markets)
 
-**The challenge:** Many platforms don't charge users money—instead, users "pay" with attention (watching ads) and data (surrendering personal information). Standard price-based demand models don't directly apply.
+When users pay nothing in monetary terms, traditional demand estimation breaks down---there is no price variation to exploit for identification. But users do pay, in attention, time, data, and exposure to advertising. The framework below adapts standard demand tools to these non-monetary costs, treating ad load, data collection intensity, and quality degradation as the "prices" that platforms charge on the user side. This aligns with the SSNDQ (Small but Significant Non-transitory Decrease in Quality) framework that competition authorities increasingly use as a substitute for SSNIP in zero-price markets.
+
+**The challenge:** Many platforms don't charge users money---instead, users "pay" with attention (watching ads) and data (surrendering personal information). Standard price-based demand models don't directly apply.
 
 **The solution:** Replace monetary fees with **attention costs**: ad load, time spent, or quality degradation. This lets us estimate how sensitive users are to non-price dimensions of competition and apply the SSNDQ (Small but Significant Non-transitory Decrease in Quality) framework used by competition authorities.
 
@@ -273,6 +279,9 @@ Epic challenged Apple's 30% App Store commission and anti-steering rules that pr
 ## Ranking, self-preferencing, and defaults
 
 ### Ranking impact visualization
+
+Ranking position is the central competitive lever on digital platforms. Empirical studies consistently find that the top search result captures 25--35% of clicks, while the tenth result captures less than 3%. Control over ranking is, in effect, control over demand---a point that explains why self-preferencing allegations focus so heavily on algorithmic ranking decisions. The visualization below quantifies this leverage using click-through rate data by position, showing how first-party listings systematically outperform third-party listings even at the same slot.
+
 ```{r}
 #| label: digital-ranking
 #| message: false
