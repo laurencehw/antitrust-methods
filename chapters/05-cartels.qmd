@@ -177,6 +177,122 @@ if (requireNamespace("patchwork", quietly = TRUE)) {
 
 These real price series illustrate a key cartel-screen insight: **bread and bakery prices** (orange) show remarkably smooth upward trajectories with minimal year-over-year volatility, while **crude oil** (purple) exhibits dramatic swings. **Cement** (blue) and **steel** (green) fall in between. In a competitive market, bread prices should track wheat and energy costs, which are volatile; persistent price smoothness despite volatile inputs is a red flag that warrants deeper investigation using firm-level bid data. The year-over-year chart makes this contrast stark: bread CPI rarely deviates more than ±5% year-over-year, while crude oil swings ±40%.
 
+### South African CPI and manufacturing data for cartel screens
+
+South African competition authorities have access to rich price and production data from Stats SA that can serve as cartel screening tools. The CPI division index tracks prices across 13 categories from 2008 onward, while the manufacturing production index provides monthly output data from 1998. Together, these series allow analysts to identify periods of price rigidity in concentrated sectors---a hallmark of coordinated conduct.
+
+```{r}
+#| label: cartel-sa-price-series
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 7
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(lubridate)
+library(tidyr)
+source("program/R/helpers.R")
+
+# Load SA CPI division data
+sa_cpi <- read_csv("../the south african economy/___Contemporary/data/processed/cpi_division_index.csv",
+                   show_col_types = FALSE) |>
+  filter(!is.na(index)) |>
+  mutate(date = as.Date(date))
+
+# Focus on key cartel-relevant categories
+cartel_divisions <- c("Food and non-alcoholic beverages",
+                      "Clothing and footwear",
+                      "Transport")
+
+sa_cpi_filtered <- sa_cpi |>
+  filter(DivisionDescription %in% cartel_divisions) |>
+  group_by(DivisionDescription) |>
+  arrange(date) |>
+  mutate(normalized = index / first(index) * 100) |>
+  ungroup()
+
+# Load SA manufacturing production
+sa_mfg <- read_csv("../the south african economy/___Contemporary/data/processed/manufacturing_production_index.csv",
+                   show_col_types = FALSE) |>
+  mutate(date = as.Date(date))
+
+# Load commodity prices
+sa_comm <- read_csv("../the south african economy/___Contemporary/data/processed/commodity_prices.csv",
+                    show_col_types = FALSE) |>
+  mutate(date = as.Date(paste0(year, "-01-01")))
+
+# Panel A: SA CPI price trends
+p1 <- ggplot(sa_cpi_filtered, aes(x = date, y = normalized, color = DivisionDescription)) +
+  geom_line(linewidth = 0.9) +
+  geom_hline(yintercept = 100, linetype = "dashed", color = "gray40") +
+  scale_color_manual(values = c(
+    "Food and non-alcoholic beverages" = "#D55E00",
+    "Clothing and footwear" = "#0072B2",
+    "Transport" = "#009E73"
+  )) +
+  labs(
+    title = "South African CPI by Division (2008–2025)",
+    subtitle = "Normalized to 100 in January 2008. Source: Stats SA.",
+    x = NULL, y = "Index (Jan 2008 = 100)", color = NULL
+  ) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+
+# Panel B: Manufacturing production vs. commodity prices
+# Normalize commodity prices
+comm_long <- sa_comm |>
+  pivot_longer(cols = -year, names_to = "commodity", values_to = "value") |>
+  mutate(date = as.Date(paste0(year, "-01-01"))) |>
+  group_by(commodity) |>
+  arrange(date) |>
+  mutate(normalized = value / first(value) * 100) |>
+  ungroup()
+
+p2 <- ggplot(comm_long, aes(x = date, y = normalized, color = commodity)) +
+  geom_line(linewidth = 0.9) +
+  geom_hline(yintercept = 100, linetype = "dashed", color = "gray40") +
+  scale_color_manual(values = c(
+    "gold_usd_oz" = "#CC79A7",
+    "platinum_usd_oz" = "#E69F00",
+    "coal_usd_tonne" = "#56B4E9",
+    "iron_ore_usd_tonne" = "#009E73"
+  )) +
+  labs(
+    title = "South African Commodity Prices (2010–2024)",
+    subtitle = "Normalized to 100 in 2010. Source: Stats SA commodity prices.",
+    x = NULL, y = "Index (2010 = 100)", color = NULL
+  ) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+
+# Display both panels
+if (requireNamespace("patchwork", quietly = TRUE)) {
+  library(patchwork)
+  p1 / p2 + plot_layout(heights = c(1, 1))
+} else {
+  print(p1)
+  print(p2)
+}
+
+# Volatility comparison
+cat("\nSA CPI volatility (coefficient of variation, YoY changes):\n")
+sa_cpi_filtered |>
+  group_by(DivisionDescription) |>
+  arrange(date) |>
+  mutate(yoy = (normalized / lag(normalized, 12) - 1) * 100) |>
+  summarise(
+    mean_yoy = mean(yoy, na.rm = TRUE),
+    sd_yoy = sd(yoy, na.rm = TRUE),
+    cv = sd_yoy / abs(mean_yoy),
+    .groups = "drop"
+  ) |>
+  knitr::kable(digits = 2,
+               caption = "Lower CV suggests price rigidity consistent with coordination")
+```
+
+The SA CPI data reveals a pattern similar to the US series: **food and beverage prices** show steady upward trajectories with low volatility, while **transport prices** (driven by fuel costs) exhibit much greater fluctuation. This divergence is exactly what cartel screens look for: in concentrated food markets, prices may remain sticky despite volatile input costs (energy, commodities), suggesting coordinated pricing behavior. The commodity price panel shows the dramatic swings in gold, platinum, coal, and iron ore prices---inputs that should flow through to downstream prices in competitive markets. When they don't, it warrants deeper investigation.
+
 ### Bid-rotation analysis
 Using cement procurement data to identify potential bid rotation patterns.
 

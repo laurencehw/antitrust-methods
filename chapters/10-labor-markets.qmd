@@ -94,7 +94,87 @@ hhi <- employment |>
   summarise(hhi = sum((share * 100)^2))
 hhi
 ```
-The illustrative tribble above demonstrates the mechanics of HHI calculation. For real-world analysis, use QCEW/LEHD or Stats SA microdata aggregated to protect confidentiality. The following chart uses real BLS employment data to show how industry-level employment concentration has evolved:
+The illustrative tribble above demonstrates the mechanics of HHI calculation. For real-world analysis, use QCEW/LEHD or Stats SA microdata aggregated to protect confidentiality. The following chart uses real South African labour force data to show employment and unemployment trends:
+
+```{r}
+#| label: labor-sa-lfs
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 5
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(tidyr)
+source("program/R/helpers.R")
+
+# Load SA Labour Force Survey data
+lfs <- read_csv("../the south african economy/___Contemporary/data/processed/lmis_lfs_summary_quarterly.csv",
+                show_col_types = FALSE) |>
+  mutate(
+    date = as.Date(paste0(
+      gsub("-Q([0-9])", "", time_period),
+      "-",
+      as.integer(gsub(".*-Q([0-9])", "\\1", time_period)) * 3 - 2,
+      "-01"
+    ))
+  )
+
+# Load SA unemployment rate
+unemp <- read_csv("../the south african economy/___Contemporary/data/processed/lmis_unemployment_rate_total_quarterly.csv",
+                  show_col_types = FALSE) |>
+  mutate(
+    date = as.Date(paste0(
+      gsub("-Q([0-9])", "", time_period),
+      "-",
+      as.integer(gsub(".*-Q([0-9])", "\\1", time_period)) * 3 - 2,
+      "-01"
+    ))
+  )
+
+# Panel A: Employment and labour force
+p1 <- ggplot(lfs, aes(x = date)) +
+  geom_line(aes(y = employment_thousands, color = "Employment"), linewidth = 1) +
+  geom_line(aes(y = labour_force_thousands, color = "Labour Force"), linewidth = 1) +
+  scale_color_manual(values = c("Employment" = "#0072B2", "Labour Force" = "#D55E00")) +
+  labs(
+    title = "South African Employment and Labour Force (2015–2024)",
+    subtitle = "Thousands. Source: Stats SA LFS.",
+    x = NULL, y = "Thousands", color = NULL
+  ) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+
+# Panel B: Unemployment rate
+p2 <- ggplot(unemp, aes(x = date, y = value)) +
+  geom_line(color = "#D55E00", linewidth = 1.2) +
+  geom_hline(yintercept = 25, linetype = "dashed", color = "gray40") +
+  annotate("text", x = min(unemp$date) + 365, y = 25.5,
+           label = "25% threshold", color = "gray40", hjust = 0, size = 3) +
+  labs(
+    title = "South African Unemployment Rate (2015–2024)",
+    subtitle = "Official unemployment rate. Source: Stats SA LFS.",
+    x = NULL, y = "Unemployment Rate (%)",
+    caption = "South Africa's persistently high unemployment rate reflects structural labor market frictions\nthat create monopsony-like conditions even in nominally competitive markets."
+  ) +
+  theme_antitrust()
+
+# Display both panels
+if (requireNamespace("patchwork", quietly = TRUE)) {
+  library(patchwork)
+  p1 | p2 + plot_layout(widths = c(1, 1))
+} else {
+  print(p1)
+  print(p2)
+}
+
+cat("\nSA Labour Market Summary:\n")
+cat(paste0("Current unemployment rate: ", round(tail(unemp$value, 1), 1), "%\n"))
+cat(paste0("Current employment: ", round(tail(lfs$employment_thousands, 1) / 1000, 1), " million\n"))
+cat(paste0("NEET rate: ", round(tail(lfs$neet_rate_pct, 1), 1), "%\n"))
+```
+
+South Africa's labour market data reveals structural conditions that create monopsony-like dynamics even in nominally competitive markets. The unemployment rate has remained above 25% for the entire period, reaching over 32% by 2024---levels that give employers enormous bargaining power over workers who have few alternative opportunities. The NEET rate (Not in Education, Employment, or Training) among youth exceeds 40%, indicating that a large share of the working-age population is effectively locked out of the labor market. In this context, even modest employer coordination---through industry wage agreements, no-poach arrangements, or geographic clustering---can have significant wage-suppressing effects. The Competition Commission's market inquiries have increasingly recognized these dynamics, particularly in sectors like healthcare, agriculture, and retail where employer concentration is high and worker mobility is constrained by geography, skills, and transportation costs.
 
 ```{r}
 #| label: labor-bls-employment
