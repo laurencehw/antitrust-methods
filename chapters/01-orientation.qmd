@@ -251,26 +251,68 @@ Track concentration trends using FRED data as a baseline for cross-jurisdictiona
 #| fig-cap: "US Bank Concentration (HHI)"
 #| fig-width: 8
 #| fig-height: 5
-library(fredr)
 library(dplyr)
 library(ggplot2)
-source("program/R/helpers.R") 
-fredr_set_key(Sys.getenv("FRED_API_KEY"))
+library(readr)
+source("program/R/helpers.R")
 
-hhi <- fredr(series_id = "HHMSDODNS", observation_start = as.Date("2000-01-01"))
-# placeholder for integrating local data:
-# local_hhi <- readr::read_csv("data/derived/sa_banking_hhi.csv")
-# hhi <- bind_rows(hhi, local_hhi)
-ggplot(hhi, aes(date, value)) +
-  geom_vline(xintercept = as.Date("2008-09-15"), linetype="dashed", color="darkred") +
-  annotate("text", x = as.Date("2009-01-01"), y = 100, label = "2008 Crisis", 
-           color = "darkred", hjust = 0, vjust = 0) +
-  geom_line(color = "#0072B2", linewidth = 1) +
-  labs(
-    title = "US Bank Concentration (HHI)",
-    subtitle = "Bank deposits (Commercial & Savings). Source: FRED Series HHMSDODNS",
-    x = NULL,
-    y = "HHI Index"
-  ) +
-  theme_antitrust()
+# Use pre-downloaded FRED data (no API key required)
+hhi <- tryCatch({
+  read_csv("data/raw/fred_bank_hhi.csv", show_col_types = FALSE) |>
+    mutate(date = as.Date(date))
+}, error = function(e) NULL)
+
+if (!is.null(hhi)) {
+  ggplot(hhi, aes(date, value)) +
+    geom_vline(xintercept = as.Date("2008-09-15"), linetype="dashed", color="darkred") +
+    annotate("text", x = as.Date("2009-01-01"), y = max(hhi$value) * 0.95, label = "2008 Crisis",
+             color = "darkred", hjust = 0, vjust = 0, size = 3) +
+    geom_line(color = "#0072B2", linewidth = 1) +
+    labs(
+      title = "US Bank Concentration (HHI)",
+      subtitle = "Bank deposits (Commercial & Savings). Source: FRED Series HHMSDODNS. Real data.",
+      x = NULL,
+      y = "HHI Index"
+    ) +
+    theme_antitrust()
+} else {
+  cat("Bank HHI data not available. Run program/scripts/01_fred_extended.R first.\n")
+}
+```
+
+### Commodity price trends
+Concentration in input markets can have downstream effects on consumer prices. Real commodity price data from FRED provides a baseline for understanding how cost shocks propagate through supply chains—a key input for cartel screens and merger analysis.
+
+```{r}
+#| label: orientation-gas-prices
+#| message: false
+#| warning: false
+#| echo: false
+#| fig-cap: "US Retail Gasoline Prices (2000–2026)"
+#| fig-width: 8
+#| fig-height: 5
+library(dplyr)
+library(ggplot2)
+library(readr)
+source("program/R/helpers.R")
+
+gas <- tryCatch({
+  read_csv("data/raw/fred_gas_prices.csv", show_col_types = FALSE) |>
+    mutate(date = as.Date(date))
+}, error = function(e) NULL)
+
+if (!is.null(gas)) {
+  ggplot(gas, aes(date, value)) +
+    geom_line(color = "#D55E00", linewidth = 0.8) +
+    geom_smooth(method = "loess", span = 0.15, color = "#0072B2", linewidth = 1, se = FALSE) +
+    labs(
+      title = "US Retail Gasoline Prices, Regular (2000–2026)",
+      subtitle = "Weekly data. Source: FRED Series GASREGW. Blue line: loess smooth.",
+      x = NULL,
+      y = "Price ($/gallon)"
+    ) +
+    theme_antitrust()
+} else {
+  cat("Gas price data not available. Run program/scripts/01_fred_extended.R first.\n")
+}
 ```

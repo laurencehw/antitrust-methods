@@ -717,82 +717,80 @@ Track platform market share over time to identify tipping points and competitive
 #| fig-height: 7
 library(dplyr)
 library(ggplot2)
+library(readr)
 library(lubridate)
+source("program/R/helpers.R")
 
-# Market share evolution from public sources and regulatory filings
-# Illustrative data for search engines, social media, or e-commerce
-market_evolution <- tibble::tribble(
-  ~date,         ~platform,      ~share,
-  "2015-01-01",  "Platform A",   0.88,
-  "2016-01-01",  "Platform A",   0.90,
-  "2017-01-01",  "Platform A",   0.91,
-  "2018-01-01",  "Platform A",   0.92,
-  "2019-01-01",  "Platform A",   0.91,
-  "2020-01-01",  "Platform A",   0.90,
-  "2021-01-01",  "Platform A",   0.89,
-  "2022-01-01",  "Platform A",   0.88,
-  "2023-01-01",  "Platform A",   0.87,
-  "2015-01-01",  "Platform B",   0.08,
-  "2016-01-01",  "Platform B",   0.07,
-  "2017-01-01",  "Platform B",   0.06,
-  "2018-01-01",  "Platform B",   0.05,
-  "2019-01-01",  "Platform B",   0.06,
-  "2020-01-01",  "Platform B",   0.07,
-  "2021-01-01",  "Platform B",   0.08,
-  "2022-01-01",  "Platform B",   0.09,
-  "2023-01-01",  "Platform B",   0.10,
-  "2015-01-01",  "Others",       0.04,
-  "2016-01-01",  "Others",       0.03,
-  "2017-01-01",  "Others",       0.03,
-  "2018-01-01",  "Others",       0.03,
-  "2019-01-01",  "Others",       0.03,
-  "2020-01-01",  "Others",       0.03,
-  "2021-01-01",  "Others",       0.03,
-  "2022-01-01",  "Others",       0.03,
-  "2023-01-01",  "Others",       0.03
-) |>
-  mutate(date = as.Date(date))
+# Real platform market share data from EU/US/SA competition authorities
+platform_shares <- read_csv("data/derived/platform_market_shares.csv", show_col_types = FALSE)
 
-# Area chart
-ggplot(market_evolution, aes(x = date, y = share, fill = platform)) +
-  geom_area(alpha = 0.8) +
+# Commission rate changes from public filings
+commissions <- read_csv("data/derived/platform_commission_rates.csv", show_col_types = FALSE)
+
+# Panel A: Market shares by platform (from regulatory filings)
+p1 <- ggplot(platform_shares, aes(x = reorder(platform, share), y = share, fill = jurisdiction)) +
+  geom_col(width = 0.7, alpha = 0.85) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", color = "darkred", linewidth = 0.8) +
+  geom_hline(yintercept = 0.7, linetype = "dotted", color = "darkred", linewidth = 0.8) +
+  annotate("text", x = 5.5, y = 0.52, label = "50%", color = "darkred", hjust = 0, size = 3) +
+  annotate("text", x = 5.5, y = 0.72, label = "70%", color = "darkred", hjust = 0, size = 3) +
   scale_y_continuous(labels = scales::percent_format()) +
-  scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
-  scale_fill_manual(
-    values = c("Platform A" = "#0072B2",
-               "Platform B" = "#009E73",
-               "Others" = "#999999")
-  ) +
+  scale_fill_manual(values = c(
+    "EU" = "#0072B2", "US" = "#D55E00", "SA" = "#009E73"
+  )) +
+  coord_flip() +
   labs(
-    title = "Digital Platform Market Share Evolution",
-    subtitle = "Example: Search engine market shares 2015-2023",
-    x = NULL,
-    y = "Market Share",
-    fill = "Platform",
-    caption = "Illustrative data. Replace with StatCounter, SimilarWeb, or regulatory filings."
+    title = "Platform Market Shares from Regulatory Filings",
+    subtitle = "Real data from EU, US, and South African competition authorities",
+    x = NULL, y = "Market Share", fill = "Jurisdiction",
+    caption = "Source: platform_market_shares.csv. Compiled from EU Commission decisions, US litigation filings, SA OIPMI."
   ) +
   theme_antitrust() +
-  theme(
-    legend.position = "bottom",
-    plot.title.position = "plot"
-  )
+  theme(legend.position = "bottom")
 
-# Summary statistics
-cat("\nMarket concentration trends:\n")
-cat(paste0("2015 HHI: ", round(sum((market_evolution$share[
-  market_evolution$date == "2015-01-01"] * 100)^2), 0), "\n"))
-cat(paste0("2023 HHI: ", round(sum((market_evolution$share[
-  market_evolution$date == "2023-01-01"] * 100)^2), 0), "\n"))
-cat(paste0("\nPlatform A share trend: ",
-          scales::percent(market_evolution$share[
-            market_evolution$date == "2015-01-01" &
-            market_evolution$platform == "Platform A"], accuracy = 0.1),
-          " (2015) → ",
-          scales::percent(market_evolution$share[
-            market_evolution$date == "2023-01-01" &
-            market_evolution$platform == "Platform A"], accuracy = 0.1),
-          " (2023)\n"))
+# Panel B: Commission rate changes over time
+p2 <- ggplot(commissions, aes(x = as.Date(date), y = commission_rate, color = platform)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 2.5) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_color_manual(values = c(
+    "Apple App Store" = "#0072B2", "Google Play" = "#D55E00",
+    "Amazon" = "#E69F00", "Uber Eats" = "#009E73"
+  )) +
+  labs(
+    title = "Platform Commission Rate Changes",
+    subtitle = "Real commission rates from public filings and regulatory disclosures",
+    x = NULL, y = "Commission Rate", color = NULL,
+    caption = "Source: platform_commission_rates.csv. From public filings and regulatory proceedings."
+  ) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+
+# Display both panels
+if (requireNamespace("patchwork", quietly = TRUE)) {
+  library(patchwork)
+  p1 / p2 + plot_layout(heights = c(1, 1))
+} else {
+  print(p1)
+  print(p2)
+}
+
+# HHI summary
+cat("\nPlatform market concentration (HHI by case):\n")
+platform_shares |>
+  group_by(case_name) |>
+  summarise(
+    n_firms = n(),
+    hhi = sum((share * 100)^2),
+    leader = platform[which.max(share)],
+    leader_share = max(share),
+    .groups = "drop"
+  ) |>
+  knitr::kable(digits = 0,
+               caption = "HHI computed from real platform market share data")
 ```
+
+These real market share figures from EU, US, and South African regulatory proceedings illustrate the concentration patterns that define digital platform markets. The commission rate panel shows how platform fees have evolved in response to regulatory pressure---Apple's reduction from 30% to 15% for small developers (2020), Google's matching response (2021), and the EU's Digital Markets Act requirements for greater fee transparency.
 
 **Data sources:**
 - **StatCounter**: Global browser, OS, search engine stats

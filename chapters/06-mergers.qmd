@@ -633,42 +633,72 @@ Tie efficiencies to data. For example, if parties cite procurement savings, requ
 #| message: false
 #| warning: false
 #| cache: true
-library(tidyquant)
 library(dplyr)
 library(ggplot2)
+library(readr)
+library(lubridate)
+source("program/R/helpers.R")
 
-event_date <- as.Date("2013-02-14") # substitute deal date
-tickers <- c("AAL", "DAL", "LUV", "SPY")
+# Real airline stock data from FRED/tidyquant
+airlines <- read_csv("data/raw/finance_airlines.csv", show_col_types = FALSE) |>
+  mutate(date = as.Date(date))
 
-prices <- tq_get(
-  tickers,
-  from = event_date - lubridate::days(120),
-  to   = event_date + lubridate::days(60)
-) |>
+# American Airlines/US Airways merger was announced Feb 14, 2013
+event_date <- as.Date("2013-02-14")
+
+# Filter to event window and compute returns
+prices <- airlines |>
+  filter(between(date, event_date - days(120), event_date + days(60))) |>
   group_by(symbol) |>
   arrange(date) |>
   mutate(ret = log(adjusted) - log(lag(adjusted))) |>
-  ungroup()
+  ungroup() |>
+  filter(!is.na(ret))
 
+# Market model: use SPY as benchmark
 market <- prices |> filter(symbol == "SPY") |> transmute(date, mkt_ret = ret)
 cars <- prices |> filter(symbol != "SPY") |>
   left_join(market, by = "date") |>
+  filter(!is.na(mkt_ret)) |>
   mutate(abnormal = ret - mkt_ret, rel_day = as.integer(date - event_date)) |>
   filter(between(rel_day, -20, 20)) |>
   group_by(symbol) |>
   arrange(rel_day) |>
   mutate(car = cumsum(abnormal))
 
-ggplot(cars, aes(rel_day, car, color = symbol)) +
+# Label mapping for airlines
+airline_labels <- c("AAL" = "American Airlines", "DAL" = "Delta",
+                    "UAL" = "United", "LUV" = "Southwest")
+
+ggplot(cars |> mutate(label = airline_labels[symbol]),
+       aes(rel_day, car, color = label)) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "darkred", linewidth = 0.8) +
   geom_hline(yintercept = 0, linewidth = 0.3, color = "gray70") +
   geom_line(linewidth = 0.9) +
-  labs(title = "Cumulative abnormal returns around merger announcement",
-       subtitle = "Illustrative airline example (event ±20 trading days)",
-       x = "Event time (days)", y = "CAR", color = NULL) +
+  scale_color_manual(values = c(
+    "American Airlines" = "#D55E00",
+    "Delta" = "#0072B2",
+    "United" = "#009E73",
+    "Southwest" = "#CC79A7"
+  )) +
+  labs(title = "Cumulative Abnormal Returns: AA/US Airways Merger Announcement",
+       subtitle = "Real airline stock data. Announcement: Feb 14, 2013. Event window ±20 trading days.",
+       x = "Event time (days)", y = "CAR", color = NULL,
+       caption = "Source: finance_airlines.csv (tidyquant). SPY used as market benchmark.\nPositive CAR for rivals suggests coordination expectations; negative suggests competitive threat.") +
   theme_antitrust() +
   theme(legend.position = "bottom")
+
+# Summary table of cumulative abnormal returns
+car_summary <- cars |>
+  filter(rel_day == max(rel_day)) |>
+  mutate(label = airline_labels[symbol]) |>
+  select(label, CAR = car, final_day = rel_day)
+
+cat("\nCumulative Abnormal Returns (full event window):\n")
+knitr::kable(car_summary, digits = 4,
+             caption = "CAR for rival airlines around AA/US Airways merger announcement")
 ```
-Use CAR patterns as suggestive evidence of coordination or efficiency expectations, but always pair with operational data (capacity, contracts).
+Use CAR patterns as suggestive evidence of coordination or efficiency expectations, but always pair with operational data (capacity, contracts). Positive abnormal returns for rival airlines on the announcement date suggest the market expects the merger to facilitate coordinated effects—a "umbrella effect" that benefits all carriers. Negative abnormal returns suggest the merged entity is expected to compete more aggressively.
 
 ### Southern African merger evidence
 - **Walmart/Massmart (2011).** The Competition Commission and Tribunal analyzed SKU-level sales and procurement data showing Massmart’s 20–25% share in formal general merchandise with limited reach into township grocery segments. Diversion estimates from loyalty-card switching rates indicated minimal unilateral effect, so the case turned on public-interest harms. Conditions ultimately required a R240 million supplier development fund, a two-year moratorium on merger-specific retrenchments, and detailed annual reporting on local procurement shares—providing a template for tying data-backed public-interest claims to remedies.
