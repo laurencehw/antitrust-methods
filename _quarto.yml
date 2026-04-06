@@ -23,6 +23,7 @@ book:
     - chapters/12-litigation-practice.qmd
     - chapters/14-closing.qmd
     - chapters/13-empirical-appendix.qmd
+    - chapters/15-glossary.qmd
 
 bibliography: references/references.bib
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/chicago-author-date.csl
