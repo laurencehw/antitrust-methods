@@ -1,5 +1,54 @@
 # Closing {.unnumbered}
 
+## Key methods at a glance
+
+The table below summarizes the core methods covered in this book and the chapters where they are developed. Use it as a quick reference when selecting tools for a specific matter.
+
+| Method | Chapter | Primary Use | Key Diagnostics |
+|--------|---------|-------------|-----------------|
+| HHI & concentration indices | @sec-market-definition | Market structure screening | Thresholds: 1,500 / 2,500 |
+| SSNIP / critical loss | @sec-market-definition | Market definition | Substitution patterns, margin estimates |
+| Difference-in-differences | @sec-research-design | Causal inference | Pre-trends, placebo tests |
+| Synthetic control | @sec-research-design | Single-unit treatment effects | Pre-treatment fit, donor placebos |
+| Staggered DiD (CS, SA) | @sec-research-design | Varying treatment timing | Event-study plots, weights |
+| Logit demand estimation | @sec-io-toolkit | Diversion ratios, UPP | Price coefficients, fit statistics |
+| Merger simulation (logit) | @sec-io-toolkit | Prospective price effects | Sensitivity analysis, GUPPI |
+| Nash-in-Nash bargaining | @sec-io-toolkit | Negotiated price effects | Disagreement payoff shifts |
+| Pass-through estimation | @sec-io-toolkit | Cost-price relationships | Instrument validity, lags |
+| Cartel screens (variance, rotation) | @sec-cartels | Collusion detection | Structural breaks, bid patterns |
+| Before/after overcharge | @sec-cartels | Cartel damages | Control product validity |
+| UPP / GUPPI | @sec-mergers | Merger screening | Diversion ratios, margins |
+| Event studies (CAR) | @sec-mergers | Market reaction analysis | Estimation window, benchmark |
+| Margin squeeze tests | @sec-monopolization | Exclusionary pricing | AEC test, cost allocation |
+| Platform two-sided metrics | @sec-digital-markets | Multi-sided market power | Cross-side elasticities, HHI |
+| Labor market HHI | @sec-labor-markets | Monopsony screening | Commuting zones, occupation codes |
+| Labor supply elasticity | @sec-labor-markets | Employer market power | Panel FE, instrument validity |
+| Patent event studies | @sec-innovation-ip | Innovation market effects | FRAND benchmarks, royalty stacks |
+| Damages estimation | @sec-litigation-practice | Overcharge / lost profits | Class certification, benchmarks |
+| Matching / weighting | @sec-empirical-appendix | Comparison group construction | Balance plots, SMD < 0.1 |
+
+## What to read next
+
+The field moves quickly. The citations below point to work that extends or complements the methods in this book, organized by theme.
+
+**Causal inference and econometric methods.** For the latest on staggered difference-in-differences, see @goodman_bacon_2021 and @sun_abraham_2021, which diagnose the biases in standard two-way fixed effects estimators when treatment timing varies across units. @callaway_santanna_2021 proposes an alternative estimator that avoids these pitfalls. For synthetic control extensions, @athey_bayati_imbens_2021 develop matrix completion methods that generalize the synthetic control framework to multiple treated units and time-varying treatment.
+
+**Digital platform competition.** The Stigler Committee on Digital Platforms (@stigler_committee_2019) provided the foundational analysis that shaped subsequent regulatory proposals, including the EU's Digital Markets Act. For empirical work on platform market power, see @crawford_etal_2022 on search bias measurement and @johnson_etal_2023 on the competitive effects of default positions. The intersection of AI and antitrust is addressed by @calvano_vijay_2023, who show that pricing algorithms can sustain supra-competitive outcomes without explicit communication.
+
+**Labor market power.** @azab_etal_2024 survey the rapidly growing empirical literature on labor monopsony, covering concentration measurement, supply elasticity estimation, and the wage effects of noncompete enforcement. For policy analysis, @naidu_posner_weyl_2018 remain the essential reference on the institutional design of labor antitrust enforcement.
+
+**Merger retrospectives and empirical IO.** @weinberg_hosken_2013 provide a comprehensive survey of merger retrospective studies, while @miller_weinberg_2017 demonstrate how structural models can be validated against post-merger price data. For the latest on differentiated-products merger simulation, @conlon_gortmaker_2020 update the PyBLP framework for modern computational environments.
+
+## Reading paths by audience
+
+Different readers will find different paths through this book most useful. Here are three suggested routes:
+
+**For students.** Start with @sec-orientation and @sec-research-design to build the institutional and methodological foundation. Then work through @sec-market-definition, @sec-io-toolkit, and the three substantive chapters (@sec-cartels, @sec-mergers, @sec-monopolization) in sequence. Use the exercises at the end of each chapter to test your understanding. The empirical appendix (@sec-empirical-appendix) provides code templates you can adapt for coursework and thesis projects.
+
+**For practitioners.** Use the book as a reference. The methods table above lets you jump directly to the technique you need. For merger work, focus on @sec-market-definition, @sec-io-toolkit (demand estimation, UPP/GUPPI, Nash-in-Nash), and @sec-mergers. For cartel matters, start with @sec-cartels and the empirical screening tools in @sec-empirical-appendix. For monopolization, @sec-monopolization and @sec-litigation-practice provide the core framework. The South African case boxes throughout offer comparative perspectives that are directly relevant to emerging-market practice.
+
+**For researchers.** The methodological frontiers are in @sec-digital-markets (multi-sided market empirics), @sec-labor-markets (monopsony measurement), and @sec-innovation-ip (innovation market definition). The "What to read next" section above points to the latest work in each area. The data pipeline documented in this book --- from FRED and BLS APIs through cleaning and analysis --- provides a reproducible foundation for new empirical projects.
+
 ## What we have built
 
 This book began from a simple observation: antitrust analysis is at its best when it integrates three distinct streams of evidence --- quantitative estimation, documentary context, and expert judgment --- and deploys them across the institutional settings where competition policy actually operates. We called this the **evidence triad**, and it has structured every chapter from market definition through litigation practice. The triad is not a theoretical innovation; it is a description of how successful cases are actually built. No single method carries the day. Econometric estimates of overcharge are persuasive when they align with internal documents discussing pricing strategy. Merger simulation results gain credibility when they are consistent with customer testimony about switching costs. Screens for bid rotation become actionable when they coincide with leniency statements identifying the participants. The chapters in this book have shown how to construct each leg of the triad and how to weave them together into a coherent evidentiary package.
