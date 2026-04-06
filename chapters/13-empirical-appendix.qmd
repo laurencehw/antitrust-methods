@@ -117,6 +117,24 @@ For all matching and weighting methods, balance plots showing standardized diffe
 
 ### Qualitative + quantitative integration
 - Align interview findings with econometric outputs using issue trees. For example, code “capacity discipline” documents and test against utilization regressions.
+
+## Connecting templates to chapter applications
+
+This section maps each diagnostic template to the specific chapters where it is applied, so you can quickly find the right tool for your matter.
+
+**Cartel matters (Chapter 5).** Start with the data inventory worksheet to catalog bid data, invoice records, and leniency statements. Use the variance and correlation screens to flag suspicious pricing patterns. The transition matrix and network graph templates identify bid rotation. For damages estimation, the before/after method with structural break tests provides the overcharge estimate. The document coding lexicon helps tag internal communications for price discipline, market allocation, or capacity restraint language.
+
+**Merger analysis (Chapter 6).** The case chronology template tracks the deal timeline from initial approach through agency review to consummation. Use the matching and weighting methods (PSM, entropy balancing, synthetic control) to construct control groups for merger retrospectives. The diff-in-diff template with staggered treatment estimators evaluates post-merger price effects. The data inventory should capture customer-level transaction data, capacity records, and internal strategy documents.
+
+**Monopolization (Chapter 7).** The margin squeeze test and pass-through diagnostics are the core quantitative tools. The document coding lexicon should include tags for exclusive dealing, tying, self-preferencing, and retaliation. The survey and interview kit is critical for gathering customer testimony about foreclosure effects and switching costs.
+
+**Digital markets (Chapter 9).** The data inventory should capture platform telemetry: user activity logs, ranking data, API access records, and multi-homing patterns. The self-preferencing detection regression and algorithmic collusion Q-learning simulation provide distinctive analytical tools not available in traditional antitrust toolkits.
+
+**Labor markets (Chapter 10).** Use the data inventory to catalog HR databases, job posting data, and commuting zone definitions. The matching methods construct comparison groups for policy evaluations (noncompete bans, no-poach settlements). The diff-in-diff template evaluates wage effects of enforcement actions.
+
+**Litigation practice (Chapter 12).** The case chronology template is the backbone of expert report preparation. The data inventory ensures all data sources are documented with custodian names, bates ranges, and confidentiality designations. The survey and interview kit supports class certification and damages estimation.
+
+**Regulation and remedies (Chapter 8).** The diff-in-diff template evaluates remedy effectiveness using pre/post KPI data. The benchmarking scatter plot compares regulated entities on cost and quality dimensions. The remedy monitoring KPI table provides a framework for compliance dashboards.
 - Use the chronology template to surface inconsistencies quickly.
 
 ## Code scaffolds
