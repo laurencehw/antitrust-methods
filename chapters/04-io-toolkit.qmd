@@ -456,6 +456,72 @@ In practice, analysts implement bargaining models at two levels of complexity:
 
 Qualitative evidence strengthens either approach. Negotiation timelines, renewal clauses, concession histories, and internal strategy documents ("we need Hospital X or we lose the state employee contract") all inform the modeling assumptions and help validate quantitative results.
 
+### A worked Nash-in-Nash example
+
+To see how Nash-in-Nash works in practice, consider a simplified hospital-insurer negotiation. Two hospital systems---Hospital A (larger, with 60% of local admissions) and Hospital B (smaller, 40%)---negotiate reimbursement rates with a single insurer that covers 100,000 local enrollees. The insurer's plan is worth $5,000 per enrollee per year if both hospitals are in-network. If Hospital A is excluded, the plan loses $800 per enrollee (patients must travel farther or switch to lower-quality providers). If Hospital B is excluded, the loss is only $200 per enrollee.
+
+The gains from trade for each pair are:
+
+| Pair | Insurer's gain from agreement | Hospital's gain from agreement | Nash product |
+|------|------|------|------|
+| A--Insurer | $800 × 100,000 = $80M | Reimbursement rate × volume | High (A is "must-have") |
+| B--Insurer | $200 × 100,000 = $20M | Reimbursement rate × volume | Lower (B is substitutable) |
+
+Now suppose Hospitals A and B merge. The insurer's disagreement payoff if it fails to reach a deal with the *merged* system is the loss of *both* hospitals---say, $1,200 per enrollee, or $120M total. This is more than the sum of the individual disagreement payoffs ($80M + $20M = $100M) because the hospitals together form a "must-have" network that neither is alone. The merged system's bargaining leverage increases, and the Nash bargaining solution yields higher negotiated prices for both hospitals---even though no beds closed and no services changed.
+
+This is the mechanism that drives price increases in hospital mergers. The effect is largest when the merging parties are each other's closest substitutes from the insurer's perspective---precisely the condition that also drives unilateral effects in standard merger analysis. The bargaining framework makes this intuition precise by quantifying how the merger changes disagreement payoffs.
+
+```{r}
+#| label: nash-in-nash-example
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+library(dplyr)
+library(ggplot2)
+source("program/R/helpers.R")
+
+# Simplified Nash-in-Nash: hospital-insurer bargaining
+# Pre-merger: each hospital bargains separately
+# Post-merger: combined entity bargains as one
+
+bargaining <- tibble::tribble(
+  ~scenario, ~hospital, ~wtp_loss_per_enrollee, ~enrollees, ~bargaining_weight,
+  "Pre-merger", "Hospital A", 800, 100000, 0.6,
+  "Pre-merger", "Hospital B", 200, 100000, 0.3,
+  "Post-merger", "Merged A+B", 1200, 100000, 0.8
+) |>
+  mutate(
+    total_wtp_loss = wtp_loss_per_enrollee * enrollees,
+    # Nash bargaining price: split gains from trade by bargaining weight
+    # Price = (bargaining_weight * total_WTP_loss) / volume
+    # Assuming 10,000 admissions per hospital
+    admissions = if_else(hospital == "Merged A+B", 20000, 10000),
+    negotiated_rate = (bargaining_weight * total_wtp_loss) / admissions
+  )
+
+# Bar chart of negotiated rates
+ggplot(bargaining, aes(x = hospital, y = negotiated_rate, fill = scenario)) +
+  geom_col(width = 0.6, alpha = 0.85) +
+  scale_fill_manual(values = c("Pre-merger" = "#0072B2", "Post-merger" = "#D55E00")) +
+  scale_y_continuous(labels = scales::dollar) +
+  labs(
+    title = "Nash-in-Nash: Hospital Merger Increases Negotiated Rates",
+    subtitle = "Merged entity's improved outside option raises prices for both hospitals",
+    x = NULL, y = "Negotiated Reimbursement Rate per Admission", fill = NULL,
+    caption = "Illustrative calculation. WTP loss = value to insurer of having hospital in-network.\nBargaining weight reflects relative leverage in Nash bargaining solution."
+  ) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+
+cat("\nPrice increase from merger:\n")
+pre_avg <- bargaining |> filter(scenario == "Pre-merger") |> summarise(avg = mean(negotiated_rate)) |> pull(avg)
+post <- bargaining |> filter(scenario == "Post-merger") |> pull(negotiated_rate)
+cat(paste0("Pre-merger average: ", scales::dollar(pre_avg, accuracy = 1), "\n"))
+cat(paste0("Post-merger: ", scales::dollar(post, accuracy = 1), "\n"))
+cat(paste0("Increase: ", scales::percent((post - pre_avg) / pre_avg, accuracy = 0.1), "\n"))
+```
+
 ### Antitrust applications
 
 Bargaining models have become standard tools in several contexts:

@@ -1,11 +1,11 @@
-# Mergers {#sec-mergers}
+# Mergers 
 
-Merger analysis brings together nearly everything from the preceding chapters. Market definition ([Chapter 3](chapters/03-market-definition.md)) establishes the competitive boundaries. The IO toolkit ([Chapter 4](chapters/04-io-toolkit.md)) provides the simulation machinery. The cartel chapter's ([Chapter 5](chapters/05-cartels.md)) coordinated effects framework informs our assessment of whether a merger facilitates tacit collusion. And the qualitative evidence protocols from [Chapter 2](chapters/02-research-design.md) guide how we integrate internal documents, customer testimony, and efficiency claims.
+Merger analysis brings together nearly everything from the preceding chapters. Market definition ([Chapter 3: Market Definition](03-market-definition.md)) establishes the competitive boundaries. The IO toolkit ([Chapter 4: IO Toolkit](04-io-toolkit.md)) provides the simulation machinery. The cartel chapter's ([Chapter 5: Cartels](05-cartels.md)) coordinated effects framework informs our assessment of whether a merger facilitates tacit collusion. And the qualitative evidence protocols from [Chapter 2: Research Design](02-research-design.md) guide how we integrate internal documents, customer testimony, and efficiency claims.
 
 This chapter provides a practical workflow for merger review. We move from transaction overview through shares and concentration metrics, unilateral and coordinated effects analysis, vertical theories, efficiency evaluation, and finally to remedy design. Throughout, we emphasize the differences in legal standards and analytical approaches across the major jurisdictions---US, EU, UK, and South Africa---because merger practitioners increasingly operate in a multi-jurisdictional environment.
 
 ## Learning goals
-Merger reviews synthesize everything covered so far: market definition, IO modeling, qualitative evidence, and remedies. This chapter provides a practical workflow for assessing unilateral, coordinated, vertical, and public-interest effects across US, EU/UK, and South African jurisdictions, drawing on agency guidance (DOJ/FTC Merger Guidelines, 2023); (EC Horizontal Merger Guidelines, 2004); (CMA Merger Assessment Guidelines, 2021).
+Merger reviews synthesize everything covered so far: market definition, IO modeling, qualitative evidence, and remedies. This chapter provides a practical workflow for assessing unilateral, coordinated, vertical, and public-interest effects across US, EU/UK, and South African jurisdictions, drawing on agency guidance [@doj_ftc_hmg_2023; @ec_hmg_2004; @cma_merger_assessment_2021].
 
 By the end you should be able to:
 
@@ -20,7 +20,6 @@ Merger analysis synthesizes the tools from previous chapters into a coherent ass
 
 {% hint style="info" %}
 **Merger Review Workflow**
-
 ```
 PHASE 1: SCREENING              PHASE 2: DEEP DIVE              PHASE 3: DECISION
        |                              |                              |
@@ -74,14 +73,14 @@ PHASE 1: SCREENING              PHASE 2: DEEP DIVE              PHASE 3: DECISIO
 - Summarize products, geographies, overlaps, and timing; map to candidate relevant markets.
 - Compute shares/HHI and diversion using shares, switching, or survey-based measures. Flag mavericks and fringe.
 - Upstream/downstream definitions depend on the theory of harm: be explicit about the vertical chain and platform sides.
-- Ground definitions in agency guidance (US Merger Guidelines (DOJ/FTC Merger Guidelines, 2023); (DOJ/FTC Horizontal Merger Guidelines, 2010), EC/CMA guidance (EC Horizontal Merger Guidelines, 2004); (CMA Merger Assessment Guidelines, 2021)) and adjust for platform/digital contexts.
+- Ground definitions in agency guidance (US Merger Guidelines [@doj_ftc_hmg_2023; @doj_ftc_hmg_2010], EC/CMA guidance [@ec_hmg_2004; @cma_merger_assessment_2021]) and adjust for platform/digital contexts.
 
-**Practical tips:** keep a data inventory ([Empirical Appendix](chapters/13-empirical-appendix.md) template) noting which datasets inform shares (transaction data, Nielsen panels, loyalty cards). Align product labels with the IO models you plan to run later so you avoid remapping midstream.
+**Practical tips:** keep a data inventory ([Chapter 13: Empirical Appendix](13-empirical-appendix.md) template) noting which datasets inform shares (transaction data, Nielsen panels, loyalty cards). Align product labels with the IO models you plan to run later so you avoid remapping midstream.
 
 ### Unilateral effects: UPP/GUPPI and sim
-- Use UPP/GUPPI as a screen (farrell_shapiro_2010_merger); (Jaffe & Weyl, 2013); report inputs (diversion, margins) transparently. Sensitivity to margin measurement and diversion estimates should be shown.
-- For differentiated products, simulate with logit/nested-logit or BLP-lite (Nevo, 2000); (Berry, Levinsohn & Pakes, 1995); emphasize calibration choices (outside share, margin sources).
-- Convey uncertainty: confidence intervals on diversion, ranges on margins, and alternative ownership assumptions (Weinberg & Hosken, 2013).
+- Use UPP/GUPPI as a screen [@farrell_shapiro_2010_merger; @jaffe_weyl_2013]; report inputs (diversion, margins) transparently. Sensitivity to margin measurement and diversion estimates should be shown.
+- For differentiated products, simulate with logit/nested-logit or BLP-lite [@nevo_2000; @berry_levinsohn_pakes_1995]; emphasize calibration choices (outside share, margin sources).
+- Convey uncertainty: confidence intervals on diversion, ranges on margins, and alternative ownership assumptions [@weinberg_hosken_2013].
 - For readers, tie back to case examples in your slides to show how margins and diversion were evidenced (transaction data, surveys, switching analyses).
 
 #### Simple UPP/GUPPI calculation
@@ -96,10 +95,10 @@ PHASE 1: SCREENING              PHASE 2: DEEP DIVE              PHASE 3: DECISIO
 library(dplyr)
 
 #' Calculate Upward Pricing Pressure (UPP) for a merger
-#' (param) diversion Fraction of lost sales that go to the merger partner
-#' (param) price Price of the product losing sales
-#' (param) margin Lerner margin (P-MC)/P as decimal
-#' (param) efficiency Per-unit cost savings from merger synergies
+#' @param diversion Fraction of lost sales that go to the merger partner
+#' @param price Price of the product losing sales
+#' @param margin Lerner margin (P-MC)/P as decimal
+#' @param efficiency Per-unit cost savings from merger synergies
 upp <- function(diversion, price, margin, efficiency = 0) {
   # UPP = diverted profit - efficiencies
   # margin = (P-MC)/P, so price * margin = P - MC = profit per unit
@@ -276,8 +275,6 @@ cat(paste0("Combined firm post-merger share: ",
            scales::percent(sum(products$share), accuracy = 0.1), "\n"))
 ```
 
-![](../images/merger-sim-example-1.png)
-
 **Key takeaways from this simulation:**
 
 1. **Diversion ratios** determine how much pricing pressure the merger creates. Higher diversion between merging products = higher UPP.
@@ -287,16 +284,14 @@ cat(paste0("Combined firm post-merger share: ",
 
 Before presenting results, show calibration diagnostics: how well the model reproduces pre-merger shares, whether price elasticities fall in plausible ranges, and how sensitive predictions are to alternative marginal-cost assumptions.
 
-{% hint style="success" %}
-**Running example: Simulating the AA/US Airways merger**
-
-The AA/US Airways merger (announced February 2013, completed December 2013) provides an ideal case for calibrating the simulation framework above to a real transaction. The demand estimates from [Chapter 4](chapters/04-io-toolkit.md) and the route-level market definitions from [Chapter 3](chapters/03-market-definition.md) supply the key inputs.
+{% endhint %} {.callout-tip title="Running example: Simulating the AA/US Airways merger"}
+The AA/US Airways merger (announced February 2013, completed December 2013) provides an ideal case for calibrating the simulation framework above to a real transaction. The demand estimates from [Chapter 4: IO Toolkit](04-io-toolkit.md) and the route-level market definitions from [Chapter 3: Market Definition](03-market-definition.md) supply the key inputs.
 
 **Calibration.** To simulate the merger on a given route, we need three ingredients: (1) carrier market shares (from DOT T-100 or DB1B data, as in the route-share heatmap), (2) an outside share representing passengers who would choose alternative transport (driving, rail) or forgo travel entirely---typically 20--40% on short-haul routes like DCA--LGA but much higher on long-haul routes with no driving substitute, and (3) carrier-level margins derived from DOT Form 41 cost reports, which provide operating expenses by carrier and stage length. Legacy carriers like AA and US Airways typically reported operating margins of 8--15% in this period, while low-cost carriers like Southwest operated at 12--18%.
 
 **Where the DOJ focused.** The government's challenge centered on routes where the merging carriers had combined nonstop shares exceeding 50%, particularly at hub airports: DCA (where AA and US together held the vast majority of slots), LGA (a slot-controlled airport with significant overlap), ORD (an AA hub where US Airways offered connecting competition), and PHL (the primary US Airways hub). On routes like DCA--LGA, the merger would have combined the two largest carriers, raising HHI well above the 2,500 threshold of the structural presumption.
 
-**The remedy.** Rather than blocking the merger outright, the DOJ required divestitures of 104 slot pairs at DCA and 34 slot pairs at LGA to low-cost carriers---primarily Southwest Airlines---to preserve competitive entry on the most concentrated routes. The logic was straightforward: if the competitive harm came from eliminating head-to-head overlap at slot-constrained airports, then transferring slots to an aggressive competitor could restore the lost competition. Whether the remedy succeeded is an empirical question that the retrospective tools from [Chapter 2](chapters/02-research-design.md) can answer, and the broader question of remedy design is taken up in (sec)-regulation.
+**The remedy.** Rather than blocking the merger outright, the DOJ required divestitures of 104 slot pairs at DCA and 34 slot pairs at LGA to low-cost carriers---primarily Southwest Airlines---to preserve competitive entry on the most concentrated routes. The logic was straightforward: if the competitive harm came from eliminating head-to-head overlap at slot-constrained airports, then transferring slots to an aggressive competitor could restore the lost competition. Whether the remedy succeeded is an empirical question that the retrospective tools from [Chapter 2: Research Design](02-research-design.md) can answer, and the broader question of remedy design is taken up in [Chapter 8: Regulation & Remedies](08-regulation-remedies.md).
 {% endhint %}
 
 ### Coordinated effects
@@ -436,8 +431,6 @@ p3 <- pricing_data |>
 )
 ```
 
-![](../images/maverick-detection-1.png)
-
 **Interpreting maverick screens:**
 
 1. **Coefficient of Variation (CV)**: Mavericks typically show CV 1.5–3× the industry average. High volatility signals frequent promotions, aggressive price responses, or willingness to sacrifice short-term margins.
@@ -450,20 +443,17 @@ p3 <- pricing_data |>
 
 {% hint style="info" %}
 **Practitioner tip**
-
 Combine quantitative screens with qualitative evidence: internal documents referencing the target as a "disruptor" or "price leader," customer testimony about switching patterns, and board materials discussing competitive responses to the target. Courts and agencies look for convergence across evidence types.
 {% endhint %}
 
-{% hint style="success" %}
-**Extended example: Hospital merger analysis**
-
+{% endhint %} {.callout-tip title="Extended example: Hospital merger analysis"}
 Hospital mergers are among the most actively litigated in US antitrust, with the FTC challenging roughly one per year. The stakes are high: commercial insurance prices can rise 20--40% after consummation of anticompetitive hospital mergers, as documented in retrospective studies by Dafny (2009) and Gaynor and Town (2012). The analytical framework combines elements of differentiated-products merger analysis---hospitals compete on quality, location, and reputation---with bilateral bargaining models, because hospitals negotiate rates with insurers rather than individual patients. This makes hospital mergers a natural application of the UPP/simulation toolkit from this chapter, but with an important twist: the "price" is not set in a standard posted-price market.
 
 Unlike standard product markets, hospital "prices" emerge from bilateral negotiations between hospital systems and insurance networks. The key metric is the hospital's willingness-to-pay (WTP) value---how much an insurer's enrollees would pay to have the hospital included in their network. A merger that combines two hospitals with high WTP increases the merged system's bargaining leverage, because the insurer cannot drop both hospitals without losing a large share of its enrollees. The change in WTP (delta-WTP) serves as the hospital-market analog of UPP/GUPPI: it quantifies how much additional bargaining power the merger confers. The FTC has deployed WTP models in cases including *Advocate Health Care* (7th Cir. 2017), *Penn State Hershey/PinnacleHealth* (3rd Cir. 2016), and *Hackensack Meridian/Englewood* (2021), establishing WTP analysis as a standard tool in the agency's hospital merger playbook.
 
 Hospital market definition is perennially contentious. Defendants typically argue for broad geographic markets on the grounds that patients can and do travel for care, while the FTC argues for narrower markets based on patient flow data showing that most patients travel less than 15--20 miles for inpatient services. The hypothetical monopolist framework adapts to this setting: instead of asking whether a price increase would be profitable, the relevant question is whether an insurer could market a viable plan excluding the merged system. Patient origin data, insurer testimony, and claims-level analysis of where patients actually receive care constitute the key evidence. The 2023 Merger Guidelines' emphasis on practical market realities---rather than theoretical substitution possibilities---has generally supported the FTC's narrower market definitions in recent hospital cases.
 
-The South African Private Healthcare Market Inquiry (2014--2019) examined similar dynamics in a very different institutional setting. The Commission found HHIs above 4,000 in several provinces and documented limited patient switching despite tariff differentials across hospital groups. The inquiry's central recommendation---the creation of a Supply-Side Regulator for Health---represents a regulatory response to the same market power problem that the FTC addresses through case-by-case merger enforcement. The contrast is instructive: the US approach relies on ex ante merger control to prevent the accumulation of hospital market power, while South Africa's proposed approach would impose ongoing oversight of an already-concentrated sector. Cross-reference [Chapter 8](chapters/08-regulation-remedies.md) for the remedy design implications.
+The South African Private Healthcare Market Inquiry (2014--2019) examined similar dynamics in a very different institutional setting. The Commission found HHIs above 4,000 in several provinces and documented limited patient switching despite tariff differentials across hospital groups. The inquiry's central recommendation---the creation of a Supply-Side Regulator for Health---represents a regulatory response to the same market power problem that the FTC addresses through case-by-case merger enforcement. The contrast is instructive: the US approach relies on ex ante merger control to prevent the accumulation of hospital market power, while South Africa's proposed approach would impose ongoing oversight of an already-concentrated sector. Cross-reference [Chapter 8: Regulation & Remedies](08-regulation-remedies.md)-remedies for the remedy design implications.
 
 For US hospital mergers, the principal data sources include CMS claims data (Medicare), FAIR Health (commercial claims), state all-payer claims databases (available in roughly 18 states), and the AHA Annual Survey for structural variables such as bed counts, service lines, and system affiliations. For South Africa, the Council for Medical Schemes, SAMRC databases, and provincial hospital utilization records provide analogous information. In both jurisdictions, the key challenge is obtaining commercially insured price data, which is often confidential and requires litigation discovery or regulatory compulsion to access. Practitioners should budget significant time for data acquisition and cleaning---hospital claims data is notoriously messy, with inconsistent coding, missing fields, and complex case-mix adjustment requirements.
 {% endhint %}
@@ -597,15 +587,13 @@ ggplot(scenarios, aes(x = edm_magnitude, y = vupp_effect, fill = net_effect)) +
   theme_antitrust()
 ```
 
-![](../images/merger-vertical-balance-1.png)
-
 **Data sources for vertical analysis:**
 - **Input pricing**: Contracts, invoices, internal transfer pricing documents
 - **Diversion estimates**: Customer surveys, switching data, or structural demand estimation
 - **Margin data**: Cost accounting, segment financials, comparable transactions
 - **Raising rivals' costs evidence**: Internal strategy documents discussing input denial, quality degradation, or discriminatory access
 
-See (Salop, 2018) for the theoretical framework and (DOJ/FTC Vertical Merger Guidelines, 2020) for agency guidance on vertical merger analysis.
+See @salop_2018 for the theoretical framework and @doj_ftc_vmg_2020 for agency guidance on vertical merger analysis.
 
 ### Efficiencies and remedies
 - Synergy claims: require verifiable, merger-specific efficiencies with timelines and implementation costs; stress test with sensitivity tables.
@@ -614,52 +602,79 @@ See (Salop, 2018) for the theoretical framework and (DOJ/FTC Vertical Merger Gui
 Tie efficiencies to data. For example, if parties cite procurement savings, request SKU-level cost projections and simulate whether those savings offset UPP. For behavioral remedies, document monitoring costs and fallback options (trustees, data rooms) referenced in CMA/DG COMP practice.
 
 ### Retrospectives
-- Where historical analogs exist, run diff-in-diff/event studies on prices/output/quality. Use rivals and unaffected markets as controls; test pre-trends (Ashenfelter & Hosken, 2010); (Miller & Weinberg, 2017).
+- Where historical analogs exist, run diff-in-diff/event studies on prices/output/quality. Use rivals and unaffected markets as controls; test pre-trends [@ashenfelter_hosken_2010; @miller_weinberg_2017].
 - For platform/vertical cases, examine participation/multi-homing effects and access terms over time.
-- Cite retrospective literature to benchmark magnitudes and methods (Weinberg & Hosken, 2013).
+- Cite retrospective literature to benchmark magnitudes and methods [@weinberg_hosken_2013].
 - Use well-known retrospectives (e.g., supermarket/hospital/airline cases) to set expectations on effect sizes and uncertainty.
 
 #### Stock-event diagnostic
 ```r
-library(tidyquant)
 library(dplyr)
 library(ggplot2)
+library(readr)
+library(lubridate)
+source("program/R/helpers.R")
 
-event_date <- as.Date("2013-02-14") # substitute deal date
-tickers <- c("AAL", "DAL", "LUV", "SPY")
+# Real airline stock data from FRED/tidyquant
+airlines <- read_csv("data/raw/finance_airlines.csv", show_col_types = FALSE) |>
+  mutate(date = as.Date(date))
 
-prices <- tq_get(
-  tickers,
-  from = event_date - lubridate::days(120),
-  to   = event_date + lubridate::days(60)
-) |>
+# American Airlines/US Airways merger was announced Feb 14, 2013
+event_date <- as.Date("2013-02-14")
+
+# Filter to event window and compute returns
+prices <- airlines |>
+  filter(between(date, event_date - days(120), event_date + days(60))) |>
   group_by(symbol) |>
   arrange(date) |>
   mutate(ret = log(adjusted) - log(lag(adjusted))) |>
-  ungroup()
+  ungroup() |>
+  filter(!is.na(ret))
 
+# Market model: use SPY as benchmark
 market <- prices |> filter(symbol == "SPY") |> transmute(date, mkt_ret = ret)
 cars <- prices |> filter(symbol != "SPY") |>
   left_join(market, by = "date") |>
+  filter(!is.na(mkt_ret)) |>
   mutate(abnormal = ret - mkt_ret, rel_day = as.integer(date - event_date)) |>
   filter(between(rel_day, -20, 20)) |>
   group_by(symbol) |>
   arrange(rel_day) |>
   mutate(car = cumsum(abnormal))
 
-ggplot(cars, aes(rel_day, car, color = symbol)) +
+# Label mapping for airlines
+airline_labels <- c("AAL" = "American Airlines", "DAL" = "Delta",
+                    "UAL" = "United", "LUV" = "Southwest")
+
+ggplot(cars |> mutate(label = airline_labels[symbol]),
+       aes(rel_day, car, color = label)) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "darkred", linewidth = 0.8) +
   geom_hline(yintercept = 0, linewidth = 0.3, color = "gray70") +
   geom_line(linewidth = 0.9) +
-  labs(title = "Cumulative abnormal returns around merger announcement",
-       subtitle = "Illustrative airline example (event ±20 trading days)",
-       x = "Event time (days)", y = "CAR", color = NULL) +
+  scale_color_manual(values = c(
+    "American Airlines" = "#D55E00",
+    "Delta" = "#0072B2",
+    "United" = "#009E73",
+    "Southwest" = "#CC79A7"
+  )) +
+  labs(title = "Cumulative Abnormal Returns: AA/US Airways Merger Announcement",
+       subtitle = "Real airline stock data. Announcement: Feb 14, 2013. Event window ±20 trading days.",
+       x = "Event time (days)", y = "CAR", color = NULL,
+       caption = "Source: finance_airlines.csv (tidyquant). SPY used as market benchmark.\nPositive CAR for rivals suggests coordination expectations; negative suggests competitive threat.") +
   theme_antitrust() +
   theme(legend.position = "bottom")
+
+# Summary table of cumulative abnormal returns
+car_summary <- cars |>
+  filter(rel_day == max(rel_day)) |>
+  mutate(label = airline_labels[symbol]) |>
+  select(label, CAR = car, final_day = rel_day)
+
+cat("\nCumulative Abnormal Returns (full event window):\n")
+knitr::kable(car_summary, digits = 4,
+             caption = "CAR for rival airlines around AA/US Airways merger announcement")
 ```
-
-![](../images/merger-stock-event-1.png)
-
-Use CAR patterns as suggestive evidence of coordination or efficiency expectations, but always pair with operational data (capacity, contracts).
+Use CAR patterns as suggestive evidence of coordination or efficiency expectations, but always pair with operational data (capacity, contracts). Positive abnormal returns for rival airlines on the announcement date suggest the market expects the merger to facilitate coordinated effects—a "umbrella effect" that benefits all carriers. Negative abnormal returns suggest the merged entity is expected to compete more aggressively.
 
 ### Southern African merger evidence
 - **Walmart/Massmart (2011).** The Competition Commission and Tribunal analyzed SKU-level sales and procurement data showing Massmart’s 20–25% share in formal general merchandise with limited reach into township grocery segments. Diversion estimates from loyalty-card switching rates indicated minimal unilateral effect, so the case turned on public-interest harms. Conditions ultimately required a R240 million supplier development fund, a two-year moratorium on merger-specific retrenchments, and detailed annual reporting on local procurement shares—providing a template for tying data-backed public-interest claims to remedies.
@@ -668,7 +683,6 @@ Use CAR patterns as suggestive evidence of coordination or efficiency expectatio
 
 {% hint style="info" %}
 **Method box**
-
 - Simple merger sim template (see R helpers).
 - Event study around merger announcement/close; rival effects.
 - Vertical tools: vUPP, EDM, raising rivals’ costs sketches.
@@ -676,13 +690,11 @@ Use CAR patterns as suggestive evidence of coordination or efficiency expectatio
 
 {% hint style="info" %}
 **Method box: UPP/GUPPI quick calc**
-
 See the UPP/GUPPI example above. Expand the template with case-specific diversion estimates (from surveys, loyalty data, or conjoint work) and margin sources (accounting or expert models). Always show sensitivity ranges.
 {% endhint %}
 
 {% hint style="info" %}
 **Qualitative evidence**
-
 - Integration plans, synergy decks, customer feedback on alternatives.
 - Internal pricing and margin analyses; board materials on strategic rationale.
 - Remedy feasibility from operations teams and third parties.
@@ -690,7 +702,6 @@ See the UPP/GUPPI example above. Expand the template with case-specific diversio
 
 {% hint style="info" %}
 **Code box: merger sim skeleton**
-
 ```r
 # robust path in case execution dir is chapter folder
 source("program/R/helpers.R")
@@ -702,15 +713,13 @@ source("program/R/helpers.R")
 
 {% hint style="info" %}
 **Citations and comparative note**
-
-- Anchor claims to current US Merger Guidelines (2023) (DOJ/FTC Merger Guidelines, 2023) and legacy 2010 guidance (DOJ/FTC Horizontal Merger Guidelines, 2010); include EC Horizontal Guidelines (EC Horizontal Merger Guidelines, 2004) and CMA merger assessment guidelines for comparisons.
+- Anchor claims to current US Merger Guidelines (2023) [@doj_ftc_hmg_2023] and legacy 2010 guidance [@doj_ftc_hmg_2010]; include EC Horizontal Guidelines [@ec_hmg_2004] and CMA merger assessment guidelines for comparisons.
 - Cite empirical merger retrospective studies when presenting methods or benchmarks (e.g., airlines, hospitals).
 - For vertical mergers, cite vUPP/EDM references and any key enforcement actions (e.g., US v. AT&T/Time Warner, EC cases on input foreclosure).
 {% endhint %}
 
 {% hint style="info" %}
 **Case box: Illustrative mergers**
-
 - Horizontal: airline mergers (UA/CO, DL/NW, AA/US) — retrospectives and coordinated effects; hospital mergers for local market power.
 - Vertical: AT&T/Time Warner (US), Microsoft/Activision (platform/distribution) — input foreclosure/EDM debates.
 - Mixed conglomerate/ad tech: Google/DoubleClick; media/telecom bundling examples.
@@ -875,8 +884,6 @@ cat(paste0("\nCombined entity share: ",
                           accuracy = 0.1), "\n"))
 ```
 
-![](../images/merger-hhi-dashboard-1.png)
-
 **Interpretation:**
 - **HHI thresholds**: The 2023 US Merger Guidelines establish a structural presumption of illegality when post-merger HHI > 1,800 and the merger increases HHI by more than 100 points.
 - **Delta HHI**: Changes above 100 in concentrated markets (HHI > 1,800) trigger the structural presumption.
@@ -983,8 +990,6 @@ cat(paste0("Price increase: ",
            ")\n"))
 ```
 
-![](../images/merger-sim-waterfall-1.png)
-
 **How to use this waterfall:**
 - **First-order UPP**: Direct pricing pressure from internalizing diversion.
 - **Internalization**: Additional optimization from portfolio effects (multi-product firms).
@@ -998,9 +1003,7 @@ cat(paste0("Price increase: ",
 
 Replace simulated values with outputs from your actual merger simulation model (logit, nested logit, BLP, or custom structural model).
 
-{% hint style="success" %}
-**Key Takeaways**
-
+{% endhint %} {.callout-tip title="Key Takeaways"}
 1. **Structural screens come first.** HHI levels and deltas provide the starting point. Mergers creating HHI > 2,500 with delta > 200 face heightened scrutiny under current guidelines.
 
 2. **Diversion is the key variable.** For unilateral effects, what matters is how many customers would switch between the merging parties. Diversion ratios from surveys or switching data drive UPP and simulation results.
@@ -1030,7 +1033,7 @@ Replace simulated values with outputs from your actual merger simulation model (
 
 ## Looking ahead
 
-Merger analysis produces artifacts—simulation outputs, UPP tables, event-study results—that feed directly into **[Chapter 7](chapters/07-monopolization.md)** and **[Chapter 12](chapters/12-litigation-practice.md)**. The same frameworks apply when assessing whether a dominant firm's conduct harms competition.
+Merger analysis produces artifacts—simulation outputs, UPP tables, event-study results—that feed directly into **[Chapter 7: Monopolization](07-monopolization.md)** and **[Chapter 12: Litigation Practice](12-litigation-practice.md)**. The same frameworks apply when assessing whether a dominant firm's conduct harms competition.
 
 **Before proceeding, prepare:**
 
@@ -1038,4 +1041,4 @@ Merger analysis produces artifacts—simulation outputs, UPP tables, event-study
 2. **Data refresh plan**: Note which datasets (Nielsen panels, loyalty data, procurement archives) need anonymization or refreshed pulls for teaching or publication.
 3. **Retrospective benchmarks**: Keep a reference list of merger retrospectives (airlines, hospitals, beer) with their effect-size estimates—useful for validating your simulations against real-world outcomes.
 
-In [Chapter 7](chapters/07-monopolization.md), we apply similar diversion and foreclosure frameworks to unilateral conduct by dominant firms. The simulation and screening tools from this chapter transfer directly—the key difference is that we're analyzing conduct by a single firm rather than a transaction between two firms.
+In [Chapter 7: Monopolization](07-monopolization.md), we apply similar diversion and foreclosure frameworks to unilateral conduct by dominant firms. The simulation and screening tools from this chapter transfer directly—the key difference is that we're analyzing conduct by a single firm rather than a transaction between two firms.

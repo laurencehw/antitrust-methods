@@ -1,4 +1,4 @@
-# Orientation: Antitrust and Regulation {#sec-orientation}
+# Orientation: Antitrust and Regulation 
 
 Before diving into specific methods, we need to understand the institutional landscape where antitrust analysis occurs. This chapter provides that foundation. Economic analysis does not happen in a vacuum---it responds to legal standards, agency priorities, and procedural constraints that vary across jurisdictions. Understanding these institutions will help you frame your analyses to address the questions that actually matter in practice.
 
@@ -12,15 +12,13 @@ An equally important goal is judgment: when should you push for additional data 
 
 Modern antitrust work is anchored by a handful of institutions with overlapping mandates. In the United States, the Department of Justice (DOJ) Antitrust Division and the Federal Trade Commission (FTC) share merger and conduct jurisdiction, aided by state attorneys general and sector regulators such as the Federal Communications Commission or Surface Transportation Board.
 
-Post-2000 history matters for understanding current doctrine. The Clinton-era Microsoft litigation cemented exclusionary conduct frameworks (*United States v. Microsoft*, 2001). The 2010 Horizontal Merger Guidelines (DOJ/FTC Horizontal Merger Guidelines, 2010) elevated unilateral effects analysis. Most recently, the 2023 Merger Guidelines (DOJ/FTC Merger Guidelines, 2023) re-centered structural presumptions and addressed platform dynamics head-on.
+Post-2000 history matters for understanding current doctrine. The Clinton-era Microsoft litigation cemented exclusionary conduct frameworks [@us_microsoft_2001]. The 2010 Horizontal Merger Guidelines [@doj_ftc_hmg_2010] elevated unilateral effects analysis. Most recently, the 2023 Merger Guidelines [@doj_ftc_hmg_2023] re-centered structural presumptions and addressed platform dynamics head-on.
 
 Across the Atlantic, the European Commission's Directorate-General for Competition (DG COMP) pairs investigations with inquisitorial decision making, while national authorities like the UK Competition and Markets Authority (CMA) play an increasingly global role—for example, blocking Microsoft/Activision until remedies evolved. Asian agencies—including Japan's JFTC, Korea's KFTC, and China's SAMR—have expanded resources to scrutinize digital markets and cross-border conduct.
 
 For practitioners working in Southern Africa, the Competition Commission and Competition Tribunal are essential reference points. These bodies have expanded their focus to digital markets, food supply chains, and cartels affecting the Southern African Development Community (SADC). Understanding each body's statutory tests, procedural timelines, and evidentiary cultures is essential to crafting persuasive analyses.
 
-{% hint style="success" %}
-**Definition: Key Antitrust Concepts**
-
+{% endhint %} {.callout-tip title="Definition: Key Antitrust Concepts"}
 | Term | Definition |
 |:-----|:-----------|
 | **Market Power** | The ability to profitably raise prices above competitive levels or exclude competitors |
@@ -49,12 +47,11 @@ For multi-jurisdictional practitioners, the table below maps common conduct type
 
 - **Standards**: US uses "monopoly power" (typically >70% share); EU/SA use "dominance" (typically >40-50% share with barriers).
 - **Effects vs. object**: EU Art. 101 distinguishes "object" restrictions (per se illegal) from "effects" analysis; US separates per se from rule of reason.
-- **Public interest**: South Africa uniquely incorporates public interest factors (employment, SME participation, ownership) in merger review under §12A(3) (SA Competition Act, 1998).
+- **Public interest**: South Africa uniquely incorporates public interest factors (employment, SME participation, ownership) in merger review under §12A(3) [@sa_competition_act_1998].
 - **Private enforcement**: US allows treble damages; EU/SA have more limited private action frameworks.
 
 {% hint style="info" %}
 **Practitioner tip**
-
 When advising on multi-jurisdictional matters, map the same conduct to each regime's statutory test early. A practice that survives US rule-of-reason analysis may still violate EU "object" restrictions or trigger South African public-interest review. Build separate legal-economic narratives for each forum.
 {% endhint %}
 
@@ -64,7 +61,6 @@ Having mapped these institutions and their statutory frameworks, practitioners m
 
 {% hint style="info" %}
 **Investigation Workflow Overview**
-
 ```
 INTAKE                 SCOPING                ANALYSIS               DECISION
    |                      |                      |                      |
@@ -97,29 +93,25 @@ Regardless of jurisdiction, investigations follow a recognizable arc. Matters ty
 Practitioners treat data, documents, and interviews as complements rather than substitutes. Intake meetings should generate inventories of transactional databases, billing systems, CRM extracts, internal forecasts, board presentations, and benchmark studies. The task is to identify what can be measured quickly (e.g., monthly price series, bidding outcomes, churn metrics) and what requires longitudinal assembly (e.g., claims-level healthcare data or network telemetry). Teams should simultaneously plan qualitative work: establish search terms for electronically stored information (ESI), design interview protocols, and identify third parties—customers, suppliers, former employees—whose perspectives sharpen or rebut economic priors. Missing this early sequencing is costly; see the Competition Commission South Africa’s review of Netcare/Community Hospital Group, where late-stage data disputes shortened the time available for substantive modeling.
 
 ### Illustrative vignette: Search dominance diagnostics
-The 2020–2023 DOJ challenge to Google Search (*United States v. Google (Search)*, 2023) illustrates how process and substance intertwine. Economists combined browser default share calculations, auction revenue data, and margin analyses with interview testimony from handset makers and browser developers. Those fact narratives clarified why certain regression designs mattered (e.g., estimating counterfactual query volume absent default contracts). Compare that to the Competition Commission South Africa's investigation into digital platforms and app stores (SA OIPMI Final Report, 2023), where documentary evidence about self-preferencing and ad-tech fee structures filled gaps in transaction data. The lesson: quantitative rigor carries the day only when tied to institutional detail about distribution agreements, switching costs, and remedy administrability.
+The 2020–2023 DOJ challenge to Google Search [@us_google_search_2023] illustrates how process and substance intertwine. Economists combined browser default share calculations, auction revenue data, and margin analyses with interview testimony from handset makers and browser developers. Those fact narratives clarified why certain regression designs mattered (e.g., estimating counterfactual query volume absent default contracts). Compare that to the Competition Commission South Africa's investigation into digital platforms and app stores [@sa_oipmi_2023], where documentary evidence about self-preferencing and ad-tech fee structures filled gaps in transaction data. The lesson: quantitative rigor carries the day only when tied to institutional detail about distribution agreements, switching costs, and remedy administrability.
 
 {% hint style="info" %}
 **Method box: Integrating empirics here**
-
 Early-stage screening rarely needs sophisticated econometrics. Build dashboards that pull together market shares, HHI trends, entry/exit indicators, and switching matrices from customer-level data. Combine transactional datasets with public sources (e.g., SEC filings, the FTC’s merger statistics, Stats SA tariff books) to benchmark plausible margins. When data are thin, like in new fintech or biotech markets pivot, quickly to qualitative or expert evidence rather than forcing underpowered regressions. Document these decisions in a running technical memo so litigators can later explain why the team prioritized one technique over another.
 {% endhint %}
 
 {% hint style="info" %}
 **Qualitative evidence**
-
-Treat qualitative work as disciplined research, not anecdote hunting. Begin with an interview guide that connects each theory of harm to specific questions, and pair every interview with contemporaneous notes plus sourcing metadata (custodian, date, privilege status). For document review, align search strings with economic hypotheses—for example, pairing “capacity discipline” with “shutdown” when probing fertilizer cartel allegations in the US Midwest and South Africa's Sasol case (*Competition Commission v. Sasol*, 2014). Create chronologies that marry documentary excerpts with data milestones; these become invaluable when explaining to a tribunal why a particular conduct pattern aligns with measured price changes or customer churn.
+Treat qualitative work as disciplined research, not anecdote hunting. Begin with an interview guide that connects each theory of harm to specific questions, and pair every interview with contemporaneous notes plus sourcing metadata (custodian, date, privilege status). For document review, align search strings with economic hypotheses—for example, pairing “capacity discipline” with “shutdown” when probing fertilizer cartel allegations in the US Midwest and South Africa's Sasol case [@sa_sasol_2014]. Create chronologies that marry documentary excerpts with data milestones; these become invaluable when explaining to a tribunal why a particular conduct pattern aligns with measured price changes or customer churn.
 {% endhint %}
 
 {% hint style="info" %}
 **Case box: Quick tour**
-
-Recent matters illustrate the diversity of evidentiary mixes. The *US v. Microsoft* (*United States v. Microsoft*, 2001) legacy is still instructive for tying and exclusion, but newer platform cases—*US v. Google Search* (*United States v. Google (Search)*, 2023) and the FTC's Meta/Within suit—highlight how product design data and third-party developer testimony reinforce each other. Airline collaborations such as DOJ v. American Airlines/JetBlue (NEA) show how scheduling data, revenue management simulations, and traveler surveys combine to test unilateral and coordinated effects. Global cartel work remains vibrant: the EU Trucks cartel decisions, the KFTC’s memory chip probes, and South Africa’s construction and bread cartels each turned on leniency statements corroborated by bidding records and cost analyses. Labor markets are now front-page antitrust: US wage-fixing cases in healthcare and the 2023 consent orders in the poultry industry relied on HR databases and interview evidence from recruiters.
+Recent matters illustrate the diversity of evidentiary mixes. The *US v. Microsoft* [@us_microsoft_2001] legacy is still instructive for tying and exclusion, but newer platform cases—*US v. Google Search* [@us_google_search_2023] and the FTC's Meta/Within suit—highlight how product design data and third-party developer testimony reinforce each other. Airline collaborations such as DOJ v. American Airlines/JetBlue (NEA) show how scheduling data, revenue management simulations, and traveler surveys combine to test unilateral and coordinated effects. Global cartel work remains vibrant: the EU Trucks cartel decisions, the KFTC’s memory chip probes, and South Africa’s construction and bread cartels each turned on leniency statements corroborated by bidding records and cost analyses. Labor markets are now front-page antitrust: US wage-fixing cases in healthcare and the 2023 consent orders in the poultry industry relied on HR databases and interview evidence from recruiters.
 {% endhint %}
 
 {% hint style="info" %}
 **Comparative note**
-
 While the US emphasizes adversarial hearings and judicial precedent, DG COMP and the CMA operate administrative processes where agencies both investigate and decide. This affects research timing: EU cases often allow broader use of compelled internal data but require detailed written submissions early, whereas South African proceedings feature public-interest considerations that demand additional qualitative evidence (jobs, ownership, regional development). Asian agencies have diverse discovery rules—SAMR can request granular consumer data with little advance notice—so plan modular analyses that adapt as production obligations change. Throughout the book, sidebar notes will flag where legal standards (dominance vs. monopoly), burdens of proof, or remedy preferences diverge.
 {% endhint %}
 
@@ -137,7 +129,7 @@ While the US emphasizes adversarial hearings and judicial precedent, DG COMP and
 
 ## Looking ahead
 
-Orientation work is only useful if it flows directly into research design. In **Chapter 02**, we translate the institutional map above into concrete analytical workplans—building case chronology templates, sketching data inventories, and establishing the evidence-integration frameworks that will structure every subsequent chapter.
+Orientation work is only useful if it flows directly into research design. In [Chapter 2: Research Design](02-research-design.md), we translate the institutional map above into concrete analytical workplans—building case chronology templates, sketching data inventories, and establishing the evidence-integration frameworks that will structure every subsequent chapter.
 
 **Before proceeding, prepare:**
 
@@ -152,16 +144,163 @@ Keep a running list of figures—HHI trends, entry timelines, platform governanc
 ### Agency and case timeline
 This timeline pairs statutory milestones with landmark enforcement actions so readers can anchor later quantitative work in institutional change. We include US, EU, and South African milestones to reflect the multi-jurisdictional focus of this book.
 
-![Antitrust Milestones: US, EU, and South Africa](../images/antitrust-timeline-1.png)
+```r
+library(dplyr)
+library(ggplot2)
+library(scales)
+source("program/R/helpers.R")
+
+# Expanded timeline with multi-jurisdictional coverage
+milestones <- tibble::tribble(
+  ~year, ~event, ~type, ~jurisdiction,
+  # US Statutes
+  1890, "Sherman Act", "Statute", "US",
+  1914, "Clayton/FTC Acts", "Statute", "US",
+  1976, "HSR Act", "Statute", "US",
+  # EU Milestones
+  1957, "Treaty of Rome\n(Art. 85/86)", "Statute", "EU",
+  2004, "EUMR Modernization", "Guidance", "EU",
+  # South Africa
+  1998, "Competition Act 89", "Statute", "SA",
+  2019, "SA Amendment Act", "Statute", "SA",
+  # Key Cases
+  2001, "US v. Microsoft", "Case", "US",
+  2004, "EU v. Microsoft", "Case", "EU",
+  2017, "EU v. Google\nShopping", "Case", "EU",
+  2024, "US v. Google\nSearch", "Case", "US",
+  # Guidelines
+  2010, "US Horizontal\nMerger Guidelines", "Guidance", "US",
+  2023, "US Merger\nGuidelines", "Guidance", "US"
+) |>
+  dplyr::arrange(year) |>
+  dplyr::mutate(
+    # Stagger labels to avoid overlap: alternate above/below, then by jurisdiction
+    y = dplyr::case_when(
+      jurisdiction == "US" & dplyr::row_number() %% 2 == 1 ~ 1.2,
+      jurisdiction == "US" ~ -1.2,
+      jurisdiction == "EU" & dplyr::row_number() %% 2 == 1 ~ 0.8,
+      jurisdiction == "EU" ~ -0.8,
+      TRUE ~ dplyr::if_else(dplyr::row_number() %% 2 == 0, 1.5, -1.5)
+    ),
+    vjust = dplyr::if_else(y > 0, -0.3, 1.3)
+  )
+
+# Color palette by jurisdiction
+jurisdiction_colors <- c(
+  "US" = "#0072B2",   # Blue
+  "EU" = "#D55E00",   # Orange
+  "SA" = "#009E73"    # Green
+)
+
+# Shape by type
+type_shapes <- c(
+  "Statute" = 15,    # Square
+  "Guidance" = 17,   # Triangle
+  "Case" = 16        # Circle
+)
+
+ggplot(milestones, aes(x = year, y = y)) +
+  # Timeline spine
+  geom_hline(yintercept = 0, color = "gray70", linewidth = 1) +
+  # Vertical connectors
+  geom_segment(aes(xend = year, yend = 0, color = jurisdiction),
+               linewidth = 0.6, alpha = 0.7) +
+  # Points
+  geom_point(aes(color = jurisdiction, shape = type), size = 4) +
+  # Labels
+  geom_text(aes(label = event, vjust = vjust, color = jurisdiction),
+            size = 3, show.legend = FALSE, lineheight = 0.85, fontface = "bold") +
+  # Scales
+  scale_y_continuous(limits = c(-2.5, 2.5)) +
+  scale_x_continuous(breaks = seq(1890, 2030, 20), limits = c(1885, 2030)) +
+  scale_color_manual(values = jurisdiction_colors, name = "Jurisdiction") +
+  scale_shape_manual(values = type_shapes, name = "Type") +
+  labs(
+    title = "Key Antitrust Milestones Across Jurisdictions",
+    subtitle = "Statutes, landmark cases, and agency guidance (1890–2024)",
+    x = NULL, y = NULL
+  ) +
+  theme_antitrust() +
+  theme(
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    axis.line.y = element_blank(),
+    panel.grid.major.x = element_line(color = "gray90", linewidth = 0.3),
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    plot.title = element_text(face = "bold"),
+    plot.subtitle = element_text(size = 10, color = "gray40")
+  ) +
+  guides(
+    color = guide_legend(order = 1, override.aes = list(size = 4)),
+    shape = guide_legend(order = 2, override.aes = list(size = 4))
+  )
+```
 
 {% hint style="info" %}
 **Timeline interpretation**
-
-The timeline shows convergence in competition enforcement approaches: South Africa's 1998 Competition Act (SA Competition Act, 1998) drew heavily on EU precedent, while the 2023 US Merger Guidelines (DOJ/FTC Merger Guidelines, 2023) moved closer to EU-style structural presumptions. Note how major cases (Microsoft (*United States v. Microsoft*, 2001), Google (*United States v. Google (Search)*, 2023); (*Google Shopping*, 2017)) often span jurisdictions with related but distinct theories of harm.
+The timeline shows convergence in competition enforcement approaches: South Africa's 1998 Competition Act [@sa_competition_act_1998] drew heavily on EU precedent, while the 2023 US Merger Guidelines [@doj_ftc_hmg_2023] moved closer to EU-style structural presumptions. Note how major cases (Microsoft [@us_microsoft_2001], Google [@us_google_search_2023; @eu_google_shopping_2017]) often span jurisdictions with related but distinct theories of harm.
 {% endhint %}
 
 ### HHI trend example
 Track concentration trends using FRED data as a baseline for cross-jurisdictional comparisons.
 
-![US Bank Concentration (HHI)](../images/us-bank-hhi-1.png)
+```r
+library(dplyr)
+library(ggplot2)
+library(readr)
+source("program/R/helpers.R")
 
+# Use pre-downloaded FRED data (no API key required)
+hhi <- tryCatch({
+  read_csv("data/raw/fred_bank_hhi.csv", show_col_types = FALSE) |>
+    mutate(date = as.Date(date))
+}, error = function(e) NULL)
+
+if (!is.null(hhi)) {
+  ggplot(hhi, aes(date, value)) +
+    geom_vline(xintercept = as.Date("2008-09-15"), linetype="dashed", color="darkred") +
+    annotate("text", x = as.Date("2009-01-01"), y = max(hhi$value) * 0.95, label = "2008 Crisis",
+             color = "darkred", hjust = 0, vjust = 0, size = 3) +
+    geom_line(color = "#0072B2", linewidth = 1) +
+    labs(
+      title = "US Bank Concentration (HHI)",
+      subtitle = "Bank deposits (Commercial & Savings). Source: FRED Series HHMSDODNS. Real data.",
+      x = NULL,
+      y = "HHI Index"
+    ) +
+    theme_antitrust()
+} else {
+  cat("Bank HHI data not available. Run program/scripts/01_fred_extended.R first.\n")
+}
+```
+
+### Commodity price trends
+Concentration in input markets can have downstream effects on consumer prices. Real commodity price data from FRED provides a baseline for understanding how cost shocks propagate through supply chains—a key input for cartel screens and merger analysis.
+
+```r
+library(dplyr)
+library(ggplot2)
+library(readr)
+source("program/R/helpers.R")
+
+gas <- tryCatch({
+  read_csv("data/raw/fred_gas_prices.csv", show_col_types = FALSE) |>
+    mutate(date = as.Date(date))
+}, error = function(e) NULL)
+
+if (!is.null(gas)) {
+  ggplot(gas, aes(date, value)) +
+    geom_line(color = "#D55E00", linewidth = 0.8) +
+    geom_smooth(method = "loess", span = 0.15, color = "#0072B2", linewidth = 1, se = FALSE) +
+    labs(
+      title = "US Retail Gasoline Prices, Regular (2000–2026)",
+      subtitle = "Weekly data. Source: FRED Series GASREGW. Blue line: loess smooth.",
+      x = NULL,
+      y = "Price ($/gallon)"
+    ) +
+    theme_antitrust()
+} else {
+  cat("Gas price data not available. Run program/scripts/01_fred_extended.R first.\n")
+}
+```

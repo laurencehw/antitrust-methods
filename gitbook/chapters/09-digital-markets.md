@@ -1,4 +1,4 @@
-# Digital Markets and Platforms {#sec-digital-markets}
+# Digital Markets and Platforms 
 
 The tools and frameworks from the preceding chapters---market definition, IO modeling, merger analysis, and monopolization doctrine---apply to digital markets, but with distinctive challenges. Multi-sided platforms, network effects, zero-price business models, and rapid technological change all complicate traditional antitrust analysis. This chapter shows how to adapt the general toolkit to these specific features.
 
@@ -16,7 +16,6 @@ Expect to combine telemetry, clickstream data, partner contracts, and qualitativ
 
 {% hint style="info" %}
 **Key acronyms**
-
 **OIPMI** = Online Intermediation Platforms Market Inquiry (South African Competition Commission, 2020–2023). A comprehensive investigation into digital platform competition covering marketplaces, app stores, food delivery, travel booking, and software platforms. Provides detailed transaction data, commission structures, and market share analyses referenced throughout this chapter.
 {% endhint %}
 
@@ -34,7 +33,7 @@ Digital platform analysis extends traditional IO tools to multi-sided markets wh
 - **Network effects**: Do more users on one side attract more users on other sides? How strong is the feedback loop?
 - **Switching costs and lock-in**: What prevents users from moving to rival platforms?
 
-**Platform conduct concerns** [see (Khan, 2017) for the foundational critique of consumer welfare standards in platform markets; (Stigler Committee, 2019) for the policy reform agenda] include:
+**Platform conduct concerns** [see @khan_2017 for the foundational critique of consumer welfare standards in platform markets; @stigler_committee_2019 for the policy reform agenda] include:
 
 - **Self-preferencing**: Does the platform favor its own products in search rankings or recommendations?
 - **Ranking manipulation**: Do algorithm changes benefit the platform at users' expense?
@@ -53,7 +52,6 @@ Digital platform analysis extends traditional IO tools to multi-sided markets wh
 
 {% hint style="info" %}
 **Platform Competition Analysis Workflow**
-
 ```
 SCOPING                   ANALYSIS                  REMEDIES
    |                          |                         |
@@ -88,7 +86,7 @@ SCOPING                   ANALYSIS                  REMEDIES
 {% endhint %}
 
 1. **Define sides and metrics.** Identify user, merchant, advertiser, developer, courier, or publisher sides. Track MAU/DAU, GMV, multi-homing rates, engagement depth, and conversion metrics.
-2. **Map fees and monetization.** Build ladders for commissions, subscriptions, ad loads, and data monetization; compute pass-through and elasticity. For two-sided market theory, see (Rochet & Tirole, 2003) and (Armstrong, 2006).
+2. **Map fees and monetization.** Build ladders for commissions, subscriptions, ad loads, and data monetization; compute pass-through and elasticity. For two-sided market theory, see @rochet_tirole_2003 and @armstrong_2006.
 3. **Theory of harm.** Common mechanisms include self-preferencing, default tying, MFN/parity clauses, data leveraging, interoperability restrictions, algorithmic ranking biases, and algorithmic collusion.
 4. **Mechanism measurement.** Quantify ranking impacts, default effects, fee changes, and data advantages; document multi-homing constraints and API access terms.
 5. **Effects & remedies.** Measure partner churn, user switching, price/fee changes, and innovation impacts. Propose remedies (choice screens, fair-ranking reports, API access rules, data portability, structural separation) tied to measured harms.
@@ -119,7 +117,6 @@ The table below maps common platform theories of harm to measurable metrics and 
 
 {% hint style="info" %}
 **Adapting to zero-price markets**
-
 When users pay with attention rather than money, adapt metrics accordingly:
 
 - Replace `fees_users` with **ad load** (ads per session, ad-to-content ratio)
@@ -130,8 +127,8 @@ When users pay with attention rather than money, adapt metrics accordingly:
 
 ## Participation, multi-homing, and network effects
 
-- **Participation curves:** Model each side's activity as a function of fees, quality, and participation on the other side. Use logit, linear, or Poisson models with cross-side terms (Evans & Schmalensee, 2007); (Hagiu & Wright, 2015).  
-- **Multi-homing rates:** Estimate the share of users or merchants active on rival platforms. OIPMI surveys and EU DMA filings include methodologies you can reuse (Parker & Van Alstyne, 2005).  
+- **Participation curves:** Model each side's activity as a function of fees, quality, and participation on the other side. Use logit, linear, or Poisson models with cross-side terms [@evans_schmalensee_2007; @hagiu_wright_2015].  
+- **Multi-homing rates:** Estimate the share of users or merchants active on rival platforms. OIPMI surveys and EU DMA filings include methodologies you can reuse [@parker_van_alstyne_2005].  
 - **Match quality:** Track conversion rates, completion times, or satisfaction metrics per platform side to show how conduct affects outcomes.  
 - **Elasticities:** Two-sided elasticities inform fee caps and remedy design (e.g., how merchant participation responds to lower commissions or improved ranking fairness).
 
@@ -268,11 +265,13 @@ cat(paste0("Would monopolist profit? Depends on ad revenue vs. user loss tradeof
 3. Simulate: would a hypothetical monopolist profitably degrade quality by 5-10%?
 4. If users wouldn't switch despite degradation → market power concern
 
-:::{.callout-note title="Case box: European Commission v. Google Shopping (2017)"}
-The Commission found that Google systematically positioned its own comparison shopping service at the top of search results while demoting rival comparison shopping sites through algorithmic adjustments (*Google Shopping*, 2017). Evidence showed click-through rates for Google's own service were 35 times higher than for organically listed rivals on the first page. The €2.42 billion fine---the largest antitrust penalty at the time---rested on empirical analysis of traffic differentials: rival comparison shopping sites lost 85% of their traffic after algorithmic changes, while Google Shopping's traffic increased 45-fold. The remedy required Google to give rival comparison services equal treatment through an auction-based mechanism for product listing ad slots. The General Court upheld the decision in 2021, confirming that self-preferencing by a dominant platform can constitute abuse even absent a traditional leveraging theory.
+{% endhint %}{.callout-note title="Case box: European Commission v. Google Shopping (2017)"}
+The Commission found that Google systematically positioned its own comparison shopping service at the top of search results while demoting rival comparison shopping sites through algorithmic adjustments [@eu_google_shopping_2017]. Evidence showed click-through rates for Google's own service were 35 times higher than for organically listed rivals on the first page. The €2.42 billion fine---the largest antitrust penalty at the time---rested on empirical analysis of traffic differentials: rival comparison shopping sites lost 85% of their traffic after algorithmic changes, while Google Shopping's traffic increased 45-fold. The remedy required Google to give rival comparison services equal treatment through an auction-based mechanism for product listing ad slots. The General Court upheld the decision in 2021, confirming that self-preferencing by a dominant platform can constitute abuse even absent a traditional leveraging theory.
+{% endhint %}
 
-:::{.callout-note title="Case box: Epic Games v. Apple (2021)"}
-Epic challenged Apple's 30% App Store commission and anti-steering rules that prevented developers from directing users to cheaper external payment options (*Epic Games v. Apple*, 2021). Judge Gonzalez Rogers found Apple was *not* a monopolist under the Sherman Act, partly because the relevant market was defined as "digital mobile gaming transactions"---a two-sided market where Apple competed with Google Play and console platforms. However, Apple violated California's Unfair Competition Law by preventing developers from communicating alternative payment methods to users. The injunction requiring Apple to allow external payment links reshaped app store economics globally. The case demonstrated the stakes of market definition in platform cases: a narrower single-sided market (iOS app distribution) might have yielded a monopoly finding, while the broader two-sided framing shielded Apple from Section 2 liability.
+{% endhint %}{.callout-note title="Case box: Epic Games v. Apple (2021)"}
+Epic challenged Apple's 30% App Store commission and anti-steering rules that prevented developers from directing users to cheaper external payment options [@us_epic_apple_2021]. Judge Gonzalez Rogers found Apple was *not* a monopolist under the Sherman Act, partly because the relevant market was defined as "digital mobile gaming transactions"---a two-sided market where Apple competed with Google Play and console platforms. However, Apple violated California's Unfair Competition Law by preventing developers from communicating alternative payment methods to users. The injunction requiring Apple to allow external payment links reshaped app store economics globally. The case demonstrated the stakes of market definition in platform cases: a narrower single-sided market (iOS app distribution) might have yielded a monopoly finding, while the broader two-sided framing shielded Apple from Section 2 liability.
+{% endhint %}
 
 ## Ranking, self-preferencing, and defaults
 
@@ -309,9 +308,6 @@ ggplot(ranking, aes(slot, ctr, color = listing)) +
   theme_antitrust() +
   theme(legend.position = "bottom")
 ```
-
-![](../images/digital-ranking-1.png)
-
 Populate the tibble with actual ranking data (e.g., OIPMI buy-box audits, CMA Amazon Marketplace analysis) or maintain sanitized values in `data/examples/digital-ranking.csv`. The CMA's market studies are publicly available at [gov.uk/cma](https://www.gov.uk/government/organisations/competition-and-markets-authority).
 
 ### Default-choice event study
@@ -366,16 +362,12 @@ ggplot(coefs, aes(x = rel_month, y = estimate)) +
   ) +
   theme_antitrust()
 ```
-
-![](../images/digital-default-event-1.png)
-
 Replace the synthetic panel with DMA compliance reports, CMA choice screen experiments, or telemetry from browser/search default changes.
 
 ## Methodologies
 
 {% hint style="info" %}
 **Method box**
-
 - Platform fee/price pass-through across sides.  
 - Event studies on ranking/default changes; DMA/DMA-style interventions.  
 - Two-sided logit or bargaining sketches to test fee caps and interoperability remedies.
@@ -383,7 +375,6 @@ Replace the synthetic panel with DMA compliance reports, CMA choice screen exper
 
 {% hint style="info" %}
 **Qualitative evidence**
-
 - Product requirement documents, experiment summaries, and governance memos.  
 - Partner contracts (parity/MFN, exclusivity), API access terms, data-sharing policies.  
 - User research/surveys capturing multi-homing, switching costs, and friction sources.
@@ -391,9 +382,8 @@ Replace the synthetic panel with DMA compliance reports, CMA choice screen exper
 
 {% hint style="info" %}
 **Citations and comparative note**
-
-- US cases (*Epic Games v. Apple*, 2021); (*United States v. Google (Search)*, 2023); (*United States v. Google (Ad Tech)*, 2023), EU/DMA (*Google Shopping*, 2017); (*Google Android*, 2018); (Digital Markets Act, 2022), UK (CMA digital market studies), KFTC/JFTC app store cases, SAMR digital enforcement.
-- Empirical studies on defaults, ranking effects, and multi-homing [e.g., (Luca, 2016); (Edelman Lai, 2016)].
+- US cases [@us_epic_apple_2021; @us_google_search_2023; @us_google_adtech_2023], EU/DMA [@eu_google_shopping_2017; @eu_google_android_2018; @eu_dma_2022], UK (CMA digital market studies), KFTC/JFTC app store cases, SAMR digital enforcement.
+- Empirical studies on defaults, ranking effects, and multi-homing [e.g., @luca_2016; @edelman_lai_2016].
 - Flag differences in parity/MFN treatment and remedy preferences (EU fair-ranking obligations vs. US injunctive relief).
 {% endhint %}
 
@@ -407,7 +397,82 @@ Replace the synthetic panel with DMA compliance reports, CMA choice screen exper
 ### Multi-homing patterns
 Multi-homing patterns reveal competitive constraints and switching costs. The following visualization shows the distribution of users across platform combinations, helping identify whether platforms compete head-to-head or serve distinct niches.
 
-![](../images/digital-multihoming-plot-1.png)
+```r
+library(dplyr)
+library(ggplot2)
+
+# Simulated multi-homing survey data
+# Replace with OIPMI survey data or DMA compliance reports
+set.seed(234)
+n_users <- 1000
+
+multihoming <- tibble(
+  user_id = 1:n_users,
+  platform_a = sample(c("Active", "Inactive"), n_users, replace = TRUE,
+                     prob = c(0.7, 0.3)),
+  platform_b = sample(c("Active", "Inactive"), n_users, replace = TRUE,
+                     prob = c(0.5, 0.5)),
+  platform_c = sample(c("Active", "Inactive"), n_users, replace = TRUE,
+                     prob = c(0.3, 0.7))
+) |>
+  mutate(
+    pattern = case_when(
+      platform_a == "Active" & platform_b == "Active" & platform_c == "Active" ~ "All three",
+      platform_a == "Active" & platform_b == "Active" ~ "A + B",
+      platform_a == "Active" & platform_c == "Active" ~ "A + C",
+      platform_b == "Active" & platform_c == "Active" ~ "B + C",
+      platform_a == "Active" ~ "A only",
+      platform_b == "Active" ~ "B only",
+      platform_c == "Active" ~ "C only",
+      TRUE ~ "None"
+    )
+  )
+
+# Aggregate flows
+flows <- multihoming |>
+  count(pattern) |>
+  mutate(
+    pct = n / sum(n),
+    pattern = factor(pattern,
+                    levels = c("A only", "B only", "C only",
+                              "A + B", "A + C", "B + C", "All three", "None"))
+  ) |>
+  arrange(pattern)
+
+# Bar chart showing multi-homing patterns
+p1 <- ggplot(flows, aes(x = pattern, y = pct, fill = pattern)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = scales::percent(pct, accuracy = 0.1)),
+            vjust = -0.5, size = 3.5) +
+  scale_y_continuous(labels = scales::percent_format(),
+                     expand = expansion(mult = c(0, 0.1))) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Multi-homing Patterns Across Platforms",
+    subtitle = "User activity across Platform A, B, and C",
+    x = NULL,
+    y = "Share of Users",
+    caption = "Illustrative data. Replace with OIPMI survey or DMA compliance reports."
+  ) +
+  theme_antitrust() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none",
+    plot.title.position = "plot"
+  )
+
+p1
+
+# Summary statistics
+cat("\nMulti-homing summary:\n")
+cat(paste0("Single-homing (one platform only): ",
+          scales::percent(sum(flows$pct[flows$pattern %in%
+                              c("A only", "B only", "C only")]),
+                         accuracy = 0.1), "\n"))
+cat(paste0("Multi-homing (2+ platforms): ",
+          scales::percent(sum(flows$pct[grepl("\\+|three", flows$pattern)]),
+                         accuracy = 0.1), "\n"))
+```
 
 **Interpretation:**
 -   **High single-homing**: Suggests strong lock-in, switching costs, or network effects. Platforms may have market power.
@@ -423,7 +488,107 @@ Multi-homing patterns reveal competitive constraints and switching costs. The fo
 ### Choice screen / default effect visualization
 Quantify how defaults affect market shares using difference-in-differences or event studies around choice screen implementations.
 
-![](../images/digital-default-plot-1.png)
+```r
+library(fixest)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+
+# Simulated data: Android choice screen impact (EU DMA context)
+# Replace with actual DMA compliance data or CMA experiments
+set.seed(345)
+weeks <- -24:24
+countries <- c("Control (no choice screen)", "Treatment (choice screen)")
+
+default_data <- expand.grid(
+  week = weeks,
+  country = countries
+) |>
+  mutate(
+    # Pre-intervention: both countries similar
+    # Post-intervention: treatment shows rival gain
+    rival_share = case_when(
+      country == "Control (no choice screen)" ~ 0.05 + 0.0005 * week + rnorm(n(), 0, 0.01),
+      week < 0 ~ 0.05 + 0.0005 * week + rnorm(n(), 0, 0.01),
+      TRUE ~ 0.05 + 0.0005 * week + 0.08 + rnorm(n(), 0, 0.01)
+    ),
+    rival_share = pmax(0.01, pmin(0.25, rival_share))
+  )
+
+# Time series plot
+p1 <- ggplot(default_data, aes(x = week, y = rival_share,
+                                color = country, linetype = country)) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40",
+             linewidth = 1) +
+  stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
+  annotate("text", x = 0, y = 0.22, label = "Choice screen\nintroduced",
+           hjust = -0.1, size = 3.5, fontface = "italic") +
+  scale_color_manual(values = c("Control (no choice screen)" = "#999999",
+                                 "Treatment (choice screen)" = "#0072B2")) +
+  scale_linetype_manual(values = c("Control (no choice screen)" = "dashed",
+                                   "Treatment (choice screen)" = "solid")) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(
+    title = "Impact of Choice Screen on Rival Search Engine Share",
+    subtitle = "Difference-in-Differences: Treatment vs. Control Countries",
+    x = "Weeks relative to choice screen introduction",
+    y = "Rival search engine share",
+    color = NULL,
+    linetype = NULL
+  ) +
+  theme_antitrust() +
+  theme(
+    legend.position = "bottom",
+    plot.title.position = "plot"
+  )
+
+# Coefficient plot (event study coefficients)
+# Simulated DiD estimates
+did_coefs <- tibble(
+  week = weeks[weeks != -1]  # reference period
+) |>
+  mutate(
+    estimate = 0.08 * as.numeric(week >= 0) + rnorm(n(), 0, 0.01),
+    ci_lower = estimate - 1.96 * 0.01,
+    ci_upper = estimate + 1.96 * 0.01
+  )
+
+p2 <- ggplot(did_coefs, aes(x = week, y = estimate)) +
+  geom_hline(yintercept = 0, linetype = "solid", color = "gray40") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40",
+             linewidth = 1) +
+  geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper),
+              alpha = 0.2, fill = "#0072B2") +
+  geom_line(color = "#0072B2", linewidth = 1) +
+  geom_point(color = "#0072B2", size = 2) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(
+    title = "Event Study Coefficients",
+    subtitle = "Treatment effect by week (relative to week -1)",
+    x = "Weeks relative to choice screen",
+    y = "Effect on rival share (percentage points)",
+    caption = "Illustrative data. Replace with DMA compliance reports or CMA experiments."
+  ) +
+  theme_antitrust() +
+  theme(plot.title.position = "plot")
+
+# Combined plot
+p1 / p2
+
+# Summary statistics
+pre_treatment <- mean(default_data$rival_share[
+  default_data$country == "Treatment (choice screen)" & default_data$week < 0])
+post_treatment <- mean(default_data$rival_share[
+  default_data$country == "Treatment (choice screen)" & default_data$week >= 0])
+effect <- post_treatment - pre_treatment
+
+cat("\nChoice screen impact summary:\n")
+tibble::tibble(
+  metric = c("Pre-treatment share", "Post-treatment share", "Treatment Effect"),
+  value = c(pre_treatment, post_treatment, effect)
+) |>
+  knitr::kable(digits = 3, caption = "Impact of Choice Screen")
+```
 
 **How to use this analysis:**
 - **Pre-trends**: Check parallel trends before intervention to validate DiD assumptions.
@@ -507,8 +672,6 @@ fees |>
   print(n = Inf)
 ```
 
-![](../images/digital-fee-structure-1.png)
-
 **Key insights:**
 - **App stores**: 30% standard (15% for small developers under $1M revenue).
 - **E-commerce marketplaces**: 15-18% base + 15-25% fulfillment (if using platform logistics).
@@ -526,84 +689,80 @@ Track platform market share over time to identify tipping points and competitive
 ```r
 library(dplyr)
 library(ggplot2)
+library(readr)
 library(lubridate)
+source("program/R/helpers.R")
 
-# Market share evolution from public sources and regulatory filings
-# Illustrative data for search engines, social media, or e-commerce
-market_evolution <- tibble::tribble(
-  ~date,         ~platform,      ~share,
-  "2015-01-01",  "Platform A",   0.88,
-  "2016-01-01",  "Platform A",   0.90,
-  "2017-01-01",  "Platform A",   0.91,
-  "2018-01-01",  "Platform A",   0.92,
-  "2019-01-01",  "Platform A",   0.91,
-  "2020-01-01",  "Platform A",   0.90,
-  "2021-01-01",  "Platform A",   0.89,
-  "2022-01-01",  "Platform A",   0.88,
-  "2023-01-01",  "Platform A",   0.87,
-  "2015-01-01",  "Platform B",   0.08,
-  "2016-01-01",  "Platform B",   0.07,
-  "2017-01-01",  "Platform B",   0.06,
-  "2018-01-01",  "Platform B",   0.05,
-  "2019-01-01",  "Platform B",   0.06,
-  "2020-01-01",  "Platform B",   0.07,
-  "2021-01-01",  "Platform B",   0.08,
-  "2022-01-01",  "Platform B",   0.09,
-  "2023-01-01",  "Platform B",   0.10,
-  "2015-01-01",  "Others",       0.04,
-  "2016-01-01",  "Others",       0.03,
-  "2017-01-01",  "Others",       0.03,
-  "2018-01-01",  "Others",       0.03,
-  "2019-01-01",  "Others",       0.03,
-  "2020-01-01",  "Others",       0.03,
-  "2021-01-01",  "Others",       0.03,
-  "2022-01-01",  "Others",       0.03,
-  "2023-01-01",  "Others",       0.03
-) |>
-  mutate(date = as.Date(date))
+# Real platform market share data from EU/US/SA competition authorities
+platform_shares <- read_csv("data/derived/platform_market_shares.csv", show_col_types = FALSE)
 
-# Area chart
-ggplot(market_evolution, aes(x = date, y = share, fill = platform)) +
-  geom_area(alpha = 0.8) +
+# Commission rate changes from public filings
+commissions <- read_csv("data/derived/platform_commission_rates.csv", show_col_types = FALSE)
+
+# Panel A: Market shares by platform (from regulatory filings)
+p1 <- ggplot(platform_shares, aes(x = reorder(platform, share), y = share, fill = jurisdiction)) +
+  geom_col(width = 0.7, alpha = 0.85) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", color = "darkred", linewidth = 0.8) +
+  geom_hline(yintercept = 0.7, linetype = "dotted", color = "darkred", linewidth = 0.8) +
+  annotate("text", x = 5.5, y = 0.52, label = "50%", color = "darkred", hjust = 0, size = 3) +
+  annotate("text", x = 5.5, y = 0.72, label = "70%", color = "darkred", hjust = 0, size = 3) +
   scale_y_continuous(labels = scales::percent_format()) +
-  scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
-  scale_fill_manual(
-    values = c("Platform A" = "#0072B2",
-               "Platform B" = "#009E73",
-               "Others" = "#999999")
-  ) +
+  scale_fill_manual(values = c(
+    "EU" = "#0072B2", "US" = "#D55E00", "SA" = "#009E73"
+  )) +
+  coord_flip() +
   labs(
-    title = "Digital Platform Market Share Evolution",
-    subtitle = "Example: Search engine market shares 2015-2023",
-    x = NULL,
-    y = "Market Share",
-    fill = "Platform",
-    caption = "Illustrative data. Replace with StatCounter, SimilarWeb, or regulatory filings."
+    title = "Platform Market Shares from Regulatory Filings",
+    subtitle = "Real data from EU, US, and South African competition authorities",
+    x = NULL, y = "Market Share", fill = "Jurisdiction",
+    caption = "Source: platform_market_shares.csv. Compiled from EU Commission decisions, US litigation filings, SA OIPMI."
   ) +
   theme_antitrust() +
-  theme(
-    legend.position = "bottom",
-    plot.title.position = "plot"
-  )
+  theme(legend.position = "bottom")
 
-# Summary statistics
-cat("\nMarket concentration trends:\n")
-cat(paste0("2015 HHI: ", round(sum((market_evolution$share[
-  market_evolution$date == "2015-01-01"] * 100)^2), 0), "\n"))
-cat(paste0("2023 HHI: ", round(sum((market_evolution$share[
-  market_evolution$date == "2023-01-01"] * 100)^2), 0), "\n"))
-cat(paste0("\nPlatform A share trend: ",
-          scales::percent(market_evolution$share[
-            market_evolution$date == "2015-01-01" &
-            market_evolution$platform == "Platform A"], accuracy = 0.1),
-          " (2015) → ",
-          scales::percent(market_evolution$share[
-            market_evolution$date == "2023-01-01" &
-            market_evolution$platform == "Platform A"], accuracy = 0.1),
-          " (2023)\n"))
+# Panel B: Commission rate changes over time
+p2 <- ggplot(commissions, aes(x = as.Date(date), y = commission_rate, color = platform)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 2.5) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_color_manual(values = c(
+    "Apple App Store" = "#0072B2", "Google Play" = "#D55E00",
+    "Amazon" = "#E69F00", "Uber Eats" = "#009E73"
+  )) +
+  labs(
+    title = "Platform Commission Rate Changes",
+    subtitle = "Real commission rates from public filings and regulatory disclosures",
+    x = NULL, y = "Commission Rate", color = NULL,
+    caption = "Source: platform_commission_rates.csv. From public filings and regulatory proceedings."
+  ) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+
+# Display both panels
+if (requireNamespace("patchwork", quietly = TRUE)) {
+  library(patchwork)
+  p1 / p2 + plot_layout(heights = c(1, 1))
+} else {
+  print(p1)
+  print(p2)
+}
+
+# HHI summary
+cat("\nPlatform market concentration (HHI by case):\n")
+platform_shares |>
+  group_by(case_name) |>
+  summarise(
+    n_firms = n(),
+    hhi = sum((share * 100)^2),
+    leader = platform[which.max(share)],
+    leader_share = max(share),
+    .groups = "drop"
+  ) |>
+  knitr::kable(digits = 0,
+               caption = "HHI computed from real platform market share data")
 ```
 
-![](../images/digital-market-evolution-1.png)
+These real market share figures from EU, US, and South African regulatory proceedings illustrate the concentration patterns that define digital platform markets. The commission rate panel shows how platform fees have evolved in response to regulatory pressure---Apple's reduction from 30% to 15% for small developers (2020), Google's matching response (2021), and the EU's Digital Markets Act requirements for greater fee transparency.
 
 **Data sources:**
 - **StatCounter**: Global browser, OS, search engine stats
@@ -644,7 +803,7 @@ Large language models (LLMs) and generative AI introduce new competitive dynamic
 | **Training data exclusivity** | Exclusive licensing of high-quality datasets | Document analysis; entry barrier assessment |
 | **API pricing squeeze** | Below-cost API pricing to foreclose rivals | Margin analysis; comparison to standalone costs |
 | **Distribution bundling** | Tying AI features to dominant platforms | Default/pre-installation analysis (cf. browser cases) |
-| **Talent concentration** | Acqui-hires and non-competes limiting rival innovation | Labor market analysis (see [Chapter 10](chapters/10-labor-markets.md)) |
+| **Talent concentration** | Acqui-hires and non-competes limiting rival innovation | Labor market analysis (see [Chapter 10: Labor Markets](10-labor-markets.md)) |
 
 ### Emerging regulatory frameworks
 
@@ -677,4 +836,4 @@ For the latest agency guidance, monitor CMA's AI Foundation Models work and FTC/
 
 ## Looking ahead
 
-Digital markets evolve rapidly, making the frameworks in this chapter a starting point rather than a final word. In **Chapter 10 (Labor Markets)**, we apply similar monopsony frameworks to employer-side platform power---gig economy classification, wage-fixing algorithms, and no-poach agreements. **Chapter 12 (Litigation Practice)** covers how to package digital market evidence into expert reports and trial exhibits. Many of the same event-study and difference-in-differences techniques used here to evaluate platform conduct reappear when assessing remedy effectiveness and merger retrospectives.
+Digital markets evolve rapidly, making the frameworks in this chapter a starting point rather than a final word. In [Chapter 10: Labor Markets](10-labor-markets.md), we apply similar monopsony frameworks to employer-side platform power---gig economy classification, wage-fixing algorithms, and no-poach agreements. [Chapter 12: Litigation Practice](12-litigation-practice.md) covers how to package digital market evidence into expert reports and trial exhibits. Many of the same event-study and difference-in-differences techniques used here to evaluate platform conduct reappear when assessing remedy effectiveness and merger retrospectives.

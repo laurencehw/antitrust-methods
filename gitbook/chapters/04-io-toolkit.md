@@ -1,8 +1,8 @@
-# Industrial Organization Toolkit {#sec-io-toolkit}
+# Industrial Organization Toolkit 
 
 The previous chapters established how to define markets and conduct causal research. We now turn to the analytical machinery that powers much of modern antitrust analysis: the industrial organization (IO) toolkit. These methods allow us to model how firms compete, estimate parameters like marginal costs and demand elasticities, and simulate the effects of mergers or conduct before they occur.
 
-This chapter occupies a pivotal position in the book. The demand models, cost estimates, and bargaining frameworks introduced here feed directly into the merger simulations in [Chapter 6](chapters/06-mergers.md), the exclusionary conduct analysis in [Chapter 7](chapters/07-monopolization.md), and the digital markets analysis in [Chapter 9](chapters/09-digital-markets.md). Master these tools, and you will be equipped to tackle nearly any quantitative antitrust question.
+This chapter occupies a pivotal position in the book. The demand models, cost estimates, and bargaining frameworks introduced here feed directly into the merger simulations in [Chapter 6: Mergers](06-mergers.md), the exclusionary conduct analysis in [Chapter 7: Monopolization](07-monopolization.md), and the digital markets analysis in [Chapter 9: Digital Markets](09-digital-markets.md). Master these tools, and you will be equipped to tackle nearly any quantitative antitrust question.
 
 ## Learning goals
 This chapter bridges descriptive evidence and full-blown merger simulations. You will learn when to deploy lightweight demand or supply models, how to explain their assumptions to agencies and courts, and how to integrate qualitative evidence (contracts, governance documents, interviews) so the results feel grounded.
@@ -18,11 +18,11 @@ By the end you should be able to:
 
 The IO toolkit is a layered architecture. Each layer builds on the one below: demand estimation feeds supply modeling, which informs bargaining analysis, which connects to the multi-sided dynamics that characterize modern platform markets. Diagnostics sit atop the stack, cross-checking every layer against observable data. The list below outlines each component; the sections that follow develop them in detail.
 
-1. **Demand estimation.** Start with logit/BLP-lite intuition (shares vs. prices and characteristics) (Nevo, 2000); (Berry, Levinsohn & Pakes, 1995). Add nested logit or random coefficients when differentiation is material, and report diversion matrices.  
+1. **Demand estimation.** Start with logit/BLP-lite intuition (shares vs. prices and characteristics) [@nevo_2000; @berry_levinsohn_pakes_1995]. Add nested logit or random coefficients when differentiation is material, and report diversion matrices.  
 2. **Supply modeling & pass-through.** Recover marginal costs via first-order conditions (FOCs) or reduced-form models, and estimate pass-through elasticities (see code below).  
-3. **Bargaining frameworks.** Nash-in-Nash approximations for platform or healthcare negotiations. For theoretical foundations, see (Tirole, 1988) and (Motta, 2004).  
-4. **Multi-sided interactions.** Incorporate indirect network effects, multi-homing rates, and platform policies (MFNs, parity clauses) as either covariates or structural parameters (Rochet & Tirole, 2003).  
-5. **Diagnostics & validation.** Cross-check simulated price effects against historical shocks, third-party benchmarks (Ashenfelter & Hosken, 2010), or rival stock reactions.
+3. **Bargaining frameworks.** Nash-in-Nash approximations for platform or healthcare negotiations. For theoretical foundations, see @tirole_1988 and @motta_2004.  
+4. **Multi-sided interactions.** Incorporate indirect network effects, multi-homing rates, and platform policies (MFNs, parity clauses) as either covariates or structural parameters [@rochet_tirole_2003].  
+5. **Diagnostics & validation.** Cross-check simulated price effects against historical shocks, third-party benchmarks [@ashenfelter_hosken_2010], or rival stock reactions.
 
 ## Structural vs. Reduced Form Approaches
 
@@ -53,9 +53,7 @@ In modern practice, these approaches reinforce each other. You might use a **red
 | **Agency preference** | Mergers (prospective) | Retrospectives, damages |
 | **Key packages** | `BLPestimatoR`, custom code | `fixest`, `did`, `synthdid` |
 
-{% hint style="danger" %}
-**Key IO Formulas**
-
+{% endhint %} {.callout-important title="Key IO Formulas"}
 | Formula | Definition | Use Case |
 |:--------|:-----------|:---------|
 | **UPP** = Diversion x Margin - Efficiency | Upward Pricing Pressure | Merger screening |
@@ -69,7 +67,6 @@ In modern practice, these approaches reinforce each other. You might use a **red
 
 {% hint style="info" %}
 **Method box**
-
 **UPP/GUPPI.** Use diversion ratios and margins to compute Upward Pricing Pressure (UPP) or Gross Upward Pricing Pressure Index (GUPPI). See Farrell & Shapiro (2010) "Antitrust Evaluation of Horizontal Mergers: An Economic Alternative to Market Definition" for the theoretical foundation.  
 **Pass-through regressions.** Run `feols(price ~ cost_shifter | product + time)` with clustered standard errors to get empirical pass-through before turning to structural models.  
 **Simulation scaffolds.** When time is short, build a logit demand system with constant marginal costs to approximate unilateral effects, then refine later.
@@ -79,7 +76,6 @@ Structural models are only as credible as the institutional knowledge embedded i
 
 {% hint style="info" %}
 **Qualitative evidence**
-
 **Contracts & governance.** MFNs, parity clauses, data-sharing obligations, and service-level agreements indicate how flexible margins are; tie them to modeling assumptions.
 **Design choices.** Product defaults, API throttling, or app-store ranking algorithms signal platform steering and inform multi-sided parameters.
 **Field interviews.** Operations or procurement leads can explain capacity constraints, switching costs, or negotiation cycles—use these insights to set priors for bargaining power or cost recovery.
@@ -87,8 +83,7 @@ Structural models are only as credible as the institutional knowledge embedded i
 
 {% hint style="info" %}
 **Jurisdictional comparison: IO tools in practice**
-
-The US and EU differ in how they deploy IO tools. US agencies have embraced UPP/GUPPI as merger screens since the 2010 Horizontal Merger Guidelines (DOJ/FTC Horizontal Merger Guidelines, 2010), sometimes bypassing formal market definition entirely. The European Commission's guidelines (EC Horizontal Merger Guidelines, 2004) place greater emphasis on market shares and HHI thresholds but increasingly use simulation models in Phase II investigations. On platform regulation, the EU has moved further with the Digital Markets Act, which imposes per se obligations on "gatekeepers" regarding MFNs and parity clauses---a structural intervention that contrasts with the US preference for case-by-case analysis under the rule of reason. The multi-sided market framework of (Rochet & Tirole, 2003) informs both jurisdictions, but its practical weight varies: EU decisions in cases like Google Shopping relied heavily on platform theory, while US courts have been slower to adopt it outside of payment-card litigation (*Ohio v. American Express*, 2018).
+The US and EU differ in how they deploy IO tools. US agencies have embraced UPP/GUPPI as merger screens since the 2010 Horizontal Merger Guidelines [@doj_ftc_hmg_2010], sometimes bypassing formal market definition entirely. The European Commission's guidelines [@ec_hmg_2004] place greater emphasis on market shares and HHI thresholds but increasingly use simulation models in Phase II investigations. On platform regulation, the EU has moved further with the Digital Markets Act, which imposes per se obligations on "gatekeepers" regarding MFNs and parity clauses---a structural intervention that contrasts with the US preference for case-by-case analysis under the rule of reason. The multi-sided market framework of @rochet_tirole_2003 informs both jurisdictions, but its practical weight varies: EU decisions in cases like Google Shopping relied heavily on platform theory, while US courts have been slower to adopt it outside of payment-card litigation (*Ohio v. American Express*, 2018).
 {% endhint %}
 
 ## Demand skeleton: simple logit example
@@ -99,7 +94,7 @@ $$\ln(s_j) - \ln(s_0) = \alpha \, p_j + \mathbf{x}_j' \boldsymbol{\beta} + \xi_j
 
 where $s_j$ is the market share of product $j$, $s_0$ is the outside-good share, $p_j$ is price, $\mathbf{x}_j$ is a vector of observed characteristics, and $\xi_j$ captures unobserved product quality. The coefficient $\alpha$ (expected to be negative) governs price sensitivity, while $\boldsymbol{\beta}$ captures how characteristics shift utility.
 
-The example below uses a cross-section of breakfast cereal brands---a setting familiar from (Nevo, 2001)---to illustrate the mechanics. With 10 inside goods and two predictors, we have adequate degrees of freedom.
+The example below uses a cross-section of breakfast cereal brands---a setting familiar from @nevo_2001---to illustrate the mechanics. With 10 inside goods and two predictors, we have adequate degrees of freedom.
 
 ```r
 library(tidyverse)
@@ -141,6 +136,32 @@ In practice, analysts address endogeneity by instrumenting for price with cost s
 Upward Pricing Pressure (UPP) is a quick screen to assess whether a merger creates incentives to raise prices. It combines diversion ratios (where do customers go?) and margins (how profitable are those diverted sales?). High UPP suggests competitive concerns; low or negative UPP (when efficiencies exceed pricing pressure) suggests the merger may be benign.
 
 ### Basic UPP calculation
+```r
+library(dplyr)
+library(ggplot2)
+
+upp <- function(diversion, margin, efficiency = 0) {
+  (diversion * margin) - efficiency
+}
+
+upp_results <- tibble::tribble(
+  ~pair, ~diversion, ~margin, ~efficiency,
+  "Product A -> B", 0.35, 0.45, 0.05,
+  "Product B -> A", 0.28, 0.40, 0.02
+) |>
+  mutate(
+    upp = upp(diversion, margin, efficiency),
+    guppi = diversion * margin,  # Gross UPP (before efficiencies)
+    interpretation = case_when(
+      upp > 0.10 ~ "High pricing pressure",
+      upp > 0.05 ~ "Moderate pricing pressure",
+      upp > 0 ~ "Low pricing pressure",
+      TRUE ~ "No pricing pressure (efficiencies dominate)"
+    )
+  )
+
+upp_results
+```
 
 ### UPP/GUPPI sensitivity tornado chart
 A tornado chart shows how UPP changes as we vary key inputs (diversion, margin, efficiencies) one at a time. This helps communicate uncertainty and identify which parameters matter most for the competitive assessment.
@@ -238,8 +259,6 @@ sensitivity |>
   print(n = Inf)
 ```
 
-![](../images/upp-tornado-1.png)
-
 **How to use this chart:**
 - **Longest bars** = most sensitive parameters. Focus data collection and robustness checks on these.
 - **Base case** (dashed orange line): Your central UPP estimate.
@@ -257,13 +276,10 @@ Tie the efficiency term to documented synergies or cost savings (procurement eco
 
 {% hint style="info" %}
 **Case box: UPP analysis in AT&T/T-Mobile (2011)**
-
-The DOJ's 2011 challenge to AT&T's proposed $39 billion acquisition of T-Mobile provides a landmark application of UPP/GUPPI analysis in merger review. The complaint alleged that T-Mobile was a particularly disruptive competitor---its aggressive pricing and unlimited data plans constrained the pricing of AT&T and Verizon. Internal documents showed high diversion between AT&T and T-Mobile: when customers left one carrier, a substantial fraction switched to the other. Combined with wireless margins of 40--55%, GUPPI estimates implied significant upward pricing pressure. The DOJ's economic analysis also estimated diversion ratios at the local market level, since wireless competition varies by geography. AT&T argued that network efficiencies and spectrum synergies would offset pricing pressure, but the claimed efficiencies were not merger-specific (AT&T could expand capacity independently). The merger was abandoned after the DOJ filed suit. The case cemented UPP as a practical screening tool and demonstrated how diversion-based analysis could substitute for formal market definition in differentiated-product mergers (Farrell & Shapiro, 2010).
+The DOJ's 2011 challenge to AT&T's proposed $39 billion acquisition of T-Mobile provides a landmark application of UPP/GUPPI analysis in merger review. The complaint alleged that T-Mobile was a particularly disruptive competitor---its aggressive pricing and unlimited data plans constrained the pricing of AT&T and Verizon. Internal documents showed high diversion between AT&T and T-Mobile: when customers left one carrier, a substantial fraction switched to the other. Combined with wireless margins of 40--55%, GUPPI estimates implied significant upward pricing pressure. The DOJ's economic analysis also estimated diversion ratios at the local market level, since wireless competition varies by geography. AT&T argued that network efficiencies and spectrum synergies would offset pricing pressure, but the claimed efficiencies were not merger-specific (AT&T could expand capacity independently). The merger was abandoned after the DOJ filed suit. The case cemented UPP as a practical screening tool and demonstrated how diversion-based analysis could substitute for formal market definition in differentiated-product mergers [@farrell_shapiro_2010].
 {% endhint %}
 
-{% hint style="success" %}
-**Running example: Airline demand and UPP**
-
+{% endhint %} {.callout-tip title="Running example: Airline demand and UPP"}
 Airline demand is typically estimated using a **nested logit** model, with nests defined by airport (e.g., all flights from DCA in one nest, all flights from IAD in another) or by service type (nonstop vs. connecting). The nesting structure relaxes the IIA assumption of the plain logit: passengers choosing among nonstop options at the same airport substitute more readily with each other than with connecting flights from a different airport. This matters because the diversion ratios that drive UPP depend on the substitution pattern.
 
 For the American Airlines/US Airways merger (2013), consider a route like DCA--LGA where both carriers offered nonstop service. Using plausible parameters from the airline literature---diversion ratios of 0.25--0.35 between the merging carriers (reflecting their large combined slot holdings at DCA) and operating margins of 10--15% (typical for legacy carriers on competitive routes)---we can compute a rough GUPPI:
@@ -272,7 +288,7 @@ $$
 \text{GUPPI}_{AA \to US} = D_{AA \to US} \times M_{US} \approx 0.30 \times 0.12 = 3.6\%
 $$
 
-A 3.6% GUPPI is below the 5% rule-of-thumb threshold, but this is sensitive to input assumptions. If diversion is at the high end (0.35, reflecting limited alternatives at slot-constrained DCA) and margins are 15%, GUPPI rises to 5.3%---crossing into the concern zone. The tornado chart above shows exactly this kind of sensitivity. In practice, different data sources yield different diversion estimates: DOT booking data captures actual itineraries, frequent-flyer program data reveals loyalty-driven switching, and customer surveys measure stated preferences. The DOJ's economic experts would have triangulated across these sources, weighting each by reliability. The market definitions from [Chapter 3](chapters/03-market-definition.md) determine which routes to screen, and the simulation framework in [Chapter 6](chapters/06-mergers.md) translates these UPP estimates into predicted price effects.
+A 3.6% GUPPI is below the 5% rule-of-thumb threshold, but this is sensitive to input assumptions. If diversion is at the high end (0.35, reflecting limited alternatives at slot-constrained DCA) and margins are 15%, GUPPI rises to 5.3%---crossing into the concern zone. The tornado chart above shows exactly this kind of sensitivity. In practice, different data sources yield different diversion estimates: DOT booking data captures actual itineraries, frequent-flyer program data reveals loyalty-driven switching, and customer surveys measure stated preferences. The DOJ's economic experts would have triangulated across these sources, weighting each by reliability. The market definitions from [Chapter 3: Market Definition](03-market-definition.md) determine which routes to screen, and the simulation framework in [Chapter 6: Mergers](06-mergers.md) translates these UPP estimates into predicted price effects.
 {% endhint %}
 
 ## Visualizations
@@ -280,7 +296,103 @@ A 3.6% GUPPI is below the 5% rule-of-thumb threshold, but this is sensitive to i
 ### Pass-through diagnostic using public price indices
 Pass-through analysis estimates how much of a cost change flows through to consumer prices. This is critical for cartel damages (upstream overcharge → downstream harm), merger analysis (will cost savings benefit consumers?), and vertical restraints. This example uses real FRED data for gasoline prices.
 
-![](../images/cost-pass-through-1.png)
+```r
+library(fredr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
+
+fredr_set_key(Sys.getenv("FRED_API_KEY"))
+
+# Producer Price Index: Petroleum refining
+ppi <- fredr(
+  series_id = "PCU324110324110",
+  observation_start = as.Date("2015-01-01")
+) |>
+  transmute(date, ppi = value)
+
+# Consumer Price Index: Gasoline (all types)
+cpi <- fredr(
+  series_id = "CUSR0000SETB01",
+  observation_start = as.Date("2015-01-01")
+) |>
+  transmute(date, cpi = value)
+
+pass_df <- inner_join(ppi, cpi, by = "date") |>
+  arrange(date) |>
+  mutate(
+    ppi_index = ppi / first(ppi) * 100,
+    cpi_index = cpi / first(cpi) * 100,
+    # Calculate changes for pass-through regression
+    ppi_change = (ppi - lag(ppi)) / lag(ppi),
+    cpi_change = (cpi - lag(cpi)) / lag(cpi)
+  ) |>
+  drop_na()
+
+# Time series plot
+pass_long <- pass_df |>
+  select(date, Producer = ppi_index, Consumer = cpi_index) |>
+  pivot_longer(-date, names_to = "series", values_to = "index")
+
+p1 <- ggplot(pass_long, aes(x = date, y = index, color = series)) +
+  geom_line(linewidth = 1.1) +
+  scale_color_manual(values = c("Producer" = "#D55E00", "Consumer" = "#0072B2")) +
+  labs(
+    title = "Producer vs. Consumer Gasoline Price Indices",
+    subtitle = "Tracking cost pass-through from refineries to retail",
+    x = NULL,
+    y = "Index (Jan 2015 = 100)",
+    color = NULL
+  ) +
+  theme_antitrust() +
+  theme(
+    legend.position = "bottom",
+    plot.title.position = "plot"
+  )
+
+# Scatter plot with regression line
+pass_model <- lm(cpi_index ~ ppi_index, data = pass_df)
+pass_coef <- coef(pass_model)[["ppi_index"]]
+pass_r2 <- summary(pass_model)$r.squared
+
+p2 <- ggplot(pass_df, aes(x = ppi_index, y = cpi_index)) +
+  geom_point(alpha = 0.5, color = "#0072B2") +
+  geom_smooth(method = "lm", se = TRUE, color = "#D55E00", linewidth = 1.2) +
+  annotate("text", x = min(pass_df$ppi_index) + 5, y = max(pass_df$cpi_index) - 5,
+           label = paste0("Pass-through rate: ", round(pass_coef, 3),
+                         "\nR² = ", round(pass_r2, 3)),
+           hjust = 0, size = 4, fontface = "bold") +
+  labs(
+    title = "Pass-Through Regression",
+    subtitle = "1 unit increase in PPI → ? unit increase in CPI",
+    x = "Producer Price Index",
+    y = "Consumer Price Index"
+  ) +
+  theme_antitrust() +
+  theme(plot.title.position = "plot")
+
+# Combined plot
+p1 / p2 + plot_annotation(
+  caption = "Data: FRED series PCU324110324110 (PPI: Petroleum Refining) and CUSR0000SETB01 (CPI: Gasoline)"
+)
+
+# Summary statistics
+pass_summary <- tibble::tibble(
+  metric = c("Pass-through coefficient", "R-squared", "Observations", "Interpretation"),
+  value = c(
+    round(pass_coef, 3),
+    round(pass_r2, 3),
+    nrow(pass_df),
+    ifelse(pass_coef < 0.5, "Incomplete pass-through",
+           ifelse(pass_coef < 1.0, "Substantial pass-through",
+                  "Over-shifting (pass-through > 100%)"))
+  )
+)
+
+cat("\nPass-through analysis summary:\n")
+knitr::kable(pass_summary, digits=3, caption="Pass-Through Analysis Results")
+```
 
 **Interpretation:**
 - **Pass-through coefficient**: Measures how much a 1% increase in producer prices flows through to consumer prices. Values < 1 indicate incomplete pass-through (firms absorb some cost increases); values > 1 indicate over-shifting (firms amplify cost increases, possibly due to market power).
@@ -295,7 +407,7 @@ Pass-through analysis estimates how much of a cost change flows through to consu
 
 Swap series IDs for your industry (e.g., `WPUSI012011` for steel PPI, `CPIAUCSL` for overall CPI) or use firm-specific cost and price data when available.
 
-## Bargaining frameworks {#sec-bargaining}
+## Bargaining frameworks 
 
 Pass-through analysis assumes price-taking behavior downstream: firms receive a cost shock and adjust prices mechanically. But in many antitrust-relevant markets---hospital-insurer negotiations, platform-merchant relationships, franchisor-franchisee arrangements---prices emerge from bilateral bargaining where both sides have leverage. The pass-through coefficient tells you how costs flow through a supply chain; it says nothing about how those costs were determined in the first place, or how a merger might shift the balance of power at the negotiating table. The bargaining frameworks below capture these dynamics.
 
@@ -303,7 +415,7 @@ Many antitrust-relevant markets do not feature posted prices. Instead, prices em
 
 ### The Nash-in-Nash framework
 
-The dominant framework in merger analysis involving negotiated prices is the **Nash-in-Nash** model (Horn Wolinsky, 1988). The setup is as follows. Each upstream firm (e.g., a hospital) and each downstream firm (e.g., an insurer) simultaneously engage in bilateral Nash bargaining over their contract terms. The negotiated price between any pair reflects their relative **bargaining leverage**, which in turn depends on each side's **disagreement payoff**---the profit each party would earn if negotiations break down and the pair fails to reach a deal.
+The dominant framework in merger analysis involving negotiated prices is the **Nash-in-Nash** model [@horn_wolinsky_1988]. The setup is as follows. Each upstream firm (e.g., a hospital) and each downstream firm (e.g., an insurer) simultaneously engage in bilateral Nash bargaining over their contract terms. The negotiated price between any pair reflects their relative **bargaining leverage**, which in turn depends on each side's **disagreement payoff**---the profit each party would earn if negotiations break down and the pair fails to reach a deal.
 
 The Nash bargaining solution for a pair $(i, j)$ maximizes the Nash product:
 
@@ -325,10 +437,71 @@ The key insight is that **outside options drive bargaining power**. A party's le
 
 In practice, analysts implement bargaining models at two levels of complexity:
 
-- **Full structural estimation.** Estimate demand (e.g., a model of insurer/plan choice and hospital choice), recover disagreement payoffs by simulating what happens when each pair is removed from the network, and solve for Nash bargaining prices. This is the approach used in hospital merger cases and formalized by (Gowrisankaran Nevo Town, 2015).
+- **Full structural estimation.** Estimate demand (e.g., a model of insurer/plan choice and hospital choice), recover disagreement payoffs by simulating what happens when each pair is removed from the network, and solve for Nash bargaining prices. This is the approach used in hospital merger cases and formalized by @gowrisankaran_nevo_town_2015.
 - **Reduced-form proxies.** When data or time constraints preclude full structural estimation, analysts use regression-based approaches. For instance, one can estimate how much of a wholesale cost shock flows into downstream prices for different bargaining parties, or use the *willingness-to-pay* (WTP) framework that measures how much an insurer's enrollees value having a particular hospital in-network.
 
 Qualitative evidence strengthens either approach. Negotiation timelines, renewal clauses, concession histories, and internal strategy documents ("we need Hospital X or we lose the state employee contract") all inform the modeling assumptions and help validate quantitative results.
+
+### A worked Nash-in-Nash example
+
+To see how Nash-in-Nash works in practice, consider a simplified hospital-insurer negotiation. Two hospital systems---Hospital A (larger, with 60% of local admissions) and Hospital B (smaller, 40%)---negotiate reimbursement rates with a single insurer that covers 100,000 local enrollees. The insurer's plan is worth $5,000 per enrollee per year if both hospitals are in-network. If Hospital A is excluded, the plan loses $800 per enrollee (patients must travel farther or switch to lower-quality providers). If Hospital B is excluded, the loss is only $200 per enrollee.
+
+The gains from trade for each pair are:
+
+| Pair | Insurer's gain from agreement | Hospital's gain from agreement | Nash product |
+|------|------|------|------|
+| A--Insurer | $800 × 100,000 = $80M | Reimbursement rate × volume | High (A is "must-have") |
+| B--Insurer | $200 × 100,000 = $20M | Reimbursement rate × volume | Lower (B is substitutable) |
+
+Now suppose Hospitals A and B merge. The insurer's disagreement payoff if it fails to reach a deal with the *merged* system is the loss of *both* hospitals---say, $1,200 per enrollee, or $120M total. This is more than the sum of the individual disagreement payoffs ($80M + $20M = $100M) because the hospitals together form a "must-have" network that neither is alone. The merged system's bargaining leverage increases, and the Nash bargaining solution yields higher negotiated prices for both hospitals---even though no beds closed and no services changed.
+
+This is the mechanism that drives price increases in hospital mergers. The effect is largest when the merging parties are each other's closest substitutes from the insurer's perspective---precisely the condition that also drives unilateral effects in standard merger analysis. The bargaining framework makes this intuition precise by quantifying how the merger changes disagreement payoffs.
+
+```r
+library(dplyr)
+library(ggplot2)
+source("program/R/helpers.R")
+
+# Simplified Nash-in-Nash: hospital-insurer bargaining
+# Pre-merger: each hospital bargains separately
+# Post-merger: combined entity bargains as one
+
+bargaining <- tibble::tribble(
+  ~scenario, ~hospital, ~wtp_loss_per_enrollee, ~enrollees, ~bargaining_weight,
+  "Pre-merger", "Hospital A", 800, 100000, 0.6,
+  "Pre-merger", "Hospital B", 200, 100000, 0.3,
+  "Post-merger", "Merged A+B", 1200, 100000, 0.8
+) |>
+  mutate(
+    total_wtp_loss = wtp_loss_per_enrollee * enrollees,
+    # Nash bargaining price: split gains from trade by bargaining weight
+    # Price = (bargaining_weight * total_WTP_loss) / volume
+    # Assuming 10,000 admissions per hospital
+    admissions = if_else(hospital == "Merged A+B", 20000, 10000),
+    negotiated_rate = (bargaining_weight * total_wtp_loss) / admissions
+  )
+
+# Bar chart of negotiated rates
+ggplot(bargaining, aes(x = hospital, y = negotiated_rate, fill = scenario)) +
+  geom_col(width = 0.6, alpha = 0.85) +
+  scale_fill_manual(values = c("Pre-merger" = "#0072B2", "Post-merger" = "#D55E00")) +
+  scale_y_continuous(labels = scales::dollar) +
+  labs(
+    title = "Nash-in-Nash: Hospital Merger Increases Negotiated Rates",
+    subtitle = "Merged entity's improved outside option raises prices for both hospitals",
+    x = NULL, y = "Negotiated Reimbursement Rate per Admission", fill = NULL,
+    caption = "Illustrative calculation. WTP loss = value to insurer of having hospital in-network.\nBargaining weight reflects relative leverage in Nash bargaining solution."
+  ) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+
+cat("\nPrice increase from merger:\n")
+pre_avg <- bargaining |> filter(scenario == "Pre-merger") |> summarise(avg = mean(negotiated_rate)) |> pull(avg)
+post <- bargaining |> filter(scenario == "Post-merger") |> pull(negotiated_rate)
+cat(paste0("Pre-merger average: ", scales::dollar(pre_avg, accuracy = 1), "\n"))
+cat(paste0("Post-merger: ", scales::dollar(post, accuracy = 1), "\n"))
+cat(paste0("Increase: ", scales::percent((post - pre_avg) / pre_avg, accuracy = 0.1), "\n"))
+```
 
 ### Antitrust applications
 
@@ -352,4 +525,4 @@ Bargaining models have become standard tools in several contexts:
 5. **Case discussion.** Describe how you would adapt the UPP/GUPPI tornado chart for a presentation to a non-technical audience (e.g., a judge or commission panel). Which parameters would you emphasize and why?
 
 ## Looking ahead
-The demand estimates, diversion matrices, and pass-through diagnostics introduced here form the quantitative backbone of the chapters ahead. In **[Chapter 5](chapters/05-cartels.md)**, we apply variance screens and structural break tests to detect collusion, while in **[Chapter 6](chapters/06-mergers.md)** we feed these IO primitives directly into merger simulations. The same bargaining and pass-through tools reappear in **[Chapter 7](chapters/07-monopolization.md)** and **[Chapter 9](chapters/09-digital-markets.md)**, where multi-sided platform dynamics add further complexity.
+The demand estimates, diversion matrices, and pass-through diagnostics introduced here form the quantitative backbone of the chapters ahead. In **[Chapter 5: Cartels](05-cartels.md)**, we apply variance screens and structural break tests to detect collusion, while in **[Chapter 6: Mergers](06-mergers.md)** we feed these IO primitives directly into merger simulations. The same bargaining and pass-through tools reappear in **[Chapter 7: Monopolization](07-monopolization.md)** and **[Chapter 9: Digital Markets](09-digital-markets.md)**, where multi-sided platform dynamics add further complexity.

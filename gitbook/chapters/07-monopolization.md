@@ -1,4 +1,4 @@
-# Monopolization and Exclusion {#sec-monopolization}
+# Monopolization and Exclusion 
 
 The previous chapter examined mergers---transactions that combine formerly independent firms. This chapter turns to conduct by firms that already possess substantial market power. How do dominant firms exclude rivals? When does aggressive competition cross the line into antitrust violation? And how do we measure the harm from exclusionary practices?
 
@@ -20,17 +20,16 @@ These questions require us to integrate all the tools developed so far. Market d
 
 Monopolization analysis sits at the intersection of conduct, market structure, and effects. Unlike merger review—which evaluates a prospective transaction—monopolization cases reconstruct historical patterns of behavior and ask whether a dominant firm has maintained or extended its position through exclusionary means rather than through competition on the merits. Section 2 of the Sherman Act in the United States and Article 102 of the Treaty on the Functioning of the European Union (TFEU) frame the legal standards, but enforcement priorities and evidentiary approaches differ substantially across jurisdictions.
 
-This chapter provides a structured workflow for analyzing monopolization claims. We begin with market power assessment, drawing on tools from Chapter 3 (market definition) and Chapter 4 (IO toolkit). We then turn to specific conduct categories—predation, rebates and loyalty programs, tying and bundling, most-favored-nation clauses, vertical restraints, and refusal to deal. For each, we pair theoretical mechanisms with empirical measurement strategies and qualitative evidence that together build a coherent narrative. The chapter concludes with remedy design considerations and a set of case exemplars that illustrate how different jurisdictions approach the same exclusionary practices.
+This chapter provides a structured workflow for analyzing monopolization claims. We begin with market power assessment, drawing on tools from [Chapter 3: Market Definition](03-market-definition.md) and [Chapter 4: IO Toolkit](04-io-toolkit.md). We then turn to specific conduct categories—predation, rebates and loyalty programs, tying and bundling, most-favored-nation clauses, vertical restraints, and refusal to deal. For each, we pair theoretical mechanisms with empirical measurement strategies and qualitative evidence that together build a coherent narrative. The chapter concludes with remedy design considerations and a set of case exemplars that illustrate how different jurisdictions approach the same exclusionary practices.
 
 Throughout, we emphasize reproducibility and transparency. Code boxes demonstrate how to compute effective prices, assess foreclosure shares, and visualize event patterns around contract adoptions. Qualitative evidence boxes highlight the documentary and testimonial sources that complement quantitative analyses. Case boxes anchor abstract principles in real enforcement actions, drawing on landmark decisions from the United States, European Union, and Southern Africa.
 
-For deeper context, consult the extensive case law on exclusionary conduct, including landmark decisions like *United States v. Microsoft* (*United States v. Microsoft*, 2001) and the European Commission's decisions on abuse of dominance (EC Article 102 Guidance, 2009). For theoretical foundations, see (Whinston, 2006) and (Salop & Scheffman, 1983) on raising rivals' costs.
+For deeper context, consult the extensive case law on exclusionary conduct, including landmark decisions like *United States v. Microsoft* [@us_microsoft_2001] and the European Commission's decisions on abuse of dominance [@ec_article102_guidance_2009]. For theoretical foundations, see @whinston_2006 and @salop_scheffman_1983 on raising rivals' costs.
 
 ## Market power and the monopolization workflow
 
 {% hint style="info" %}
 **Monopolization Analysis Workflow**
-
 ```
 STEP 1: MARKET POWER          STEP 2: CONDUCT               STEP 3: EFFECTS
        |                            |                            |
@@ -71,7 +70,7 @@ STEP 4: JUSTIFICATIONS    STEP 5: BALANCING         STEP 6: REMEDIES
 
 ### Establishing market power
 
-Monopolization liability begins with market power. In the United States, courts typically require monopoly power—the ability to control prices or exclude competition—which is often proxied by a sustained market share above 60–70% in a properly defined relevant market (*United States v. Grinnell*, 1966). The European Union applies a lower threshold for dominance under Article 102 TFEU, with shares as low as 40% potentially qualifying when combined with barriers to entry and expansion (*AKZO*, 1991); (*United Brands*, 1978). These quantitative thresholds, however, must be buttressed by evidence of entry conditions, buyer power, and the duration of the firm's position.
+Monopolization liability begins with market power. In the United States, courts typically require monopoly power—the ability to control prices or exclude competition—which is often proxied by a sustained market share above 60–70% in a properly defined relevant market [@us_grinnell_1966]. The European Union applies a lower threshold for dominance under Article 102 TFEU, with shares as low as 40% potentially qualifying when combined with barriers to entry and expansion [@eu_akzo_1991; @eu_united_brands_1978]. These quantitative thresholds, however, must be buttressed by evidence of entry conditions, buyer power, and the duration of the firm's position.
 
 **Quantitative indicators** include:
 
@@ -147,7 +146,7 @@ To compute effective prices:
 - Calculate the marginal benefit of reaching the threshold: if a buyer purchases 95 units at the list price and buying 5 more units triggers a 10% rebate on all 100 units, the effective price of those last 5 units is deeply negative.
 - Compare effective prices to rivals' costs or list prices to assess whether contestation is feasible.
 
-The European Commission's Intel decision (*Intel*, 2017) applied a version of this test, focusing on whether the rebates made it unprofitable for AMD to compete for incremental volumes even when AMD's products were technically competitive. The as-efficient competitor (AEC) test, refined post-Intel, requires showing that an equally efficient rival would be foreclosed.
+The European Commission's Intel decision [@eu_intel_2017] applied a version of this test, focusing on whether the rebates made it unprofitable for AMD to compete for incremental volumes even when AMD's products were technically competitive. The as-efficient competitor (AEC) test, refined post-Intel, requires showing that an equally efficient rival would be foreclosed.
 
 #### Effective price waterfall for loyalty rebates
 
@@ -282,11 +281,9 @@ p_waterfall / p_evolution +
   )
 ```
 
-![](../images/monopoly-effective-price-waterfall-1.png)
-
 **Data replacement:** Use actual customer purchase data and contract terms from litigation discovery. Calculate effective prices per customer segment; overlay rival cost estimates from cost studies or public financial statements. For share evolution, use market monitoring data or customer panel data tracking purchases before/after contract adoption.
 
-**As-efficient competitor (AEC) test:** The waterfall shows that even an equally efficient rival (cost = $75) cannot profitably compete for the marginal units that trigger the rebate, as the effective price faced by the customer is deeply negative. This satisfies the AEC framework established in *Intel* (*Intel*, 2017) and subsequent EU enforcement.
+**As-efficient competitor (AEC) test:** The waterfall shows that even an equally efficient rival (cost = $75) cannot profitably compete for the marginal units that trigger the rebate, as the effective price faced by the customer is deeply negative. This satisfies the AEC framework established in *Intel* [@eu_intel_2017] and subsequent EU enforcement.
 
 ### Qualitative evidence for rebates and exclusivity
 
@@ -297,7 +294,7 @@ Internal documents and customer testimony are critical complements to quantitati
 - **Customer interviews**: Testimony on switching costs, the importance of multi-sourcing for resilience, and coercion (explicit or implicit) to accept exclusive terms.
 - **Sales force incentives**: Compensation structures that reward exclusivity or penalize customers who multi-source.
 
-In the United States, the rule of reason standard for exclusive dealing (under Section 1 or Section 2) often weighs these qualitative factors heavily, looking for evidence that foreclosure was the purpose rather than a byproduct of legitimate incentives (*Tampa Electric v. Nashville Coal*, 1961). For economic analysis of exclusive dealing, see (Whinston, 2006) and (Ordover, Saloner & Salop, 1990) on vertical foreclosure.
+In the United States, the rule of reason standard for exclusive dealing (under Section 1 or Section 2) often weighs these qualitative factors heavily, looking for evidence that foreclosure was the purpose rather than a byproduct of legitimate incentives [@us_tampa_electric_1961]. For economic analysis of exclusive dealing, see @whinston_2006 and @ordover_saloner_salop_1990 on vertical foreclosure.
 
 ### Event studies and staggered rollouts
 
@@ -420,17 +417,15 @@ p_event / p_timing +
   )
 ```
 
-![](../images/monopoly-contract-rollout-event-1.png)
-
 **Interpretation:** The event study coefficients show no pre-trend (flat estimates in periods -11 to -1), providing support for the parallel trends assumption. Post-adoption, rival share drops by ~8 percentage points, consistent with foreclosure. The individual trajectories confirm the aggregate pattern and reveal heterogeneity in treatment effects across customers.
 
-**Data replacement:** Use customer-level purchase data with precise contract adoption dates. Estimate event studies separately for different contract types (exclusive vs. loyalty rebates) or customer segments. If contracts are truly staggered (different customers adopt at different times), use `fixest::sunab()` for heterogeneity-robust estimation (Callaway & Sant'Anna, 2021).
+**Data replacement:** Use customer-level purchase data with precise contract adoption dates. Estimate event studies separately for different contract types (exclusive vs. loyalty rebates) or customer segments. If contracts are truly staggered (different customers adopt at different times), use `fixest::sunab()` for heterogeneity-robust estimation [@callaway_santanna_2021].
 
 ## Predatory pricing
 
 ### The price-cost test
 
-Predatory pricing claims allege that a dominant firm sets prices below an appropriate measure of cost to drive out rivals or deter entry, with the expectation of recouping losses through supracompetitive prices once competition is eliminated. The canonical legal test, articulated in *Brooke Group* (*Brooke Group v. Brown & Williamson*, 1993), requires (1) pricing below an appropriate measure of cost, and (2) a dangerous probability of recouping the investment in below-cost pricing. The foundational economic framework was established by (Areeda & Turner, 1975).
+Predatory pricing claims allege that a dominant firm sets prices below an appropriate measure of cost to drive out rivals or deter entry, with the expectation of recouping losses through supracompetitive prices once competition is eliminated. The canonical legal test, articulated in *Brooke Group* [@us_brooke_group_1993], requires (1) pricing below an appropriate measure of cost, and (2) a dangerous probability of recouping the investment in below-cost pricing. The foundational economic framework was established by @areeda_turner_1975.
 
 **Cost benchmarks** in antitrust analysis include:
 
@@ -450,7 +445,7 @@ Predatory pricing claims allege that a dominant firm sets prices below an approp
 - Estimating the duration and magnitude of below-cost pricing and the time needed to recoup at elevated prices.
 - Examining documents that discuss post-exit pricing strategies or barriers that would prevent re-entry.
 
-The European Union historically placed less emphasis on explicit recoupment proofs, focusing instead on the exclusionary effect and intent. However, post-*Intel*, EU enforcers increasingly apply an as-efficient competitor framework that implicitly considers recoupment by asking whether exclusion harms consumers (*Intel*, 2017); (*Post Danmark*, 2012).
+The European Union historically placed less emphasis on explicit recoupment proofs, focusing instead on the exclusionary effect and intent. However, post-*Intel*, EU enforcers increasingly apply an as-efficient competitor framework that implicitly considers recoupment by asking whether exclusion harms consumers [@eu_intel_2017; @eu_post_danmark_2012].
 
 ### Event patterns and qualitative evidence
 
@@ -461,7 +456,7 @@ Where price-cost tests are ambiguous—prices near AAC, cost allocation disputes
 - **Share and capacity shifts**: Plot market shares and capacity utilization over time; sharp increases in the alleged predator's share coinciding with rival exits support the predation narrative.
 - **Subsequent price increases**: If prices rose significantly after rivals exited, recoupment is more plausible. Use difference-in-differences with unaffected markets as controls to isolate the predation effect.
 
-In the EU *AKZO* case (*AKZO*, 1991), internal documents referencing a plan to eliminate a competitor were central to the finding of abuse, even though the price-cost analysis was contested. Similarly, in the Southern African *Media24* case (discussed earlier), predatory intent combined with below-cost pricing over an extended period led to liability.
+In the EU *AKZO* case [@eu_akzo_1991], internal documents referencing a plan to eliminate a competitor were central to the finding of abuse, even though the price-cost analysis was contested. Similarly, in the Southern African *Media24* case (discussed earlier), predatory intent combined with below-cost pricing over an extended period led to liability.
 
 ## Tying, bundling, and technical integration
 
@@ -486,9 +481,9 @@ Tying occurs when a seller conditions the sale of one product (the tying product
 
 Tying and bundling often generate legitimate efficiencies: cost savings from unified billing, improved interoperability, or enhanced user experience. The key question is whether the same efficiencies could be achieved through less-restrictive means.
 
-For example, in *United States v. Microsoft* (*United States v. Microsoft*, 2001), the court found that tying Internet Explorer to Windows foreclosed Netscape and Java, undermining the middleware threat to Microsoft's operating system monopoly. For economic analysis of tying and bundling, see (Whinston, 2006). While Microsoft argued integration benefits, the court found that much of the integration could have been accomplished without contractual or technical restrictions on rivals' ability to compete.
+For example, in *United States v. Microsoft* [@us_microsoft_2001], the court found that tying Internet Explorer to Windows foreclosed Netscape and Java, undermining the middleware threat to Microsoft's operating system monopoly. For economic analysis of tying and bundling, see @whinston_2006. While Microsoft argued integration benefits, the court found that much of the integration could have been accomplished without contractual or technical restrictions on rivals' ability to compete.
 
-Similarly, in *Google Android* (*Google Android*, 2018), the European Commission found that Google's requirement that manufacturers pre-install Google Search and Chrome as a condition of licensing the Play Store foreclosed rivals, even though the Commission acknowledged integration efficiencies. The remedy required Google to offer Android without the mandatory pre-installation bundle, demonstrating the feasibility of less-restrictive alternatives.
+Similarly, in *Google Android* [@eu_google_android_2018], the European Commission found that Google's requirement that manufacturers pre-install Google Search and Chrome as a condition of licensing the Play Store foreclosed rivals, even though the Commission acknowledged integration efficiencies. The remedy required Google to offer Android without the mandatory pre-installation bundle, demonstrating the feasibility of less-restrictive alternatives.
 
 ### Qualitative evidence for tying and defaults
 
@@ -625,15 +620,13 @@ p_bundle / (p_shares | p_correlation) +
   )
 ```
 
-![](../images/monopoly-tying-bundling-impacts-1.png)
-
 **Interpretation:** The bundle was introduced in Q8, and penetration ramped quickly to 80-90% by Q16 as new OS installations included the bundled media player by default. Rival A's market share dropped from ~40% to ~10% over the same period, while Rival B's share fell from ~20% to ~5%. The strong negative correlation (-0.95+) between bundle penetration and rival share supports the foreclosure theory. The stacked area chart shows the incumbent's bundled product capturing share predominantly from the leading standalone rival.
 
 **Data replacement:** Use OS installation data (OEM shipments, enterprise deployments) to measure bundle penetration. Track media player usage via telemetry, market surveys (e.g., StatCounter, NetMarketShare), or download statistics. For technical tying (defaults, API restrictions), collect user switching data and A/B test results on choice screen interventions.
 
 **Counterfactual analysis:** To isolate the causal effect of bundling from organic trends, estimate a difference-in-differences model comparing markets or time periods with and without the bundle. If the bundle rolled out in stages (e.g., different regions or OS versions), use the staggered rollout as a natural experiment. Document whether rival share losses coincide with reduced investment, product exits, or acquisition at distressed valuations.
 
-**Looking ahead:** For more on defaults and choice screens in digital markets, see [Chapter 9](chapters/09-digital-markets.md). For damages estimation in tying cases, see [Chapter 12](chapters/12-litigation-practice.md).
+**Looking ahead:** For more on defaults and choice screens in digital markets, see [Chapter 9: Digital Markets](09-digital-markets.md). For damages estimation in tying cases, see [Chapter 12: Litigation Practice](12-litigation-practice.md).
 
 ## Most-favored-nation clauses and parity agreements
 
@@ -656,7 +649,7 @@ Most-favored-nation (MFN) or parity clauses require sellers to offer the platfor
 - **Fee pass-through**: Absent MFNs, platforms that lower fees should see sellers reduce retail prices. With MFNs, pass-through is muted.
 - **Entry and platform switching**: Document whether rival platforms grew or stagnated after MFN adoption; interview sellers about constraints on multi-homing strategies.
 
-The European Commission challenged Amazon's across-platform MFN (parity requirement) in several member states, finding that it insulated Amazon from price competition and reduced sellers' incentives to join rival platforms (eu_amazon_parity). The UK Competition and Markets Authority similarly required removal of broad MFNs in online hotel booking following its investigation (cma_hotel_booking).
+The European Commission challenged Amazon's across-platform MFN (parity requirement) in several member states, finding that it insulated Amazon from price competition and reduced sellers' incentives to join rival platforms [@eu_amazon_parity]. The UK Competition and Markets Authority similarly required removal of broad MFNs in online hotel booking following its investigation [@cma_hotel_booking].
 
 #### MFN effects on price dispersion and fee pass-through
 
@@ -798,13 +791,11 @@ p_passthrough <- fee_passthrough |>
   )
 ```
 
-![](../images/monopoly-mfn-price-dispersion-1.png)
-
 **Interpretation:** Before the MFN, hotels priced differently across platforms, reflecting variation in platform fees (Incumbent 20%, Rival A 15%, Rival B 12%, Direct 0%). Price dispersion (coefficient of variation) averaged 0.05-0.08. After the MFN binds, prices converge across all platforms to near the Incumbent's level, collapsing dispersion to near zero. The fee pass-through test shows that pre-MFN, hotels on lower-fee platforms charged correspondingly lower prices (gap of ~$4.60), consistent with partial pass-through of fee savings. Post-MFN, the price gap shrinks to near zero, as hotels cannot undercut on rival platforms without violating parity.
 
 **Data replacement:** Use platform transaction data with hotel-level prices across multiple channels (incumbent platform, rival platforms, hotel direct booking). Estimate pass-through regressions to quantify the relationship between platform fees and retail prices before and after MFN adoption. Interview sellers to document contractual constraints on pricing flexibility.
 
-**Looking ahead:** For more on platform competition and two-sided markets, see [Chapter 9](chapters/09-digital-markets.md). For MFN-related damages estimation, see [Chapter 12](chapters/12-litigation-practice.md).
+**Looking ahead:** For more on platform competition and two-sided markets, see [Chapter 9: Digital Markets](09-digital-markets.md). For MFN-related damages estimation, see [Chapter 12: Litigation Practice](12-litigation-practice.md).
 
 ## Refusal to deal and essential facilities
 
@@ -816,7 +807,7 @@ Refusal to deal claims arise when a vertically integrated dominant firm denies r
 - **Terms of access**: If access is provided, are the terms (price, technical specifications, service levels) equivalent to what the integrated firm provides to itself? Margin squeeze analyses compare the wholesale access price to the retail price, subtracting downstream costs to see if an equally efficient rival can break even.
 - **Objective justification**: Legitimate reasons to refuse access include capacity constraints, IP protection, or safety/quality concerns. Assess whether less-restrictive conditions could address these concerns.
 
-In *Bronner* (*Bronner*, 1998), the European Court of Justice held that a newspaper distribution network was not indispensable because the rival could develop its own network, even if at higher cost. By contrast, in *IMS Health* (*IMS Health*, 2004), the court found that a unique brick structure for regional health data was indispensable, and refusal to license it eliminated competition in a derivative market.
+In *Bronner* [@eu_bronner_1998], the European Court of Justice held that a newspaper distribution network was not indispensable because the rival could develop its own network, even if at higher cost. By contrast, in *IMS Health* [@eu_ims_2004], the court found that a unique brick structure for regional health data was indispensable, and refusal to license it eliminated competition in a derivative market.
 
 **US approach—*Verizon v. Trinko* (2004):** The US Supreme Court sharply limited the essential facilities doctrine, holding that antitrust law generally does not require firms to share their infrastructure with rivals. In *Trinko*, the Court found no antitrust duty to deal where telecommunications regulations already mandated access, and emphasized that forced sharing may reduce incentives to invest in infrastructure. After *Trinko*, US plaintiffs face a high bar: refusal to deal claims typically require evidence of a prior profitable dealing relationship that was terminated for anticompetitive reasons (citing *Aspen Skiing*).
 
@@ -951,15 +942,13 @@ p_wholesale_compare <- margin_squeeze_data |>
   )
 ```
 
-![](../images/monopoly-margin-squeeze-1.png)
-
 **Interpretation:** The margin squeeze test shows that an equally efficient rival—one with the same downstream costs as the incumbent—cannot break even when paying the incumbent's wholesale access price and competing at the incumbent's retail price. The waterfall reveals that the rival margin ($6) is well below the minimum required to sustain operations (~$10). The wholesale price comparison shows that the incumbent implicitly transfers wholesale access to its own retail arm at a lower price than charged to rivals, violating the non-discrimination principle.
 
 **Data replacement:** Use regulatory cost accounting data, interconnection agreements, and retail tariff schedules. For telecommunications, water, electricity, or transport access cases, request separated accounts showing upstream and downstream cost allocations. Cross-check implicit transfer prices against actual wholesale prices charged to third parties.
 
-**Legal framework:** Margin squeeze is recognized as abusive under Article 102 TFEU (*Deutsche Telekom* (*Deutsche Telekom*, 2010), *Telefónica* (*Telefónica*, 2014)) and in Southern African competition law (Telkom SA case, 2013 settlement). In the United States, the *linkLine* decision (*Pacific Bell v. linkLine*, 2009) narrowed the scope of margin squeeze claims absent an antitrust duty to deal, but margin squeeze remains relevant where regulatory obligations to provide access exist.
+**Legal framework:** Margin squeeze is recognized as abusive under Article 102 TFEU (*Deutsche Telekom* [@eu_deutsche_telekom_2010], *Telefónica* [@eu_telefonica_2014]) and in Southern African competition law (Telkom SA case, 2013 settlement). In the United States, the *linkLine* decision [@us_linkline_2009] narrowed the scope of margin squeeze claims absent an antitrust duty to deal, but margin squeeze remains relevant where regulatory obligations to provide access exist.
 
-For FRAND-committed standard-essential patents (SEPs), the analysis shifts to whether licensing terms comply with the FRAND obligation and whether injunctions or threats thereof constitute hold-up. See [Chapter 11](chapters/11-innovation-ip.md) for detailed treatment of SEPs.
+For FRAND-committed standard-essential patents (SEPs), the analysis shifts to whether licensing terms comply with the FRAND obligation and whether injunctions or threats thereof constitute hold-up. See [Chapter 11: Innovation & IP](11-innovation-ip.md) for detailed treatment of SEPs.
 
 ### Southern African exclusion case evidence
 - **Telkom wholesale broadband (Competition Commission v. Telkom SA, 2013 settlement).** Using bitstream and IPConnect price data from 2005–2009, the Commission demonstrated that Telkom’s effective wholesale prices exceeded its retail DSL tariffs for 91% of line-speed combinations once access and backhaul costs were included, yielding a classic margin squeeze. The Tribunal-approved settlement paired a R200 million administrative penalty with mandated price cuts (down to cost-plus 8%) and functional separation of wholesale and retail reporting lines, providing a replicable margin-test template for regulated utilities.
@@ -968,7 +957,6 @@ For FRAND-committed standard-essential patents (SEPs), the analysis shifts to wh
 
 {% hint style="info" %}
 **Method box: Foreclosure share calculation**
-
 When evaluating exclusive dealing or loyalty rebate programs, compute the share of demand or capacity that is foreclosed to rivals:
 
 ```r
@@ -1013,14 +1001,11 @@ contracts_data |>
   theme_antitrust()
 ```
 
-![](../images/monopoly-foreclosure-shares-1.png)
-
 Interpretation: If the foreclosed share (here 58%) exceeds the threshold needed for rivals to reach minimum efficient scale, and contracts are long-duration with staggered renewals, foreclosure concerns are substantial.
 {% endhint %}
 
 {% hint style="info" %}
 **Method box: Event study around contract rollout**
-
 If exclusive or loyalty contracts were adopted in a staggered fashion, use an event-study design:
 
 - Event/phase analysis around contract adoptions.
@@ -1030,7 +1015,6 @@ If exclusive or loyalty contracts were adopted in a staggered fashion, use an ev
 
 {% hint style="info" %}
 **Method box: price-cost test with suction effect**
-
 ```r
 # Retroactive rebates create "suction" - the effective price of MARGINAL units
 # that trigger the rebate can be deeply negative
@@ -1063,7 +1047,6 @@ contracts[, c("customer", "marginal_units", "effective_marginal_price", "margin_
 
 {% hint style="info" %}
 **Qualitative evidence**
-
 - Internal strategy docs and emails on exclusion goals.
 - Contract clause analysis and negotiation histories.
 - Customer interviews on switching frictions and coercion.
@@ -1071,10 +1054,9 @@ contracts[, c("customer", "marginal_units", "effective_marginal_price", "margin_
 
 {% hint style="info" %}
 **Jurisdictional comparison: Monopolization standards**
+**United States (Sherman Act Section 2):** Requires monopoly power *plus* willful acquisition or maintenance through exclusionary conduct. The rule of reason applies; courts weigh procompetitive justifications against anticompetitive effects. Key standards include *Brooke Group* (predation requires below-cost pricing + recoupment) [@us_brooke_group_1993], *Trinko* (no general duty to deal) [@us_trinko_2004], and *Amex* (two-sided platform analysis) [@us_amex_2018].
 
-**United States (Sherman Act Section 2):** Requires monopoly power *plus* willful acquisition or maintenance through exclusionary conduct. The rule of reason applies; courts weigh procompetitive justifications against anticompetitive effects. Key standards include *Brooke Group* (predation requires below-cost pricing + recoupment) (*Brooke Group v. Brown & Williamson*, 1993), *Trinko* (no general duty to deal) (*Verizon v. Trinko*, 2004), and *Amex* (two-sided platform analysis) (*Ohio v. American Express*, 2018).
-
-**European Union (Article 102 TFEU):** Applies to firms in a "dominant position." The as-efficient competitor (AEC) test is the primary framework for pricing abuses post-*Intel* (*Intel*, 2017). Explicit recoupment proof is not required for predatory pricing. Self-preferencing is recognized as a standalone theory of harm (*Google Shopping*) (*Google Shopping*, 2017). Remedies tend toward behavioral obligations.
+**European Union (Article 102 TFEU):** Applies to firms in a "dominant position." The as-efficient competitor (AEC) test is the primary framework for pricing abuses post-*Intel* [@eu_intel_2017]. Explicit recoupment proof is not required for predatory pricing. Self-preferencing is recognized as a standalone theory of harm (*Google Shopping*) [@eu_google_shopping_2017]. Remedies tend toward behavioral obligations.
 
 **South Africa (Competition Act Section 8):** Prohibits abuse of dominance with explicit provisions for excessive pricing (Section 8(a)) and exclusionary acts (Section 8(c)/(d)). The Tribunal has applied both price-cost tests (*Media24*) and margin squeeze analyses (*Telkom*), with public-interest considerations (employment, SME development) shaping remedy design.
 {% endhint %}
@@ -1093,6 +1075,6 @@ contracts[, c("customer", "marginal_units", "effective_marginal_price", "margin_
 
 ## Looking ahead
 
-Monopolization analysis produces artifacts---foreclosure calculations, effective price computations, margin squeeze tests---that reappear throughout the remaining chapters. **[Chapter 8](chapters/08-regulation-remedies.md)** addresses what happens after a liability finding: how to design remedies that actually cure the diagnosed harm and how to evaluate whether they work. Many monopolization cases end in consent decrees with behavioral obligations; the next chapter explains how to structure and monitor those commitments.
+Monopolization analysis produces artifacts---foreclosure calculations, effective price computations, margin squeeze tests---that reappear throughout the remaining chapters. **[Chapter 8: Regulation & Remedies](08-regulation-remedies.md)** addresses what happens after a liability finding: how to design remedies that actually cure the diagnosed harm and how to evaluate whether they work. Many monopolization cases end in consent decrees with behavioral obligations; the next chapter explains how to structure and monitor those commitments.
 
-The exclusionary conduct frameworks in this chapter also apply directly to **[Chapter 9](chapters/09-digital-markets.md)**, where platform self-preferencing, default tying, and data leverage cases build on the same analytical foundations.
+The exclusionary conduct frameworks in this chapter also apply directly to **[Chapter 9: Digital Markets](09-digital-markets.md)**, where platform self-preferencing, default tying, and data leverage cases build on the same analytical foundations.

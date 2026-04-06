@@ -771,7 +771,7 @@ A critical caveat: NLP-assisted review is a triage and prioritization tool, not 
 
 ### Evidentiary challenges
 
-The use of ML methods in antitrust raises important questions about admissibility and transparency, particularly in U.S. litigation governed by the *Daubert* standard [@daubert_1993] and in other jurisdictions with analogous reliability requirements (see @sec-litigation for the broader framework of expert testimony standards).
+The use of ML methods in antitrust raises important questions about admissibility and transparency, particularly in U.S. litigation governed by the *Daubert* standard [@daubert_1993] and in other jurisdictions with analogous reliability requirements (see @sec-litigation-practice for the broader framework of expert testimony standards).
 
 ML models face heightened scrutiny because of "black box" concerns — the worry that a model's predictions cannot be meaningfully explained or challenged. This concern is not merely theoretical: opposing counsel will argue, often persuasively, that a model whose internal logic cannot be articulated in plain language should not form the basis of a damages estimate or a liability finding. For this reason, practitioners should favor interpretable models when the output will face judicial scrutiny. Random forests with variable importance rankings, gradient-boosted trees with SHAP (SHapley Additive exPlanations) values, and regularized regression methods all provide mechanisms for explaining which features drive predictions and by how much. Deep neural networks, by contrast, are harder to defend in adversarial proceedings, however strong their predictive performance.
 

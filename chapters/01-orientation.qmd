@@ -123,7 +123,7 @@ While the US emphasizes adversarial hearings and judicial precedent, DG COMP and
 
 ## Looking ahead
 
-Orientation work is only useful if it flows directly into research design. In **Chapter 02**, we translate the institutional map above into concrete analytical workplans—building case chronology templates, sketching data inventories, and establishing the evidence-integration frameworks that will structure every subsequent chapter.
+Orientation work is only useful if it flows directly into research design. In @sec-research-design, we translate the institutional map above into concrete analytical workplans—building case chronology templates, sketching data inventories, and establishing the evidence-integration frameworks that will structure every subsequent chapter.
 
 **Before proceeding, prepare:**
 
