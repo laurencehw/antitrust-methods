@@ -342,7 +342,7 @@ When a cartel is disrupted---by a dawn raid, a leniency application, or a regula
 
 When raids or leniency filings occur, run event studies on prices, spreads, or quantities. Check both cartel participants and outsiders; in public procurement you can also evaluate engineers’ estimates or cost indices.
 
-Structural break tests (Bai–Perron, CUSUM) highlight regime shifts. Always incorporate costs so you do not misattribute cost-driven changes to conduct. Present break plots next to relevant timeline entries (e.g., WhatsApp thread confirming a January 2019 meeting).
+Structural break tests (Bai–Perron, CUSUM) highlight regime shifts [@bai_perron_1998; @brown_durbin_evans_1975]. Always incorporate costs so you do not misattribute cost-driven changes to conduct. Present break plots next to relevant timeline entries (e.g., WhatsApp thread confirming a January 2019 meeting).
 
 ::: {.callout-note title="Code box: raid event study scaffold"}
 ```{r}
@@ -358,14 +358,14 @@ Structural break tests (Bai–Perron, CUSUM) highlight regime shifts. Always inc
 :::
 
 ::: {.callout-tip title="Running example: Airlines --- coordination vs. collusion"}
-The AA/US Airways merger analyzed in @sec-mergers should be distinguished from a different airline enforcement action that straddles the merger--cartel boundary: the DOJ's 2021 challenge to the **American Airlines/JetBlue Northeast Alliance (NEA)**. The NEA was not a merger but a revenue-sharing and scheduling coordination agreement covering roughly 70 routes out of Boston and New York. Under the NEA, AA and JetBlue jointly managed capacity, coordinated schedules, and shared revenue on overlapping routes---conduct that a federal judge found amounted to a de facto merger of their competitive operations in the Northeast, ordering dissolution in 2023.
+The AA/US Airways merger analyzed in @sec-mergers should be distinguished from a different airline enforcement action that straddles the merger--cartel boundary: the DOJ's 2021 challenge to the **American Airlines/JetBlue Northeast Alliance (NEA)** [@us_aa_jetblue_nea_2021]. The NEA was not a merger but a revenue-sharing and scheduling coordination agreement covering roughly 70 routes out of Boston and New York. Under the NEA, AA and JetBlue jointly managed capacity, coordinated schedules, and shared revenue on overlapping routes---conduct that a federal judge found amounted to a de facto merger of their competitive operations in the Northeast, ordering dissolution in 2023.
 
 The NEA case illustrates how the same empirical toolkit applies across the merger--cartel boundary. The route-share data and event-study methods introduced in @sec-research-design and @sec-market-definition can screen for coordinated effects: for instance, one could test whether price correlations between AA and JetBlue increased on NEA routes relative to non-NEA routes after the alliance took effect, or whether fare dispersion fell on routes subject to revenue sharing. These are precisely the variance and correlation screens discussed earlier in this chapter. The case is a reminder that coordination need not involve secret meetings or bid-rigging to raise antitrust concerns---formal joint ventures and alliances can produce similar competitive harm when they eliminate independent decision-making between rivals.
 :::
 
 ## Overcharge and pass-through
 
-Selecting a counterfactual is the single most consequential methodological choice in cartel damages estimation. Every approach embeds assumptions about what the world would have looked like absent the conspiracy, and opposing experts will attack those assumptions relentlessly. The choice depends on data availability, the structure of the affected market, and jurisdictional precedent---US courts tend to favor before/after and yardstick approaches that rely on observable comparators, while EU practice has been more receptive to econometric models with extensive controls. South African Tribunal proceedings have drawn on both traditions, with the bread and construction cases relying heavily on before/after comparisons buttressed by cost data from Stats SA. The menu below outlines the main options, ranked roughly by data intensity.
+Selecting a counterfactual is the single most consequential methodological choice in cartel damages estimation. Every approach embeds assumptions about what the world would have looked like absent the conspiracy, and opposing experts will attack those assumptions relentlessly. The choice depends on data availability, the structure of the affected market, and jurisdictional precedent---US courts tend to favor before/after and yardstick approaches that rely on observable comparators, while EU practice has been more receptive to econometric models with extensive controls. South African Tribunal proceedings have drawn on both traditions, with the bread [@sa_bread_cartel_2007] and construction [@sa_construction_cartel_2013] cases relying heavily on before/after comparisons buttressed by cost data from Stats SA. The menu below outlines the main options, ranked roughly by data intensity.
 
 - **Before/after:** Include product, customer, and time fixed effects plus cost controls.  
 - **Difference-in-differences:** Compare cartel markets to unaffected regions or product classes; test pre-trends.  
@@ -504,7 +504,7 @@ Treat qualitative materials as structured data:
 
 ::: {.callout-note title="Case box: Illustrative matters"}
 **Apple eBooks (US).** Hub-and-spoke coordination with agency-model contracts and SSNDQ logic [@us_apple_ebooks_2013].
-**Lysine & DRAM (US/EU).** Classic dawn-raid analyses with overcharge estimates of 17--20% (lysine) and 10--15% (DRAM), illustrating how leniency programs can expose sophisticated international price-fixing. These cases anchor the empirical literature on cartel overcharges.
+**Lysine & DRAM (US/EU).** Classic dawn-raid analyses with overcharge estimates of 17--20% (lysine) and 10--15% (DRAM), illustrating how leniency programs can expose sophisticated international price-fixing [@us_lysine_cartel_1996; @eu_dram_cartel_2010]. These cases anchor the empirical literature on cartel overcharges.
 **Construction bid-rigging (EU, SA, JFTC).** Rotation matrices and dawn raids aligned with procurement archives.
 **Digital advertising (SAMR).** Algorithms and platform policies as qualitative evidence.
 :::
@@ -512,7 +512,7 @@ Treat qualitative materials as structured data:
 ::: {.callout-note title="Case box: South African enforcement highlights"}
 - **Bread cartel (Tribunal case 15/CR/Feb07).** Stats SA CPI data plus mill-level costs revealed synchronized 30–40 cent jumps; overcharge estimated at 7–10% with R250 million penalties and consumer relief funds.  
 - **Construction fast-track settlement (2013).** Self-reported matrices across 300 tenders showed rotation; event windows around raids captured 8–12% price drops relative to engineers’ estimates.  
-- **Fertilizer/ammonia (Sasol/Yara/Omnia).** Export-parity benchmarks and plant-level variable-cost data showed 25–30% overcharges despite spare capacity, leading to penalties and divestitures.
+- **Fertilizer/ammonia (Sasol/Yara/Omnia).** Export-parity benchmarks and plant-level variable-cost data showed 25–30% overcharges despite spare capacity, leading to penalties and divestitures [@sa_fertilizer_inquiry_2019].
 :::
 
 ## Code box: structural break illustration
@@ -559,8 +559,8 @@ ggplot(gas, aes(date, price, color = regime)) +
 Replace the public FRED data with product-level transactions to present in litigation.
 
 ::: {.callout-note title="Citations and comparative note"}
-- Cite OECD screen guidance, FTC/DOJ econometrics speeches, and EC/JFTC leniency notices when defending methodology.
-- Reference cases (lysine, DRAM, auto parts, LIBOR) with docket numbers.
+- Cite OECD screen guidance, FTC/DOJ econometrics speeches, and EC [@ec_leniency_notice_2006] and JFTC [@jftc_leniency_2005] leniency notices when defending methodology.
+- Reference cases (lysine, DRAM, auto parts [@us_auto_parts_cartel_2011], LIBOR [@us_libor_litigation_2013]) with docket numbers.
 - Flag jurisdictional differences: e.g., SAMR often requires data-driven screens, while US courts scrutinize documentary corroboration.
 :::
 
