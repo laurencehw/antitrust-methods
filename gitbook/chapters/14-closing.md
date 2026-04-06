@@ -104,3 +104,23 @@ What this book has aimed to provide is not a set of definitive answers but a too
 4. **Intellectual honesty.** Think of a situation in which you might be tempted to present an empirical result more confidently than the evidence warrants. What safeguards --- pre-analysis plans, robustness checks, peer review, disclosure of limitations --- would help you maintain intellectual honesty? How would you communicate uncertainty to a non-technical audience such as a judge or jury?
 
 5. **Your contribution.** The field of antitrust methods is evolving. What gap in the current toolkit do you see most clearly? What method, data source, or analytical approach would you most like to develop or improve? How does the foundation in this book position you to make that contribution?
+
+## Capstone exercises
+
+The following exercises integrate methods from multiple chapters, simulating the kind of end-to-end analysis you would conduct in practice.
+
+**Exercise 1: Hospital merger analysis.** You are an economist at a competition authority reviewing a proposed merger between two hospital systems in a metropolitan area. Using the tools from across this book:
+1. Define the relevant product and geographic markets using patient-flow data ([Chapter 3: Market Definition](03-market-definition.md)).
+2. Compute HHI and delta-HHI for each relevant market ([Chapter 3: Market Definition](03-market-definition.md), [Chapter 13: Empirical Appendix](13-empirical-appendix.md)).
+3. Estimate diversion ratios using a logit demand model ([Chapter 4: IO Toolkit](04-io-toolkit.md)).
+4. Compute UPP and GUPPI for the merging parties ([Chapter 4: IO Toolkit](04-io-toolkit.md)).
+5. Assess bargaining leverage effects using the Nash-in-Nash framework ([Chapter 4: IO Toolkit, Bargaining section](04-io-toolkit.md)).
+6. Design a retrospective DiD study to evaluate the merger's effects after consummation ([Chapter 2: Research Design](02-research-design.md)).
+7. Draft a one-page memo summarizing your findings and recommending approval, conditional approval, or prohibition.
+
+**Exercise 2: Cartel detection and damages.** You are retained by a plaintiffs' class to estimate damages from an alleged cartel in the cement industry. Using the tools from this book:
+1. Screen for cartel indicators using variance tests and price correlation analysis ([Chapter 5: Cartels](05-cartels.md)).
+2. Identify the cartel period using structural break tests ([Chapter 5: Cartels](05-cartels.md)).
+3. Estimate the overcharge using a before/after comparison with a control product ([Chapter 5: Cartels](05-cartels.md)).
+4. Validate your results with placebo tests (fake break dates, control products) ([Chapter 2: Research Design](02-research-design.md)).
+5. Prepare an expert report section presenting your methodology, results, and sensitivity analysis ([Chapter 12: Litigation Practice](12-litigation-practice.md)).

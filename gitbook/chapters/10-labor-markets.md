@@ -52,25 +52,6 @@ The toolkit for labor antitrust transfers almost directly from the product-marke
 
 The analytical framework for labor antitrust rests on five pillars. First, **labor concentration measurement** applies the Herfindahl-Hirschman Index to labor markets defined as commuting zone--occupation cells, using data from the BLS Quarterly Census of Employment and Wages, Census LEHD, or South Africa's Quarterly Labour Force Survey. Second, **labor supply elasticity estimation** quantifies the degree of monopsony power by measuring how responsive employment is to wage changes at the firm level---elasticities below 2--3 indicate meaningful market power [@manning_2003; @ashenfelter_farber_ransom_2010]. Third, **event studies and difference-in-differences** designs exploit policy variation---state-level noncompete bans, franchise no-poach settlements, wage transparency mandates---to estimate causal effects on wages and mobility. Fourth, **wage-posting and vacancy analysis** uses job advertisement data from sources like Burning Glass/Lightcast to study how employers set initial offers and how this behavior changes under competitive pressure. Fifth, **qualitative evidence** from HR documents, franchise agreements, worker testimony, and internal communications provides the contextual grounding that transforms statistical patterns into a coherent theory of harm.
 
-{% hint style="info" %}
-**Method box**
-**Monopsony elasticities:** Estimate labor supply elasticity using quits, recruitment response, or equilibrium wage-setting models (e.g., inverse labor supply).  
-**Policy diff-in-diff:** Evaluate wage or mobility effects after noncompete bans or franchise no-poach settlements.  
-**Synthetic control:** Single-state reforms (e.g., Washington franchise no-poach settlement) can be assessed via synthetic control or staggered diff-in-diff.
-{% endhint %}
-
-{% hint style="info" %}
-**Qualitative evidence**
-**HR policies & agreements:** Franchise agreements, noncompete clauses, wage-fixing communications.  
-**Worker interviews/surveys:** Capture outside options, relocation constraints, switching costs, discrimination concerns.  
-**Internal memos:** Evidence of wage suppression strategy, benchmarking against collusive agreements, or fear of poaching.
-{% endhint %}
-
-{% hint style="info" %}
-**Citations and comparative note**
-Key references: US DOJ/FTC criminal wage-fixing cases [@us_jindal_2021; @us_davita_2022], the FTC's noncompete rule [@ftc_noncompete_2023] (finalized April 2024 but enjoined by federal court in August 2024), and DOJ/FTC HR guidance [@doj_hr_guidance_2016]. For empirical evidence on labor market concentration, see @azar_marinescu_steinbaum_2020 and @benmelech_bergman_kim_2020. On franchise no-poach clauses, see @krueger_ashenfelter_2018. For monopsony theory, see @manning_2003 and @naidu_posner_weyl_2018. International enforcement is evolving: the CMA focuses on noncompetes shorter than 3 months, and the EC is developing guidelines on HR collusion.
-{% endhint %}
-
 {% hint style="danger" %}
 **Statutory labor exemption**
 **Labor antitrust enforcement targets employer conduct, not worker organizing.** The Clayton Act (Section 6, 1914) declares that "the labor of a human being is not a commodity or article of commerce" and exempts legitimate labor union activities from antitrust. The Norris-LaGuardia Act (1932) further shields collective bargaining, strikes, and boycotts. Thus, while employers agreeing to fix wages or not poach workers violates antitrust, workers collectively bargaining for higher wages through unions does not. The exemption covers union organizing, collective bargaining, and coordinated labor action—but not agreements between unions and employers designed to harm competition in product markets [*Connell Construction v. Plumbers Local 100*, @us_connell_1975].

@@ -53,7 +53,8 @@ In modern practice, these approaches reinforce each other. You might use a **red
 | **Agency preference** | Mergers (prospective) | Retrospectives, damages |
 | **Key packages** | `BLPestimatoR`, custom code | `fixest`, `did`, `synthdid` |
 
-{% endhint %} {.callout-important title="Key IO Formulas"}
+{% hint style="danger" %}
+**Key IO Formulas**
 | Formula | Definition | Use Case |
 |:--------|:-----------|:---------|
 | **UPP** = Diversion x Margin - Efficiency | Upward Pricing Pressure | Merger screening |
@@ -279,7 +280,8 @@ Tie the efficiency term to documented synergies or cost savings (procurement eco
 The DOJ's 2011 challenge to AT&T's proposed $39 billion acquisition of T-Mobile provides a landmark application of UPP/GUPPI analysis in merger review. The complaint alleged that T-Mobile was a particularly disruptive competitor---its aggressive pricing and unlimited data plans constrained the pricing of AT&T and Verizon. Internal documents showed high diversion between AT&T and T-Mobile: when customers left one carrier, a substantial fraction switched to the other. Combined with wireless margins of 40--55%, GUPPI estimates implied significant upward pricing pressure. The DOJ's economic analysis also estimated diversion ratios at the local market level, since wireless competition varies by geography. AT&T argued that network efficiencies and spectrum synergies would offset pricing pressure, but the claimed efficiencies were not merger-specific (AT&T could expand capacity independently). The merger was abandoned after the DOJ filed suit. The case cemented UPP as a practical screening tool and demonstrated how diversion-based analysis could substitute for formal market definition in differentiated-product mergers [@farrell_shapiro_2010].
 {% endhint %}
 
-{% endhint %} {.callout-tip title="Running example: Airline demand and UPP"}
+{% hint style="success" %}
+**Running example: Airline demand and UPP**
 Airline demand is typically estimated using a **nested logit** model, with nests defined by airport (e.g., all flights from DCA in one nest, all flights from IAD in another) or by service type (nonstop vs. connecting). The nesting structure relaxes the IIA assumption of the plain logit: passengers choosing among nonstop options at the same airport substitute more readily with each other than with connecting flights from a different airport. This matters because the diversion ratios that drive UPP depend on the substitution pattern.
 
 For the American Airlines/US Airways merger (2013), consider a route like DCA--LGA where both carriers offered nonstop service. Using plausible parameters from the airline literature---diversion ratios of 0.25--0.35 between the merging carriers (reflecting their large combined slot holdings at DCA) and operating margins of 10--15% (typical for legacy carriers on competitive routes)---we can compute a rough GUPPI:
@@ -409,9 +411,7 @@ Swap series IDs for your industry (e.g., `WPUSI012011` for steel PPI, `CPIAUCSL`
 
 ## Bargaining frameworks 
 
-Pass-through analysis assumes price-taking behavior downstream: firms receive a cost shock and adjust prices mechanically. But in many antitrust-relevant markets---hospital-insurer negotiations, platform-merchant relationships, franchisor-franchisee arrangements---prices emerge from bilateral bargaining where both sides have leverage. The pass-through coefficient tells you how costs flow through a supply chain; it says nothing about how those costs were determined in the first place, or how a merger might shift the balance of power at the negotiating table. The bargaining frameworks below capture these dynamics.
-
-Many antitrust-relevant markets do not feature posted prices. Instead, prices emerge from bilateral negotiations: hospitals bargain with insurers over reimbursement rates, content studios negotiate licensing fees with distributors, and pharmaceutical manufacturers set prices with pharmacy benefit managers. In these settings, standard Bertrand or Cournot models---which assume firms unilaterally set prices or quantities---miss the fundamental economics. Bargaining models fill that gap.
+Pass-through analysis assumes price-taking behavior downstream: firms receive a cost shock and adjust prices mechanically. But many antitrust-relevant markets---hospital-insurer negotiations, platform-merchant relationships, content licensing, pharmaceutical PBM negotiations---do not feature posted prices at all. Instead, prices emerge from bilateral bargaining where both sides have leverage. The pass-through coefficient tells you how costs flow through a supply chain; it says nothing about how those costs were determined in the first place, or how a merger might shift the balance of power at the negotiating table. Standard Bertrand or Cournot models---which assume firms unilaterally set prices or quantities---miss the fundamental economics. Bargaining models fill that gap.
 
 ### The Nash-in-Nash framework
 
