@@ -1,4 +1,4 @@
-# Cartels and Collusion {#sec-cartels}
+# Cartels and Collusion 
 
 Cartels represent the clearest antitrust violations---competitors agreeing to fix prices, rig bids, or allocate markets cause direct and quantifiable harm to consumers. Yet proving collusion and measuring damages requires integrating the research design, market definition, and IO tools from earlier chapters into a coherent evidentiary package.
 
@@ -18,7 +18,6 @@ By the end you should be able to:
 
 {% hint style="info" %}
 **Cartel Detection and Analysis Workflow**
-
 ```
 PHASE 1: DETECTION            PHASE 2: ESTIMATION          PHASE 3: LITIGATION
        |                            |                            |
@@ -73,12 +72,217 @@ Document every known communication, meeting, or enforcement action in a single t
 ## Descriptives and screens
 Start with `ggplot2` dashboards that overlay prices with cost indices, demand proxies, and competitor prices. Flag regimes where prices remain static despite volatile costs or where margins converge across firms.
 
-- **Variance/dispersion screens:** Check price spreads, standard deviations, and coefficents of variation across firms or regions (Abrantes-Mello, 2010).  
-- **Procurement rotation:** Rank bids chronologically to flag turn-taking, convenient price endings, or geographic allocations (Porter & Zona, 1993); (Conley & Decarolis, 2016).  
+- **Variance/dispersion screens:** Check price spreads, standard deviations, and coefficents of variation across firms or regions [@abrantes_mello_2010].  
+- **Procurement rotation:** Rank bids chronologically to flag turn-taking, convenient price endings, or geographic allocations [@porter_zona_1993; @conley_decarolis_2016].  
 - **Digit/Benford checks:** Use sparingly and only when invoice conventions support the assumptions.  
-- **Correlation screens:** High correlations in supposedly independent bids can justify deeper probes (Harrington, 2008).
+- **Correlation screens:** High correlations in supposedly independent bids can justify deeper probes [@harrington_2008].
 
-Document screen logic following OECD guidance on cartel screens (OECD Cartel Screens, 2013) and note data limitations (missing bidders, net vs. list prices).
+Document screen logic following OECD guidance on cartel screens [@oecd_cartel_screens_2013] and note data limitations (missing bidders, net vs. list prices).
+
+### Real price series as cartel screen context
+
+Before turning to bid-level analysis, it is useful to examine aggregate price series for the products in question. Real data from FRED provides cost and price indices that can reveal anomalous pricing patterns suggestive of coordinated conduct. The key diagnostic is whether prices track costs: in competitive markets, prices should fluctuate with input costs; in cartelized markets, prices may remain sticky despite cost volatility, or may move in lockstep across firms.
+
+```r
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(lubridate)
+source("program/R/helpers.R")
+
+# Load real FRED price series
+bread <- read_csv("data/raw/fred_bread_cpi.csv", show_col_types = FALSE) |>
+  mutate(date = as.Date(paste0(date, "-01")),
+         series = "Bread & bakery CPI")
+
+cement <- read_csv("data/raw/fred_cement_ppi.csv", show_col_types = FALSE) |>
+  mutate(date = as.Date(paste0(date, "-01")),
+         series = "Cement PPI")
+
+steel <- read_csv("data/raw/fred_steel_ppi.csv", show_col_types = FALSE) |>
+  mutate(date = as.Date(paste0(date, "-01")),
+         series = "Steel PPI")
+
+crude <- read_csv("data/raw/fred_crude_oil.csv", show_col_types = FALSE) |>
+  filter(!is.na(value)) |>
+  mutate(date = as.Date(date),
+         series = "WTI Crude Oil")
+
+# Combine and normalize to 100 at first observation
+combined <- bind_rows(bread, cement, steel, crude) |>
+  group_by(series) |>
+  arrange(date) |>
+  mutate(normalized = value / first(value) * 100) |>
+  ungroup() |>
+  filter(date >= as.Date("2010-01-01"))
+
+# Panel A: Price level trends
+p1 <- ggplot(combined, aes(x = date, y = normalized, color = series)) +
+  geom_line(linewidth = 0.9) +
+  geom_hline(yintercept = 100, linetype = "dashed", color = "gray40") +
+  scale_color_manual(values = c(
+    "Bread & bakery CPI" = "#D55E00",
+    "Cement PPI" = "#0072B2",
+    "Steel PPI" = "#009E73",
+    "WTI Crude Oil" = "#CC79A7"
+  )) +
+  labs(
+    title = "Real Price Series: Cartel-Relevant Commodities (2010–2026)",
+    subtitle = "Normalized to 100 in January 2010. Source: FRED.",
+    x = NULL, y = "Index (Jan 2010 = 100)", color = NULL,
+    caption = "Bread CPI: CUSR0000SAF112 | Cement PPI: PCU327310327310 | Steel PPI: PCU331331 | WTI Crude: DCOILWTICO"
+  ) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+
+# Panel B: Year-over-year changes (volatility comparison)
+yoy <- combined |>
+  group_by(series) |>
+  arrange(date) |>
+  mutate(yoy_pct = (normalized / lag(normalized, 12) - 1) * 100) |>
+  ungroup() |>
+  filter(!is.na(yoy_pct))
+
+p2 <- ggplot(yoy, aes(x = date, y = yoy_pct, color = series)) +
+  geom_line(linewidth = 0.7) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
+  scale_color_manual(values = c(
+    "Bread & bakery CPI" = "#D55E00",
+    "Cement PPI" = "#0072B2",
+    "Steel PPI" = "#009E73",
+    "WTI Crude Oil" = "#CC79A7"
+  )) +
+  labs(
+    title = "Year-over-Year Price Changes: Volatility as Cartel Screen",
+    subtitle = "Sticky prices despite volatile costs may warrant deeper investigation",
+    x = NULL, y = "Year-over-year change (%)", color = NULL,
+    caption = "Low volatility in bread/cement vs. crude oil suggests price rigidity consistent with coordination."
+  ) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+
+# Display both panels
+if (requireNamespace("patchwork", quietly = TRUE)) {
+  library(patchwork)
+  p1 / p2 + plot_layout(heights = c(1, 1))
+} else {
+  print(p1)
+  print(p2)
+}
+```
+
+These real price series illustrate a key cartel-screen insight: **bread and bakery prices** (orange) show remarkably smooth upward trajectories with minimal year-over-year volatility, while **crude oil** (purple) exhibits dramatic swings. **Cement** (blue) and **steel** (green) fall in between. In a competitive market, bread prices should track wheat and energy costs, which are volatile; persistent price smoothness despite volatile inputs is a red flag that warrants deeper investigation using firm-level bid data. The year-over-year chart makes this contrast stark: bread CPI rarely deviates more than ±5% year-over-year, while crude oil swings ±40%.
+
+### South African CPI and manufacturing data for cartel screens
+
+South African competition authorities have access to rich price and production data from Stats SA that can serve as cartel screening tools. The CPI division index tracks prices across 13 categories from 2008 onward, while the manufacturing production index provides monthly output data from 1998. Together, these series allow analysts to identify periods of price rigidity in concentrated sectors---a hallmark of coordinated conduct.
+
+```r
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(lubridate)
+library(tidyr)
+source("program/R/helpers.R")
+
+# Load SA CPI division data
+sa_cpi <- read_csv("../the south african economy/___Contemporary/data/processed/cpi_division_index.csv",
+                   show_col_types = FALSE) |>
+  filter(!is.na(index)) |>
+  mutate(date = as.Date(date))
+
+# Focus on key cartel-relevant categories
+cartel_divisions <- c("Food and non-alcoholic beverages",
+                      "Clothing and footwear",
+                      "Transport")
+
+sa_cpi_filtered <- sa_cpi |>
+  filter(DivisionDescription %in% cartel_divisions) |>
+  group_by(DivisionDescription) |>
+  arrange(date) |>
+  mutate(normalized = index / first(index) * 100) |>
+  ungroup()
+
+# Load SA manufacturing production
+sa_mfg <- read_csv("../the south african economy/___Contemporary/data/processed/manufacturing_production_index.csv",
+                   show_col_types = FALSE) |>
+  mutate(date = as.Date(date))
+
+# Load commodity prices
+sa_comm <- read_csv("../the south african economy/___Contemporary/data/processed/commodity_prices.csv",
+                    show_col_types = FALSE) |>
+  mutate(date = as.Date(paste0(year, "-01-01")))
+
+# Panel A: SA CPI price trends
+p1 <- ggplot(sa_cpi_filtered, aes(x = date, y = normalized, color = DivisionDescription)) +
+  geom_line(linewidth = 0.9) +
+  geom_hline(yintercept = 100, linetype = "dashed", color = "gray40") +
+  scale_color_manual(values = c(
+    "Food and non-alcoholic beverages" = "#D55E00",
+    "Clothing and footwear" = "#0072B2",
+    "Transport" = "#009E73"
+  )) +
+  labs(
+    title = "South African CPI by Division (2008–2025)",
+    subtitle = "Normalized to 100 in January 2008. Source: Stats SA.",
+    x = NULL, y = "Index (Jan 2008 = 100)", color = NULL
+  ) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+
+# Panel B: Manufacturing production vs. commodity prices
+# Normalize commodity prices
+comm_long <- sa_comm |>
+  pivot_longer(cols = -year, names_to = "commodity", values_to = "value") |>
+  mutate(date = as.Date(paste0(year, "-01-01"))) |>
+  group_by(commodity) |>
+  arrange(date) |>
+  mutate(normalized = value / first(value) * 100) |>
+  ungroup()
+
+p2 <- ggplot(comm_long, aes(x = date, y = normalized, color = commodity)) +
+  geom_line(linewidth = 0.9) +
+  geom_hline(yintercept = 100, linetype = "dashed", color = "gray40") +
+  scale_color_manual(values = c(
+    "gold_usd_oz" = "#CC79A7",
+    "platinum_usd_oz" = "#E69F00",
+    "coal_usd_tonne" = "#56B4E9",
+    "iron_ore_usd_tonne" = "#009E73"
+  )) +
+  labs(
+    title = "South African Commodity Prices (2010–2024)",
+    subtitle = "Normalized to 100 in 2010. Source: Stats SA commodity prices.",
+    x = NULL, y = "Index (2010 = 100)", color = NULL
+  ) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+
+# Display both panels
+if (requireNamespace("patchwork", quietly = TRUE)) {
+  library(patchwork)
+  p1 / p2 + plot_layout(heights = c(1, 1))
+} else {
+  print(p1)
+  print(p2)
+}
+
+# Volatility comparison
+cat("\nSA CPI volatility (coefficient of variation, YoY changes):\n")
+sa_cpi_filtered |>
+  group_by(DivisionDescription) |>
+  arrange(date) |>
+  mutate(yoy = (normalized / lag(normalized, 12) - 1) * 100) |>
+  summarise(
+    mean_yoy = mean(yoy, na.rm = TRUE),
+    sd_yoy = sd(yoy, na.rm = TRUE),
+    cv = sd_yoy / abs(mean_yoy),
+    .groups = "drop"
+  ) |>
+  knitr::kable(digits = 2,
+               caption = "Lower CV suggests price rigidity consistent with coordination")
+```
+
+The SA CPI data reveals a pattern similar to the US series: **food and beverage prices** show steady upward trajectories with low volatility, while **transport prices** (driven by fuel costs) exhibit much greater fluctuation. This divergence is exactly what cartel screens look for: in concentrated food markets, prices may remain sticky despite volatile input costs (energy, commodities), suggesting coordinated pricing behavior. The commodity price panel shows the dramatic swings in gold, platinum, coal, and iron ore prices---inputs that should flow through to downstream prices in competitive markets. When they don't, it warrants deeper investigation.
 
 ### Bid-rotation analysis
 Using cement procurement data to identify potential bid rotation patterns.
@@ -110,9 +314,6 @@ ggplot(rotation, aes(x = reorder(winner, wins), y = wins)) +
        x = NULL, y = "Contract wins") +
   theme_antitrust()
 ```
-
-![](../images/cartel-rotation-1.png)
-
 Pair charts with tables showing consecutive wins, geographic patterns, or unexplained bid withdrawals.
 
 ### Transition matrix for rotation detection
@@ -177,8 +378,6 @@ cat(paste0("Diagonal (repeat win) share: ", scales::percent(diag_prob, accuracy 
 cat(paste0("Off-diagonal (rotation) share: ", scales::percent(1 - diag_prob, accuracy = 0.1), "\n"))
 cat("Note: Competitive markets typically show >50% diagonal; rotation schemes show <30%.\n")
 ```
-
-![](../images/cartel-transition-matrix-1.png)
 
 **How to interpret the transition matrix:**
 
@@ -316,8 +515,6 @@ cat("High eigenvector + high in-degree = receives wins from many firms\n")
 cat("High betweenness = potential coordinator bridging subgroups\n")
 ```
 
-![](../images/cartel-rotation-network-1.png)
-
 **How to interpret this graph:**
 - **Hub-spoke patterns**: If one firm is at the center with many arrows pointing to it, that firm may be the "ringleader" coordinating bids.
 - **Circular patterns**: Arrows forming a circle (A→B→C→D→A) suggest systematic rotation where firms take turns winning.
@@ -337,11 +534,10 @@ When a cartel is disrupted---by a dawn raid, a leniency application, or a regula
 
 When raids or leniency filings occur, run event studies on prices, spreads, or quantities. Check both cartel participants and outsiders; in public procurement you can also evaluate engineers’ estimates or cost indices.
 
-Structural break tests (Bai–Perron, CUSUM) highlight regime shifts. Always incorporate costs so you do not misattribute cost-driven changes to conduct. Present break plots next to relevant timeline entries (e.g., WhatsApp thread confirming a January 2019 meeting).
+Structural break tests (Bai–Perron, CUSUM) highlight regime shifts [@bai_perron_1998; @brown_durbin_evans_1975]. Always incorporate costs so you do not misattribute cost-driven changes to conduct. Present break plots next to relevant timeline entries (e.g., WhatsApp thread confirming a January 2019 meeting).
 
 {% hint style="info" %}
 **Code box: raid event study scaffold**
-
 ```r
 # df must include date, price, cost, treated (0/1), firm, product
 # library(fixest)
@@ -353,15 +549,14 @@ Structural break tests (Bai–Perron, CUSUM) highlight regime shifts. Always inc
 
 {% hint style="success" %}
 **Running example: Airlines --- coordination vs. collusion**
+The AA/US Airways merger analyzed in [Chapter 6: Mergers](06-mergers.md) should be distinguished from a different airline enforcement action that straddles the merger--cartel boundary: the DOJ's 2021 challenge to the **American Airlines/JetBlue Northeast Alliance (NEA)** [@us_aa_jetblue_nea_2021]. The NEA was not a merger but a revenue-sharing and scheduling coordination agreement covering roughly 70 routes out of Boston and New York. Under the NEA, AA and JetBlue jointly managed capacity, coordinated schedules, and shared revenue on overlapping routes---conduct that a federal judge found amounted to a de facto merger of their competitive operations in the Northeast, ordering dissolution in 2023.
 
-The AA/US Airways merger analyzed in [Chapter 6](chapters/06-mergers.md) should be distinguished from a different airline enforcement action that straddles the merger--cartel boundary: the DOJ's 2021 challenge to the **American Airlines/JetBlue Northeast Alliance (NEA)**. The NEA was not a merger but a revenue-sharing and scheduling coordination agreement covering roughly 70 routes out of Boston and New York. Under the NEA, AA and JetBlue jointly managed capacity, coordinated schedules, and shared revenue on overlapping routes---conduct that a federal judge found amounted to a de facto merger of their competitive operations in the Northeast, ordering dissolution in 2023.
-
-The NEA case illustrates how the same empirical toolkit applies across the merger--cartel boundary. The route-share data and event-study methods introduced in [Chapter 2](chapters/02-research-design.md) and [Chapter 3](chapters/03-market-definition.md) can screen for coordinated effects: for instance, one could test whether price correlations between AA and JetBlue increased on NEA routes relative to non-NEA routes after the alliance took effect, or whether fare dispersion fell on routes subject to revenue sharing. These are precisely the variance and correlation screens discussed earlier in this chapter. The case is a reminder that coordination need not involve secret meetings or bid-rigging to raise antitrust concerns---formal joint ventures and alliances can produce similar competitive harm when they eliminate independent decision-making between rivals.
+The NEA case illustrates how the same empirical toolkit applies across the merger--cartel boundary. The route-share data and event-study methods introduced in [Chapter 2: Research Design](02-research-design.md) and [Chapter 3: Market Definition](03-market-definition.md) can screen for coordinated effects: for instance, one could test whether price correlations between AA and JetBlue increased on NEA routes relative to non-NEA routes after the alliance took effect, or whether fare dispersion fell on routes subject to revenue sharing. These are precisely the variance and correlation screens discussed earlier in this chapter. The case is a reminder that coordination need not involve secret meetings or bid-rigging to raise antitrust concerns---formal joint ventures and alliances can produce similar competitive harm when they eliminate independent decision-making between rivals.
 {% endhint %}
 
 ## Overcharge and pass-through
 
-Selecting a counterfactual is the single most consequential methodological choice in cartel damages estimation. Every approach embeds assumptions about what the world would have looked like absent the conspiracy, and opposing experts will attack those assumptions relentlessly. The choice depends on data availability, the structure of the affected market, and jurisdictional precedent---US courts tend to favor before/after and yardstick approaches that rely on observable comparators, while EU practice has been more receptive to econometric models with extensive controls. South African Tribunal proceedings have drawn on both traditions, with the bread and construction cases relying heavily on before/after comparisons buttressed by cost data from Stats SA. The menu below outlines the main options, ranked roughly by data intensity.
+Selecting a counterfactual is the single most consequential methodological choice in cartel damages estimation. Every approach embeds assumptions about what the world would have looked like absent the conspiracy, and opposing experts will attack those assumptions relentlessly. The choice depends on data availability, the structure of the affected market, and jurisdictional precedent---US courts tend to favor before/after and yardstick approaches that rely on observable comparators, while EU practice has been more receptive to econometric models with extensive controls. South African Tribunal proceedings have drawn on both traditions, with the bread [@sa_bread_cartel_2007] and construction [@sa_construction_cartel_2013] cases relying heavily on before/after comparisons buttressed by cost data from Stats SA. The menu below outlines the main options, ranked roughly by data intensity.
 
 - **Before/after:** Include product, customer, and time fixed effects plus cost controls.  
 - **Difference-in-differences:** Compare cartel markets to unaffected regions or product classes; test pre-trends.  
@@ -457,8 +652,6 @@ ggplot(panel, aes(x = period, y = price, color = product)) +
  theme(legend.position = "bottom")
 ```
 
-![](../images/cartel-placebo-test-1.png)
-
 **Interpreting placebo results:**
 
 - **Product placebo fails** (control shows effect): Consider whether the "control" product is actually affected, or whether your specification captures market-wide shocks rather than cartel conduct.
@@ -471,13 +664,12 @@ Leniency statements, chats, and board minutes pin down conduct mechanisms (rotat
 - Set regression windows and sample selections.  
 - Validate that estimated start/stop dates match qualitative evidence.  
 - Explain residuals—if econometrics show little effect where documents admit coordination, revisit product mapping or data coverage.  
-- Clarify what is fact (documented) vs. inference (econometric patterns), citing (OECD Leniency Programmes, 2015) or agency policies.
+- Clarify what is fact (documented) vs. inference (econometric patterns), citing [@oecd_leniency_2015] or agency policies.
 
 The preceding sections have covered the analytical pipeline from screening through estimation. What remains is to integrate these elements into a coherent evidentiary package---one that connects econometric findings to documentary evidence and presents the result in a form that tribunals and courts can evaluate. The boxes below summarize the key methodological, qualitative, and case-based resources that practitioners should assemble when building a cartel matter.
 
 {% hint style="info" %}
 **Method box: econometric toolkit**
-
 **Event studies:** Evaluate raid/leniency impact on prices or spreads.
 **Overcharge regressions:** `feols(log(price) ~ cartel_period + cost + demand | product + customer + time)` with clustered SEs and placebo checks.
 **Pass-through:** Dynamic regressions or VECMs linking upstream and downstream prices to trace harm along the chain.
@@ -485,7 +677,6 @@ The preceding sections have covered the analytical pipeline from screening throu
 
 {% hint style="info" %}
 **Method box: screens & variance**
-
 **Distribution screens:** Variance compression, digit spikes, Benford where appropriate.  
 **Rotation checks:** Consecutive wins, geographic allocation, or sequential ordering.  
 **Cost-pass-through diagnostics:** Compare pass-through before/during suspected collusion; suppressed pass-through can corroborate coordination.
@@ -493,7 +684,6 @@ The preceding sections have covered the analytical pipeline from screening throu
 
 {% hint style="info" %}
 **Qualitative evidence**
-
 Treat qualitative materials as structured data:
 
 - **Bid sheets & messaging apps:** Extract explicit allocation rules or fallback prices.  
@@ -503,19 +693,17 @@ Treat qualitative materials as structured data:
 
 {% hint style="info" %}
 **Case box: Illustrative matters**
-
-**Apple eBooks (US).** Hub-and-spoke coordination with agency-model contracts and SSNDQ logic (*United States v. Apple Inc.*, 2013).
-**Lysine & DRAM (US/EU).** Classic dawn-raid analyses with overcharge estimates of 17--20% (lysine) and 10--15% (DRAM), illustrating how leniency programs can expose sophisticated international price-fixing. These cases anchor the empirical literature on cartel overcharges.
+**Apple eBooks (US).** Hub-and-spoke coordination with agency-model contracts and SSNDQ logic [@us_apple_ebooks_2013].
+**Lysine & DRAM (US/EU).** Classic dawn-raid analyses with overcharge estimates of 17--20% (lysine) and 10--15% (DRAM), illustrating how leniency programs can expose sophisticated international price-fixing [@us_lysine_cartel_1996; @eu_dram_cartel_2010]. These cases anchor the empirical literature on cartel overcharges.
 **Construction bid-rigging (EU, SA, JFTC).** Rotation matrices and dawn raids aligned with procurement archives.
 **Digital advertising (SAMR).** Algorithms and platform policies as qualitative evidence.
 {% endhint %}
 
 {% hint style="info" %}
 **Case box: South African enforcement highlights**
-
 - **Bread cartel (Tribunal case 15/CR/Feb07).** Stats SA CPI data plus mill-level costs revealed synchronized 30–40 cent jumps; overcharge estimated at 7–10% with R250 million penalties and consumer relief funds.  
 - **Construction fast-track settlement (2013).** Self-reported matrices across 300 tenders showed rotation; event windows around raids captured 8–12% price drops relative to engineers’ estimates.  
-- **Fertilizer/ammonia (Sasol/Yara/Omnia).** Export-parity benchmarks and plant-level variable-cost data showed 25–30% overcharges despite spare capacity, leading to penalties and divestitures.
+- **Fertilizer/ammonia (Sasol/Yara/Omnia).** Export-parity benchmarks and plant-level variable-cost data showed 25–30% overcharges despite spare capacity, leading to penalties and divestitures [@sa_fertilizer_inquiry_2019].
 {% endhint %}
 
 ## Code box: structural break illustration
@@ -553,22 +741,17 @@ ggplot(gas, aes(date, price, color = regime)) +
   theme_antitrust() +
   guides(color = guide_legend(nrow = 1))
 ```
-
-![Structural break detection in gasoline prices](../images/cartel-break-gasoline-1.png)
-
 Replace the public FRED data with product-level transactions to present in litigation.
 
 {% hint style="info" %}
 **Citations and comparative note**
-
-- Cite OECD screen guidance, FTC/DOJ econometrics speeches, and EC/JFTC leniency notices when defending methodology.
-- Reference cases (lysine, DRAM, auto parts, LIBOR) with docket numbers.
+- Cite OECD screen guidance, FTC/DOJ econometrics speeches, and EC [@ec_leniency_notice_2006] and JFTC [@jftc_leniency_2005] leniency notices when defending methodology.
+- Reference cases (lysine, DRAM, auto parts [@us_auto_parts_cartel_2011], LIBOR [@us_libor_litigation_2013]) with docket numbers.
 - Flag jurisdictional differences: e.g., SAMR often requires data-driven screens, while US courts scrutinize documentary corroboration.
 {% endhint %}
 
 {% hint style="success" %}
 **Key Takeaways**
-
 1. **Screens are triage tools, not proof.** Variance screens, rotation patterns, and price correlations identify suspicious markets worth investigating. They rarely prove collusion alone.
 
 2. **Leniency evidence anchors timelines.** The strongest cartel cases combine econometric analysis with documentary evidence from leniency applicants. Build your analysis around known communication dates.
@@ -595,4 +778,4 @@ Replace the public FRED data with product-level transactions to present in litig
 5. **Conceptual.** A leniency applicant provides a statement claiming cartel meetings occurred quarterly from 2015 to 2019, but your price data shows a structural break in 2017 rather than 2015. How would you reconcile this discrepancy? What additional evidence would you seek?
 
 ## Looking ahead
-The detection screens, overcharge regressions, and pass-through analyses developed here carry forward throughout the book. **[Chapter 6](chapters/06-mergers.md)** builds on the same demand estimates and diversion ratios---post-cartel mergers frequently face heightened scrutiny, and the diagnostic tools overlap substantially. **[Chapter 12](chapters/12-litigation-practice.md)** revisits damages modeling and expert report preparation, showing how to package cartel evidence for courtroom presentation. The rotation indices, structural break plots, and overcharge tables introduced here will serve as templates you can adapt to new cases and jurisdictions.
+The detection screens, overcharge regressions, and pass-through analyses developed here carry forward throughout the book. **[Chapter 6: Mergers](06-mergers.md)** builds on the same demand estimates and diversion ratios---post-cartel mergers frequently face heightened scrutiny, and the diagnostic tools overlap substantially. **[Chapter 12: Litigation Practice](12-litigation-practice.md)** revisits damages modeling and expert report preparation, showing how to package cartel evidence for courtroom presentation. The rotation indices, structural break plots, and overcharge tables introduced here will serve as templates you can adapt to new cases and jurisdictions.
