@@ -100,3 +100,19 @@ This glossary collects key terms, statutes, cases, and methods referenced throug
 | Specification curve analysis | Robustness across model specifications | @sec-research-design |
 | Synthetic control | Weighted control group for single-unit treatment | @sec-research-design |
 | UPP/GUPPI | Merger screening without full simulation | @sec-mergers |
+
+## Additional Terms
+
+**Cellophane fallacy.** The error of defining a market too broadly by using the prevailing (monopoly) price as the benchmark for substitution analysis. Named after *United States v. E.I. du Pont de Nemours & Co.* (1956), where the Supreme Court found that cellophane competed with other flexible wrapping materials, ignoring that du Pont's monopoly pricing had already made substitutes appear competitive. Relevant to SSNIP analysis: the hypothetical monopolist test should start from the competitive price, not the current price.
+
+**ECPR (Efficient Component Pricing Rule).** An access pricing formula that sets the wholesale charge equal to the incumbent's incremental cost of providing access plus the opportunity cost of lost retail sales. Also known as the Baumol-Willig rule. Used in telecommunications and rail access remedies. See @sec-regulation-remedies.
+
+**Per se vs. rule of reason.** Two standards of antitrust analysis. *Per se* illegality applies to conduct that is presumed anticompetitive without detailed economic analysis (e.g., horizontal price-fixing, bid-rigging). The *rule of reason* requires a full economic analysis of the conduct's competitive effects, weighing pro-competitive justifications against anti-competitive harms. Most conduct---including vertical restraints, most mergers, and unilateral conduct---is evaluated under the rule of reason. South Africa uses a similar distinction, with certain horizontal agreements subject to a "per se prohibition" under Section 4(1)(a) of the Competition Act.
+
+**Public interest test.** A feature of South African merger review (and some other emerging-economy regimes) that requires the Competition Tribunal to consider factors beyond competitive effects, including employment impacts, small business participation, the ability of historically disadvantaged persons to participate in the economy, and the effect on specific industries or regions. No direct analogue in US or EU merger law.
+
+**SIEC test (Significant Impediment to Effective Competition).** The EU's substantive test for merger review under the EU Merger Regulation. Broader than the US "substantial lessening of competition" (SLC) test in that it explicitly captures non-coordinated effects in oligopolistic markets (the "gap" created by the removal of a maverick firm) without requiring proof of collective dominance.
+
+**SSNDQ (Small but Significant Non-transitory Decrease in Quality).** The zero-price analogue of SSNIP, used to define markets where users pay with attention or data rather than money. Asks whether a hypothetical monopolist could profitably degrade quality (e.g., increase ad load, reduce privacy protections) by a small but significant amount. Used in digital market investigations.
+
+**Trinko doctrine.** The US Supreme Court's holding in *Verizon v. Trinko* (2004) that there is generally no duty to deal with competitors under Section 2 of the Sherman Act, narrowing the essential facilities doctrine. Contrasts with the EU's more expansive approach under @eu_bronner_1998 and @eu_ims_2004.

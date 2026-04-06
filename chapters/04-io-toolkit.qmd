@@ -423,9 +423,7 @@ Swap series IDs for your industry (e.g., `WPUSI012011` for steel PPI, `CPIAUCSL`
 
 ## Bargaining frameworks {#sec-bargaining}
 
-Pass-through analysis assumes price-taking behavior downstream: firms receive a cost shock and adjust prices mechanically. But in many antitrust-relevant markets---hospital-insurer negotiations, platform-merchant relationships, franchisor-franchisee arrangements---prices emerge from bilateral bargaining where both sides have leverage. The pass-through coefficient tells you how costs flow through a supply chain; it says nothing about how those costs were determined in the first place, or how a merger might shift the balance of power at the negotiating table. The bargaining frameworks below capture these dynamics.
-
-Many antitrust-relevant markets do not feature posted prices. Instead, prices emerge from bilateral negotiations: hospitals bargain with insurers over reimbursement rates, content studios negotiate licensing fees with distributors, and pharmaceutical manufacturers set prices with pharmacy benefit managers. In these settings, standard Bertrand or Cournot models---which assume firms unilaterally set prices or quantities---miss the fundamental economics. Bargaining models fill that gap.
+Pass-through analysis assumes price-taking behavior downstream: firms receive a cost shock and adjust prices mechanically. But many antitrust-relevant markets---hospital-insurer negotiations, platform-merchant relationships, content licensing, pharmaceutical PBM negotiations---do not feature posted prices at all. Instead, prices emerge from bilateral bargaining where both sides have leverage. The pass-through coefficient tells you how costs flow through a supply chain; it says nothing about how those costs were determined in the first place, or how a merger might shift the balance of power at the negotiating table. Standard Bertrand or Cournot models---which assume firms unilaterally set prices or quantities---miss the fundamental economics. Bargaining models fill that gap.
 
 ### The Nash-in-Nash framework
 

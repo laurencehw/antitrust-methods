@@ -1,6 +1,6 @@
 # Digital Markets and Platforms {#sec-digital-markets}
 
-The tools and frameworks from the preceding chapters---market definition, IO modeling, merger analysis, and monopolization doctrine---apply to digital markets, but with distinctive challenges. Multi-sided platforms, network effects, zero-price business models, and rapid technological change all complicate traditional antitrust analysis. This chapter shows how to adapt the general toolkit to these specific features.
+The tools and frameworks from the preceding chapters---market definition (@sec-market-definition), IO modeling (@sec-io-toolkit), merger analysis (@sec-mergers), and monopolization doctrine (@sec-monopolization)---apply to digital markets, but with distinctive challenges. Multi-sided platforms, network effects, zero-price business models, and rapid technological change all complicate traditional antitrust analysis. This chapter shows how to adapt the general toolkit to these specific features.
 
 We also introduce new evidence types that matter especially in digital markets: telemetry data, clickstream analysis, API documentation, and product requirements documents. The intersection of technical product knowledge and economic reasoning defines much of the frontier in digital platform enforcement, from the US cases against Google and Meta to the EU's Digital Markets Act and South Africa's Online Intermediation Platforms Market Inquiry.
 
@@ -84,7 +84,7 @@ SCOPING                   ANALYSIS                  REMEDIES
 :::
 
 1. **Define sides and metrics.** Identify user, merchant, advertiser, developer, courier, or publisher sides. Track MAU/DAU, GMV, multi-homing rates, engagement depth, and conversion metrics.
-2. **Map fees and monetization.** Build ladders for commissions, subscriptions, ad loads, and data monetization; compute pass-through and elasticity. For two-sided market theory, see @rochet_tirole_2003 and @armstrong_2006.
+2. **Map fees and monetization.** Build ladders for commissions, subscriptions, ad loads, and data monetization; compute pass-through and elasticity. For two-sided market theory, see @rochet_tirole_2003 and @armstrong_2006; the demand estimation framework in @sec-io-toolkit provides the empirical foundation for these models.
 3. **Theory of harm.** Common mechanisms include self-preferencing, default tying, MFN/parity clauses, data leveraging, interoperability restrictions, algorithmic ranking biases, and algorithmic collusion.
 4. **Mechanism measurement.** Quantify ranking impacts, default effects, fee changes, and data advantages; document multi-homing constraints and API access terms.
 5. **Effects & remedies.** Measure partner churn, user switching, price/fee changes, and innovation impacts. Propose remedies (choice screens, fair-ranking reports, API access rules, data portability, structural separation) tied to measured harms.
@@ -102,7 +102,7 @@ The table below maps common platform theories of harm to measurable metrics and 
 | **Foreclosure (raising rivals' costs)** | Fee differential; cost-to-serve by channel | Comparison of platform vs. direct channel costs | Fee schedules, merchant P&L data |
 | **Data leverage** | Copycat product launch timing; feature matching | Survival analysis of 3rd-party products post-data access | Product launch dates, feature audits, internal documents |
 | **MFN/parity clauses** | Price dispersion across platforms | Variance analysis; price comparison pre/post MFN removal | Price scraping, platform listings, DMA studies |
-| **Algorithmic collusion** | Price correlation; response times; convergence patterns | Granger causality; structural break tests; simulation | Transaction-level pricing data, algorithm audits |
+| **Algorithmic collusion** | Price correlation; response times; convergence patterns | Granger causality; structural break tests; simulation (cf. cartel screens in @sec-cartels) | Transaction-level pricing data, algorithm audits |
 | **Switching costs/lock-in** | Multi-homing rates; churn by tenure | Duration models; switching cost estimation | Survey data, telemetry, DMA surveys |
 | **Network effects exploitation** | Participation elasticity; tipping point dynamics | Two-sided demand estimation; natural experiments | Platform growth data, entry/exit events |
 
@@ -377,7 +377,7 @@ Replace the synthetic panel with DMA compliance reports, CMA choice screen exper
 
 ::: {.callout-note title="Method box"}
 - Platform fee/price pass-through across sides.  
-- Event studies on ranking/default changes; DMA/DMA-style interventions.  
+- Event studies on ranking/default changes, following the design-based approach in @sec-research-design; DMA-style interventions.  
 - Two-sided logit or bargaining sketches to test fee caps and interoperability remedies.
 :::
 
@@ -499,6 +499,76 @@ cat(paste0("Multi-homing (2+ platforms): ",
 
 ### Choice screen / default effect visualization
 Quantify how defaults affect market shares using difference-in-differences or event studies around choice screen implementations.
+
+### Self-preferencing detection exercise
+
+Self-preferencing occurs when a platform uses its control over access to favor its own products or services over those of rivals. The EU's Google Shopping decision (@eu_google_shopping_2017) established that systematic demotion of rival comparison shopping services in search results constituted an abuse of dominance under Article 102 TFEU. Detecting self-preferencing requires comparing the platform's treatment of its own offerings against its treatment of rivals, controlling for quality differences.
+
+The empirical approach involves three steps: (1) measure the platform's ranking or visibility of own vs. rival products; (2) control for quality differences (relevance, price, user ratings); and (3) test whether any residual favoritism is statistically and economically significant.
+
+```{r}
+#| label: digital-self-preferencing
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 6
+library(dplyr)
+library(ggplot2)
+library(fixest)
+source("program/R/helpers.R")
+
+# Simulated search ranking data
+# Replace with actual platform ranking data from discovery or DMA reports
+set.seed(456)
+n_queries <- 500
+
+ranking_data <- tibble(
+  query_id = 1:n_queries,
+  # Platform's own product vs. rival
+  is_own = rbinom(n_queries, 1, 0.3),
+  # Quality metrics (observable to the econometrician)
+  relevance_score = runif(n_queries, 0, 1),
+  user_rating = runif(n_queries, 1, 5),
+  price_competitiveness = runif(n_queries, 0, 1),
+  # Position assigned by platform (1 = top, higher = worse)
+  # Own products get better positions, controlling for quality
+  position = case_when(
+    is_own == 1 ~ round(2 + 3 * (1 - relevance_score) + rnorm(n_queries, 0, 0.5)),
+    TRUE ~ round(4 + 3 * (1 - relevance_score) + rnorm(n_queries, 0, 0.8))
+  ),
+  position = pmax(1, pmin(10, position))
+)
+
+# Regression: does being "own" improve ranking, controlling for quality?
+rank_model <- feols(
+  position ~ is_own + relevance_score + user_rating + price_competitiveness,
+  data = ranking_data
+)
+
+cat("Self-preferencing test:\n")
+cat("Coefficient on is_own (negative = better ranking for own products):\n")
+cat(paste0("  β = ", round(coef(rank_model)["is_own"], 3), "\n"))
+cat(paste0("  SE = ", round(sqrt(diag(vcov(rank_model)))["is_own"], 3), "\n"))
+cat(paste0("  p-value = ", sprintf("%.4f", coef(summary(rank_model))["is_own", 4]), "\n\n"))
+
+# Visualization: distribution of positions for own vs. rival products
+ggplot(ranking_data, aes(x = position, fill = factor(is_own, labels = c("Rival", "Own")))) +
+  geom_bar(position = "dodge", alpha = 0.8) +
+  scale_fill_manual(values = c("Rival" = "#0072B2", "Own" = "#D55E00")) +
+  scale_x_reverse(breaks = 1:10) +
+  labs(
+    title = "Self-Preferencing Detection: Position Distribution",
+    subtitle = "Own products systematically ranked higher, controlling for quality",
+    x = "Search Position (1 = top)", y = "Count of Products", fill = NULL,
+    caption = "Simulated data. Replace with actual platform ranking data from discovery or DMA reports."
+  ) +
+  theme_antitrust() +
+  theme(legend.position = "bottom")
+```
+
+**Interpreting the results:** A statistically significant negative coefficient on `is_own` indicates that the platform's own products receive better positions than rival products, even after controlling for relevance, user ratings, and price competitiveness. This is the pattern that competition authorities look for in self-preferencing cases. The magnitude of the coefficient tells you the average position advantage---a coefficient of -1.5 means own products are ranked 1.5 positions higher on average, which can translate into substantial traffic differences given the steep click-through rate gradient across search positions.
+
+**Data sources:** Platform ranking logs (from discovery or regulatory requests), click-through rate data, user engagement metrics, and product quality scores. The EU's DMA requires designated gatekeepers to provide ranking data to the Commission, creating a new data source for self-preferencing analysis.
 
 ```{r}
 #| label: digital-default-plot
