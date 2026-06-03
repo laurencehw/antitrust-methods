@@ -2,7 +2,7 @@
 
 Cartels represent the clearest antitrust violations---competitors agreeing to fix prices, rig bids, or allocate markets cause direct and quantifiable harm to consumers. Yet proving collusion and measuring damages requires integrating the research design, market definition, and IO tools from earlier chapters into a coherent evidentiary package.
 
-This chapter shows how to detect collusion, measure its effects, and build cases that survive both economic and legal scrutiny. Quantitative screens and qualitative evidence do different jobs. Econometrics can show that prices were elevated above a competitive benchmark; it cannot, on its own, show an agreement. Leniency statements and internal communications supply the agreement. Each is weak without the other, which is why cartel cases live or die on assembling both.
+This chapter shows how to detect collusion, measure its effects, and build cases that survive both economic and legal scrutiny. Quantitative screens and qualitative evidence do different jobs. Econometrics can show that prices were elevated above a competitive benchmark; it cannot, on its own, show an agreement. Leniency statements and internal communications supply the agreement. Each is weak without the other, so cartel cases turn on assembling both.
 
 ## Learning goals
 Cartel enforcement hinges on weaving together quantitative screens, econometric estimates, and documentary evidence. This chapter walks through that workflow using established methodologies from the OECD and academic literature on cartel detection.
@@ -554,7 +554,7 @@ Replace simulated data with actual procurement records (World Bank, TED, US DOT,
 
 ## Event and break tests
 
-When a cartel is disrupted---by a dawn raid, a leniency application, or a regulatory intervention---prices often shift abruptly. These disruptions create natural experiments: the timing is typically exogenous to market conditions (raids are secret until executed; leniency filings are triggered by internal decisions, not demand shocks), making them attractive for causal inference. Event studies around these breaks test whether price levels, spreads, or quantities change in ways consistent with a transition from collusive to competitive equilibrium. The challenge is isolating the cartel effect from coincident cost or demand changes, which is why pairing econometric break tests with documentary evidence about the timing and mechanism of cartel dissolution is essential.
+When a cartel is disrupted---by a dawn raid, a leniency application, or a regulatory intervention---prices often shift abruptly. These disruptions create natural experiments: the timing is typically exogenous to market conditions (raids are secret until executed; leniency filings are triggered by internal decisions, not demand shocks), making them attractive for causal inference. Event studies around these breaks test whether price levels, spreads, or quantities change in ways consistent with a transition from collusive to competitive equilibrium. The challenge is isolating the cartel effect from coincident cost or demand changes. That is why econometric break tests need documentary evidence about the timing and mechanism of cartel dissolution.
 
 When raids or leniency filings occur, run event studies on prices, spreads, or quantities. Check both cartel participants and outsiders; in public procurement you can also evaluate engineers’ estimates or cost indices.
 

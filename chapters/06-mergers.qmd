@@ -749,7 +749,7 @@ source("program/R/helpers.R")
 ## Visualizations
 
 ### Market shares and HHI dashboard
-This dashboard provides a comprehensive view of market structure before and after the merger, combining share distributions, HHI calculations, and competitive thresholds.
+This dashboard shows market structure before and after the merger, combining share distributions, HHI calculations, and competitive thresholds.
 
 ```{r}
 #| label: merger-hhi-dashboard

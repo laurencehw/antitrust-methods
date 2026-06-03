@@ -826,7 +826,7 @@ tibble::tibble(
 The EU Digital Markets Act requires designated gatekeepers to offer choice screens for browsers, search engines, and other services. This analysis framework can evaluate compliance and effectiveness.
 
 ### Platform fee structure visualization
-Commission and fee structures are critical evidence in platform cases. Show how fees vary by seller tier, product category, or fulfillment method.
+Commission and fee structures are central evidence in platform cases. Show how fees vary by seller tier, product category, or fulfillment method.
 
 ```{r}
 #| label: digital-fee-structure

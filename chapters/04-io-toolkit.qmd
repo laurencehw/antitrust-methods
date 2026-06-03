@@ -2,7 +2,7 @@
 
 Having defined markets and laid out the causal toolkit, we turn to the machinery behind most quantitative antitrust work: the industrial organization (IO) toolkit. These methods model how firms compete, recover parameters like marginal cost and demand elasticity, and simulate the effect of a merger or a course of conduct before it happens.
 
-Much of the rest of the book runs through this chapter. The demand models, cost estimates, and bargaining frameworks here feed the merger simulations in @sec-mergers, the foreclosure analysis in @sec-monopolization, and the platform work in @sec-digital-markets. The investment pays off across all of them.
+Much of the rest of the book runs through this chapter. The demand models, cost estimates, and bargaining frameworks here feed the merger simulations in @sec-mergers, the foreclosure analysis in @sec-monopolization, and the platform work in @sec-digital-markets.
 
 ## Learning goals
 This chapter bridges descriptive evidence and full-blown merger simulations. You will learn when to deploy lightweight demand or supply models, how to explain their assumptions to agencies and courts, and how to integrate qualitative evidence (contracts, governance documents, interviews) so the results feel grounded.
@@ -16,7 +16,7 @@ By the end you should be able to:
 
 ## Core components
 
-The IO toolkit is a layered architecture. Each layer builds on the one below: demand estimation feeds supply modeling, which informs bargaining analysis, which connects to the multi-sided dynamics that characterize modern platform markets. Diagnostics sit atop the stack, cross-checking every layer against observable data. The list below outlines each component; the sections that follow develop them in detail.
+The components build on each other. Demand estimation feeds supply modeling, which informs bargaining analysis, which connects to the multi-sided dynamics of platform markets. Diagnostics cross-check each component against observable data. The list below outlines each one; the sections that follow develop them in detail.
 
 1. **Demand estimation.** Start with logit/BLP-lite intuition (shares vs. prices and characteristics) [@nevo_2000; @berry_levinsohn_pakes_1995]. Add nested logit or random coefficients when differentiation is material, and report diversion matrices.  
 2. **Supply modeling & pass-through.** Recover marginal costs via first-order conditions (FOCs) or reduced-form models, and estimate pass-through elasticities (see code below).  
@@ -26,7 +26,7 @@ The IO toolkit is a layered architecture. Each layer builds on the one below: de
 
 ## Structural vs. Reduced Form Approaches
 
-Antitrust economics relies on two distinct methodological traditions. Understanding the difference—and knowing when to use each—is critical for designing an effective expert report.
+Antitrust economics relies on two distinct methodological traditions. Knowing the difference, and when to use each, shapes the design of an expert report.
 
 ### The Contrast
 
@@ -71,7 +71,7 @@ In modern practice, these approaches reinforce each other. You might use a **red
 **Simulation scaffolds.** When time is short, build a logit demand system with constant marginal costs to approximate unilateral effects, then refine later.
 :::
 
-Structural models are only as credible as the institutional knowledge embedded in their assumptions. Contracts, governance documents, and field interviews don't just provide courtroom narrative---they inform the modeling choices that drive simulation results. A pass-through estimate that ignores contractual price adjustment clauses, or a demand model that overlooks loyalty programs, will produce numbers that feel precise but rest on sand. The qualitative evidence below is not a supplement to the quantitative toolkit; it is a prerequisite for using it well.
+Structural models are only as credible as the institutional knowledge embedded in their assumptions. Contracts, governance documents, and field interviews inform the modeling choices that drive simulation results. A pass-through estimate that ignores contractual price adjustment clauses, or a demand model that overlooks loyalty programs, will produce numbers that feel precise but rest on sand. The qualitative evidence below is a prerequisite for using the quantitative toolkit well, not a supplement to it.
 
 ::: {.callout-note title="Qualitative evidence"}
 **Contracts & governance.** MFNs, parity clauses, data-sharing obligations, and service-level agreements indicate how flexible margins are; tie them to modeling assumptions.
@@ -301,7 +301,7 @@ A 3.6% GUPPI is below the 5% rule-of-thumb threshold, but this is sensitive to i
 ## Visualizations
 
 ### Pass-through diagnostic using public price indices
-Pass-through analysis estimates how much of a cost change flows through to consumer prices. This is critical for cartel damages (upstream overcharge → downstream harm), merger analysis (will cost savings benefit consumers?), and vertical restraints. This example uses real FRED data for gasoline prices.
+Pass-through analysis estimates how much of a cost change flows through to consumer prices. It matters for cartel damages (upstream overcharge → downstream harm), merger analysis (will cost savings benefit consumers?), and vertical restraints. This example uses real FRED data for gasoline prices.
 
 ```{r}
 #| label: cost-pass-through
@@ -423,7 +423,7 @@ Swap series IDs for your industry (e.g., `WPUSI012011` for steel PPI, `CPIAUCSL`
 
 ## Bargaining frameworks {#sec-bargaining}
 
-Pass-through analysis assumes price-taking behavior downstream: firms receive a cost shock and adjust prices mechanically. But many antitrust-relevant markets---hospital-insurer negotiations, platform-merchant relationships, content licensing, pharmaceutical PBM negotiations---do not feature posted prices at all. Instead, prices emerge from bilateral bargaining where both sides have leverage. The pass-through coefficient tells you how costs flow through a supply chain; it says nothing about how those costs were determined in the first place, or how a merger might shift the balance of power at the negotiating table. Standard Bertrand or Cournot models---which assume firms unilaterally set prices or quantities---miss the fundamental economics. Bargaining models fill that gap.
+Pass-through analysis assumes price-taking behavior downstream: firms receive a cost shock and adjust prices mechanically. But many antitrust-relevant markets---hospital-insurer negotiations, platform-merchant relationships, content licensing, pharmaceutical PBM negotiations---do not feature posted prices at all. Instead, prices emerge from bilateral bargaining where both sides have leverage. The pass-through coefficient tells you how costs flow through a supply chain; it says nothing about how those costs were determined in the first place, or how a merger might shift the balance of power at the negotiating table. Standard Bertrand or Cournot models, which assume firms unilaterally set prices or quantities, miss the underlying economics. Bargaining models fill that gap.
 
 ### The Nash-in-Nash framework
 
