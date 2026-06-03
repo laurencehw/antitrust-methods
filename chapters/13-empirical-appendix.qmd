@@ -211,6 +211,7 @@ Essential for difference-in-differences designs (mergers, labor, remedies).
 
 ```{r}
 #| label: diagnostic-pretrends
+#| fig-cap: "Pre-trends diagnostic. Synthetic data for illustration only."
 #| message: false
 #| warning: false
 #| fig-width: 11
@@ -330,6 +331,7 @@ Show covariate balance before and after matching or weighting.
 
 ```{r}
 #| label: diagnostic-balance
+#| fig-cap: "Covariate balance diagnostic. Synthetic data for illustration only."
 #| message: false
 #| warning: false
 #| fig-width: 10
@@ -453,6 +455,7 @@ Show robustness across multiple reasonable specifications.
 
 ```{r}
 #| label: diagnostic-spec-curve
+#| fig-cap: "Specification-curve diagnostic. Synthetic data for illustration only."
 #| message: false
 #| warning: false
 #| fig-width: 11

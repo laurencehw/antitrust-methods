@@ -259,6 +259,7 @@ This inquiry demonstrates how competition authorities can use benchmarking and p
 #### Retrospective diff-in-diff scaffold
 ```{r}
 #| label: regulation-remedy-did
+#| fig-cap: "Difference-in-differences evaluation of a remedy. Synthetic data for illustration only."
 #| message: false
 #| warning: false
 library(dplyr)

@@ -132,6 +132,7 @@ When users pay with attention rather than money, adapt metrics accordingly:
 ### Two-sided demand scaffold
 ```{r}
 #| label: digital-two-sided
+#| fig-cap: "Two-sided platform participation. Synthetic data for illustration only."
 #| message: false
 #| warning: false
 library(dplyr)

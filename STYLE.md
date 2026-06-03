@@ -6,24 +6,35 @@ specific patterns to remove. It exists so the remaining edits (body boxes,
 
 ## The target voice
 
-Anchored on the author's published empirical work, which is direct, declarative,
-and evidence-first. The model sentence states a claim and a magnitude and stops:
-"a completed foreclosure causes between 0.5 and 0.7 additional filings within
-0.1 miles." Carry that into the book:
+Anchored on the author's published empirical work (the foreclosure-contagion and
+rural-apartheid papers), which is direct, declarative, and evidence-first. The
+model paragraph sets up a problem in short sentences and then states what the
+author does and finds, with magnitudes: *"Apartheid South Africa provides a good
+setting in which to examine these issues. It was non-democratic. Its economy
+remained dependent on agriculture for a long time."* And: *"I use subnational
+variation in South Africa to test this mechanism. … I find that reductions in the
+supply of foreign mine labor … increased mechanization on the mines and on farms
+competing with mines for labor."*
 
+Carry that into the book:
+
+- **First person singular for analytical moves.** The author writes "I use," "I
+  find," "I then show," not "we now turn to." For a co-written textbook the
+  editorial "we" (author + reader) is acceptable, but keep it for genuinely shared
+  steps and prefer plain statements and "you" for the reader. Reserve flourish-free
+  "I" for authorial choices.
 - **Lead with the claim, then support it.** Not "It is important to note that
-  market definition shapes everything that follows" — just "Market definition
-  fixes the market shares, the theory of harm, and the remedy."
-- **Concrete over abstract.** Name the document, the dataset, the number. Prefer
-  "the internal pricing memo" to "documentary context."
-- **Hedge with ranges and conditions, not adverbs.** "between 0.5 and 0.7," "when
-  the panel is rich," not "arguably," "quite possibly," "it could be argued."
-- **Short declarative sentences carry the load.** Use a long sentence when the
-  logic needs it, not for rhythm.
+  market definition shapes everything that follows" — just "Market definition fixes
+  the market shares, the theory of harm, and the remedy."
+- **Very short declaratives carry setup.** Three or four words is fine. "It was
+  non-democratic." Let them sit next to longer explanatory sentences.
+- **Concrete over abstract.** Name the document, the dataset, the date, the number.
+  "between 1974 and 1976," "40% of all employment as late as 1958."
+- **Hedge with ranges and conditions, not adverbs.** "between 0.5 and 0.7,"
+  "suggestive evidence," "may have contributed" — not "arguably," "quite possibly."
 - **Plain verbs.** "shows," "fixes," "rests on," "buys" — not "leverages,"
   "underpins," "powers," "unlocks."
-- **One voice for the author.** Editorial "we" for the book's argument; "I" only
-  for genuinely personal statements (acknowledgments). Decide once, keep it.
+
 
 ## Patterns to remove (the sweep)
 

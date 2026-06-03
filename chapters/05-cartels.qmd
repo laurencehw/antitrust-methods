@@ -408,6 +408,7 @@ Network graphs help visualize suspected coordination patterns by showing which b
 
 ```{r}
 #| label: cartel-rotation-network
+#| fig-cap: "Bid-rotation network. Synthetic data for illustration only."
 #| message: false
 #| warning: false
 #| fig-width: 10
@@ -598,6 +599,7 @@ Placebo tests strengthen causal claims by showing that the estimated effect disa
 
 ```{r}
 #| label: cartel-placebo-test
+#| fig-cap: "Placebo test for the cartel overcharge estimate. Synthetic data for illustration only."
 #| message: false
 #| warning: false
 #| fig-width: 10
