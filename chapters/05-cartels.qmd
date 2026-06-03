@@ -697,7 +697,7 @@ Leniency statements, chats, and board minutes pin down conduct mechanisms (rotat
 - Explain residuals—if econometrics show little effect where documents admit coordination, revisit product mapping or data coverage.  
 - Clarify what is fact (documented) vs. inference (econometric patterns), citing [@oecd_leniency_2015] or agency policies.
 
-The preceding sections have covered the analytical pipeline from screening through estimation. What remains is to integrate these elements into a coherent evidentiary package---one that connects econometric findings to documentary evidence and presents the result in a form that tribunals and courts can evaluate. The boxes below summarize the key methodological, qualitative, and case-based resources that practitioners should assemble when building a cartel matter.
+The remaining task is to integrate screening, estimation, and documentary evidence into a package that tribunals and courts can evaluate. The boxes below summarize the methodological, qualitative, and case-based resources to assemble when building a cartel matter.
 
 ::: {.callout-note title="Method box: econometric toolkit"}
 **Event studies:** Evaluate raid/leniency impact on prices or spreads.

@@ -15,14 +15,14 @@ Digital markets combine traditional IO concepts with product design, governance,
 Expect to combine telemetry, clickstream data, partner contracts, and qualitative product documentation with econometric tests and simulation scaffolds.
 
 ::: {.callout-note title="Key acronyms"}
-**OIPMI** = Online Intermediation Platforms Market Inquiry (South African Competition Commission, 2020–2023). A comprehensive investigation into digital platform competition covering marketplaces, app stores, food delivery, travel booking, and software platforms. Provides detailed transaction data, commission structures, and market share analyses referenced throughout this chapter.
+**OIPMI** = Online Intermediation Platforms Market Inquiry (South African Competition Commission, 2020–2023). An investigation into digital platform competition covering marketplaces, app stores, food delivery, travel booking, and software platforms. Provides transaction data, commission structures, and market share analyses referenced throughout this chapter.
 :::
 
 ## Core topics
 
 In June 2017, the European Commission fined Google 2.42 billion euros for systematically favoring its own comparison-shopping service in search results---a decision that launched a decade of platform antitrust. The case turned on a deceptively simple empirical question: did Google's algorithmic ranking decisions steer traffic away from rival comparison-shopping sites and toward Google Shopping? The answer required analyzing terabytes of clickstream data, modeling user behavior across search result positions, and disentangling algorithmic design choices from organic quality differences.
 
-The South African Competition Commission's OIPMI inquiry (2020--2023) confronted parallel questions in a developing-market context: whether Takealot's marketplace algorithm favored its own retail arm, whether food-delivery commission structures foreclosed small restaurants, and whether Google's search dominance warranted the same remedies in Johannesburg as in Brussels. These cases---and the US DOJ's subsequent monopolization suits against Google in search and advertising technology---illustrate that digital platform enforcement is now a global phenomenon, with common empirical challenges that recur across jurisdictions even as legal standards diverge. The tools in this chapter equip you to engage with all of them.
+The South African Competition Commission's OIPMI inquiry (2020--2023) confronted parallel questions in a developing-market context: whether Takealot's marketplace algorithm favored its own retail arm, whether food-delivery commission structures foreclosed small restaurants, and whether Google's search dominance warranted the same remedies in Johannesburg as in Brussels. These cases, and the US DOJ's subsequent monopolization suits against Google in search and advertising technology, show that digital platform enforcement is now global, with common empirical challenges that recur across jurisdictions even as legal standards diverge.
 
 Digital platform analysis extends traditional IO tools to multi-sided markets where network effects, data advantages, and zero-price business models create distinct competitive dynamics. This section covers the key mechanisms and evidence types.
 
@@ -1014,11 +1014,9 @@ These real market share figures from EU, US, and South African regulatory procee
 
 ## Generative AI and foundation models
 
-The platform competition framework developed above—multi-sided markets, network effects, data as a competitive moat—extends naturally to AI markets. Yet foundation models introduce novel concerns that merit separate treatment: compute concentration, partnership structures that may confer control without acquisition, and rapidly evolving capabilities that challenge static market share analysis.
+The platform competition framework developed above—multi-sided markets, network effects, data as a competitive moat—carries over to AI markets. Foundation models add concerns that merit separate treatment: compute concentration, partnership structures that may confer control without acquisition, and rapidly evolving capabilities that strain static market share analysis.
 
 This section surveys early enforcement thinking on AI markets, adapting concepts from the platform discussion above. As of 2025-2026, enforcement agencies are actively examining AI markets for potential antitrust concerns.
-
-Large language models (LLMs) and generative AI introduce new competitive dynamics that extend traditional platform analysis.
 
 ### Market structure concerns
 
@@ -1072,4 +1070,4 @@ For the latest agency guidance, monitor CMA's AI Foundation Models work and FTC/
 
 ## Looking ahead
 
-Digital markets evolve rapidly, making the frameworks in this chapter a starting point rather than a final word. In @sec-labor-markets, we apply similar monopsony frameworks to employer-side platform power---gig economy classification, wage-fixing algorithms, and no-poach agreements. @sec-litigation-practice covers how to package digital market evidence into expert reports and trial exhibits. Many of the same event-study and difference-in-differences techniques used here to evaluate platform conduct reappear when assessing remedy effectiveness and merger retrospectives.
+Digital markets move fast, so treat the frameworks here as a starting point. @sec-labor-markets applies similar monopsony frameworks to employer-side platform power---gig economy classification, wage-fixing algorithms, and no-poach agreements. @sec-litigation-practice covers how to package digital market evidence into expert reports and trial exhibits. Many of the same event-study and difference-in-differences techniques used here to evaluate platform conduct reappear when assessing remedy effectiveness and merger retrospectives.
