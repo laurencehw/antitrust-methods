@@ -1,8 +1,8 @@
 # Market Definition and Competitive Landscape {#sec-market-definition}
 
-With the research design principles from @sec-research-design in hand, we now turn to one of the foundational tasks in antitrust analysis: defining the relevant market. Market definition is often the first substantive question in any competition matter, and the answer shapes everything that follows---from market share calculations to theories of harm to remedy design.
+Almost every antitrust matter opens with the same fight: what is the relevant market? The answer fixes the market shares, frames the theory of harm, and bounds the remedy, so the parties contest it hard and early. Draw the boundary wide and a dominant firm looks ordinary; draw it narrow and an ordinary firm looks dominant.
 
-This chapter builds on the causal inference toolkit introduced earlier, showing how to combine quantitative analysis with qualitative evidence to draw market boundaries that will withstand scrutiny from regulators and courts.
+This chapter uses the causal toolkit from @sec-research-design to draw those boundaries from data and qualitative evidence---boundaries that hold up when a regulator or a court pushes on them.
 
 ## Learning goals
 

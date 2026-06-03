@@ -1,6 +1,6 @@
 # Monopolization and Exclusion {#sec-monopolization}
 
-The previous chapter examined mergers---transactions that combine formerly independent firms. This chapter turns to conduct by firms that already possess substantial market power. How do dominant firms exclude rivals? When does aggressive competition cross the line into antitrust violation? And how do we measure the harm from exclusionary practices?
+Mergers ask what happens when two firms combine. Monopolization asks a harder question, and one courts have struggled with for a century: what may a firm that already holds substantial market power do to keep it? Where is the line between competing hard and excluding rivals unlawfully, and how do we measure the harm when conduct crosses it?
 
 These questions require us to integrate all the tools developed so far. Market definition establishes dominance. The IO toolkit provides pricing and foreclosure models. And research design principles guide our empirical measurement of competitive effects. But monopolization cases also demand particular attention to intent evidence and business justifications, making the interplay between quantitative and qualitative evidence especially critical.
 

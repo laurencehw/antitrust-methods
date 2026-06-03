@@ -1,65 +1,65 @@
 # Preface and How to Use This Book {.unnumbered}
 
-This book bridges the gap between academic research and the practical realities of antitrust work. Whether you are a graduate student preparing for a career in competition policy, an economist moving into antitrust consulting, or a practitioner seeking to strengthen your methodological toolkit, this text aims to provide the conceptual foundations, empirical techniques, and practical judgment you need to contribute effectively to antitrust analysis.
+Antitrust work sits between two worlds that rarely talk to each other: the academic literature on industrial organization and the day-to-day reality of building a case. This book tries to connect them. It is for the graduate student headed into competition policy, the economist moving into antitrust consulting, and the practitioner who wants a current reference on empirical methods and how courts and agencies actually use them.
 
 ## Who this book is for
 
-The primary audience includes upper-level undergraduates and early graduate students in economics, law, and public policy who want to understand how antitrust analysis actually works in practice. The book also serves practitioners---economists at consulting firms, agency staff, and lawyers working with economic experts---who need a reference for modern empirical methods and their application to competition cases.
+The core readers are upper-level undergraduates and early graduate students in economics, law, and public policy who want to see how antitrust analysis works once it leaves the seminar room. The book also serves practitioners---economists at consulting firms, agency staff, and the lawyers who work with them---who need a desk reference for modern methods and their application.
 
-We assume familiarity with intermediate microeconomics and basic econometrics (regression, hypothesis testing, panel data). Where more advanced techniques appear, we provide intuition and references to deeper treatments. The goal is not to make you a specialist in any single method, but to give you the vocabulary and judgment to work effectively across the range of issues that arise in antitrust matters.
+We assume intermediate microeconomics and basic econometrics: regression, hypothesis testing, panel data. Where the material runs ahead of that, we give the intuition and point to fuller treatments. The aim is not to make you a specialist in any one method but to give you the vocabulary and the judgment to work across the range of questions that come up in a matter.
 
 ## The evidence triad
 
-A central organizing principle of this book is what we call the *evidence triad*: the integration of empirical analysis, documentary evidence, and expert judgment. Modern antitrust work rarely succeeds on any single dimension alone.
+The book is organized around a simple claim: good antitrust analysis rests on three kinds of evidence at once, and weakness in any one shows. We call this the *evidence triad*.
 
-**Empirical analysis** provides quantitative rigor through estimation and statistical inference. Throughout this book, code boxes demonstrate how to implement key techniques using R, with all figures designed to be reproduced locally. We emphasize transparency in assumptions, diagnostics for identification, and clear communication of uncertainty.
+**Empirical analysis** supplies the quantitative side---estimation, inference, and the discipline of stating assumptions and uncertainty plainly. Code boxes throughout show how to implement each technique in R, and every figure can be reproduced locally.
 
-**Documentary evidence** grounds quantitative findings in real-world context. Case boxes throughout each chapter illustrate how agencies, courts, and parties have used (or misused) particular methods. We draw on discovery documents, public filings, and reported decisions to show how evidence fits together in actual matters.
+**Documentary evidence** supplies context. Case boxes show how agencies, courts, and parties have used---and misused---a given method, drawing on discovery documents, public filings, and reported decisions.
 
-**Expert judgment** ties analysis to legal and economic standards. Method boxes flag common pitfalls, highlight where professional judgment is required, and note areas of ongoing debate in the field. We discuss survey design, qualitative interviews, and the translation of technical findings for legal audiences.
+**Expert judgment** ties the analysis to legal and economic standards. Method boxes flag the common mistakes, mark where judgment has to do the work, and note where the field still disagrees.
+
+A point estimate of overcharge persuades when it lines up with the internal pricing memos; a merger simulation gains weight when customers describe the same switching costs it assumes. The triad is not a theory. It is a description of how the cases that win are actually built.
 
 ## How to navigate this book
 
-The chapters are designed to build on each other, but each can also stand alone as a reference for a particular topic. Here are several ways to approach the material:
+The chapters build on each other, but each also stands alone as a reference.
 
-**For classroom use:** Work through chapters sequentially, starting with the orientation to antitrust institutions (@sec-orientation) and research design (@sec-research-design). The core analytical chapters on market definition (@sec-market-definition), industrial organization tools (@sec-io-toolkit), and specific practice areas (cartels, mergers, monopolization) follow logically. End with the specialized chapters on digital markets, labor, and innovation that apply these methods to emerging areas.
+**For classroom use:** Work straight through. Start with the orientation to antitrust institutions (@sec-orientation) and research design (@sec-research-design), then the analytical core---market definition (@sec-market-definition), the IO toolkit (@sec-io-toolkit), and the practice areas (cartels, mergers, monopolization). The later chapters on digital markets, labor, and innovation apply those methods to harder, newer terrain.
 
-**For practitioners:** Use the book as a reference. Each chapter opens with learning goals and core topics, making it easy to locate relevant material. The empirical appendix (@sec-empirical-appendix) provides reusable code templates and diagnostic tools that can be adapted to specific matters.
+**For practitioners:** Use it as a reference. Each chapter opens with its goals and a roadmap, so the relevant section is easy to find. The empirical appendix (@sec-empirical-appendix) collects reusable code templates and diagnostics.
 
-**For self-study:** Begin by skimming the case boxes to see how methods are applied in practice, then work through the technical material. Every code chunk is designed to run with the accompanying data files, so you can experiment with the techniques yourself.
+**For self-study:** Skim the case boxes first to see the methods in use, then work the technical material. Every code chunk runs against the supplied data, so you can change assumptions and see what moves.
 
 ::: {.callout-tip title="Using the code examples"}
-All R code in this book is designed to be fully reproducible. Data files are stored in `data/raw/` and `data/derived/`, with API keys managed through `.Renviron`. Render the entire book with `quarto render`, or work through individual chapters interactively. We recommend using `renv` to lock package versions, ensuring consistency for teaching and for litigation work where reproducibility is essential.
+All R code here is meant to run. Data live in `data/raw/` and `data/derived/`, and API keys in `.Renviron`. Render the whole book with `quarto render`, or work a chapter at a time. Use `renv` to lock package versions---it keeps results stable for teaching, and it matters in litigation, where another expert has to reproduce what you did.
 :::
 
 ## Structure of each chapter
 
-Most chapters follow a consistent structure:
+Most chapters share a layout:
 
-- **Learning goals** articulate what you should understand after completing the chapter.
-- **Core topics** provide a roadmap of the material covered.
-- **Method boxes** explain key empirical techniques, including their assumptions and limitations.
-- **Case boxes** illustrate how methods have been applied in real antitrust matters.
-- **Code chunks** demonstrate implementation with reproducible examples.
-- **Qualitative evidence sections** discuss documentary sources and interview protocols.
-- **Looking ahead sections** preview how the current chapter connects to subsequent material.
-
-This structure reflects our conviction that good antitrust work requires moving fluidly between theory, empirics, and institutional context.
+- **Learning goals** state what you should be able to do afterward.
+- **Core topics** map the ground covered.
+- **Method boxes** work through a technique, its assumptions, and its limits.
+- **Case boxes** show the method in a real matter.
+- **Code chunks** implement it on data you can run.
+- **Qualitative evidence sections** cover documentary sources and interview protocols.
+- **Looking ahead** connects the chapter to what follows.
 
 ## Jurisdictional scope
 
-A defining feature of this book --- and the aspect that most distinguishes it from competing texts --- is its genuinely tri-jurisdictional scope. Most antitrust textbooks are written from a single-jurisdiction perspective, treating other regimes as footnotes or comparative appendices. This book takes a different approach: the United States, the European Union, and South Africa are treated as co-equal analytical lenses throughout every chapter.
+Most antitrust texts are written from inside one legal system and treat the others as appendices. This one carries three throughout: the United States, the European Union, and South Africa. The reason is practical, not encyclopedic. These three regimes solve the same problems in different ways, and watching a method bend as it crosses borders teaches you something about the method itself.
 
-This is not an exercise in comprehensiveness for its own sake. The three jurisdictions represent fundamentally different models of competition enforcement, and understanding how methods translate across them makes you a better analyst in any one of them. The US system --- with its dual federal agencies (DOJ Antitrust Division and FTC), federal court adjudication, and the world's most developed case law --- provides the richest doctrinal foundation and the most sophisticated econometric tradition. The European Union --- with its single Commission (DG COMP), administrative decision-making, and effects-based approach refined over two decades of merger and abuse-of-dominance enforcement --- offers the clearest articulation of how to weigh competitive effects against efficiencies and the most advanced framework for digital market regulation. South Africa --- with its Competition Commission and Competition Tribunal, its public-interest mandate embedded in the Competition Act of 1998, and its role as a model for emerging-economy regimes --- demonstrates how competition policy can address structural inequality, employment effects, and small-business participation alongside conventional consumer-welfare analysis.
+The US system---two federal agencies (the DOJ Antitrust Division and the FTC), enforcement through the federal courts, and the deepest body of case law and econometric practice anywhere---is the doctrinal and technical anchor. The EU---a single Commission (DG COMP), administrative decision-making, and an effects-based approach worked out over two decades of merger and abuse-of-dominance cases---offers the clearest treatment of how to trade competitive harm against efficiencies, and the most developed framework for regulating digital markets. South Africa---the Competition Commission and Tribunal, the public-interest mandate written into the Competition Act of 1998---shows how competition policy can take on employment, ownership, and small-business participation alongside the usual consumer-welfare questions, which is why it has become a template for other emerging-economy regimes.
 
-When a method works differently across jurisdictions, we say so explicitly. When a case from one jurisdiction illuminates a method that applies everywhere, we use it. When the data environment differs --- US microdata versus EU case-team data rooms versus South African market inquiries --- we show how to adapt. Readers working in any single jurisdiction should find the methods directly applicable, while those operating across borders will find the comparative framework essential.
+Where a method behaves differently across the three, we say so. Where a case from one jurisdiction illuminates a method that travels, we use it. Where the data environment differs---US microdata, EU case-team data rooms, South African market inquiries---we show how to adapt. A reader working in just one system will find the methods apply directly; a reader working across borders will need the comparison.
 
 ## Acknowledgments and how to contribute
 
-This book grew out of teaching materials developed at NYU Wagner and consulting experience across a range of competition matters. We are grateful to the students and colleagues who provided feedback on earlier drafts.
+This book came out of teaching at NYU Wagner and consulting across a range of competition matters. I am grateful to the students and colleagues who read earlier drafts and pushed back on them.
 
-The book is designed as a living document. If you find errors, have suggestions for additional case examples, or develop useful code extensions, please contribute through the book's repository. Our goal is to keep the methods current as the field evolves.
+It is meant to stay current. If you find an error, have a case worth adding, or write a useful code extension, send it through the book's repository.
 
 ## Looking ahead
 
-The next chapter provides an orientation to antitrust institutions, legal standards, and the professional landscape. We then turn to research design principles before diving into the substantive methods that form the core of antitrust economic analysis. Welcome to the practice of antitrust methods.
+The next chapter sets the stage: the institutions, the legal standards, and the working landscape antitrust economists operate in. From there we move to research design, and then into the methods that make up the bulk of the book.

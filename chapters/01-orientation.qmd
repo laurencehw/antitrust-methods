@@ -1,11 +1,11 @@
 # Orientation: Antitrust and Regulation {#sec-orientation}
 
-Before diving into specific methods, we need to understand the institutional landscape where antitrust analysis occurs. This chapter provides that foundation. Economic analysis does not happen in a vacuum---it responds to legal standards, agency priorities, and procedural constraints that vary across jurisdictions. Understanding these institutions will help you frame your analyses to address the questions that actually matter in practice.
+Economic analysis answers to legal standards, agency priorities, and procedural rules, and all three vary by jurisdiction. So the methods come second. First the institutions: who enforces competition law, what they have to prove, and where the economics enters. Get that frame right and your analysis speaks to the questions that decide a matter rather than the ones that are merely interesting.
 
 ## Learning goals
-This opening chapter orients you to the institutional settings where economists, researchers, and lawyers work side by side. By the end you should be able to articulate how competition authorities define their objectives, how they translate statutes or guidelines into investigative hypotheses, and how evidentiary burdens shift between agencies and courts. You will also learn how to map economic questions—market definition, market power, theory of harm, efficiencies, and remedy selection—onto the specific legal elements regulators must prove or rebut.
+This chapter maps the settings where economists, researchers, and lawyers work side by side. By the end you should be able to say how competition authorities set their objectives, how they turn a statute or guideline into an investigative hypothesis, and how the burden of proof shifts as a matter moves from agency to court. You should also be able to map the economic questions---market definition, market power, theory of harm, efficiencies, remedy---onto the legal elements a regulator has to prove or rebut.
 
-An equally important goal is judgment: when should you push for additional data work, and when is documentary, testimonial, or industry expertise the better marginal investment? Because this course serves practitioners in South Africa who often face multi-jurisdictional matters, we will continually compare US-led doctrines with approaches in the EU, UK, Asia, and regional African regulators. Expect a mix of narrative history, process walkthroughs, and applied examples from roughly 2005–2024.
+The harder skill is judgment: when to push for more data work, and when documentary, testimonial, or industry evidence is the better use of the next dollar. Because many readers face multi-jurisdictional matters, we set US doctrine against the EU, the UK, Asia, and regional African regulators throughout. Expect a mix of narrative history, process walkthroughs, and worked examples from roughly 2005--2024.
 
 ## Core narrative
 ### Institutions and mandates

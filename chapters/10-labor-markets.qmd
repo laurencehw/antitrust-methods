@@ -1,6 +1,6 @@
 # Antitrust and Labor Markets {#sec-labor-markets}
 
-The preceding chapters focused primarily on product markets---markets where firms sell goods and services to customers. This chapter turns to labor markets, where firms buy the services of workers. The economic logic is parallel but inverted: instead of asking whether sellers have market power to raise prices, we ask whether employers have market power to suppress wages.
+Until now the markets have run one way: firms selling to customers. Labor markets run the other way---firms buying the work of employees---and the economics inverts with them. The question is no longer whether a seller can push price above the competitive level, but whether an employer can hold wages below it.
 
 Labor antitrust has emerged as a major enforcement priority. The DOJ has brought criminal wage-fixing and no-poach cases; the FTC attempted a nationwide ban on noncompete agreements; and academics have documented substantial labor market concentration in many occupations and regions. The tools are familiar---concentration measurement, causal inference, qualitative evidence---but the application to input markets raises distinctive issues, from the statutory labor exemption to the measurement of commuting zones and occupational boundaries.
 

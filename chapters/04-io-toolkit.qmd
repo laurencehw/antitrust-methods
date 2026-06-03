@@ -1,8 +1,8 @@
 # Industrial Organization Toolkit {#sec-io-toolkit}
 
-The previous chapters established how to define markets and conduct causal research. We now turn to the analytical machinery that powers much of modern antitrust analysis: the industrial organization (IO) toolkit. These methods allow us to model how firms compete, estimate parameters like marginal costs and demand elasticities, and simulate the effects of mergers or conduct before they occur.
+Having defined markets and laid out the causal toolkit, we turn to the machinery behind most quantitative antitrust work: the industrial organization (IO) toolkit. These methods model how firms compete, recover parameters like marginal cost and demand elasticity, and simulate the effect of a merger or a course of conduct before it happens.
 
-This chapter occupies a pivotal position in the book. The demand models, cost estimates, and bargaining frameworks introduced here feed directly into the merger simulations in @sec-mergers, the exclusionary conduct analysis in @sec-monopolization, and the digital markets analysis in @sec-digital-markets. Master these tools, and you will be equipped to tackle nearly any quantitative antitrust question.
+Much of the rest of the book runs through this chapter. The demand models, cost estimates, and bargaining frameworks here feed the merger simulations in @sec-mergers, the foreclosure analysis in @sec-monopolization, and the platform work in @sec-digital-markets. The investment pays off across all of them.
 
 ## Learning goals
 This chapter bridges descriptive evidence and full-blown merger simulations. You will learn when to deploy lightweight demand or supply models, how to explain their assumptions to agencies and courts, and how to integrate qualitative evidence (contracts, governance documents, interviews) so the results feel grounded.

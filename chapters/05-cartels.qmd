@@ -2,7 +2,7 @@
 
 Cartels represent the clearest antitrust violations---competitors agreeing to fix prices, rig bids, or allocate markets cause direct and quantifiable harm to consumers. Yet proving collusion and measuring damages requires integrating the research design, market definition, and IO tools from earlier chapters into a coherent evidentiary package.
 
-This chapter shows how to detect collusion, measure its effects, and build cases that survive both economic and legal scrutiny. We emphasize the interplay between quantitative screens and qualitative evidence: econometric analysis can establish that prices were artificially elevated, but leniency statements and internal communications provide the smoking gun that confirms coordination. The two streams of evidence reinforce each other.
+This chapter shows how to detect collusion, measure its effects, and build cases that survive both economic and legal scrutiny. Quantitative screens and qualitative evidence do different jobs. Econometrics can show that prices were elevated above a competitive benchmark; it cannot, on its own, show an agreement. Leniency statements and internal communications supply the agreement. Each is weak without the other, which is why cartel cases live or die on assembling both.
 
 ## Learning goals
 Cartel enforcement hinges on weaving together quantitative screens, econometric estimates, and documentary evidence. This chapter walks through that workflow using established methodologies from the OECD and academic literature on cartel detection.

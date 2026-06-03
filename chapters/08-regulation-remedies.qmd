@@ -1,6 +1,6 @@
 # Regulation and Remedies {#sec-regulation-remedies}
 
-The preceding chapters focused on diagnosing competitive harm---identifying cartels (@sec-cartels), predicting merger effects (@sec-mergers), and establishing exclusionary conduct (@sec-monopolization). But identifying harm is only half the job. This chapter addresses what comes next: designing remedies that actually work and, in some cases, ongoing regulatory frameworks that substitute for competition where markets cannot be made competitive.
+Diagnosing harm is only half the job. The cartel, merger, and monopolization chapters were about establishing that competition had been hurt, or would be. This chapter is about what you do once you have: designing a remedy that actually works, and---where a market cannot be made competitive at all---standing regulation in for competition.
 
 Remedy design requires different skills than liability analysis. You must think dynamically about how firms will respond to constraints, whether trustees can effectively monitor behavioral commitments, and whether structural relief will create viable competitors. The economic tools are familiar---cost analysis, benchmarking, causal inference for evaluation---but the application shifts from diagnosis to prescription.
 
