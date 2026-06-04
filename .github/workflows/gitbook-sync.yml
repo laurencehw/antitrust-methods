@@ -1,0 +1,33 @@
+name: GitBook sync check
+
+# Prevents the "edited chapters/*.qmd but forgot to regenerate gitbook/*.md"
+# problem: GitBook renders gitbook/*.md, so a stale copy means the published
+# book lags the source. This regenerates and fails if anything is uncommitted.
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  gitbook-fresh:
+    name: gitbook/*.md regenerates cleanly from chapters/*.qmd
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: pip install pyyaml
+      - name: Regenerate GitBook markdown and confirm it is committed
+        run: |
+          python3 scripts/convert_to_gitbook.py
+          if ! git diff --quiet -- gitbook/; then
+            echo "::error::gitbook/*.md is out of sync with chapters/*.qmd."
+            echo "Run locally: python3 scripts/convert_to_gitbook.py  (then commit gitbook/)."
+            git --no-pager diff --stat -- gitbook/
+            exit 1
+          fi
+          echo "GitBook markdown is in sync with the chapter sources."

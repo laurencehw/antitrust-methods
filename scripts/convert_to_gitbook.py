@@ -222,12 +222,16 @@ def convert_citations(content: str) -> str:
 
 def convert_callouts(content: str) -> str:
     """Convert Quarto callouts to GitBook hints."""
-    # Pattern for Quarto callouts: ::: {.callout-TYPE title="TITLE"}
-    callout_pattern = r'::: \{\.callout-(\w+)(?: title="([^"]*)")?\}\n(.*?)\n:::'
+    # Match :::{.callout-TYPE ...attrs...} tolerating optional space and 3+ colons
+    # (case boxes use ":::{" with no space) and any attribute order
+    # (e.g. {.callout-tip collapse="true" title="Answer"}).
+    callout_pattern = r':::+\s*\{\.callout-(\w+)([^}]*)\}\n(.*?)\n:::+'
 
     def replace_callout(match):
         callout_type = match.group(1)
-        title = match.group(2) or callout_type.capitalize()
+        attrs = match.group(2) or ''
+        title_match = re.search(r'title="([^"]*)"', attrs)
+        title = title_match.group(1) if title_match else callout_type.capitalize()
         content = match.group(3).strip()
 
         # Map Quarto types to GitBook hint styles
@@ -370,9 +374,9 @@ def convert_chapter(input_path: Path, output_path: Path,
     content = convert_citations(content)
     content = fix_math_delimiters(content)
 
-    # Remove Quarto-specific div classes (but keep content)
-    content = re.sub(r'^::: \{[^}]*\}\s*$', '', content, flags=re.MULTILINE)
-    content = re.sub(r'^:::\s*$', '', content, flags=re.MULTILINE)
+    # Remove any remaining Quarto fenced-div markers (3+ colons, optional space)
+    content = re.sub(r'^:::+\s*\{[^}]*\}\s*$', '', content, flags=re.MULTILINE)
+    content = re.sub(r'^:::+\s*$', '', content, flags=re.MULTILINE)
 
     # Clean up multiple blank lines
     content = re.sub(r'\n{3,}', '\n\n', content)

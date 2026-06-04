@@ -1,10 +1,10 @@
-# Empirical Appendix and Templates 
+# Empirical Appendix and Templates {#sec-empirical-appendix .unnumbered}
 
 ## Purpose
 This appendix is the shared workspace for reusable diagnostics, qualitative protocols, and data inventories referenced throughout the book. Treat it as the "operations manual" for the course: every code chunk or template lives here so you can drop it into chapter-specific notebooks, expert reports, or litigation memos without rewriting boilerplate.
 
 ## How to use this appendix
-1. **Start here during scoping.** Clone the chronology, data inventory, and interview templates before diving into a matter so legal, economic, and qualitative teams stay synchronized.
+1. **Start here during scoping.** Clone the chronology, data inventory, and interview templates at the outset so legal, economic, and qualitative teams stay synchronized.
 2. **Customize but keep provenance.** When you adapt a template, note the source so future readers can trace assumptions.
 3. **Feed updates back in.** If a later chapter develops a better diagnostic, link it here to avoid divergence.
 
@@ -13,13 +13,13 @@ This appendix is the shared workspace for reusable diagnostics, qualitative prot
 | Chapter focus | Key resources |
 | --- | --- |
 | Orientation & institutions | Agency websites: [DOJ Antitrust](https://www.justice.gov/atr), [FTC](https://www.ftc.gov/), [EC Competition](https://ec.europa.eu/competition/), [CMA](https://www.gov.uk/cma) |
-| Research design & methods | [Causal Inference: The Mixtape](https://mixtape.scunning.com/), Angrist & Pischke [@angrist_pischke_2009; @angrist_pischke_2015] |
+| Research design & methods | [Causal Inference: The Mixtape](https://mixtape.scunning.com/), Angrist & Pischke (Angrist & Pischke, 2009); (Angrist & Pischke, 2015) |
 | Cartels & collusion | [OECD Cartel Guidance](https://www.oecd.org/daf/competition/cartels/) |
-| Mergers | US/EU/UK Merger Guidelines [@doj_ftc_hmg_2023; @ec_hmg_2004; @cma_merger_assessment_2021] |
+| Mergers | US/EU/UK Merger Guidelines (DOJ/FTC Merger Guidelines, 2023); (EC Horizontal Merger Guidelines, 2004); (CMA Merger Assessment Guidelines, 2021) |
 | Digital markets | [EU DMA](https://ec.europa.eu/dma), CMA Digital Markets Unit |
 | Labor markets | [BLS data](https://www.bls.gov/), [Census LEHD](https://lehd.ces.census.gov/) |
 
-Use this table alongside external references such as [@ashenfelter_hosken_2010] and agency guidelines.
+Use this table alongside external references such as (Ashenfelter & Hosken, 2010) and agency guidelines.
 
 ## Case chronology template
 When building mixed-method narratives, start with a matrix that ties events to evidence and hypotheses. Duplicate the scaffold below into your project notebook:
@@ -91,22 +91,22 @@ Maintain the lexicon as a YAML or CSV in `data/derived`.
 ## Reusable diagnostics
 
 ### Diff-in-diff and event studies
-- Run parallel-trend visuals, dynamic leads/lags, and placebo periods (`did::att_gt`, `fixest::sunab`). Reference @cunningham_2021 for intuition and cite @ashenfelter_hosken_2010 for merger retrospectives. For staggered treatment timing, see @callaway_santanna_2021.
-- For South African matters with staggered regulatory actions, consider matrix-completion methods from recent econometrics literature [@athey_bayati_imbens_2021].
+- Run parallel-trend visuals, dynamic leads/lags, and placebo periods (`did::att_gt`, `fixest::sunab`). Reference (Cunningham, 2021) for intuition and cite (Ashenfelter & Hosken, 2010) for merger retrospectives. For staggered treatment timing, see (Callaway & Sant'Anna, 2021).
+- For South African matters with staggered regulatory actions, consider matrix-completion methods from recent econometrics literature (Athey Bayati Imbens, 2021).
 
 ### Matching and weighting
 
-Matching and weighting methods are essential whenever you need to construct a credible comparison group from observational data --- merger retrospectives, labor market studies, remedy evaluations, and damages analyses all rely on them. The core idea is to reweight or subsample the control group so that its observable characteristics match those of the treated group, reducing selection bias and improving the credibility of causal estimates.
+Matching and weighting methods come into play whenever you need to construct a credible comparison group from observational data. Merger retrospectives, labor market studies, remedy evaluations, and damages analyses all rely on them. The core idea is to reweight or subsample the control group so that its observable characteristics match those of the treated group, reducing selection bias and improving the credibility of causal estimates.
 
-**Propensity score matching (PSM)** estimates the probability of treatment given observed covariates, then matches treated and control units with similar propensity scores. The key diagnostics are balance tests: after matching, the standardized mean difference (SMD) for each covariate should be below 0.1 [@austin_2009]. Love plots (showing SMD before and after matching) are the standard visualization. The limitation of PSM is that it only balances observed covariates; unobserved confounders remain a threat to identification.
+**Propensity score matching (PSM)** estimates the probability of treatment given observed covariates, then matches treated and control units with similar propensity scores. The key diagnostics are balance tests: after matching, the standardized mean difference (SMD) for each covariate should be below 0.1 (Austin, 2009). Love plots (showing SMD before and after matching) are the standard visualization. The limitation of PSM is that it only balances observed covariates; unobserved confounders remain a threat to identification.
 
-**Entropy balancing** [@hainmueller_2012] is an alternative that directly reweights the control group to match the treated group's moments (means, variances, and optionally higher moments) on selected covariates. Unlike PSM, entropy balancing achieves exact balance on the specified moments by construction, and the weights have a clear information-theoretic interpretation (they minimize the Kullback-Leibler divergence from uniform weights). In antitrust applications, entropy balancing is particularly useful for merger retrospectives where the pre-merger characteristics of treated and control markets can be precisely matched.
+**Entropy balancing** (Hainmueller, 2012) is an alternative that directly reweights the control group to match the treated group's moments (means, variances, and optionally higher moments) on selected covariates. Unlike PSM, entropy balancing achieves exact balance on the specified moments by construction, and the weights have a clear information-theoretic interpretation (they minimize the Kullback-Leibler divergence from uniform weights). In antitrust applications, entropy balancing is particularly useful for merger retrospectives where the pre-merger characteristics of treated and control markets can be precisely matched.
 
 **Coarsened exact matching (CEM)** partitions the covariate space into strata and retains only treated-control pairs that fall into the same stratum. This guarantees balance on the coarsened covariates but can result in substantial data loss if the covariate space is high-dimensional. CEM is most useful when you have a small number of key matching variables (e.g., market size, pre-treatment price level, geographic region) and want to ensure exact comparability.
 
-**Synthetic control** [@abadie_diamond_hainmueller_2010] constructs a weighted combination of untreated units that matches the treated unit's pre-treatment trajectory. It is the method of choice for "N=1" cases --- a single national merger, a one-off regulatory intervention, or a market inquiry affecting a specific sector. The key diagnostics are pre-treatment fit (the synthetic control should closely track the treated unit before the intervention) and placebo tests (applying the same method to each donor unit should produce smaller effects than the treated unit).
+**Synthetic control** (Abadie, Diamond & Hainmueller, 2010) constructs a weighted combination of untreated units that matches the treated unit's pre-treatment trajectory. It is the method of choice for "N=1" cases: a single national merger, a one-off regulatory intervention, or a market inquiry affecting a specific sector. The key diagnostics are pre-treatment fit (the synthetic control should closely track the treated unit before the intervention) and placebo tests (applying the same method to each donor unit should produce smaller effects than the treated unit).
 
-For all matching and weighting methods, balance plots showing standardized differences before and after matching should be included in expert reports. Store reusable plotting code in `R/helpers.R` (`plot_balance()`). For general guidance on matching methods, see @angrist_pischke_2009 and @austin_2009.
+For all matching and weighting methods, balance plots showing standardized differences before and after matching should be included in expert reports. Store reusable plotting code in `R/helpers.R` (`plot_balance()`). For general guidance on matching methods, see (Angrist & Pischke, 2009) and (Austin, 2009).
 
 ### Panel FE and inference choices
 - Two-way FE with staggered treatment: document estimator choice and weights; cite the relevant methodological literature.
@@ -114,6 +114,24 @@ For all matching and weighting methods, balance plots showing standardized diffe
 
 ### Qualitative + quantitative integration
 - Align interview findings with econometric outputs using issue trees. For example, code “capacity discipline” documents and test against utilization regressions.
+
+## Connecting templates to chapter applications
+
+This section maps each diagnostic template to the specific chapters where it is applied, so you can quickly find the right tool for your matter.
+
+**Cartel matters (Chapter 5).** Start with the data inventory worksheet to catalog bid data, invoice records, and leniency statements. Use the variance and correlation screens to flag suspicious pricing patterns. The transition matrix and network graph templates identify bid rotation. For damages estimation, the before/after method with structural break tests provides the overcharge estimate. The document coding lexicon helps tag internal communications for price discipline, market allocation, or capacity restraint language.
+
+**Merger analysis (Chapter 6).** The case chronology template tracks the deal timeline from initial approach through agency review to consummation. Use the matching and weighting methods (PSM, entropy balancing, synthetic control) to construct control groups for merger retrospectives. The diff-in-diff template with staggered treatment estimators evaluates post-merger price effects. The data inventory should capture customer-level transaction data, capacity records, and internal strategy documents.
+
+**Monopolization (Chapter 7).** The margin squeeze test and pass-through diagnostics are the core quantitative tools. The document coding lexicon should include tags for exclusive dealing, tying, self-preferencing, and retaliation. The survey and interview kit is critical for gathering customer testimony about foreclosure effects and switching costs.
+
+**Digital markets (Chapter 9).** The data inventory should capture platform telemetry: user activity logs, ranking data, API access records, and multi-homing patterns. The self-preferencing detection regression and algorithmic collusion Q-learning simulation provide distinctive analytical tools not available in traditional antitrust toolkits.
+
+**Labor markets (Chapter 10).** Use the data inventory to catalog HR databases, job posting data, and commuting zone definitions. The matching methods construct comparison groups for policy evaluations (noncompete bans, no-poach settlements). The diff-in-diff template evaluates wage effects of enforcement actions.
+
+**Litigation practice (Chapter 12).** The case chronology template is the backbone of expert report preparation. The data inventory ensures all data sources are documented with custodian names, bates ranges, and confidentiality designations. The survey and interview kit supports class certification and damages estimation.
+
+**Regulation and remedies (Chapter 8).** The diff-in-diff template evaluates remedy effectiveness using pre/post KPI data. The benchmarking scatter plot compares regulated entities on cost and quality dimensions. The remedy monitoring KPI table provides a framework for compliance dashboards.
 - Use the chronology template to surface inconsistencies quickly.
 
 ## Code scaffolds
@@ -173,6 +191,8 @@ ggplot(chronology, aes(x = date, y = category, color = category)) +
   theme_antitrust() +
   theme(legend.position = "none")
 ```
+
+![](../images/chronology-viz-1.png)
 
 ## Diagnostic Gallery
 
@@ -286,11 +306,13 @@ cat(paste0("Mean pre-period coefficient: ",
 cat(paste0("Joint F-test p-value: [run wald_test on event_study model]\n"))
 ```
 
+![Pre-trends diagnostic. Synthetic data for illustration only.](../images/diagnostic-pretrends-1.png)
+
 **Interpretation:**
 - **Pre-trends near zero**: Validates parallel trends assumption
 - **Post-treatment divergence**: Confirms treatment effect
 - **Confidence intervals**: Should include zero in pre-period
-- **Use this**: Mergers ([Chapter 6: Mergers](06-mergers.md)), remedies ([Chapter 8: Regulation & Remedies](08-regulation-remedies.md)), labor ([Chapter 10: Labor Markets](10-labor-markets.md))
+- **Use this**: Mergers ([Chapter 6](chapters/06-mergers.md)), remedies ([Chapter 8](chapters/08-regulation-remedies.md)), labor ([Chapter 10](chapters/10-labor-markets.md))
 
 ### Balance plots for matching/weighting
 Show covariate balance before and after matching or weighting.
@@ -405,6 +427,8 @@ balance_combined |>
   print()
 ```
 
+![Covariate balance diagnostic. Synthetic data for illustration only.](../images/diagnostic-balance-1.png)
+
 **Interpretation:**
 - **SMD < 0.1**: Acceptable balance (Austin, 2009)
 - **Matching improves balance**: Lines should move toward zero
@@ -501,6 +525,8 @@ cat(paste0("All specifications significant? ",
 cat(paste0("Median estimate: ", round(median(spec_results$estimate), 2), "\n"))
 ```
 
+![Specification-curve diagnostic. Synthetic data for illustration only.](../images/diagnostic-spec-curve-1.png)
+
 **Interpretation:**
 - **Stable across specs**: Effect robust to model choices
 - **All CIs exclude zero**: Consistent significance
@@ -585,6 +611,8 @@ p4 <- ggplot(diagnostics, aes(x = residual)) +
 )
 ```
 
+![](../images/diagnostic-residuals-1.png)
+
 **What to look for:**
 - **Residuals vs. Fitted**: No pattern (confirms linearity)
 - **Q-Q Plot**: Points follow line (confirms normality)
@@ -601,7 +629,7 @@ library(pwr)
 
 # Calculate power for different scenarios
 sample_sizes <- seq(50, 500, by = 25)
-effect_sizes <- c(0.2, 0.5, 0.8)  # Small, medium, large (Cohen's d) [@cohen_1988]
+effect_sizes <- c(0.2, 0.5, 0.8)  # Small, medium, large (Cohen's d) (Cohen, 1988)
 
 power_grid <- expand.grid(
   n = sample_sizes,
@@ -661,6 +689,8 @@ cat("\nMinimum sample size for 80% power:\n")
 print(power_summary, n = Inf)
 ```
 
+![](../images/diagnostic-power-1.png)
+
 **Use this for:**
 - Study design and sample size planning
 - Explaining null results (underpowered?)
@@ -668,13 +698,13 @@ print(power_summary, n = Inf)
 
 ## AI and Machine Learning in Antitrust
 
-Machine learning is, at its core, a prediction technology. Its power lies in finding complex patterns in high-dimensional data and generating accurate out-of-sample forecasts — tasks at which it routinely outperforms traditional parametric models. In antitrust work, prediction tasks arise more often than practitioners sometimes recognize: classifying markets as potentially collusive, forecasting demand systems for merger simulation, identifying anomalous bidding patterns in procurement data, and clustering millions of documents for efficient review. These are all settings where ML methods can deliver genuine improvements over conventional approaches.
+Machine learning is a prediction technology. It finds patterns in high-dimensional data and generates out-of-sample forecasts, often outperforming traditional parametric models. In antitrust work, prediction tasks arise more often than practitioners sometimes recognize: classifying markets as potentially collusive, forecasting demand systems for merger simulation, identifying anomalous bidding patterns in procurement data, and clustering millions of documents for efficient review. In all of these settings ML methods can improve on conventional approaches.
 
-But prediction is not causation, and antitrust enforcement ultimately depends on causal claims. Estimating the overcharge from a cartel conspiracy, measuring the price effect of a consummated merger, or attributing competitive harm to exclusionary conduct — these tasks require the design-based econometric methods developed in earlier chapters of this book. No amount of predictive accuracy can substitute for a credible identification strategy when the question is "what would have happened absent the challenged conduct?" The key insight for practitioners is that ML can substantially improve the *inputs* to causal analysis — better demand estimates, more precisely matched control groups, sharper variable selection — without replacing the causal framework itself. Researchers who treat ML as a complement to, rather than a substitute for, the methods in [Chapter 2: Research Design](02-research-design.md) will find the most productive applications.
+But prediction is not causation, and antitrust enforcement ultimately depends on causal claims. Estimating the overcharge from a cartel conspiracy, measuring the price effect of a consummated merger, or attributing competitive harm to exclusionary conduct — these tasks require the design-based econometric methods developed in earlier chapters of this book. No amount of predictive accuracy can substitute for a credible identification strategy when the question is "what would have happened absent the challenged conduct?" ML can improve the *inputs* to causal analysis, such as demand estimates and matched control groups, without replacing the causal framework itself. Researchers who treat ML as a complement to the methods in [Chapter 2](chapters/02-research-design.md), rather than a substitute, will find the most productive applications.
 
 ### ML for cartel screening
 
-One of the most promising applications of machine learning in competition enforcement is the automated screening of markets for collusive behavior. Traditional cartel screens, discussed in [Chapter 5: Cartels](05-cartels.md), rely on structural and behavioral markers — bid rotation patterns, price parallelism, variance reductions — applied to individual markets. ML methods can scale these screens across hundreds or thousands of markets simultaneously, flagging those that warrant deeper investigation by enforcement agencies.
+One of the most promising applications of machine learning in competition enforcement is the automated screening of markets for collusive behavior. Traditional cartel screens, discussed in [Chapter 5](chapters/05-cartels.md), rely on structural and behavioral markers — bid rotation patterns, price parallelism, variance reductions — applied to individual markets. ML methods can scale these screens across hundreds or thousands of markets simultaneously, flagging those that warrant deeper investigation by enforcement agencies.
 
 **Supervised approaches** train classifiers on markets where cartel activity has been established (through leniency applications, successful prosecutions, or agency decisions) and use the learned patterns to score unscreened markets. Random forests and gradient-boosted trees are particularly well suited to this task because they handle nonlinear interactions among features naturally and provide variable importance measures that aid interpretability. Useful features include the coefficient of variation of bids, the number of bidders per tender, the bid spread (difference between highest and lowest bids), price-cost margins, market concentration indices, and indicators of bidder rotation. The challenge, as with any supervised method, is that the training data is censored: we only observe cartels that were detected, and detected cartels may differ systematically from undetected ones.
 
@@ -714,9 +744,9 @@ importance(rf_model)
 
 ### Algorithmic collusion
 
-A distinct and increasingly urgent concern is that pricing algorithms may themselves facilitate collusion — not through explicit coordination among firms, but through the autonomous convergence of algorithmic pricing strategies on supracompetitive equilibria. When competing firms deploy reinforcement-learning or Q-learning algorithms to set prices in repeated market interactions, experimental research has shown that these algorithms can learn to sustain prices above competitive levels without any direct communication between them [@oecd_algorithms_2017]. The algorithms effectively discover and implement tacit collusion strategies that would be difficult for human managers to coordinate.
+A distinct and increasingly urgent concern is that pricing algorithms may themselves facilitate collusion — not through explicit coordination among firms, but through the autonomous convergence of algorithmic pricing strategies on supracompetitive equilibria. When competing firms deploy reinforcement-learning or Q-learning algorithms to set prices in repeated market interactions, experimental research has shown that these algorithms can learn to sustain prices above competitive levels without any direct communication between them (Oecd Algorithms, 2017). The algorithms effectively discover and implement tacit collusion strategies that would be difficult for human managers to coordinate.
 
-This possibility poses a fundamental challenge for antitrust enforcement. Traditional cartel law requires evidence of an agreement or concerted practice — the "smoking gun" communications, meeting records, or parallel conduct plus facilitating factors that investigators rely on to establish liability. When an algorithm arrives at collusive pricing through autonomous learning, there may be no human agreement to discover. The algorithm's pricing behavior *is* the evidence, and interpreting that behavior requires new empirical tools.
+This possibility poses a hard problem for antitrust enforcement. Traditional cartel law requires evidence of an agreement or concerted practice: the "smoking gun" communications, meeting records, or parallel conduct plus facilitating factors that investigators rely on to establish liability. When an algorithm arrives at collusive pricing through autonomous learning, there may be no human agreement to discover. The algorithm's pricing behavior *is* the evidence, and interpreting that behavior requires new empirical tools.
 
 Researchers have proposed several approaches to detecting algorithmic collusion empirically. Granger causality tests can assess whether one firm's algorithmic pricing adjustments predict a competitor's subsequent price changes beyond what market fundamentals would explain. Structural break detection methods can identify whether the deployment of pricing algorithms coincided with a regime change in pricing patterns — a sudden increase in price levels, reduction in price variance, or acceleration of price adjustment speed. And A/B testing frameworks, where algorithmic pricing is deployed in some markets but not others, can provide quasi-experimental variation to estimate the causal effect of algorithmic pricing on market outcomes.
 
@@ -728,21 +758,21 @@ Natural language processing has become an indispensable tool for managing the en
 
 Topic modeling algorithms (such as Latent Dirichlet Allocation) can automatically organize large document collections into thematic clusters — grouping documents that discuss capacity planning, pricing strategy, competitor intelligence, or supply agreements. Named entity recognition can extract and link references to specific firms, executives, products, and markets across thousands of documents. Semantic search, powered by transformer-based language models, allows investigators to find documents that are conceptually related to a query even when they do not share exact keywords — for instance, finding documents that discuss "price discipline" even when the phrase used is "market stability" or "rational pricing."
 
-These tools are particularly powerful when linked to econometric findings. If a structural break analysis identifies a specific date range when pricing behavior changed (see [Chapter 5: Cartels](05-cartels.md)), NLP-assisted search can prioritize documents from that period, looking for contemporaneous discussions of competitor contacts, pricing agreements, or capacity restrictions. This integration of quantitative and qualitative evidence embodies the triangulation principle emphasized throughout this book.
+These tools work best when linked to econometric findings. If a structural break analysis identifies a specific date range when pricing behavior changed (see [Chapter 5](chapters/05-cartels.md)), NLP-assisted search can prioritize documents from that period, looking for contemporaneous discussions of competitor contacts, pricing agreements, or capacity restrictions. Quantitative and qualitative evidence reinforce each other here.
 
-A critical caveat: NLP-assisted review is a triage and prioritization tool, not a replacement for human expert judgment. Privilege review, assessment of document authenticity, and the interpretive work of connecting documentary evidence to legal theories of harm all require experienced lawyers and economists. The technology accelerates the process of finding the needle in the haystack; it does not eliminate the need for expertise in understanding what the needle means.
+One caveat: NLP-assisted review is a triage and prioritization tool, not a replacement for human expert judgment. Privilege review, assessment of document authenticity, and the interpretive work of connecting documentary evidence to legal theories of harm all require experienced lawyers and economists. The technology accelerates the process of finding the needle in the haystack; it does not eliminate the need for expertise in understanding what the needle means.
 
 ### Evidentiary challenges
 
-The use of ML methods in antitrust raises important questions about admissibility and transparency, particularly in U.S. litigation governed by the *Daubert* standard [@daubert_1993] and in other jurisdictions with analogous reliability requirements (see [Chapter 12: Litigation Practice](12-litigation-practice.md) for the broader framework of expert testimony standards).
+The use of ML methods in antitrust raises important questions about admissibility and transparency, particularly in U.S. litigation governed by the *Daubert* standard (Daubert, 1993) and in other jurisdictions with analogous reliability requirements (see [Chapter 12](chapters/12-litigation-practice.md) for the broader framework of expert testimony standards).
 
-ML models face heightened scrutiny because of "black box" concerns — the worry that a model's predictions cannot be meaningfully explained or challenged. This concern is not merely theoretical: opposing counsel will argue, often persuasively, that a model whose internal logic cannot be articulated in plain language should not form the basis of a damages estimate or a liability finding. For this reason, practitioners should favor interpretable models when the output will face judicial scrutiny. Random forests with variable importance rankings, gradient-boosted trees with SHAP (SHapley Additive exPlanations) values, and regularized regression methods all provide mechanisms for explaining which features drive predictions and by how much. Deep neural networks, by contrast, are harder to defend in adversarial proceedings, however strong their predictive performance.
+ML models face heightened scrutiny because of "black box" concerns: the worry that a model's predictions cannot be meaningfully explained or challenged. The concern is practical. Opposing counsel will argue, often persuasively, that a model whose internal logic cannot be articulated in plain language should not form the basis of a damages estimate or a liability finding. For this reason, practitioners should favor interpretable models when the output will face judicial scrutiny. Random forests with variable importance rankings, gradient-boosted trees with SHAP (SHapley Additive exPlanations) values, and regularized regression methods all provide mechanisms for explaining which features drive predictions and by how much. Deep neural networks, by contrast, are harder to defend in adversarial proceedings, however strong their predictive performance.
 
 Documentation practices matter as much as model choice. Practitioners should maintain detailed records of model selection rationale, hyperparameter tuning procedures, cross-validation protocols, and out-of-sample performance metrics. The goal is to demonstrate that the modeling choices were principled rather than result-driven — that the analyst did not simply try dozens of specifications and report the one most favorable to their client's position.
 
 The distinction between screening and estimation carries particular legal significance. Using ML to prioritize markets for investigation or to identify relevant documents is relatively uncontroversial — these are internal workflow decisions that do not directly determine liability or damages. Using ML to *estimate* an overcharge or to *quantify* competitive harm places the model's output squarely at issue in the proceedings and invites much more rigorous challenge. Practitioners should be clear about which role their ML tools are playing and adjust their transparency and validation practices accordingly.
 
-Finally, the regulatory landscape itself is evolving. The EU's AI Act [@eu_ai_act_2024], which entered into force in 2024, may impose additional transparency and documentation requirements on algorithmic tools used in public enforcement proceedings, including competition investigations. Practitioners operating across jurisdictions should monitor these developments and ensure that their ML workflows satisfy not only evidentiary standards but also emerging regulatory obligations for algorithmic accountability.
+Finally, the regulatory landscape itself is evolving. The EU's AI Act (Eu Ai Act, 2024), which entered into force in 2024, may impose additional transparency and documentation requirements on algorithmic tools used in public enforcement proceedings, including competition investigations. Practitioners operating across jurisdictions should monitor these developments and ensure that their ML workflows satisfy both evidentiary standards and emerging regulatory obligations for algorithmic accountability.
 
 ## Additional references
 - **FTC resources:** See [ftc.gov](https://www.ftc.gov/) for expert guidance and econometric standards.

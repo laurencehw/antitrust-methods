@@ -1,14 +1,12 @@
 # Market Definition and Competitive Landscape {#sec-market-definition}
 
-With the research design principles from [Chapter 2](chapters/02-research-design.md) in hand, we now turn to one of the foundational tasks in antitrust analysis: defining the relevant market. Market definition is often the first substantive question in any competition matter, and the answer shapes everything that follows---from market share calculations to theories of harm to remedy design.
+Almost every antitrust matter opens with the same fight: what is the relevant market? The answer fixes the market shares, frames the theory of harm, and bounds the remedy, so the parties contest it hard and early. Draw the boundary wide and a dominant firm looks ordinary; draw it narrow and an ordinary firm looks dominant.
 
-This chapter builds on the causal inference toolkit introduced earlier, showing how to combine quantitative analysis with qualitative evidence to draw market boundaries that will withstand scrutiny from regulators and courts.
+This chapter uses the causal toolkit from [Chapter 2](chapters/02-research-design.md) to draw those boundaries from data and qualitative evidence---boundaries that hold up when a regulator or a court pushes on them.
 
 ## Learning goals
 
-Market definition is no longer a rote SSNIP ritual. Yet agencies and courts still expect a disciplined articulation of product and geographic boundaries before debating competitive effects.
-
-This chapter shows you how to frame those boundaries using data and qualitative evidence, evaluate SSNIP/SSNDQ logic, and communicate results across multiple jurisdictions—DOJ/FTC, DG COMP, CMA, SAMR, and Competition Tribunal South Africa.
+Market definition is no longer a rote SSNIP ritual. But agencies and courts still expect a disciplined statement of product and geographic boundaries before any debate about competitive effects, and they expect it to translate across DOJ/FTC, DG COMP, CMA, SAMR, and the Competition Tribunal of South Africa.
 
 By the end of the chapter you should be able to:
 
@@ -18,7 +16,7 @@ By the end of the chapter you should be able to:
 - Reference key precedents (e.g., (DOJ/FTC Merger Guidelines, 2023), (EC Market Definition Notice, 2024), (CMA Merger Assessment Guidelines, 2021)) and literature when defending methodological choices.
 
 ## Why market definition still matters
-Even in unilateral-effects cases where agencies focus on margins, diversion, and price effects directly, courts often ask, "what is the market?" The answer shapes presumptions (HHI thresholds, dominance), jurisdictional hooks (public-interest test vs. consumer welfare), and remedy feasibility. Practitioners should treat market definition as an evidence-integration exercise: describe customer substitution paths, quantify them when possible, and tie those findings to the legal standard at issue (e.g., "reasonable interchangeability" in US case law vs. "sufficiently interchangeable" in EC practice). Keep records of how you screened candidate markets so future teams can expand or narrow scope without re-litigating data prep.
+Even in unilateral-effects cases, where agencies work directly with margins, diversion, and price effects, courts still ask "what is the market?" Treat the answer as an evidence-integration exercise: describe the customer substitution paths, quantify them where you can, and tie the findings to the legal standard at issue---"reasonable interchangeability" in US case law, "sufficiently interchangeable" in EC practice. Keep a record of how you screened candidate markets so a later team can widen or narrow scope without re-doing the data prep.
 
 {% hint style="info" %}
 **SSNIP Test Decision Flowchart**
@@ -74,7 +72,7 @@ START: Define candidate market (products + geography)
 
 ## Core tools and workflow
 
-Now that we've established why market definition remains essential, this section introduces the practical toolkit for conducting the analysis. Modern market-definition work typically cycles through four complementary approaches, each suited to different data environments and legal standards.
+Modern market-definition work cycles through four approaches, each suited to different data environments and legal standards.
 
 1. **Descriptive analytics.** Price/volume trends, seasonality, and policy shocks that reveal when products or regions move together. Use `ggplot2` quick looks before heavy modeling.
 2. **Demand elasticities & diversion.** Log-log regressions, AIDS-lite models, discrete choice, or churn-based diversion ratios that quantify substitutability. Always document instruments, fixed effects, or controls used.
@@ -85,7 +83,7 @@ The workflow mirrors [Chapter 2](chapters/02-research-design.md)'s research desi
 
 ## Core diagnostic tools
 
-The workflow above identifies *what* to do; this section shows *how* to do it. Each diagnostic below produces artifacts that feed directly into merger simulations ([Chapter 6](chapters/06-mergers.md)) and cartel analysis ([Chapter 5](chapters/05-cartels.md)). Use these specific diagnostics to anchor your analysis:
+The workflow says *what* to do; the diagnostics below show *how*. Each produces artifacts that feed directly into merger simulations ([Chapter 6](chapters/06-mergers.md)) and cartel analysis ([Chapter 5](chapters/05-cartels.md)):
 
 - **Price/quantity dashboards.** Track cointegration, variance ratios, and shock responses to see which products move together.
 - **Elasticities/diversion.** Estimate log-log or `fixest` panel regressions; or use choice data (`mlogit`, `apollo`) when products are differentiated.
@@ -290,7 +288,7 @@ Replace `nycflights13` with live data (slot allocation, loyalty records, booking
 
 Airline mergers illustrate how market definition choices can determine a case's outcome. The central question is geographic scope: should the relevant market be defined as an airport-pair (e.g., DCA--LGA), a city-pair (e.g., Washington--New York), or a broader corridor? Product scope matters too: are nonstop flights a separate market from connecting service?
 
-The heatmap above shows that many NYC-origin routes are served by only one or two carriers with dominant shares---exactly the pattern that motivates route-level market definition. In the DOJ's 2013 challenge to the American Airlines/US Airways merger, the government defined relevant markets at the **airport-pair level with nonstop service** as the relevant product. This narrow definition was critical: on many routes the merging carriers' combined shares exceeded the structural presumption thresholds, whereas a broader city-pair definition that pooled all three NYC-area airports would have diluted concentration.
+The heatmap above shows that many NYC-origin routes are served by only one or two carriers with dominant shares---exactly the pattern that motivates route-level market definition. In the DOJ's 2013 challenge to the American Airlines/US Airways merger, the government defined relevant markets at the **airport-pair level with nonstop service** as the relevant product. The narrow definition decided the matter: on many routes the merging carriers' combined shares exceeded the structural presumption thresholds, whereas a broader city-pair definition that pooled all three NYC-area airports would have diluted concentration.
 
 We can compute route-level HHI directly from the flight data to identify which routes would trigger scrutiny under the 2023 Merger Guidelines:
 
@@ -589,11 +587,11 @@ diversion_matrix |>
 {% hint style="info" %}
 **Debate: Is market definition still necessary?**
 
-A lively debate centers on whether formal market definition remains essential in unilateral effects analysis. **The traditional view** (agencies, most courts) holds that market definition disciplines the analysis: it forces practitioners to articulate which products/regions constrain pricing, establishes evidentiary presumptions (HHI thresholds), and provides a common language across jurisdictions. Without it, arguments risk becoming untethered from competitive reality.
+A long-running debate centers on whether formal market definition remains necessary in unilateral effects analysis. **The traditional view** (agencies, most courts) holds that market definition disciplines the analysis: it forces practitioners to articulate which products/regions constrain pricing, establishes evidentiary presumptions (HHI thresholds), and provides a common language across jurisdictions. Without it, arguments risk becoming untethered from competitive reality.
 
 **The reform view** (some economists, recent US guidelines commentary) argues that diversion ratios, margins, and UPP/GUPPI directly answer the relevant question—"will this merger raise prices?"—without the need for binary in/out market distinctions. Forcing a SSNIP test can be arbitrary (the 5-10% threshold is a convention, not economics), and critical-loss analysis is sensitive to margin measurement. Modern tools (merger simulation, natural experiments) can estimate price effects directly. See Katz & Shapiro (2003), Farrell & Shapiro (2010), and Werden (2012) for the evolution of this debate.
 
-**Practical middle ground:** Most practitioners define a candidate market to anchor share calculations and HHI, but also present direct evidence (diversion, UPP, simulation) to avoid getting bogged down in SSNIP debates. Courts still expect market definition—especially in monopolization and vertical cases where structural presumptions remain central—so skip it at your peril. Document the market definition exercise even if your ultimate analysis relies on direct effects modeling.
+**Practical middle ground:** Most practitioners define a candidate market to anchor share calculations and HHI, but also present direct evidence (diversion, UPP, simulation) to avoid getting bogged down in SSNIP debates. Courts still expect market definition, especially in monopolization and vertical cases where structural presumptions remain central. Document the market definition exercise even if your ultimate analysis relies on direct effects modeling.
 
 **Jurisdictional variation:** DG COMP and the CMA increasingly accept "direct effects" arguments in merger reviews but still require formal market definition in abuse-of-dominance cases. The US has moved toward pragmatism: the 2023 Merger Guidelines retain market definition but emphasize it's not always necessary when direct evidence of competitive effects is available. South African practice follows this middle path: the Competition Act requires market definition for some statutory tests (dominance, public interest), but practitioners routinely supplement with direct diversion and simulation evidence.
 {% endhint %}
@@ -634,14 +632,28 @@ A lively debate centers on whether formal market definition remains essential in
 
 5. **Data/code.** Using the diversion ratio code scaffold in this chapter, modify the simulation to create asymmetric diversion (A to B = 35%, B to A = 15%). Compute UPP for both directions and explain why asymmetric diversion matters for merger analysis.
 
+### Data exercise (checkable)
+
+A candidate market has a gross margin of 40%. You run a SSNIP of 5%.
+
+a. Compute the critical loss.
+b. Survey evidence suggests the actual loss from a 5% price rise would be about 8%. Is the candidate market a relevant antitrust market, or is it drawn too narrowly?
+
+{% hint style="success" %}
+**Worked answer**
+
+a. Critical loss = t / (t + m) = 0.05 / (0.05 + 0.40) = 0.05 / 0.45 = **11.1%**.
+b. Actual loss (8%) < critical loss (11.1%), so the hypothetical monopolist would find the 5% increase profitable. The candidate market **is a relevant market** -- it is not too narrow.
+{% endhint %}
+
 ## Looking ahead
 
-With market boundaries now defined, we turn in **[Chapter 4](chapters/04-io-toolkit.md)** to the **Industrial Organization Toolkit**: quantifying market power *within* those boundaries using concentration measures (HHI), pricing relationships, and entry barriers. Market definition answers "which products compete?"; IO analysis answers "how much pricing power does each firm have?"
+Market definition answers "which products compete?" The **Industrial Organization Toolkit** in **[Chapter 4](chapters/04-io-toolkit.md)** answers the next question: how much pricing power does each firm have *within* those boundaries? It measures that power with concentration indices (HHI), pricing relationships, and entry barriers.
 
-**Before proceeding, prepare:**
+To prepare:
 
 1. **Product labels**: Ensure switching matrices and elasticity estimates use the same product names you'll use in IO models (don't rename later—it creates errors).
 2. **Geographic definitions**: Confirm that shipment-flow maps and customer testimony align with the geographic markets you'll assume in [Chapter 4](chapters/04-io-toolkit.md).
 3. **Data artifacts**: Export cleaned switching matrices, elasticity estimates, and qualitative chronologies to the shared appendix so the IO, merger, and cartels chapters can reuse them.
 
-In [Chapter 4](chapters/04-io-toolkit.md), we'll assume market definitions are fixed and focus on what happens *inside* those markets: how firms set prices, whether entry threatens incumbents, and what evidence suggests market power. You'll use the switching matrices from this chapter to compute diversion ratios for merger simulations in [Chapter 6](chapters/06-mergers.md).
+[Chapter 4](chapters/04-io-toolkit.md) takes market definitions as fixed and looks inside those markets: how firms set prices, whether entry threatens incumbents, and what evidence points to market power. The switching matrices from this chapter become diversion ratios for the merger simulations in [Chapter 6](chapters/06-mergers.md).

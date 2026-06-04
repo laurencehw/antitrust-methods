@@ -1,6 +1,6 @@
-# Digital Markets and Platforms 
+# Digital Markets and Platforms {#sec-digital-markets}
 
-The tools and frameworks from the preceding chapters---market definition ([Chapter 3: Market Definition](03-market-definition.md)), IO modeling ([Chapter 4: IO Toolkit](04-io-toolkit.md)), merger analysis ([Chapter 6: Mergers](06-mergers.md)), and monopolization doctrine ([Chapter 7: Monopolization](07-monopolization.md))---apply to digital markets, but with distinctive challenges. Multi-sided platforms, network effects, zero-price business models, and rapid technological change all complicate traditional antitrust analysis. This chapter shows how to adapt the general toolkit to these specific features.
+The tools and frameworks from the preceding chapters---market definition ([Chapter 3](chapters/03-market-definition.md)), IO modeling ([Chapter 4](chapters/04-io-toolkit.md)), merger analysis ([Chapter 6](chapters/06-mergers.md)), and monopolization doctrine ([Chapter 7](chapters/07-monopolization.md))---apply to digital markets, but with distinctive challenges. Multi-sided platforms, network effects, zero-price business models, and rapid technological change all complicate traditional antitrust analysis. This chapter shows how to adapt the general toolkit to these specific features.
 
 We also introduce new evidence types that matter especially in digital markets: telemetry data, clickstream analysis, API documentation, and product requirements documents. The intersection of technical product knowledge and economic reasoning defines much of the frontier in digital platform enforcement, from the US cases against Google and Meta to the EU's Digital Markets Act and South Africa's Online Intermediation Platforms Market Inquiry.
 
@@ -16,14 +16,15 @@ Expect to combine telemetry, clickstream data, partner contracts, and qualitativ
 
 {% hint style="info" %}
 **Key acronyms**
-**OIPMI** = Online Intermediation Platforms Market Inquiry (South African Competition Commission, 2020–2023). A comprehensive investigation into digital platform competition covering marketplaces, app stores, food delivery, travel booking, and software platforms. Provides detailed transaction data, commission structures, and market share analyses referenced throughout this chapter.
+
+**OIPMI** = Online Intermediation Platforms Market Inquiry (South African Competition Commission, 2020–2023). An investigation into digital platform competition covering marketplaces, app stores, food delivery, travel booking, and software platforms. Provides transaction data, commission structures, and market share analyses referenced throughout this chapter.
 {% endhint %}
 
 ## Core topics
 
 In June 2017, the European Commission fined Google 2.42 billion euros for systematically favoring its own comparison-shopping service in search results---a decision that launched a decade of platform antitrust. The case turned on a deceptively simple empirical question: did Google's algorithmic ranking decisions steer traffic away from rival comparison-shopping sites and toward Google Shopping? The answer required analyzing terabytes of clickstream data, modeling user behavior across search result positions, and disentangling algorithmic design choices from organic quality differences.
 
-The South African Competition Commission's OIPMI inquiry (2020--2023) confronted parallel questions in a developing-market context: whether Takealot's marketplace algorithm favored its own retail arm, whether food-delivery commission structures foreclosed small restaurants, and whether Google's search dominance warranted the same remedies in Johannesburg as in Brussels. These cases---and the US DOJ's subsequent monopolization suits against Google in search and advertising technology---illustrate that digital platform enforcement is now a global phenomenon, with common empirical challenges that recur across jurisdictions even as legal standards diverge. The tools in this chapter equip you to engage with all of them.
+The South African Competition Commission's OIPMI inquiry (2020--2023) confronted parallel questions in a developing-market context: whether Takealot's marketplace algorithm favored its own retail arm, whether food-delivery commission structures foreclosed small restaurants, and whether Google's search dominance warranted the same remedies in Johannesburg as in Brussels. These cases, and the US DOJ's subsequent monopolization suits against Google in search and advertising technology, show that digital platform enforcement is now global, with common empirical challenges that recur across jurisdictions even as legal standards diverge.
 
 Digital platform analysis extends traditional IO tools to multi-sided markets where network effects, data advantages, and zero-price business models create distinct competitive dynamics. This section covers the key mechanisms and evidence types.
 
@@ -33,7 +34,7 @@ Digital platform analysis extends traditional IO tools to multi-sided markets wh
 - **Network effects**: Do more users on one side attract more users on other sides? How strong is the feedback loop?
 - **Switching costs and lock-in**: What prevents users from moving to rival platforms?
 
-**Platform conduct concerns** [see @khan_2017 for the foundational critique of consumer welfare standards in platform markets; @stigler_committee_2019 for the policy reform agenda] include:
+**Platform conduct concerns** [see (Khan, 2017) for the foundational critique of consumer welfare standards in platform markets; (Stigler Committee, 2019) for the policy reform agenda] include:
 
 - **Self-preferencing**: Does the platform favor its own products in search rankings or recommendations?
 - **Ranking manipulation**: Do algorithm changes benefit the platform at users' expense?
@@ -52,6 +53,7 @@ Digital platform analysis extends traditional IO tools to multi-sided markets wh
 
 {% hint style="info" %}
 **Platform Competition Analysis Workflow**
+
 ```
 SCOPING                   ANALYSIS                  REMEDIES
    |                          |                         |
@@ -86,7 +88,7 @@ SCOPING                   ANALYSIS                  REMEDIES
 {% endhint %}
 
 1. **Define sides and metrics.** Identify user, merchant, advertiser, developer, courier, or publisher sides. Track MAU/DAU, GMV, multi-homing rates, engagement depth, and conversion metrics.
-2. **Map fees and monetization.** Build ladders for commissions, subscriptions, ad loads, and data monetization; compute pass-through and elasticity. For two-sided market theory, see @rochet_tirole_2003 and @armstrong_2006; the demand estimation framework in [Chapter 4: IO Toolkit](04-io-toolkit.md) provides the empirical foundation for these models.
+2. **Map fees and monetization.** Build ladders for commissions, subscriptions, ad loads, and data monetization; compute pass-through and elasticity. For two-sided market theory, see (Rochet & Tirole, 2003) and (Armstrong, 2006); the demand estimation framework in [Chapter 4](chapters/04-io-toolkit.md) provides the empirical foundation for these models.
 3. **Theory of harm.** Common mechanisms include self-preferencing, default tying, MFN/parity clauses, data leveraging, interoperability restrictions, algorithmic ranking biases, and algorithmic collusion.
 4. **Mechanism measurement.** Quantify ranking impacts, default effects, fee changes, and data advantages; document multi-homing constraints and API access terms.
 5. **Effects & remedies.** Measure partner churn, user switching, price/fee changes, and innovation impacts. Propose remedies (choice screens, fair-ranking reports, API access rules, data portability, structural separation) tied to measured harms.
@@ -104,7 +106,7 @@ The table below maps common platform theories of harm to measurable metrics and 
 | **Foreclosure (raising rivals' costs)** | Fee differential; cost-to-serve by channel | Comparison of platform vs. direct channel costs | Fee schedules, merchant P&L data |
 | **Data leverage** | Copycat product launch timing; feature matching | Survival analysis of 3rd-party products post-data access | Product launch dates, feature audits, internal documents |
 | **MFN/parity clauses** | Price dispersion across platforms | Variance analysis; price comparison pre/post MFN removal | Price scraping, platform listings, DMA studies |
-| **Algorithmic collusion** | Price correlation; response times; convergence patterns | Granger causality; structural break tests; simulation (cf. cartel screens in [Chapter 5: Cartels](05-cartels.md)) | Transaction-level pricing data, algorithm audits |
+| **Algorithmic collusion** | Price correlation; response times; convergence patterns | Granger causality; structural break tests; simulation (cf. cartel screens in [Chapter 5](chapters/05-cartels.md)) | Transaction-level pricing data, algorithm audits |
 | **Switching costs/lock-in** | Multi-homing rates; churn by tenure | Duration models; switching cost estimation | Survey data, telemetry, DMA surveys |
 | **Network effects exploitation** | Participation elasticity; tipping point dynamics | Two-sided demand estimation; natural experiments | Platform growth data, entry/exit events |
 
@@ -117,6 +119,7 @@ The table below maps common platform theories of harm to measurable metrics and 
 
 {% hint style="info" %}
 **Adapting to zero-price markets**
+
 When users pay with attention rather than money, adapt metrics accordingly:
 
 - Replace `fees_users` with **ad load** (ads per session, ad-to-content ratio)
@@ -127,8 +130,8 @@ When users pay with attention rather than money, adapt metrics accordingly:
 
 ## Participation, multi-homing, and network effects
 
-- **Participation curves:** Model each side's activity as a function of fees, quality, and participation on the other side. Use logit, linear, or Poisson models with cross-side terms [@evans_schmalensee_2007; @hagiu_wright_2015].  
-- **Multi-homing rates:** Estimate the share of users or merchants active on rival platforms. OIPMI surveys and EU DMA filings include methodologies you can reuse [@parker_van_alstyne_2005].  
+- **Participation curves:** Model each side's activity as a function of fees, quality, and participation on the other side. Use logit, linear, or Poisson models with cross-side terms (Evans & Schmalensee, 2007); (Hagiu & Wright, 2015).  
+- **Multi-homing rates:** Estimate the share of users or merchants active on rival platforms. OIPMI surveys and EU DMA filings include methodologies you can reuse (Parker & Van Alstyne, 2005).  
 - **Match quality:** Track conversion rates, completion times, or satisfaction metrics per platform side to show how conduct affects outcomes.  
 - **Elasticities:** Two-sided elasticities inform fee caps and remedy design (e.g., how merchant participation responds to lower commissions or improved ranking fairness).
 
@@ -265,12 +268,16 @@ cat(paste0("Would monopolist profit? Depends on ad revenue vs. user loss tradeof
 3. Simulate: would a hypothetical monopolist profitably degrade quality by 5-10%?
 4. If users wouldn't switch despite degradation → market power concern
 
-{% endhint %}{.callout-note title="Case box: European Commission v. Google Shopping (2017)"}
-The Commission found that Google systematically positioned its own comparison shopping service at the top of search results while demoting rival comparison shopping sites through algorithmic adjustments [@eu_google_shopping_2017]. Evidence showed click-through rates for Google's own service were 35 times higher than for organically listed rivals on the first page. The €2.42 billion fine---the largest antitrust penalty at the time---rested on empirical analysis of traffic differentials: rival comparison shopping sites lost 85% of their traffic after algorithmic changes, while Google Shopping's traffic increased 45-fold. The remedy required Google to give rival comparison services equal treatment through an auction-based mechanism for product listing ad slots. The General Court upheld the decision in 2021, confirming that self-preferencing by a dominant platform can constitute abuse even absent a traditional leveraging theory.
+{% hint style="info" %}
+**Case box: European Commission v. Google Shopping (2017)**
+
+The Commission found that Google systematically positioned its own comparison shopping service at the top of search results while demoting rival comparison shopping sites through algorithmic adjustments (*Google Shopping*, 2017). Evidence showed click-through rates for Google's own service were 35 times higher than for organically listed rivals on the first page. The €2.42 billion fine---the largest antitrust penalty at the time---rested on empirical analysis of traffic differentials: rival comparison shopping sites lost 85% of their traffic after algorithmic changes, while Google Shopping's traffic increased 45-fold. The remedy required Google to give rival comparison services equal treatment through an auction-based mechanism for product listing ad slots. The General Court upheld the decision in 2021, confirming that self-preferencing by a dominant platform can constitute abuse even absent a traditional leveraging theory.
 {% endhint %}
 
-{% endhint %}{.callout-note title="Case box: Epic Games v. Apple (2021)"}
-Epic challenged Apple's 30% App Store commission and anti-steering rules that prevented developers from directing users to cheaper external payment options [@us_epic_apple_2021]. Judge Gonzalez Rogers found Apple was *not* a monopolist under the Sherman Act, partly because the relevant market was defined as "digital mobile gaming transactions"---a two-sided market where Apple competed with Google Play and console platforms. However, Apple violated California's Unfair Competition Law by preventing developers from communicating alternative payment methods to users. The injunction requiring Apple to allow external payment links reshaped app store economics globally. The case demonstrated the stakes of market definition in platform cases: a narrower single-sided market (iOS app distribution) might have yielded a monopoly finding, while the broader two-sided framing shielded Apple from Section 2 liability.
+{% hint style="info" %}
+**Case box: Epic Games v. Apple (2021)**
+
+Epic challenged Apple's 30% App Store commission and anti-steering rules that prevented developers from directing users to cheaper external payment options (*Epic Games v. Apple*, 2021). Judge Gonzalez Rogers found Apple was *not* a monopolist under the Sherman Act, partly because the relevant market was defined as "digital mobile gaming transactions"---a two-sided market where Apple competed with Google Play and console platforms. However, Apple violated California's Unfair Competition Law by preventing developers from communicating alternative payment methods to users. The injunction requiring Apple to allow external payment links reshaped app store economics globally. The case demonstrated the stakes of market definition in platform cases: a narrower single-sided market (iOS app distribution) might have yielded a monopoly finding, while the broader two-sided framing shielded Apple from Section 2 liability.
 {% endhint %}
 
 ## Ranking, self-preferencing, and defaults
@@ -308,6 +315,9 @@ ggplot(ranking, aes(slot, ctr, color = listing)) +
   theme_antitrust() +
   theme(legend.position = "bottom")
 ```
+
+![](../images/digital-ranking-1.png)
+
 Populate the tibble with actual ranking data (e.g., OIPMI buy-box audits, CMA Amazon Marketplace analysis) or maintain sanitized values in `data/examples/digital-ranking.csv`. The CMA's market studies are publicly available at [gov.uk/cma](https://www.gov.uk/government/organisations/competition-and-markets-authority).
 
 ### Default-choice event study
@@ -362,19 +372,24 @@ ggplot(coefs, aes(x = rel_month, y = estimate)) +
   ) +
   theme_antitrust()
 ```
+
+![](../images/digital-default-event-1.png)
+
 Replace the synthetic panel with DMA compliance reports, CMA choice screen experiments, or telemetry from browser/search default changes.
 
 ## Methodologies
 
 {% hint style="info" %}
 **Method box**
+
 - Platform fee/price pass-through across sides.  
-- Event studies on ranking/default changes, following the design-based approach in [Chapter 2: Research Design](02-research-design.md); DMA-style interventions.  
+- Event studies on ranking/default changes, following the design-based approach in [Chapter 2](chapters/02-research-design.md); DMA-style interventions.  
 - Two-sided logit or bargaining sketches to test fee caps and interoperability remedies.
 {% endhint %}
 
 {% hint style="info" %}
 **Qualitative evidence**
+
 - Product requirement documents, experiment summaries, and governance memos.  
 - Partner contracts (parity/MFN, exclusivity), API access terms, data-sharing policies.  
 - User research/surveys capturing multi-homing, switching costs, and friction sources.
@@ -382,14 +397,15 @@ Replace the synthetic panel with DMA compliance reports, CMA choice screen exper
 
 {% hint style="info" %}
 **Citations and comparative note**
-- US cases [@us_epic_apple_2021; @us_google_search_2023; @us_google_adtech_2023], EU/DMA [@eu_google_shopping_2017; @eu_google_android_2018; @eu_dma_2022], UK (CMA digital market studies), KFTC/JFTC app store cases, SAMR digital enforcement.
-- Empirical studies on defaults, ranking effects, and multi-homing [e.g., @luca_2016; @edelman_lai_2016].
+
+- US cases (*Epic Games v. Apple*, 2021); (*United States v. Google (Search)*, 2023); (*United States v. Google (Ad Tech)*, 2023), EU/DMA (*Google Shopping*, 2017); (*Google Android*, 2018); (Digital Markets Act, 2022), UK (CMA digital market studies), KFTC/JFTC app store cases, SAMR digital enforcement.
+- Empirical studies on defaults, ranking effects, and multi-homing [e.g., (Luca, 2016); (Edelman Lai, 2016)].
 - Flag differences in parity/MFN treatment and remedy preferences (EU fair-ranking obligations vs. US injunctive relief).
 {% endhint %}
 
 ### Algorithmic collusion: a Q-learning simulation
 
-One of the most distinctive challenges in digital market competition is the possibility that pricing algorithms---even when independently developed and deployed---may learn to coordinate on supra-competitive prices without any explicit communication between firms. This is not hypothetical: laboratory experiments have shown that simple reinforcement learning agents (Q-learning algorithms) playing repeated pricing games converge to prices well above the Nash equilibrium, approaching collusive outcomes [@calvano_vijay_2023; @oecd_algorithms_2017].
+One of the most distinctive challenges in digital market competition is the possibility that pricing algorithms---even when independently developed and deployed---may learn to coordinate on supra-competitive prices without any explicit communication between firms. This is not hypothetical: laboratory experiments have shown that simple reinforcement learning agents (Q-learning algorithms) playing repeated pricing games converge to prices well above the Nash equilibrium, approaching collusive outcomes (Calvano Vijay, 2023); (Oecd Algorithms, 2017).
 
 The mechanism is straightforward. Each algorithm observes the current state (the vector of prices set by all firms in the previous period), chooses an action (raise, lower, or maintain price), and receives a reward (profit). Over repeated iterations, the algorithm learns a Q-table mapping states to actions that maximizes cumulative reward. When two such algorithms interact, they discover that mutual price increases yield higher rewards than price competition---and they learn to punish deviations by reverting to competitive pricing, creating a self-enforcing collusive equilibrium that mirrors the grim-trigger strategies of repeated-game theory.
 
@@ -517,7 +533,7 @@ cat(paste0("Convergence ratio: ",
 
 **Interpretation.** The simulation shows that two independent Q-learning algorithms, each maximizing its own profit with no communication or coordination, converge to prices well above the Nash equilibrium of 8.00 and approach the collusive price of 16.00. The convergence ratio of approximately 80--90% means the algorithms sustain prices close to monopoly levels---not through explicit agreement, but through the emergent logic of repeated interaction and punishment strategies.
 
-**Antitrust implications.** This result challenges the traditional legal framework for cartel enforcement, which requires proof of an "agreement" or "concerted practice." Q-learning algorithms achieve collusive outcomes through independent optimization---there is no meeting of minds, no communication, no explicit coordination. Competition authorities are grappling with how to address this gap. The OECD's 2017 report on algorithms and collusion [@oecd_algorithms_2017] identified four scenarios: (1) messenger algorithms (humans collude, algorithms implement), (2) hub-and-spoke (common algorithm provider), (3) predictable agent (algorithms respond to each other's predictable behavior), and (4) autonomous machine (algorithms independently learn to collude). The first three fit within existing legal frameworks; the fourth does not. The EU's Digital Markets Act and the UK's CMA digital markets unit are developing ex ante tools to address algorithmic coordination, while US enforcement remains focused on traditional conspiracy doctrine.
+**Antitrust implications.** This result challenges the traditional legal framework for cartel enforcement, which requires proof of an "agreement" or "concerted practice." Q-learning algorithms achieve collusive outcomes through independent optimization---there is no meeting of minds, no communication, no explicit coordination. Competition authorities are grappling with how to address this gap. The OECD's 2017 report on algorithms and collusion (Oecd Algorithms, 2017) identified four scenarios: (1) messenger algorithms (humans collude, algorithms implement), (2) hub-and-spoke (common algorithm provider), (3) predictable agent (algorithms respond to each other's predictable behavior), and (4) autonomous machine (algorithms independently learn to collude). The first three fit within existing legal frameworks; the fourth does not. The EU's Digital Markets Act and the UK's CMA digital markets unit are developing ex ante tools to address algorithmic coordination, while US enforcement remains focused on traditional conspiracy doctrine.
 
 ### Southern African digital enforcement snapshots
 - **Online Intermediation Platforms Market Inquiry (OIPMI, 2020–2023).** The Competition Commission collected transaction-level data from e-commerce marketplaces, app stores, food delivery apps, and travel platforms. Findings highlighted Google Search’s >90% share of general search queries, food-delivery commissions clustering at 25–30%, and marketplace buy-box algorithms that favored first-party listings (e.g., Takealot Retail) over third-party sellers with identical fulfillment metrics. Final remedies require fair-ranking reports, caps on marketplace storage/fulfillment fees for SMEs, and anti-steering relief that lets restaurants promote direct-order channels inside aggregator apps.
@@ -529,82 +545,7 @@ cat(paste0("Convergence ratio: ",
 ### Multi-homing patterns
 Multi-homing patterns reveal competitive constraints and switching costs. The following visualization shows the distribution of users across platform combinations, helping identify whether platforms compete head-to-head or serve distinct niches.
 
-```r
-library(dplyr)
-library(ggplot2)
-
-# Simulated multi-homing survey data
-# Replace with OIPMI survey data or DMA compliance reports
-set.seed(234)
-n_users <- 1000
-
-multihoming <- tibble(
-  user_id = 1:n_users,
-  platform_a = sample(c("Active", "Inactive"), n_users, replace = TRUE,
-                     prob = c(0.7, 0.3)),
-  platform_b = sample(c("Active", "Inactive"), n_users, replace = TRUE,
-                     prob = c(0.5, 0.5)),
-  platform_c = sample(c("Active", "Inactive"), n_users, replace = TRUE,
-                     prob = c(0.3, 0.7))
-) |>
-  mutate(
-    pattern = case_when(
-      platform_a == "Active" & platform_b == "Active" & platform_c == "Active" ~ "All three",
-      platform_a == "Active" & platform_b == "Active" ~ "A + B",
-      platform_a == "Active" & platform_c == "Active" ~ "A + C",
-      platform_b == "Active" & platform_c == "Active" ~ "B + C",
-      platform_a == "Active" ~ "A only",
-      platform_b == "Active" ~ "B only",
-      platform_c == "Active" ~ "C only",
-      TRUE ~ "None"
-    )
-  )
-
-# Aggregate flows
-flows <- multihoming |>
-  count(pattern) |>
-  mutate(
-    pct = n / sum(n),
-    pattern = factor(pattern,
-                    levels = c("A only", "B only", "C only",
-                              "A + B", "A + C", "B + C", "All three", "None"))
-  ) |>
-  arrange(pattern)
-
-# Bar chart showing multi-homing patterns
-p1 <- ggplot(flows, aes(x = pattern, y = pct, fill = pattern)) +
-  geom_col(width = 0.7) +
-  geom_text(aes(label = scales::percent(pct, accuracy = 0.1)),
-            vjust = -0.5, size = 3.5) +
-  scale_y_continuous(labels = scales::percent_format(),
-                     expand = expansion(mult = c(0, 0.1))) +
-  scale_fill_brewer(palette = "Set2") +
-  labs(
-    title = "Multi-homing Patterns Across Platforms",
-    subtitle = "User activity across Platform A, B, and C",
-    x = NULL,
-    y = "Share of Users",
-    caption = "Illustrative data. Replace with OIPMI survey or DMA compliance reports."
-  ) +
-  theme_antitrust() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "none",
-    plot.title.position = "plot"
-  )
-
-p1
-
-# Summary statistics
-cat("\nMulti-homing summary:\n")
-cat(paste0("Single-homing (one platform only): ",
-          scales::percent(sum(flows$pct[flows$pattern %in%
-                              c("A only", "B only", "C only")]),
-                         accuracy = 0.1), "\n"))
-cat(paste0("Multi-homing (2+ platforms): ",
-          scales::percent(sum(flows$pct[grepl("\\+|three", flows$pattern)]),
-                         accuracy = 0.1), "\n"))
-```
+![](../images/digital-multihoming-plot-1.png)
 
 **Interpretation:**
 -   **High single-homing**: Suggests strong lock-in, switching costs, or network effects. Platforms may have market power.
@@ -622,7 +563,7 @@ Quantify how defaults affect market shares using difference-in-differences or ev
 
 ### Self-preferencing detection exercise
 
-Self-preferencing occurs when a platform uses its control over access to favor its own products or services over those of rivals. The EU's Google Shopping decision (@eu_google_shopping_2017) established that systematic demotion of rival comparison shopping services in search results constituted an abuse of dominance under Article 102 TFEU. Detecting self-preferencing requires comparing the platform's treatment of its own offerings against its treatment of rivals, controlling for quality differences.
+Self-preferencing occurs when a platform uses its control over access to favor its own products or services over those of rivals. The EU's Google Shopping decision ((*Google Shopping*, 2017)) established that systematic demotion of rival comparison shopping services in search results constituted an abuse of dominance under Article 102 TFEU. Detecting self-preferencing requires comparing the platform's treatment of its own offerings against its treatment of rivals, controlling for quality differences.
 
 The empirical approach involves three steps: (1) measure the platform's ranking or visibility of own vs. rival products; (2) control for quality differences (relevance, price, user ratings); and (3) test whether any residual favoritism is statistically and economically significant.
 
@@ -685,107 +626,7 @@ ggplot(ranking_data, aes(x = position, fill = factor(is_own, labels = c("Rival",
 
 **Data sources:** Platform ranking logs (from discovery or regulatory requests), click-through rate data, user engagement metrics, and product quality scores. The EU's DMA requires designated gatekeepers to provide ranking data to the Commission, creating a new data source for self-preferencing analysis.
 
-```r
-library(fixest)
-library(dplyr)
-library(ggplot2)
-library(patchwork)
-
-# Simulated data: Android choice screen impact (EU DMA context)
-# Replace with actual DMA compliance data or CMA experiments
-set.seed(345)
-weeks <- -24:24
-countries <- c("Control (no choice screen)", "Treatment (choice screen)")
-
-default_data <- expand.grid(
-  week = weeks,
-  country = countries
-) |>
-  mutate(
-    # Pre-intervention: both countries similar
-    # Post-intervention: treatment shows rival gain
-    rival_share = case_when(
-      country == "Control (no choice screen)" ~ 0.05 + 0.0005 * week + rnorm(n(), 0, 0.01),
-      week < 0 ~ 0.05 + 0.0005 * week + rnorm(n(), 0, 0.01),
-      TRUE ~ 0.05 + 0.0005 * week + 0.08 + rnorm(n(), 0, 0.01)
-    ),
-    rival_share = pmax(0.01, pmin(0.25, rival_share))
-  )
-
-# Time series plot
-p1 <- ggplot(default_data, aes(x = week, y = rival_share,
-                                color = country, linetype = country)) +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40",
-             linewidth = 1) +
-  stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
-  annotate("text", x = 0, y = 0.22, label = "Choice screen\nintroduced",
-           hjust = -0.1, size = 3.5, fontface = "italic") +
-  scale_color_manual(values = c("Control (no choice screen)" = "#999999",
-                                 "Treatment (choice screen)" = "#0072B2")) +
-  scale_linetype_manual(values = c("Control (no choice screen)" = "dashed",
-                                   "Treatment (choice screen)" = "solid")) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  labs(
-    title = "Impact of Choice Screen on Rival Search Engine Share",
-    subtitle = "Difference-in-Differences: Treatment vs. Control Countries",
-    x = "Weeks relative to choice screen introduction",
-    y = "Rival search engine share",
-    color = NULL,
-    linetype = NULL
-  ) +
-  theme_antitrust() +
-  theme(
-    legend.position = "bottom",
-    plot.title.position = "plot"
-  )
-
-# Coefficient plot (event study coefficients)
-# Simulated DiD estimates
-did_coefs <- tibble(
-  week = weeks[weeks != -1]  # reference period
-) |>
-  mutate(
-    estimate = 0.08 * as.numeric(week >= 0) + rnorm(n(), 0, 0.01),
-    ci_lower = estimate - 1.96 * 0.01,
-    ci_upper = estimate + 1.96 * 0.01
-  )
-
-p2 <- ggplot(did_coefs, aes(x = week, y = estimate)) +
-  geom_hline(yintercept = 0, linetype = "solid", color = "gray40") +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40",
-             linewidth = 1) +
-  geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper),
-              alpha = 0.2, fill = "#0072B2") +
-  geom_line(color = "#0072B2", linewidth = 1) +
-  geom_point(color = "#0072B2", size = 2) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  labs(
-    title = "Event Study Coefficients",
-    subtitle = "Treatment effect by week (relative to week -1)",
-    x = "Weeks relative to choice screen",
-    y = "Effect on rival share (percentage points)",
-    caption = "Illustrative data. Replace with DMA compliance reports or CMA experiments."
-  ) +
-  theme_antitrust() +
-  theme(plot.title.position = "plot")
-
-# Combined plot
-p1 / p2
-
-# Summary statistics
-pre_treatment <- mean(default_data$rival_share[
-  default_data$country == "Treatment (choice screen)" & default_data$week < 0])
-post_treatment <- mean(default_data$rival_share[
-  default_data$country == "Treatment (choice screen)" & default_data$week >= 0])
-effect <- post_treatment - pre_treatment
-
-cat("\nChoice screen impact summary:\n")
-tibble::tibble(
-  metric = c("Pre-treatment share", "Post-treatment share", "Treatment Effect"),
-  value = c(pre_treatment, post_treatment, effect)
-) |>
-  knitr::kable(digits = 3, caption = "Impact of Choice Screen")
-```
+![](../images/digital-default-plot-1.png)
 
 **How to use this analysis:**
 - **Pre-trends**: Check parallel trends before intervention to validate DiD assumptions.
@@ -797,7 +638,7 @@ tibble::tibble(
 The EU Digital Markets Act requires designated gatekeepers to offer choice screens for browsers, search engines, and other services. This analysis framework can evaluate compliance and effectiveness.
 
 ### Platform fee structure visualization
-Commission and fee structures are critical evidence in platform cases. Show how fees vary by seller tier, product category, or fulfillment method.
+Commission and fee structures are central evidence in platform cases. Show how fees vary by seller tier, product category, or fulfillment method.
 
 ```r
 library(dplyr)
@@ -868,6 +709,8 @@ fees |>
   mutate(total_fee = scales::percent(total_fee, accuracy = 0.1)) |>
   print(n = Inf)
 ```
+
+![](../images/digital-fee-structure-1.png)
 
 **Key insights:**
 - **App stores**: 30% standard (15% for small developers under $1M revenue).
@@ -959,6 +802,8 @@ platform_shares |>
                caption = "HHI computed from real platform market share data")
 ```
 
+![](../images/digital-market-evolution-1.png)
+
 These real market share figures from EU, US, and South African regulatory proceedings illustrate the concentration patterns that define digital platform markets. The commission rate panel shows how platform fees have evolved in response to regulatory pressure---Apple's reduction from 30% to 15% for small developers (2020), Google's matching response (2021), and the EU's Digital Markets Act requirements for greater fee transparency.
 
 **Data sources:**
@@ -975,11 +820,9 @@ These real market share figures from EU, US, and South African regulatory procee
 
 ## Generative AI and foundation models
 
-The platform competition framework developed above—multi-sided markets, network effects, data as a competitive moat—extends naturally to AI markets. Yet foundation models introduce novel concerns that merit separate treatment: compute concentration, partnership structures that may confer control without acquisition, and rapidly evolving capabilities that challenge static market share analysis.
+The platform competition framework developed above—multi-sided markets, network effects, data as a competitive moat—carries over to AI markets. Foundation models add concerns that merit separate treatment: compute concentration, partnership structures that may confer control without acquisition, and rapidly evolving capabilities that strain static market share analysis.
 
 This section surveys early enforcement thinking on AI markets, adapting concepts from the platform discussion above. As of 2025-2026, enforcement agencies are actively examining AI markets for potential antitrust concerns.
-
-Large language models (LLMs) and generative AI introduce new competitive dynamics that extend traditional platform analysis.
 
 ### Market structure concerns
 
@@ -1000,7 +843,7 @@ Large language models (LLMs) and generative AI introduce new competitive dynamic
 | **Training data exclusivity** | Exclusive licensing of high-quality datasets | Document analysis; entry barrier assessment |
 | **API pricing squeeze** | Below-cost API pricing to foreclose rivals | Margin analysis; comparison to standalone costs |
 | **Distribution bundling** | Tying AI features to dominant platforms | Default/pre-installation analysis (cf. browser cases) |
-| **Talent concentration** | Acqui-hires and non-competes limiting rival innovation | Labor market analysis (see [Chapter 10: Labor Markets](10-labor-markets.md)) |
+| **Talent concentration** | Acqui-hires and non-competes limiting rival innovation | Labor market analysis (see [Chapter 10](chapters/10-labor-markets.md)) |
 
 ### Emerging regulatory frameworks
 
@@ -1031,6 +874,20 @@ For the latest agency guidance, monitor CMA's AI Foundation Models work and FTC/
 
 5. **Conceptual.** A ride-hailing platform argues that high multi-homing rates among drivers prove the market is competitive. Evaluate this argument. Under what conditions could high multi-homing coexist with significant market power on the rider side?
 
+### Data exercise (checkable)
+
+On a search platform, the click-through rate is 35% for the top organic position and 8% for position 4. The platform demotes a rival comparison-shopping service from position 1 to position 4 on a query that runs 1,000,000 times.
+
+a. Compute the rival's lost clicks from the demotion.
+b. Why does this metric matter for a self-preferencing theory of harm?
+
+{% hint style="success" %}
+**Worked answer**
+
+a. Lost clicks = (0.35 - 0.08) x 1,000,000 = 0.27 x 1,000,000 = **270,000 clicks**.
+b. It quantifies the causal traffic diversion from a ranking change -- the empirical core of the *Google Shopping* theory of harm. Tying the click loss to the algorithm change, rather than to organic quality differences, is what separates unlawful self-preferencing from legitimate ranking.
+{% endhint %}
+
 ## Looking ahead
 
-Digital markets evolve rapidly, making the frameworks in this chapter a starting point rather than a final word. In [Chapter 10: Labor Markets](10-labor-markets.md), we apply similar monopsony frameworks to employer-side platform power---gig economy classification, wage-fixing algorithms, and no-poach agreements. [Chapter 12: Litigation Practice](12-litigation-practice.md) covers how to package digital market evidence into expert reports and trial exhibits. Many of the same event-study and difference-in-differences techniques used here to evaluate platform conduct reappear when assessing remedy effectiveness and merger retrospectives.
+Digital markets move fast, so treat the frameworks here as a starting point. [Chapter 10](chapters/10-labor-markets.md) applies similar monopsony frameworks to employer-side platform power---gig economy classification, wage-fixing algorithms, and no-poach agreements. [Chapter 12](chapters/12-litigation-practice.md) covers how to package digital market evidence into expert reports and trial exhibits. Many of the same event-study and difference-in-differences techniques used here to evaluate platform conduct reappear when assessing remedy effectiveness and merger retrospectives.

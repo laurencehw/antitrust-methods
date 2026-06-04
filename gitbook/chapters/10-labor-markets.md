@@ -1,6 +1,6 @@
-# Antitrust and Labor Markets 
+# Antitrust and Labor Markets {#sec-labor-markets}
 
-The preceding chapters focused primarily on product markets---markets where firms sell goods and services to customers. This chapter turns to labor markets, where firms buy the services of workers. The economic logic is parallel but inverted: instead of asking whether sellers have market power to raise prices, we ask whether employers have market power to suppress wages.
+Until now the markets have run one way: firms selling to customers. Labor markets run the other way---firms buying the work of employees---and the economics inverts with them. The question is no longer whether a seller can push price above the competitive level, but whether an employer can hold wages below it.
 
 Labor antitrust has emerged as a major enforcement priority. The DOJ has brought criminal wage-fixing and no-poach cases; the FTC attempted a nationwide ban on noncompete agreements; and academics have documented substantial labor market concentration in many occupations and regions. The tools are familiar---concentration measurement, causal inference, qualitative evidence---but the application to input markets raises distinctive issues, from the statutory labor exemption to the measurement of commuting zones and occupational boundaries.
 
@@ -16,6 +16,7 @@ Labor cases now sit alongside mergers and cartels in agency priorities. This cha
 
 {% hint style="info" %}
 **Labor Antitrust Analysis Workflow**
+
 ```
 MARKET DEFINITION          CONDUCT ANALYSIS          EFFECTS & DAMAGES
        |                          |                         |
@@ -42,38 +43,39 @@ MARKET DEFINITION          CONDUCT ANALYSIS          EFFECTS & DAMAGES
 
 ## The rise of labor antitrust
 
-In January 2021, a federal grand jury in Colorado returned criminal indictments against executives of Pilgrim's Pride Corporation, one of the largest poultry processors in the United States, for conspiring to fix the wages and benefits of plant workers. The charges were remarkable not for the underlying conduct---wage suppression in meatpacking has been documented for over a century---but for the legal theory. The Department of Justice was treating wage-fixing as a criminal offense under Section 1 of the Sherman Act, the same per se framework applied to price-fixing cartels. For decades, labor-side antitrust had been a backwater: agencies occasionally challenged no-poach agreements in civil settlements, and academics wrote theoretical papers on monopsony, but criminal prosecution for suppressing worker pay was virtually unheard of. Pilgrim's Pride signaled that the enforcement landscape had fundamentally shifted.
+In January 2021, a federal grand jury in Colorado returned criminal indictments against executives of Pilgrim's Pride Corporation, one of the largest poultry processors in the United States, for conspiring to fix the wages and benefits of plant workers. The charges were remarkable not for the underlying conduct---wage suppression in meatpacking has been documented for over a century---but for the legal theory. The Department of Justice was treating wage-fixing as a criminal offense under Section 1 of the Sherman Act, the same per se framework applied to price-fixing cartels. For decades, labor-side antitrust had been a backwater: agencies occasionally challenged no-poach agreements in civil settlements, and academics wrote theoretical papers on monopsony, but criminal prosecution for suppressing worker pay was virtually unheard of. Pilgrim's Pride signaled that the enforcement landscape had shifted.
 
-The intellectual groundwork for this shift had been laid over the preceding two decades. @manning_2003 published a landmark treatise arguing that monopsony---employer market power over workers---was not a curiosity confined to isolated company towns but a pervasive feature of modern labor markets. Frictions in job search, geographic immobility, occupational specialization, and information asymmetries all give employers wage-setting power, even in markets with multiple firms. The empirical confirmation came from @azar_marinescu_steinbaum_2020, who computed Herfindahl-Hirschman Indices for labor markets defined as commuting zone--occupation cells using Census Bureau data. Their headline finding was arresting: the average labor market HHI exceeded 3,100, well above the 2,500 threshold that triggers structural presumptions in product-market merger review. In many local labor markets---particularly for healthcare, manufacturing, and food service occupations outside major metropolitan areas---a single employer accounted for more than half of all hiring. The standard antitrust toolkit, it turned out, was directly applicable to labor.
+The intellectual groundwork for this shift had been laid over the preceding two decades. (Manning, 2003) published a landmark treatise arguing that monopsony, employer market power over workers, is a pervasive feature of modern labor markets, not a curiosity confined to isolated company towns. Frictions in job search, geographic immobility, and occupational specialization all give employers wage-setting power, even in markets with multiple firms. The empirical confirmation came from (Azar, Marinescu & Steinbaum, 2020), who computed Herfindahl-Hirschman Indices for labor markets defined as commuting zone--occupation cells using Census Bureau data. Their headline finding was arresting: the average labor market HHI exceeded 3,100, well above the 2,500 threshold that triggers structural presumptions in product-market merger review. In many local labor markets---particularly for healthcare, manufacturing, and food service occupations outside major metropolitan areas---a single employer accounted for more than half of all hiring. The standard antitrust toolkit, it turned out, was directly applicable to labor.
 
-Political momentum followed the academic findings. @krueger_ashenfelter_2018 documented that over half of major fast-food franchisors included no-poach clauses in their franchise agreements, preventing a worker at one McDonald's from moving to another McDonald's owned by a different franchisee---even when no trade secret or training investment justified the restriction. The DOJ and FTC issued joint guidance warning HR professionals that wage-fixing and no-poach agreements could violate antitrust law [@doj_hr_guidance_2016]. The Biden administration's 2021 executive order on promoting competition identified labor market concentration as a priority, and the FTC responded in April 2024 with a rule banning most noncompete agreements nationwide---though a federal court enjoined the rule before it took effect. In under a decade, labor antitrust went from an academic curiosity to a top-three enforcement priority at both federal agencies.
+Political momentum followed the academic findings. (Krueger & Ashenfelter, 2018) documented that over half of major fast-food franchisors included no-poach clauses in their franchise agreements, preventing a worker at one McDonald's from moving to another McDonald's owned by a different franchisee---even when no trade secret or training investment justified the restriction. The DOJ and FTC issued joint guidance warning HR professionals that wage-fixing and no-poach agreements could violate antitrust law (DOJ/FTC HR Guidance, 2016). The Biden administration's 2021 executive order on promoting competition identified labor market concentration as a priority, and the FTC responded in April 2024 with a rule banning most noncompete agreements nationwide---though a federal court enjoined the rule before it took effect. In under a decade, labor antitrust went from an academic curiosity to a top-three enforcement priority at both federal agencies.
 
-The toolkit for labor antitrust transfers almost directly from the product-market methods covered in earlier chapters. The same HHI calculations apply, with commuting zones replacing shipping radii as geographic markets and occupation codes replacing product categories. Difference-in-differences designs exploit policy shocks---noncompete bans, no-poach settlements, wage transparency mandates---just as product-market studies exploit merger consummations or regulatory changes. Event studies track wage and mobility responses to enforcement actions. The adjustments are real but manageable: labor markets require attention to commuting patterns, occupational licensing, and the asymmetry between employer and worker information. The methods, however, are fundamentally the same.
+The toolkit for labor antitrust transfers almost directly from the product-market methods covered in earlier chapters. The same HHI calculations apply, with commuting zones replacing shipping radii as geographic markets and occupation codes replacing product categories. Difference-in-differences designs exploit policy shocks such as noncompete bans, no-poach settlements, and wage transparency mandates, just as product-market studies exploit merger consummations or regulatory changes. Event studies track wage and mobility responses to enforcement actions. The adjustments are real but manageable. Labor markets require attention to commuting patterns, occupational licensing, and the asymmetry between employer and worker information. The methods themselves are the same.
 
-The analytical framework for labor antitrust rests on five pillars. First, **labor concentration measurement** applies the Herfindahl-Hirschman Index to labor markets defined as commuting zone--occupation cells, using data from the BLS Quarterly Census of Employment and Wages, Census LEHD, or South Africa's Quarterly Labour Force Survey. Second, **labor supply elasticity estimation** quantifies the degree of monopsony power by measuring how responsive employment is to wage changes at the firm level---elasticities below 2--3 indicate meaningful market power [@manning_2003; @ashenfelter_farber_ransom_2010]. Third, **event studies and difference-in-differences** designs exploit policy variation---state-level noncompete bans, franchise no-poach settlements, wage transparency mandates---to estimate causal effects on wages and mobility. Fourth, **wage-posting and vacancy analysis** uses job advertisement data from sources like Burning Glass/Lightcast to study how employers set initial offers and how this behavior changes under competitive pressure. Fifth, **qualitative evidence** from HR documents, franchise agreements, worker testimony, and internal communications provides the contextual grounding that transforms statistical patterns into a coherent theory of harm.
+The analytical framework for labor antitrust rests on five pillars. First, **labor concentration measurement** applies the Herfindahl-Hirschman Index to labor markets defined as commuting zone--occupation cells, using data from the BLS Quarterly Census of Employment and Wages, Census LEHD, or South Africa's Quarterly Labour Force Survey. Second, **labor supply elasticity estimation** quantifies the degree of monopsony power by measuring how responsive employment is to wage changes at the firm level---elasticities below 2--3 indicate meaningful market power (Manning, 2003); (Ashenfelter, Farber & Ransom, 2010). Third, **event studies and difference-in-differences** designs exploit policy variation---state-level noncompete bans, franchise no-poach settlements, wage transparency mandates---to estimate causal effects on wages and mobility. Fourth, **wage-posting and vacancy analysis** uses job advertisement data from sources like Burning Glass/Lightcast to study how employers set initial offers and how this behavior changes under competitive pressure. Fifth, **qualitative evidence** from HR documents, franchise agreements, worker testimony, and internal communications provides the contextual grounding that transforms statistical patterns into a coherent theory of harm.
 
 {% hint style="danger" %}
 **Statutory labor exemption**
-**Labor antitrust enforcement targets employer conduct, not worker organizing.** The Clayton Act (Section 6, 1914) declares that "the labor of a human being is not a commodity or article of commerce" and exempts legitimate labor union activities from antitrust. The Norris-LaGuardia Act (1932) further shields collective bargaining, strikes, and boycotts. Thus, while employers agreeing to fix wages or not poach workers violates antitrust, workers collectively bargaining for higher wages through unions does not. The exemption covers union organizing, collective bargaining, and coordinated labor action—but not agreements between unions and employers designed to harm competition in product markets [*Connell Construction v. Plumbers Local 100*, @us_connell_1975].
+
+**Labor antitrust enforcement targets employer conduct, not worker organizing.** The Clayton Act (Section 6, 1914) declares that "the labor of a human being is not a commodity or article of commerce" and exempts legitimate labor union activities from antitrust. The Norris-LaGuardia Act (1932) further shields collective bargaining, strikes, and boycotts. Thus, while employers agreeing to fix wages or not poach workers violates antitrust, workers collectively bargaining for higher wages through unions does not. The exemption covers union organizing, collective bargaining, and coordinated labor action—but not agreements between unions and employers designed to harm competition in product markets [*Connell Construction v. Plumbers Local 100*, (*Connell Construction v. Plumbers Local 100*, 1975)].
 {% endhint %}
 
 ## Measuring labor market power
 
-Before turning to measurement, it helps to clarify the core conceptual distinction. In product markets, market power means a seller can profitably raise prices above the competitive level. In labor markets, monopsony power means a buyer of labor---an employer---can profitably suppress wages below the competitive level. The asymmetry has a practical consequence that surprises many practitioners: a firm can be tiny in its product market yet dominant in its local labor market. A rural hospital may account for less than 1% of national healthcare revenue, making it irrelevant in any product-market merger analysis. But if it is the only employer of registered nurses within a 60-mile radius, it wields enormous monopsony power over those workers. The nurses cannot easily commute to the next hospital, retrain for a different occupation, or relocate their families. The hospital knows this and can set wages accordingly.
+Start with the core conceptual distinction. In product markets, market power means a seller can profitably raise prices above the competitive level. In labor markets, monopsony power means a buyer of labor---an employer---can profitably suppress wages below the competitive level. The asymmetry has a practical consequence that surprises many practitioners: a firm can be tiny in its product market yet dominant in its local labor market. A rural hospital may account for less than 1% of national healthcare revenue, making it irrelevant in any product-market merger analysis. But if it is the only employer of registered nurses within a 60-mile radius, it wields enormous monopsony power over those workers. The nurses cannot easily commute to the next hospital, retrain for a different occupation, or relocate their families. The hospital knows this and can set wages accordingly.
 
-This means that labor market definition departs from product-market conventions in important ways. The geographic dimension is defined by commuting zones---clusters of counties where workers live and work, typically delineated by the USDA Economic Research Service from Census commuting-flow data---rather than by shipping radii or customer willingness to travel. The product dimension is occupation, defined by Standard Occupational Classification (SOC) codes, rather than product characteristics or demand substitution patterns. Within these narrowly defined commuting zone--occupation cells, concentration is often startlingly high. @azar_marinescu_steinbaum_2020 found that more than 60% of such cells in the United States are "highly concentrated" by the 2,500-point HHI standard used in product-market merger review. Rural areas, healthcare occupations, and food-processing regions show the most extreme concentration, but even suburban labor markets for common occupations like truck driving or warehouse work frequently exceed the structural presumption threshold.
+This means that labor market definition departs from product-market conventions in important ways. The geographic dimension is defined by commuting zones---clusters of counties where workers live and work, typically delineated by the USDA Economic Research Service from Census commuting-flow data---rather than by shipping radii or customer willingness to travel. The product dimension is occupation, defined by Standard Occupational Classification (SOC) codes, rather than product characteristics or demand substitution patterns. Within these narrowly defined commuting zone--occupation cells, concentration is often startlingly high. (Azar, Marinescu & Steinbaum, 2020) found that more than 60% of such cells in the United States are "highly concentrated" by the 2,500-point HHI standard used in product-market merger review. Rural areas, healthcare occupations, and food-processing regions show the most extreme concentration, but even suburban labor markets for common occupations like truck driving or warehouse work frequently exceed the structural presumption threshold.
 
 ### Concentration indices
 
-Measuring concentration in labor markets requires adapting the product-market toolkit in ways that are conceptually straightforward but practically important. In product markets, the analyst observes prices and quantities directly: if a cartel raises prices, the effect is visible in transaction data. In labor markets, the analogous observable is the wage --- but wages are the outcome of a matching process between heterogeneous workers and heterogeneous employers, not a posted price. A firm does not publish a wage schedule the way it publishes a product price. Instead, wages emerge from individual negotiations, internal pay bands, and institutional constraints (minimum wages, union contracts, civil service scales) that vary across employers even within the same occupation and geography. This means that labor market concentration measures must account for wage dispersion within cells that would be treated as homogeneous in product-market analysis.
+Measuring concentration in labor markets requires adapting the product-market toolkit in ways that are conceptually straightforward but practically important. In product markets, the analyst observes prices and quantities directly: if a cartel raises prices, the effect is visible in transaction data. In labor markets, the analogous observable is the wage. But wages are the outcome of a matching process between heterogeneous workers and heterogeneous employers, not a posted price. A firm does not publish a wage schedule the way it publishes a product price. Wages emerge from individual negotiations, internal pay bands, and institutional constraints (minimum wages, union contracts, civil service scales) that vary across employers even within the same occupation and geography. Labor market concentration measures must therefore account for wage dispersion within cells that would be treated as homogeneous in product-market analysis.
 
-Moreover, the relevant unit of analysis differs. In product markets, the relevant share is the firm's share of sales in the relevant market. In labor markets, the relevant share is the firm's share of employment (or job opportunities) in the relevant commuting zone--occupation cell. But employment shares are not directly observable in most data sources: the BLS QCEW reports establishment-level employment by industry and county, not by occupation, and the Census LEHD provides worker-level links between employees and employers but requires special access arrangements. The analyst must therefore make assumptions about the mapping from industry codes to occupation categories, and from county boundaries to commuting zones. These assumptions introduce measurement error that tends to bias concentration estimates downward --- meaning that reported HHI figures are likely lower bounds on true labor market concentration.
+The relevant unit of analysis also differs. In product markets, the relevant share is the firm's share of sales in the relevant market. In labor markets, the relevant share is the firm's share of employment (or job opportunities) in the relevant commuting zone--occupation cell. But employment shares are not directly observable in most data sources: the BLS QCEW reports establishment-level employment by industry and county, not by occupation, and the Census LEHD provides worker-level links between employees and employers but requires special access arrangements. The analyst must therefore make assumptions about the mapping from industry codes to occupation categories, and from county boundaries to commuting zones. These assumptions introduce measurement error that tends to bias concentration estimates downward, so reported HHI figures are likely lower bounds on true labor market concentration.
 
 Computing concentration indices for labor markets follows the same mechanics as product-market HHI calculation, but the data sources and market definitions differ in important ways. The analyst begins by defining the relevant labor market as a commuting zone--occupation cell. Commuting zones, delineated by the USDA Economic Research Service from Census commuting-flow data, group counties based on actual worker commuting patterns rather than arbitrary administrative boundaries. Occupation codes, drawn from the Standard Occupational Classification system, provide the product dimension. Within each cell, the analyst computes employment shares for each employer and calculates HHI as the sum of squared shares multiplied by 10,000.
 
 The data infrastructure for this calculation varies by jurisdiction. In the United States, the BLS Quarterly Census of Employment and Wages provides establishment-level employment counts by county and industry, while the Census LEHD Origin-Destination Employment Statistics offer finer-grained worker-level data linking employees to specific employers over time. Both require careful aggregation to protect confidentiality and to map industry codes to occupation categories. In South Africa, Statistics South Africa's Quarterly Labour Force Survey provides aggregate employment by occupation and province, though employer-level microdata requires special access arrangements through the DataFirst repository at the University of Cape Town.
 
-For empirical evidence on labor market concentration, see @azar_marinescu_steinbaum_2020, who found average labor market HHI exceeding 3,100, and @benmelech_bergman_kim_2020, who documented similar patterns using establishment-level data from the Census Bureau's County Business Patterns. Both studies confirm that labor market concentration is pervasive and that it correlates with lower wages, reduced job mobility, and higher inequality.
+For empirical evidence on labor market concentration, see (Azar, Marinescu & Steinbaum, 2020), who found average labor market HHI exceeding 3,100, and (Benmelech, Bergman & Kim, 2020), who documented similar patterns using establishment-level data from the Census Bureau's County Business Patterns. Both studies confirm that labor market concentration is pervasive and that it correlates with lower wages, reduced job mobility, and higher inequality.
 
 ```r
 library(dplyr)
@@ -197,6 +199,12 @@ bls_emp <- tryCatch({
 }, error = function(e) NULL)
 
 if (!is.null(bls_emp)) {
+  ces_caption <- if ("data_source" %in% names(bls_emp) &&
+                     any(bls_emp$data_source == "synthetic_fallback")) {
+    "SYNTHETIC fallback data for illustration only — run program/scripts/03_bls_labor.R with BLS_KEY for real CES data."
+  } else {
+    "Source: BLS Current Employment Statistics (CES). Real API data."
+  }
   ggplot(bls_emp, aes(x = date, y = employment, color = industry)) +
     geom_line(linewidth = 0.9) +
     scale_y_continuous(labels = scales::comma) +
@@ -204,7 +212,7 @@ if (!is.null(bls_emp)) {
       title = "US Employment by Major Industry (BLS Data)",
       subtitle = "Thousands of employees, seasonally adjusted",
       x = NULL, y = "Employment (thousands)", color = NULL,
-      caption = "Source: BLS Current Employment Statistics (CES). Real API data."
+      caption = ces_caption
     ) +
     theme_antitrust() +
     theme(legend.position = "bottom")
@@ -212,6 +220,8 @@ if (!is.null(bls_emp)) {
   cat("BLS data not available. Run program/scripts/03_bls_labor.R first.\n")
 }
 ```
+
+![](../images/labor-bls-employment-1.png)
 
 The following analysis uses real BLS Quarterly Census of Employment and Wages (QCEW) data to measure employment concentration at the county level---a proxy for the labor market vulnerability that monopsony analysis seeks to capture.
 
@@ -271,6 +281,13 @@ if (!is.null(qcew_result)) {
   # Panel A: Distribution of employer concentration across all counties
   yr2023 <- qcew_result$yr2023
 
+  # Honest labelling: if 03_bls_labor.R wrote a synthetic fallback, say so.
+  qcew_synth <- "data_source" %in% names(yr2023) &&
+    any(yr2023$data_source == "synthetic_fallback")
+  qcew_note <- if (qcew_synth) {
+    "SYNTHETIC fallback for illustration only — not real QCEW data; run program/scripts/03_bls_labor.R with network access.\n"
+  } else ""
+
   # Create concentration bins matching merger guideline thresholds
   yr2023 <- yr2023 |>
     mutate(
@@ -307,6 +324,7 @@ if (!is.null(qcew_result)) {
       y = "Number of counties",
       fill = "County employment size",
       caption = paste0(
+        qcew_note,
         "Source: BLS Quarterly Census of Employment and Wages, 2023 annual data.\n",
         "Uniform-size proxy is a lower bound: actual employer-level HHI is higher ",
         "because firms vary in size.\nAzar, Marinescu & Steinbaum (2020) find ",
@@ -339,6 +357,7 @@ if (!is.null(qcew_result)) {
       subtitle = "Private-sector counties with ≥ 200 employees, ranked by HHI proxy",
       x = "Estimated HHI (uniform-size proxy)", y = NULL,
       caption = paste0(
+        qcew_note,
         "Source: BLS QCEW, 2023. Labels show establishment count and total ",
         "employment.\nWith only 17–55 establishments, these counties' actual ",
         "employer-level HHI may exceed merger-review thresholds."
@@ -365,6 +384,8 @@ if (!is.null(qcew_result)) {
       "Place qcew_county_employment.csv in data/raw/.\n")
 }
 ```
+
+![](../images/labor-qcew-hhi-1.png)
 
 Counties with high industry concentration are more vulnerable to monopsony power: when a small number of employers dominate local employment, workers have fewer outside options, giving employers greater wage-setting leverage. This pattern is especially pronounced in rural counties dominated by healthcare, manufacturing, or resource extraction. The uniform-size proxy shown here is a lower bound on true HHI---actual employer-size inequality would push these figures higher still, reinforcing the concern that many local labor markets are "highly concentrated" by the same standards applied in product-market merger review.
 
@@ -403,13 +424,13 @@ elasticity_model <- feols(
 summary(elasticity_model)
 ```
 
-The coefficient on log wages in the employment equation estimates the firm-level labor supply elasticity. Use matched employer-employee data (LEHD, SSA, UI wage records) or firm-level HR exports for production estimates. Elasticities below 2--3 indicate meaningful monopsony power: the firm can reduce wages without losing most of its workforce [@manning_2003; @ashenfelter_farber_ransom_2010]. For policy implications, see @naidu_posner_weyl_2018.
+The coefficient on log wages in the employment equation estimates the firm-level labor supply elasticity. Use matched employer-employee data (LEHD, SSA, UI wage records) or firm-level HR exports for production estimates. Elasticities below 2--3 indicate meaningful monopsony power: the firm can reduce wages without losing most of its workforce (Manning, 2003); (Ashenfelter, Farber & Ransom, 2010). For policy implications, see (Naidu, Posner & Weyl, 2018).
 
-The labor supply elasticity is the single most important parameter in monopsony analysis. An elasticity of 1.5 means that a 10% wage cut would reduce the firm's workforce by only 15%---a trade-off that is profitable whenever the wage savings on remaining workers exceed the cost of lost output. By contrast, an elasticity of 10 would mean the same 10% wage cut loses half the workforce, making wage suppression unprofitable. The empirical literature consistently finds firm-level elasticities in the range of 1--5 for most occupations, well below the levels that would characterize competitive labor markets [@manning_2003]. @ashenfelter_farber_ransom_2010 survey the evidence and conclude that monopsony power is "not a curiosity but a pervasive feature of labor markets." For a synthesis of policy responses, see @naidu_posner_weyl_2018.
+The labor supply elasticity is the single most important parameter in monopsony analysis. An elasticity of 1.5 means that a 10% wage cut would reduce the firm's workforce by only 15%---a trade-off that is profitable whenever the wage savings on remaining workers exceed the cost of lost output. By contrast, an elasticity of 10 would mean the same 10% wage cut loses half the workforce, making wage suppression unprofitable. The empirical literature consistently finds firm-level elasticities in the range of 1--5 for most occupations, well below the levels that would characterize competitive labor markets (Manning, 2003). (Ashenfelter, Farber & Ransom, 2010) survey the evidence and conclude that monopsony power is "not a curiosity but a pervasive feature of labor markets." For a synthesis of policy responses, see (Naidu, Posner & Weyl, 2018).
 
 ## Noncompetes, no-poach, and wage fixing
 
-Noncompete agreements---contractual clauses that prevent a worker from joining a competitor or starting a competing business for a specified period after leaving an employer---are among the most widespread restraints on labor market competition. Estimates suggest that roughly 18% of American workers are currently bound by a noncompete, and the figure has historically been even higher. Critically, noncompetes are not confined to senior executives with access to genuine trade secrets. Studies have documented their use among fast-food workers, warehouse employees, hair stylists, and yoga instructors---workers with no proprietary knowledge to protect. The economic harms are well-established: noncompetes reduce job-to-job mobility by 8--10%, suppress wages by an estimated 3--4% on average, diminish knowledge spillovers between firms, and reduce entrepreneurship rates. Workers bound by noncompetes are less likely to receive outside job offers (because prospective employers know they cannot be hired) and therefore lose bargaining leverage even if the noncompete is never formally enforced.
+Noncompete agreements are contractual clauses that prevent a worker from joining a competitor or starting a competing business for a specified period after leaving an employer. They are among the most widespread restraints on labor market competition. Estimates suggest that roughly 18% of American workers are currently bound by a noncompete, and the figure has historically been even higher. Noncompetes are not confined to senior executives with access to genuine trade secrets. Studies have documented their use among fast-food workers, warehouse employees, and yoga instructors---workers with no proprietary knowledge to protect. The economic harms are well documented: noncompetes reduce job-to-job mobility by 8--10%, suppress wages by an estimated 3--4% on average, and reduce entrepreneurship rates. Workers bound by noncompetes are less likely to receive outside job offers (because prospective employers know they cannot be hired) and therefore lose bargaining leverage even if the noncompete is never formally enforced.
 
 The legal treatment of noncompetes varies dramatically across jurisdictions, creating a patchwork of natural experiments that researchers can exploit. California has refused to enforce noncompetes since 1872 under Business and Professions Code Section 16600, a policy that many scholars credit with facilitating Silicon Valley's culture of employee mobility and knowledge diffusion. At the other extreme, many U.S. states enforce noncompetes under a "reasonableness" standard that permits restrictions of one to two years for workers with access to confidential information. The FTC's April 2024 rule would have banned most noncompetes nationwide, but a federal district court in *Ryan LLC v. FTC* enjoined the rule in August 2024, and its legal future remains uncertain. Internationally, the United Kingdom applies a reasonableness test similar to U.S. common law but with shorter typical durations; several EU member states require employers to pay compensation during the noncompete period, effectively pricing the restriction; and South Africa enforces restraint-of-trade clauses subject to a public-interest balancing test. These varied regimes---particularly the cross-state variation within the United States---provide the identifying variation for difference-in-differences and event-study designs that estimate the causal effects of noncompete enforcement on wages, mobility, and innovation.
 
@@ -432,27 +453,28 @@ Substitute actual wage data (BLS Occupational Employment and Wage Statistics, CP
 
 ### The FTC noncompete ban and its aftermath
 
-In April 2024, the FTC finalized a rule [@ftc_noncompete_2023] banning most noncompete agreements nationwide, concluding that these clauses constitute unfair methods of competition under Section 5 of the FTC Act. The rule would have voided existing noncompetes for all workers except senior executives and prohibited new noncompetes going forward. Before it could take effect, federal courts in *Ryan LLC v. FTC* (N.D. Texas, August 2024) enjoined the rule nationwide, holding that the FTC likely exceeded its statutory authority. As of this writing the rule's future remains uncertain pending appellate review. Regardless of the rule's legal fate, the episode is significant for empirical researchers. The FTC's rulemaking process generated extensive public comments and economic analysis estimating that noncompetes suppress wages by roughly 3--4% on average and reduce job-to-job mobility by 8--10%. More importantly, the brief period between the rule's announcement (January 2023 proposed rule, April 2024 final rule) and its injunction created a natural experiment: some employers preemptively dropped noncompetes in anticipation of the ban, while others retained them. Researchers can exploit this staggered, voluntary compliance as an instrument for studying the causal effects of noncompete removal on wages, mobility, and entrepreneurship---a before-and-after design that is more credible than cross-state comparisons because it operates within the same regulatory environment.
+In April 2024, the FTC finalized a rule (FTC Non-Compete Clause Rule, 2023) banning most noncompete agreements nationwide, concluding that these clauses constitute unfair methods of competition under Section 5 of the FTC Act. The rule would have voided existing noncompetes for all workers except senior executives and prohibited new noncompetes going forward. Before it could take effect, federal courts in *Ryan LLC v. FTC* (N.D. Texas, August 2024) enjoined the rule nationwide, holding that the FTC likely exceeded its statutory authority. As of this writing the rule's future remains uncertain pending appellate review. Regardless of the rule's legal fate, the episode is significant for empirical researchers. The FTC's rulemaking process generated extensive public comments and economic analysis estimating that noncompetes suppress wages by roughly 3--4% on average and reduce job-to-job mobility by 8--10%. The brief period between the rule's announcement (January 2023 proposed rule, April 2024 final rule) and its injunction created a natural experiment. Some employers preemptively dropped noncompetes in anticipation of the ban, while others retained them. Researchers can exploit this staggered, voluntary compliance to study the causal effects of noncompete removal on wages, mobility, and entrepreneurship. The before-and-after design is more credible than cross-state comparisons because it operates within the same regulatory environment.
 
-The economic case against noncompetes rests on both efficiency and distributional grounds. From an efficiency perspective, noncompetes reduce the matching quality between workers and employers: a worker bound by a noncompete cannot move to a firm where their skills would be more productive, reducing aggregate output. They also suppress knowledge spillovers---the informal diffusion of ideas and techniques that occurs when workers move between firms---which are particularly important for innovation in technology-intensive industries. California's refusal to enforce noncompetes under Business and Professions Code Section 16600 is widely credited with facilitating the employee mobility that underpins Silicon Valley's innovation ecosystem [@fallick_fleischman_rebitzer_2006; @marx_strumsky_henderson_2009]. From a distributional perspective, noncompetes disproportionately affect lower-wage workers who lack the bargaining power to negotiate them away and who face the greatest financial hardship from periods of forced non-employment.
+The economic case against noncompetes rests on both efficiency and distributional grounds. From an efficiency perspective, noncompetes reduce the matching quality between workers and employers: a worker bound by a noncompete cannot move to a firm where their skills would be more productive, reducing aggregate output. They also suppress knowledge spillovers---the informal diffusion of ideas and techniques that occurs when workers move between firms---which are particularly important for innovation in technology-intensive industries. California's refusal to enforce noncompetes under Business and Professions Code Section 16600 is widely credited with facilitating the employee mobility that underpins Silicon Valley's innovation ecosystem (Fallick Fleischman Rebitzer, 2006); (Marx Strumsky Henderson, 2009). From a distributional perspective, noncompetes disproportionately affect lower-wage workers who lack the bargaining power to negotiate them away and who face the greatest financial hardship from periods of forced non-employment.
 
 ### Franchise no-poach analysis
 
-No-poach agreements between franchisees---where one franchise location agrees not to hire or solicit workers from another location of the same brand---have come under intense scrutiny as a form of horizontal wage suppression. The DOJ has treated naked no-poach agreements (those not ancillary to a legitimate collaboration) as per se illegal under Section 1 of the Sherman Act, applying the same framework used for bid-rigging and price-fixing. This distinction matters: a no-poach clause that is reasonably necessary to protect a franchisor's investment in training may survive rule-of-reason analysis, but a blanket prohibition on hiring across franchise locations that serves no purpose other than suppressing worker mobility is treated as a criminal offense. The DOJ's prosecution of *United States v. Jindal* [@us_jindal_2021], involving a healthcare staffing company executive who agreed with competitors to fix nurses' pay rates and allocate markets, marked a milestone as one of the first criminal no-poach cases to go to trial, even though the jury acquitted on the allocation count. The DaVita prosecutions [@us_davita_2022] in the dialysis industry further underscored the government's willingness to bring criminal charges against corporate officers for no-poach and non-solicitation agreements (see the case box below).
+No-poach agreements between franchisees---where one franchise location agrees not to hire or solicit workers from another location of the same brand---have come under intense scrutiny as a form of horizontal wage suppression. The DOJ has treated naked no-poach agreements (those not ancillary to a legitimate collaboration) as per se illegal under Section 1 of the Sherman Act, applying the same framework used for bid-rigging and price-fixing. This distinction matters: a no-poach clause that is reasonably necessary to protect a franchisor's investment in training may survive rule-of-reason analysis, but a blanket prohibition on hiring across franchise locations that serves no purpose other than suppressing worker mobility is treated as a criminal offense. The DOJ's prosecution of *United States v. Jindal* (*United States v. Jindal*, 2021), involving a healthcare staffing company executive who agreed with competitors to fix nurses' pay rates and allocate markets, marked a milestone as one of the first criminal no-poach cases to go to trial, even though the jury acquitted on the allocation count. The DaVita prosecutions (*United States v. DaVita*, 2022) in the dialysis industry further underscored the government's willingness to bring criminal charges against corporate officers for no-poach and non-solicitation agreements (see the case box below).
 
-From an empirical standpoint, franchise no-poach analysis requires careful contract review to extract the scope, duration, and geographic reach of restrictive clauses. Researchers should examine franchise disclosure documents (FDDs), which are publicly filed and contain the relevant contractual provisions. @krueger_ashenfelter_2018 documented that a majority of major fast-food franchisors included no-poach clauses in their franchise agreements, effectively preventing workers at one McDonald's or Burger King location from moving to another location of the same brand---even when owned by a different franchisee. The empirical consequence is reduced outside options for low-wage workers who may have limited occupational mobility to begin with.
+From an empirical standpoint, franchise no-poach analysis requires careful contract review to extract the scope, duration, and geographic reach of restrictive clauses. Researchers should examine franchise disclosure documents (FDDs), which are publicly filed and contain the relevant contractual provisions. (Krueger & Ashenfelter, 2018) documented that a majority of major fast-food franchisors included no-poach clauses in their franchise agreements, effectively preventing workers at one McDonald's or Burger King location from moving to another location of the same brand---even when owned by a different franchisee. The empirical consequence is reduced outside options for low-wage workers who may have limited occupational mobility to begin with.
 
-Evaluating the effects of no-poach removal requires transaction-level data. Payroll or scheduling records can track cross-franchise transfers before and after clause removal, while event-study designs can assess wage and hiring patterns following state enforcement actions. The Washington State Attorney General's settlements with major fast-food chains (2018--2019), which required the removal of no-poach clauses nationwide, provide a natural experiment. Researchers can compare wage trajectories and worker turnover at affected franchise brands against unaffected employers in the same local labor markets. See @doj_hr_guidance_2016 for the DOJ and FTC's joint guidance on human resources professionals and antitrust compliance.
+Evaluating the effects of no-poach removal requires transaction-level data. Payroll or scheduling records can track cross-franchise transfers before and after clause removal, while event-study designs can assess wage and hiring patterns following state enforcement actions. The Washington State Attorney General's settlements with major fast-food chains (2018--2019), which required the removal of no-poach clauses nationwide, provide a natural experiment. Researchers can compare wage trajectories and worker turnover at affected franchise brands against unaffected employers in the same local labor markets. See (DOJ/FTC HR Guidance, 2016) for the DOJ and FTC's joint guidance on human resources professionals and antitrust compliance.
 
-The DOJ's 2016 guidance [@doj_hr_guidance_2016] marked a turning point in enforcement posture. Prior to this guidance, most HR professionals were unaware that wage-fixing and no-poach agreements could trigger criminal liability. The guidance made clear that "naked" wage-fixing agreements---those not ancillary to a legitimate collaboration such as a joint venture---would be prosecuted criminally, on par with price-fixing cartels. This was a significant escalation from the prior practice of civil settlements and consent orders. The guidance was accompanied by a series of outreach sessions for HR professionals, signaling that the agencies intended to build compliance from the ground up rather than relying solely on after-the-fact enforcement.
+The DOJ's 2016 guidance (DOJ/FTC HR Guidance, 2016) marked a turning point in enforcement posture. Prior to this guidance, most HR professionals were unaware that wage-fixing and no-poach agreements could trigger criminal liability. The guidance made clear that "naked" wage-fixing agreements---those not ancillary to a legitimate collaboration such as a joint venture---would be prosecuted criminally, on par with price-fixing cartels. This was a significant escalation from the prior practice of civil settlements and consent orders. The guidance was accompanied by a series of outreach sessions for HR professionals, signaling that the agencies intended to build compliance from the ground up rather than relying solely on after-the-fact enforcement.
 
 {% hint style="info" %}
 **Case box: United States v. DaVita Inc. --- Criminal No-Poach in Dialysis**
+
 In 2021, the DOJ indicted DaVita Inc., the largest dialysis services provider in the United States, and its former CEO Kent Thiry on charges of conspiring with competing healthcare companies to suppress competition for employees. The government alleged that from 2012 to 2019, DaVita entered into agreements with at least three competitors---including Surgical Care Affiliates and two unnamed co-conspirators---not to solicit each other's senior employees. These were not ancillary to any joint venture or legitimate collaboration; they were standalone agreements to divide the labor market.
 
 The case was significant for several reasons. First, it was among the first criminal prosecutions of no-poach agreements under Section 1 of the Sherman Act, signaling the DOJ's willingness to treat labor market allocation with the same severity as price-fixing cartels. Second, the defendants were high-profile corporate leaders, not mid-level managers, demonstrating that the agency was targeting conduct at the highest levels of corporate governance. Third, the alleged conspiracy spanned nearly a decade, suggesting that no-poach agreements can persist undetected for extended periods when they operate through informal channels rather than written contracts.
 
-In April 2022, a federal jury in the District of Colorado acquitted Thiry and DaVita on the criminal charges, dealing a setback to the DOJ's strategy of pursuing no-poach agreements under per se criminal liability. The acquittal highlighted the evidentiary challenges of proving criminal intent in labor market allocation cases, particularly when the agreements are informal and the defendants can argue that the restrictions were motivated by legitimate business concerns such as protecting training investments. Nevertheless, the case reshaped compliance practices across the healthcare industry: DaVita separately paid $53.6 million to settle a related civil class action brought by affected employees, and major health systems began auditing and removing informal no-poach arrangements from their HR practices. The case illustrates both the promise and the difficulty of criminal labor antitrust enforcement [@us_davita_2022; @us_jindal_2021].
+In April 2022, a federal jury in the District of Colorado acquitted Thiry and DaVita on the criminal charges, dealing a setback to the DOJ's strategy of pursuing no-poach agreements under per se criminal liability. The acquittal highlighted the evidentiary challenges of proving criminal intent in labor market allocation cases, particularly when the agreements are informal and the defendants can argue that the restrictions were motivated by legitimate business concerns such as protecting training investments. Nevertheless, the case reshaped compliance practices across the healthcare industry: DaVita separately paid $53.6 million to settle a related civil class action brought by affected employees, and major health systems began auditing and removing informal no-poach arrangements from their HR practices. The case illustrates both the promise and the difficulty of criminal labor antitrust enforcement (*United States v. DaVita*, 2022); (*United States v. Jindal*, 2021).
 {% endhint %}
 
 ### Synthetic control for single-state reforms
@@ -498,7 +520,7 @@ abline(v = 2017, lty = 2)  # Policy implementation
 - **Post-treatment gap:** The difference between actual and synthetic Washington after 2017 estimates the policy effect.
 - **Placebo tests:** Run the same analysis on each donor state (pretending it was treated). If the Washington effect is larger than most placebos, the finding is more credible.
 
-For the `Synth` package, see @abadie_diamond_hainmueller_2010. For applications to labor policy, see @dube_lester_reich_2016.
+For the `Synth` package, see (Abadie, Diamond & Hainmueller, 2010). For applications to labor policy, see (Dube, Lester & Reich, 2016).
 
 ## Wage posting vs. realized wages
 
@@ -514,94 +536,24 @@ Worker mobility data provides some of the most direct evidence of labor market b
 
 Retention metrics complement mobility analysis by capturing the employer side of the relationship. Key performance indicators include median tenure, voluntary quit rates, rehire rates (boomerang employees), and the share of separations followed by extended non-employment spells. In a competitive labor market, voluntary quit rates should be responsive to outside wage offers: when a competitor raises wages, quit rates at non-adjusting firms should increase. Under monopsony, quit rates are less responsive because workers face high switching costs---whether from noncompetes, pension forfeiture, visa sponsorship ties, or thin local labor markets. Practitioners evaluating mergers or restraints can use pre- and post-event changes in these retention KPIs to measure the competitive effects of the conduct at issue.
 
-Heterogeneity analysis is essential for both economic rigor and public interest considerations. Worker mobility and the effects of labor market restraints vary substantially by occupation, education level, gender, race, immigration status, and geography. For example, noncompete agreements may bind most tightly on mid-career workers with specialized skills and limited geographic mobility, while having little practical effect on entry-level workers in thick urban labor markets. Commuting pattern data (from LEHD Origin-Destination statistics or the American Community Survey) can reveal how geographic constraints define effective labor market boundaries differently for workers with and without access to reliable transportation. Segmenting results along these dimensions ensures that concentration measures and policy evaluations capture the full distributional impact of employer conduct.
+Heterogeneity analysis matters for both economic rigor and public interest considerations. Worker mobility and the effects of labor market restraints vary by occupation, education level, gender, race, immigration status, and geography. Noncompete agreements may bind most tightly on mid-career workers with specialized skills and limited geographic mobility, while having little practical effect on entry-level workers in thick urban labor markets. Commuting pattern data (from LEHD Origin-Destination statistics or the American Community Survey) can reveal how geographic constraints define effective labor market boundaries differently for workers with and without access to reliable transportation. Segmenting results along these dimensions ensures that concentration measures and policy evaluations capture the full distributional impact of employer conduct.
 
 ## Southern African enforcement snapshots
 
 South Africa's Competition Commission has emerged as one of the more active competition authorities in the developing world, and its recent market inquiries bear directly on labor antitrust---even when the inquiries were not framed in those terms. The Commission operates under the Competition Act of 1998, which includes a distinctive public-interest mandate requiring consideration of employment effects, small business participation, and historically disadvantaged persons in merger and conduct analysis. This institutional context means that labor market impacts surface more explicitly in South African competition proceedings than in most other jurisdictions, offering a comparative lens on how competition enforcement can address employer market power.
 
-**Healthcare wage dynamics and monopsony.** The Healthcare Market Inquiry (2014--2019) found that Netcare, Mediclinic, and Life Healthcare collectively controlled over 80% of private hospital beds and 90% of admissions, a degree of concentration that enabled sustained above-competitive pricing for facility fees and created structural monopsony conditions for healthcare workers [@sa_hmi_2019]. The labor-side implications were acute during the COVID-19 pandemic, when the three hospital groups coordinated their use of agency nurses---temporary nursing staff supplied by private staffing agencies---effectively setting common rate ceilings for agency placements. The Commission's investigation drew on payroll analysis comparing agency nurse rates across hospital groups and time periods, supplemented by interviews with nurses and agency operators who described a market in which the major hospital groups benchmarked their agency rates against each other rather than competing for scarce nursing labor. The inquiry recommended supply-side regulation and a dedicated health sector regulator to address both the product-market and labor-market dimensions of hospital concentration. The HMI's findings are notable because they explicitly linked product-market concentration to labor-market harm---a connection that US and EU authorities have been slower to articulate in formal proceedings.
+**Healthcare wage dynamics and monopsony.** The Healthcare Market Inquiry (2014--2019) found that Netcare, Mediclinic, and Life Healthcare collectively controlled over 80% of private hospital beds and 90% of admissions, a degree of concentration that enabled sustained above-competitive pricing for facility fees and created structural monopsony conditions for healthcare workers (Sa Hmi, 2019). The labor-side implications were acute during the COVID-19 pandemic, when the three hospital groups coordinated their use of agency nurses---temporary nursing staff supplied by private staffing agencies---effectively setting common rate ceilings for agency placements. The Commission's investigation drew on payroll analysis comparing agency nurse rates across hospital groups and time periods, supplemented by interviews with nurses and agency operators who described a market in which the major hospital groups benchmarked their agency rates against each other rather than competing for scarce nursing labor. The inquiry recommended supply-side regulation and a dedicated health sector regulator to address both the product-market and labor-market dimensions of hospital concentration. The HMI's findings are notable because they explicitly linked product-market concentration to labor-market harm---a connection that US and EU authorities have been slower to articulate in formal proceedings.
 
 **Retail labor and supplier squeeze.** The Grocery Retail Market Inquiry (2019) examined exclusive lease agreements between major retailers---Shoprite, Pick n Pay, Spar, and Woolworths---and shopping-mall landlords, finding that long-term exclusivity clauses entrenched incumbent market power and raised barriers to entry for smaller competitors. While framed as a product-market inquiry, the GRMI's findings have direct labor-market implications. Concentrated retail markets compress margins for small suppliers and their workforces: when a handful of supermarket chains control procurement channels, they can dictate terms to food processors, logistics firms, and agricultural intermediaries, and those cost pressures flow through to the wages and working conditions of employees throughout the supply chain. The Commission examined scheduling data and workforce composition at major retailers, and received testimony from trade unions representing retail and warehouse workers about the competitive effects of market concentration on wages, hours, and working conditions in the sector. The GRMI's recommended remedies---including restrictions on exclusive lease clauses and support for small supplier participation---illustrate how South Africa's public-interest mandate produces remedies that address labor-market harm indirectly, through supply-chain restructuring rather than direct wage regulation.
 
-**Gig platforms and e-hailing.** The Online Intermediation Platforms Market Inquiry (2023) examined platform competition across food delivery, e-commerce, software app stores, travel, and online classifieds [@sa_oipmi_2023]. The inquiry found that Uber Eats and Mr D Food imposed opaque commission structures and menu surcharges on independent restaurants, and required these platforms to adopt standardised tiered commission fee structures with greater transparency. Although the inquiry formally excluded ride-hailing (e-hailing) services from its scope, its findings have significant implications for gig-economy labor conditions. The Commission documented multi-homing constraints---platform rules and incentive structures that discourage drivers and restaurants from operating across competing platforms---along with commission escalators that increase the platform's take rate as a worker's dependence on the platform grows. The recommended remedies included transparency dashboards requiring platforms to disclose per-trip earnings breakdowns, commission rates, and algorithmic pricing factors to drivers and delivery workers. These transparency measures represent an emerging model for addressing information asymmetries in gig labor markets, where the platform's control over matching algorithms, surge pricing, and performance ratings gives it structural advantages in its relationship with nominally independent workers. The OIPMI's approach---using market inquiry powers to investigate platform labor conditions without requiring a formal finding of anticompetitive conduct---offers a model that US and EU authorities, constrained by more restrictive legal frameworks, might consider adopting.
+**Gig platforms and e-hailing.** The Online Intermediation Platforms Market Inquiry (2023) examined platform competition across food delivery, e-commerce, software app stores, travel, and online classifieds (SA OIPMI Final Report, 2023). The inquiry found that Uber Eats and Mr D Food imposed opaque commission structures and menu surcharges on independent restaurants, and required these platforms to adopt standardised tiered commission fee structures with greater transparency. Although the inquiry formally excluded ride-hailing (e-hailing) services from its scope, its findings have significant implications for gig-economy labor conditions. The Commission documented multi-homing constraints---platform rules and incentive structures that discourage drivers and restaurants from operating across competing platforms---along with commission escalators that increase the platform's take rate as a worker's dependence on the platform grows. The recommended remedies included transparency dashboards requiring platforms to disclose per-trip earnings breakdowns, commission rates, and algorithmic pricing factors to drivers and delivery workers. These transparency measures represent an emerging model for addressing information asymmetries in gig labor markets, where the platform's control over matching algorithms, surge pricing, and performance ratings gives it structural advantages in its relationship with nominally independent workers. The OIPMI's approach---using market inquiry powers to investigate platform labor conditions without requiring a formal finding of anticompetitive conduct---offers a model that US and EU authorities, constrained by more restrictive legal frameworks, might consider adopting.
 
 ## Visualizations
 
 ### Labor market concentration choropleth
 A geographic visualization of labor market concentration helps identify regions and occupations with potential monopsony concerns. This example uses synthetic data but can be adapted for BLS QCEW, Census LEHD, or Stats SA QLFS data.
 
-```r
-library(dplyr)
-library(ggplot2)
-library(maps)
-library(viridis)
-
-# Simulated labor market HHI data by state/province and occupation
-# Replace with BLS QCEW or Census LEHD data aggregated to commuting zones
-set.seed(456)
-us_states <- map_data("state")
-
-# Create synthetic HHI data for states (illustrative)
-labor_hhi <- tibble(
-  region = unique(us_states$region),
-  hhi = runif(length(unique(us_states$region)), 800, 4500),
-  occupation = "Registered Nurses"
-) |>
-  mutate(
-    concentration_level = case_when(
-      hhi < 1000 ~ "Unconcentrated",
-      hhi < 1800 ~ "Moderately concentrated",
-      TRUE ~ "Highly concentrated"
-    ),
-    concentration_level = factor(
-      concentration_level,
-      levels = c("Unconcentrated", "Moderately concentrated",
-                 "Highly concentrated")
-    )
-  )
-
-# Join with map data
-us_map <- us_states |>
-  left_join(labor_hhi, by = "region")
-
-# Choropleth map
-ggplot(us_map, aes(x = long, y = lat, group = group, fill = hhi)) +
-  geom_polygon(color = "white", linewidth = 0.2) +
-  scale_fill_viridis_c(
-    option = "plasma",
-    direction = -1,
-    breaks = c(1000, 1800, 3000),
-    labels = c("1,000\n(Unconcentrated)",
-               "1,800\n(Presumption)",
-               "3,000\n(High)")
-  ) +
-  labs(
-    title = "Labor Market Concentration by State",
-    subtitle = "HHI for Registered Nurses (Illustrative Data)",
-    fill = "HHI",
-    caption = "Replace with BLS QCEW/LEHD data. Commuting zones provide more granular analysis than states."
-  ) +
-  theme_void(base_size = 12) +
-  theme(
-    plot.title = element_text(face = "bold", hjust = 0.5),
-    plot.subtitle = element_text(hjust = 0.5),
-    legend.position = "right"
-  ) +
-  coord_map()
-
-# Summary statistics by concentration level
-cat("\nConcentration distribution:\n")
-labor_summary <- labor_hhi |>
-  group_by(concentration_level) |>
-  summarise(
-    count = n(),
-    mean_hhi = mean(hhi),
-    median_hhi = median(hhi),
-    .groups = "drop"
-  )
-print(labor_summary, n = Inf)
-```
+![](../images/labor-hhi-static-map-1.png)
 
 **Interpretation:**
 - **HHI < 1,000**: Competitive labor markets; multiple employers compete for workers.
@@ -710,6 +662,8 @@ labor_occ |>
   knitr::kable(digits = 0, caption = "Occupations with Highest Concentration")
 ```
 
+![](../images/labor-hhi-comparison-1.png)
+
 **Key insights:**
 - **Rural areas** typically show higher concentration due to fewer employers.
 - **Low-skill occupations** (fast food, warehouse) often face more concentration than high-skill occupations with remote work options.
@@ -771,6 +725,8 @@ cat("\nRegression: Wage gap ~ HHI\n")
 summary(wage_model)
 ```
 
+![](../images/labor-hhi-wage-impact-1.png)
+
 **How to use these visualizations:**
 - **Enforcement priorities**: Focus investigations on high-HHI markets.
 - **Remedy design**: Target no-poach bans or wage disclosure rules at concentrated markets.
@@ -796,8 +752,22 @@ summary(wage_model)
 
 5. **Data/code.** The synthetic control scaffold in this chapter estimates the effect of Washington's no-poach settlement. Describe how you would construct the donor pool (which states to include/exclude and why) and what pre-treatment variables you would match on. What placebo tests would you run?
 
+### Data exercise (checkable)
+
+In a local labor market, three employers account for hiring shares of 50%, 30%, and 20%.
+
+a. Compute the labor-market HHI and classify it against the 2,500 threshold.
+b. The estimated firm-level labor supply elasticity is 2. Using wage / MRPL = eta / (1 + eta), by what percentage does the wage fall below the marginal revenue product of labor?
+
+{% hint style="success" %}
+**Worked answer**
+
+a. HHI = 50^2 + 30^2 + 20^2 = 2,500 + 900 + 400 = **3,800** -- highly concentrated, well above 2,500.
+b. wage / MRPL = 2 / (1 + 2) = 2/3 ~= 0.667, so the wage is about **33% below** the marginal revenue product of labor.
+{% endhint %}
+
 ## Looking ahead
 
-Labor antitrust connects to several threads in the remaining chapters. **[Chapter 11: Innovation & IP](11-innovation-ip.md)** examines how employment contracts---particularly noncompete clauses and trade secret provisions---interact with innovation incentives. The same monopsony frameworks apply when analyzing how labor market restrictions affect the pace of technical change.
+Labor antitrust connects to several threads in the remaining chapters. **[Chapter 11](chapters/11-innovation-ip.md)** takes up how employment contracts, particularly noncompete clauses and trade secret provisions, interact with innovation incentives. The same monopsony frameworks apply when labor market restrictions affect the pace of technical change.
 
-The labor market methods also feed into **[Chapter 12: Litigation Practice](12-litigation-practice.md)**. Wage-fixing and no-poach cases increasingly proceed as criminal matters or class actions, requiring the damages estimation and class certification analysis covered there. The concentration calculations and policy event studies introduced in this chapter will reappear in damages proceedings and remedy compliance evaluations.
+The labor market methods also feed into **[Chapter 12](chapters/12-litigation-practice.md)**. Wage-fixing and no-poach cases increasingly proceed as criminal matters or class actions, requiring the damages estimation and class certification analysis covered there. The concentration calculations and policy event studies in this chapter reappear in damages proceedings and remedy compliance evaluations.
