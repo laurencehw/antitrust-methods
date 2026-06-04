@@ -20,20 +20,24 @@ BIB = "references/references.bib"
 QUARTO = "_quarto.yml"
 # Quarto cross-reference prefixes that look like @keys but are not citations.
 XREF_PREFIXES = ("sec-", "fig-", "tbl-", "eq-", "lst-", "thm-", "def-")
-KEY_RE = re.compile(r"@([A-Za-z][\w:.\-+]*)")
+# Negative lookbehind so an email address (user@example.com) is not read as a key.
+KEY_RE = re.compile(r"(?<!\w)@([A-Za-z][\w:.\-+]*)")
 FENCE_RE = re.compile(r"```.*?```", re.S)
 
 
 def defined_keys() -> set:
-    bib = open(BIB, encoding="utf-8").read()
-    return set(re.findall(r"@\w+\{([^,\s]+)\s*,", bib))
+    with open(BIB, encoding="utf-8") as f:
+        bib = f.read()
+    # \s* tolerates "@article {key," (optional space before the brace).
+    return set(re.findall(r"@\w+\s*\{([^,\s]+)\s*,", bib))
 
 
 def cited_keys() -> dict:
     """Map each cited key -> set of files citing it (code fences stripped)."""
     out: dict = {}
     for f in sorted(glob.glob("chapters/*.qmd") + glob.glob("*.qmd")):
-        text = FENCE_RE.sub("", open(f, encoding="utf-8").read())
+        with open(f, encoding="utf-8") as fh:
+            text = FENCE_RE.sub("", fh.read())
         for m in KEY_RE.finditer(text):
             key = m.group(1).rstrip(".,;:")
             if key.startswith(XREF_PREFIXES):
@@ -45,7 +49,9 @@ def cited_keys() -> dict:
 def remote_csl() -> str | None:
     if not os.path.exists(QUARTO):
         return None
-    m = re.search(r"^\s*csl:\s*(\S+)", open(QUARTO, encoding="utf-8").read(), re.M)
+    with open(QUARTO, encoding="utf-8") as f:
+        content = f.read()
+    m = re.search(r"^\s*csl:\s*(\S+)", content, re.M)
     if m and m.group(1).startswith(("http://", "https://")):
         return m.group(1)
     return None
