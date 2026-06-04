@@ -1,11 +1,11 @@
 # Mergers {#sec-mergers}
 
-Merger analysis brings together nearly everything from the preceding chapters. Market definition (@sec-market-definition) establishes the competitive boundaries. The IO toolkit (@sec-io-toolkit) provides the simulation machinery. The cartel chapter's (@sec-cartels) coordinated effects framework informs our assessment of whether a merger facilitates tacit collusion. And the qualitative evidence protocols from @sec-research-design guide how we integrate internal documents, customer testimony, and efficiency claims.
+A merger review pulls on most of the tools developed so far. Market definition (@sec-market-definition) sets the competitive boundaries. The IO toolkit (@sec-io-toolkit) supplies the simulation machinery. The coordinated effects framework from the cartel chapter (@sec-cartels) informs whether a merger facilitates tacit collusion. The qualitative evidence protocols from @sec-research-design guide how internal documents, customer testimony, and efficiency claims fit together.
 
-This chapter provides a practical workflow for merger review. We move from transaction overview through shares and concentration metrics, unilateral and coordinated effects analysis, vertical theories, efficiency evaluation, and finally to remedy design. Throughout, we emphasize the differences in legal standards and analytical approaches across the major jurisdictions---US, EU, UK, and South Africa---because merger practitioners increasingly operate in a multi-jurisdictional environment.
+This chapter walks through a merger review end to end: transaction overview, shares and concentration metrics, unilateral and coordinated effects, vertical theories, efficiency evaluation, and remedy design. Legal standards and analytical approaches differ across the major jurisdictions (US, EU, UK, and South Africa), and merger practitioners increasingly work in more than one of them at once.
 
 ## Learning goals
-Merger reviews synthesize everything covered so far: market definition, IO modeling, qualitative evidence, and remedies. This chapter provides a practical workflow for assessing unilateral, coordinated, vertical, and public-interest effects across US, EU/UK, and South African jurisdictions, drawing on agency guidance [@doj_ftc_hmg_2023; @ec_hmg_2004; @cma_merger_assessment_2021].
+Merger reviews draw on market definition, IO modeling, qualitative evidence, and remedies. This chapter provides a practical workflow for assessing unilateral, coordinated, vertical, and public-interest effects across US, EU/UK, and South African jurisdictions, drawing on agency guidance [@doj_ftc_hmg_2023; @ec_hmg_2004; @cma_merger_assessment_2021].
 
 By the end you should be able to:
 
@@ -16,7 +16,7 @@ By the end you should be able to:
 
 ## Core topics
 
-Merger analysis synthesizes the tools from previous chapters into a coherent assessment of whether a transaction will harm competition. This section covers the major theories of harm and the workflow for evaluating each.
+This section covers the theories of harm and the workflow for evaluating each.
 
 ::: {.callout-note title="Merger Review Workflow"}
 ```
@@ -292,13 +292,13 @@ cat(paste0("Combined firm post-merger share: ",
 Before presenting results, show calibration diagnostics: how well the model reproduces pre-merger shares, whether price elasticities fall in plausible ranges, and how sensitive predictions are to alternative marginal-cost assumptions.
 
 ::: {.callout-tip title="Running example: Simulating the AA/US Airways merger"}
-The AA/US Airways merger (announced February 2013, completed December 2013) provides an ideal case for calibrating the simulation framework above to a real transaction. The demand estimates from @sec-io-toolkit and the route-level market definitions from @sec-market-definition supply the key inputs.
+The AA/US Airways merger (announced February 2013, completed December 2013) lets us calibrate the simulation framework above to a real transaction. The demand estimates from @sec-io-toolkit and the route-level market definitions from @sec-market-definition supply the key inputs.
 
 **Calibration.** To simulate the merger on a given route, we need three ingredients: (1) carrier market shares (from DOT T-100 or DB1B data, as in the route-share heatmap), (2) an outside share representing passengers who would choose alternative transport (driving, rail) or forgo travel entirely---typically 20--40% on short-haul routes like DCA--LGA but much higher on long-haul routes with no driving substitute, and (3) carrier-level margins derived from DOT Form 41 cost reports, which provide operating expenses by carrier and stage length. Legacy carriers like AA and US Airways typically reported operating margins of 8--15% in this period, while low-cost carriers like Southwest operated at 12--18%.
 
 **Where the DOJ focused.** The government's challenge centered on routes where the merging carriers had combined nonstop shares exceeding 50%, particularly at hub airports: DCA (where AA and US together held the vast majority of slots), LGA (a slot-controlled airport with significant overlap), ORD (an AA hub where US Airways offered connecting competition), and PHL (the primary US Airways hub). On routes like DCA--LGA, the merger would have combined the two largest carriers, raising HHI well above the 2,500 threshold of the structural presumption.
 
-**The remedy.** Rather than blocking the merger outright, the DOJ required divestitures of 104 slot pairs at DCA and 34 slot pairs at LGA to low-cost carriers---primarily Southwest Airlines---to preserve competitive entry on the most concentrated routes. The logic was straightforward: if the competitive harm came from eliminating head-to-head overlap at slot-constrained airports, then transferring slots to an aggressive competitor could restore the lost competition. Whether the remedy succeeded is an empirical question that the retrospective tools from @sec-research-design can answer, and the broader question of remedy design is taken up in @sec-regulation-remedies.
+**The remedy.** Rather than blocking the merger outright, the DOJ required divestitures of 104 slot pairs at DCA and 34 slot pairs at LGA to low-cost carriers, primarily Southwest Airlines, to preserve competitive entry on the most concentrated routes. The logic: if the harm came from eliminating head-to-head overlap at slot-constrained airports, transferring slots to an aggressive competitor could restore the lost competition. Whether the remedy succeeded is an empirical question that the retrospective tools from @sec-research-design can answer, and remedy design is taken up in @sec-regulation-remedies.
 :::
 
 ### Coordinated effects
@@ -458,15 +458,15 @@ Combine quantitative screens with qualitative evidence: internal documents refer
 :::
 
 ::: {.callout-tip title="Extended example: Hospital merger analysis"}
-Hospital mergers are among the most actively litigated in US antitrust, with the FTC challenging roughly one per year. The stakes are high: commercial insurance prices can rise 20--40% after consummation of anticompetitive hospital mergers, as documented in retrospective studies by Dafny (2009) and Gaynor and Town (2012). The analytical framework combines elements of differentiated-products merger analysis---hospitals compete on quality, location, and reputation---with bilateral bargaining models, because hospitals negotiate rates with insurers rather than individual patients. This makes hospital mergers a natural application of the UPP/simulation toolkit from this chapter, but with an important twist: the "price" is not set in a standard posted-price market.
+Hospital mergers are among the most actively litigated in US antitrust, with the FTC challenging roughly one per year. Commercial insurance prices can rise 20--40% after consummation of anticompetitive hospital mergers, as documented in retrospective studies by Dafny (2009) and Gaynor and Town (2012). The analytical framework combines differentiated-products merger analysis (hospitals compete on quality, location, and reputation) with bilateral bargaining models, because hospitals negotiate rates with insurers rather than individual patients. The UPP/simulation toolkit from this chapter applies, with one wrinkle: the "price" is not set in a standard posted-price market.
 
-Unlike standard product markets, hospital "prices" emerge from bilateral negotiations between hospital systems and insurance networks. The key metric is the hospital's willingness-to-pay (WTP) value---how much an insurer's enrollees would pay to have the hospital included in their network. A merger that combines two hospitals with high WTP increases the merged system's bargaining leverage, because the insurer cannot drop both hospitals without losing a large share of its enrollees. The change in WTP (delta-WTP) serves as the hospital-market analog of UPP/GUPPI: it quantifies how much additional bargaining power the merger confers. The FTC has deployed WTP models in cases including *Advocate Health Care* (7th Cir. 2017), *Penn State Hershey/PinnacleHealth* (3rd Cir. 2016), and *Hackensack Meridian/Englewood* (2021), establishing WTP analysis as a standard tool in the agency's hospital merger playbook.
+Hospital "prices" emerge from bilateral negotiations between hospital systems and insurance networks. The key metric is the hospital's willingness-to-pay (WTP) value: how much an insurer's enrollees would pay to have the hospital included in their network. A merger that combines two hospitals with high WTP increases the merged system's bargaining leverage, because the insurer cannot drop both hospitals without losing a large share of its enrollees. The change in WTP (delta-WTP) serves as the hospital-market analog of UPP/GUPPI. It quantifies how much additional bargaining power the merger confers. The FTC has deployed WTP models in cases including *Advocate Health Care* (7th Cir. 2017), *Penn State Hershey/PinnacleHealth* (3rd Cir. 2016), and *Hackensack Meridian/Englewood* (2021), establishing WTP analysis as a standard tool in the agency's hospital merger playbook.
 
-Hospital market definition is perennially contentious. Defendants typically argue for broad geographic markets on the grounds that patients can and do travel for care, while the FTC argues for narrower markets based on patient flow data showing that most patients travel less than 15--20 miles for inpatient services. The hypothetical monopolist framework adapts to this setting: instead of asking whether a price increase would be profitable, the relevant question is whether an insurer could market a viable plan excluding the merged system. Patient origin data, insurer testimony, and claims-level analysis of where patients actually receive care constitute the key evidence. The 2023 Merger Guidelines' emphasis on practical market realities---rather than theoretical substitution possibilities---has generally supported the FTC's narrower market definitions in recent hospital cases.
+Hospital market definition is perennially contentious. Defendants typically argue for broad geographic markets on the grounds that patients can and do travel for care, while the FTC argues for narrower markets based on patient flow data showing that most patients travel less than 15--20 miles for inpatient services. The hypothetical monopolist framework adapts to this setting: instead of asking whether a price increase would be profitable, the relevant question is whether an insurer could market a viable plan excluding the merged system. Patient origin data, insurer testimony, and claims-level analysis of where patients actually receive care constitute the key evidence. The 2023 Merger Guidelines' emphasis on practical market realities, rather than theoretical substitution possibilities, has generally supported the FTC's narrower market definitions in recent hospital cases.
 
 The South African Private Healthcare Market Inquiry (2014--2019) examined similar dynamics in a very different institutional setting. The Commission found HHIs above 4,000 in several provinces and documented limited patient switching despite tariff differentials across hospital groups. The inquiry's central recommendation---the creation of a Supply-Side Regulator for Health---represents a regulatory response to the same market power problem that the FTC addresses through case-by-case merger enforcement. The contrast is instructive: the US approach relies on ex ante merger control to prevent the accumulation of hospital market power, while South Africa's proposed approach would impose ongoing oversight of an already-concentrated sector. Cross-reference @sec-regulation-remedies-remedies for the remedy design implications.
 
-For US hospital mergers, the principal data sources include CMS claims data (Medicare), FAIR Health (commercial claims), state all-payer claims databases (available in roughly 18 states), and the AHA Annual Survey for structural variables such as bed counts, service lines, and system affiliations. For South Africa, the Council for Medical Schemes, SAMRC databases, and provincial hospital utilization records provide analogous information. In both jurisdictions, the key challenge is obtaining commercially insured price data, which is often confidential and requires litigation discovery or regulatory compulsion to access. Practitioners should budget significant time for data acquisition and cleaning---hospital claims data is notoriously messy, with inconsistent coding, missing fields, and complex case-mix adjustment requirements.
+For US hospital mergers, the principal data sources include CMS claims data (Medicare), FAIR Health (commercial claims), state all-payer claims databases (available in roughly 18 states), and the AHA Annual Survey for structural variables such as bed counts, service lines, and system affiliations. For South Africa, the Council for Medical Schemes, SAMRC databases, and provincial hospital utilization records provide analogous information. In both jurisdictions, the key challenge is obtaining commercially insured price data, which is often confidential and requires litigation discovery or regulatory compulsion to access. Budget time for data acquisition and cleaning. Hospital claims data is messy, with inconsistent coding and complex case-mix adjustment requirements.
 :::
 
 ### Vertical and mixed effects
@@ -749,10 +749,11 @@ source("program/R/helpers.R")
 ## Visualizations
 
 ### Market shares and HHI dashboard
-This dashboard provides a comprehensive view of market structure before and after the merger, combining share distributions, HHI calculations, and competitive thresholds.
+This dashboard shows market structure before and after the merger, combining share distributions, HHI calculations, and competitive thresholds.
 
 ```{r}
 #| label: merger-hhi-dashboard
+#| fig-cap: "Merger screening dashboard: shares, HHI, and delta-HHI. Synthetic data for illustration only."
 #| message: false
 #| warning: false
 #| fig-width: 12
@@ -1062,14 +1063,24 @@ Replace simulated values with outputs from your actual merger simulation model (
 
 5. **Conceptual.** Explain the difference between a first-order price effect approximation (from UPP) and a full equilibrium merger simulation. When is the approximation likely to overstate or understate the actual price effect?
 
+### Data exercise (checkable)
+
+Two differentiated competitors with market shares of 25% and 15% propose to merge.
+
+a. Using delta-HHI = 2 x s_1 x s_2, compute the change in HHI.
+b. The diversion ratio from product 1 to product 2 is 0.30, product 2's margin is 0.40, and prices are equal. Compute the GUPPI for product 1.
+c. The pre-merger HHI is 1,900. Does the structural presumption (HHI > 1,800, delta-HHI > 100) apply, and what does the GUPPI add?
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. delta-HHI = 2 x 25 x 15 = **750**.
+b. GUPPI_1 = D_12 x m_2 x (p_2 / p_1) = 0.30 x 0.40 x 1 = **0.12 = 12%**.
+c. Post-merger HHI = 1,900 + 750 = 2,650 > 1,800 and delta-HHI 750 > 100, so **the structural presumption applies**. The 12% GUPPI sits well above the 5% screening threshold many agencies use, corroborating a unilateral-effects concern beyond the structural screen.
+:::
+
 ## Looking ahead
 
-Merger analysis produces artifacts—simulation outputs, UPP tables, event-study results—that feed directly into **@sec-monopolization** and **@sec-litigation-practice**. The same frameworks apply when assessing whether a dominant firm's conduct harms competition.
+Merger analysis produces artifacts—simulation outputs, UPP tables, event-study results—that reappear in **@sec-monopolization** and **@sec-litigation-practice**. The same frameworks apply when assessing whether a dominant firm's conduct harms competition.
 
-**Before proceeding, prepare:**
+Three steps make that reuse easier. Store merger sims, UPP tables, and event-study code in `data/derived/` with README files documenting assumptions and data sources. Note which datasets (Nielsen panels, loyalty data, procurement archives) need anonymization or refreshed pulls for teaching or publication. Keep a reference list of merger retrospectives (airlines, hospitals, beer) with their effect-size estimates, useful for validating simulations against real-world outcomes.
 
-1. **Archive outputs**: Store merger sims, UPP tables, and event-study code in `data/derived/` with README files documenting assumptions and data sources.
-2. **Data refresh plan**: Note which datasets (Nielsen panels, loyalty data, procurement archives) need anonymization or refreshed pulls for teaching or publication.
-3. **Retrospective benchmarks**: Keep a reference list of merger retrospectives (airlines, hospitals, beer) with their effect-size estimates—useful for validating your simulations against real-world outcomes.
-
-In @sec-monopolization, we apply similar diversion and foreclosure frameworks to unilateral conduct by dominant firms. The simulation and screening tools from this chapter transfer directly—the key difference is that we're analyzing conduct by a single firm rather than a transaction between two firms.
+@sec-monopolization applies similar diversion and foreclosure frameworks to unilateral conduct by dominant firms. The simulation and screening tools transfer directly. The difference is that the conduct comes from a single firm rather than a transaction between two.

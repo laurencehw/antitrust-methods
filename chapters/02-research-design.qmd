@@ -1,8 +1,8 @@
 # Research Design: Quantitative and Qualitative {#sec-research-design}
 
-The previous chapter oriented you to the institutions and legal standards that shape antitrust work. With that foundation in place, we now turn to methodology. How do you design research that will persuade regulators, courts, and opposing experts? This chapter introduces the core principles of research design---both quantitative and qualitative---that underpin the specific applications in later chapters.
+With the institutions and legal standards in hand, we turn to method. The question that organizes this chapter is how to design research that will persuade a regulator, a court, and an opposing expert who is paid to find the holes in it. The principles below---quantitative and qualitative---carry through every application that follows.
 
-The goal is not just to learn techniques, but to develop the judgment to choose among them. Different questions call for different methods, and the choice depends as much on available data and institutional constraints as on statistical properties. We emphasize the "credibility revolution" in applied economics while recognizing that qualitative evidence often plays an equally important role in antitrust matters.
+The aim is judgment: which method to choose, and why. Different questions call for different methods, and the choice turns as much on the data you can get and the constraints you face as on the statistical properties of the estimator. We lean on the "credibility revolution" in applied economics without losing sight of how much of an antitrust matter rides on qualitative evidence.
 
 ## Learning goals
 The goal of this chapter is to help you translate messy case facts into evidence that withstands scrutiny from opposing experts, agency staff, and judges. You will learn how to articulate research questions that map directly to legal theories of harm and to choose empirical strategies—diff-in-diff, event study, instrumental variables (IV), regression discontinuity (RDD), matching, or structural models—that are feasible with available data. Equally important, you will practice designing qualitative instruments (surveys, interviews, document coding schemes) that align with those empirical tests so each stream of evidence reinforces the others.
@@ -11,13 +11,13 @@ Because antitrust matters often unfold across jurisdictions, we emphasize how to
 
 ## Workflow
 ### Scoping memo
-Every matter should begin with a scoping memo linking the narrative theory of harm to measurable outcomes. Specify the primary question (“Did the 2018 hospital merger in Texas raise commercial insurance prices?”), outline plausible channels (unilateral effects vs. coordination), and list essential datasets with owners, legal process required, and likely cleaning steps. Capture timing constraints—the DOJ’s Second Request clock, the CMA’s Phase I deadlines, or the Competition Commission South Africa’s 60-business-day merger review period—and highlight non-negotiable assumptions (e.g., availability of claims-level data or ability to survey procurement managers). Include citations to precedent such as merger retrospectives [@ashenfelter_hosken_2010]---the methodology we apply in @sec-mergers---or class-certification common-impact decisions [@dickey_rubinfeld_2014] so legal teams can anticipate how courts reacted to similar designs.
+Every matter should begin with a scoping memo linking the narrative theory of harm to measurable outcomes. Specify the primary question (“Did the 2018 hospital merger in Texas raise commercial insurance prices?”), outline plausible channels (unilateral effects vs. coordination), and list essential datasets with owners, legal process required, and likely cleaning steps. Capture timing constraints—the DOJ’s Second Request clock, the CMA’s Phase I deadlines, or the Competition Commission South Africa’s 60-business-day merger review period—and highlight non-negotiable assumptions (e.g., availability of claims-level data or ability to survey procurement managers). Include citations to precedent such as merger retrospectives [@ashenfelter_hosken_2010], the methodology we apply in @sec-mergers, or class-certification common-impact decisions [@dickey_rubinfeld_2014] so legal teams can anticipate how courts reacted to similar designs.
 
 ### Data pipeline architecture
 Treat the data pipeline as infrastructure. Raw productions, public datasets, and hand-entered chronologies should land in `data/raw`, with documented schemas and hashing to ensure integrity. Cleaning scripts housed in `scripts/` or `R/` should emit analytic files to `data/derived`, complete with README files explaining variable creation, filtering rules, and version numbers. Cloud-based teams should use reproducible environments (Renv, Conda, Docker) so every regression or visualization is rerunnable months later when litigation heats up. For South African matters, plan for hybrid data sources—local procurement records may arrive as PDFs, while US financials might come via SEC APIs—so build ingestion scripts that normalize currencies, indexation, and time zones.
 
 ### Pre-analysis and litigation deliverables
-Before estimating anything, write a pre-analysis plan that documents main outcomes, treatment definitions, control groups, identifying assumptions, and robustness checks. This discipline is not just for academics: DOJ and FTC staff frequently ask for pre-specified models, DG COMP expects methodological appendices, and South African tribunals often require plain-language summaries usable in simultaneous interpretation. Include sensitivity tests (e.g., alternative market definitions, exclusion of outlier distributors, placebo periods) and specify the qualitative evidence that will contextualize results. As you progress, convert technical memos into courtroom-ready outputs—slide decks, white papers, expert declarations—without sacrificing reproducibility.
+Before estimating anything, write a pre-analysis plan that documents main outcomes, treatment definitions, control groups, identifying assumptions, and robustness checks. Agencies expect this too: DOJ and FTC staff frequently ask for pre-specified models, DG COMP expects methodological appendices, and South African tribunals often require plain-language summaries usable in simultaneous interpretation. Include sensitivity tests (e.g., alternative market definitions, exclusion of outlier distributors, placebo periods) and specify the qualitative evidence that will contextualize results. As you progress, convert technical memos into courtroom-ready outputs—slide decks, white papers, expert declarations—without sacrificing reproducibility.
 
 ## The Modern Causal Toolkit: The Credibility Revolution
 
@@ -34,7 +34,7 @@ This approach prioritizes:
 ### Core Causal Toolkit
 While the toolkit is vast, antitrust practitioners lean heavily on a few workhorses:
 -   **Difference-in-Differences (DiD):** The gold standard for retrospective merger analysis.
--   **Synthetic Control:** Crucial for "N=1" cases (e.g., a single national merger) where no single control unit exists.
+-   **Synthetic Control:** For "N=1" cases (e.g., a single national merger) where no single control unit exists.
 -   **Instrumental Variables (IV):** Used when prices are endogenous; we look for "shifters" (like tax changes or weather) that move supply but not demand.
 -   **Regression Discontinuity (RDD):** Exploits arbitrary cutoffs (e.g., population thresholds for regulation) to compare similar firms on either side of the line.
 
@@ -89,7 +89,7 @@ While the toolkit is vast, antitrust practitioners lean heavily on a few workhor
 | **Structural** | Forward-looking prediction needed | Model correctly specified | Merger simulation, counterfactual pricing |
 
 ### The Evolution of DiD
-A critical development in recent years is the realization that the standard Two-Way Fixed Effects (TWFE) estimator can be biased when treatment timing varies (staggered adoption). If you are analyzing a rollup strategy where a firm buys competitors in 2018, 2019, and 2020, standard regressions might compare early-treated units to late-treated units in ways that invert the sign of the effect.
+A key development in recent years is the realization that the standard Two-Way Fixed Effects (TWFE) estimator can be biased when treatment timing varies (staggered adoption). If you are analyzing a rollup strategy where a firm buys competitors in 2018, 2019, and 2020, standard regressions might compare early-treated units to late-treated units in ways that invert the sign of the effect.
 
 Modern estimators like @callaway_santanna_2021 or @sun_abraham_2021 (implemented in R packages `did` and `fixest`) explicitly handle this heterogeneity. In litigation, relying on "old" TWFE without robustness checks is now a vulnerability.
 
@@ -194,8 +194,20 @@ ggplot(cars, aes(x = rel_day, y = car, color = symbol)) +
 
 5. **Conceptual.** A South African Competition Commission investigation has access to 18 months of transaction data from two grocery chains but no natural experiment or policy shock. What research design options are available? Discuss the tradeoffs between before/after, cross-sectional, and structural approaches.
 
+### Data exercise (checkable)
+
+A merger affects one regional market (treated) but not another (control). Mean prices are: treated 100 (pre) and 118 (post); control 100 (pre) and 110 (post).
+
+a. Compute the difference-in-differences estimate of the merger's price effect.
+b. What identifying assumption must hold for this to be causal, and what plot would you show to support it?
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. DiD = (118 - 100) - (110 - 100) = 18 - 10 = **8**, an 8-unit (8%) price increase attributable to the merger.
+b. **Parallel trends**: absent the merger, treated and control prices would have moved together. Support it with an event-study / pre-trend plot showing the two series tracking each other before the merger date.
+:::
+
 ## Looking ahead
-Document every decision from scoping memo to estimation so later chapters can layer on industry-specific models. Begin compiling a reusable appendix that includes sample interview protocols, diversion survey templates, and code snippets for data validation. We will lean on these assets when we turn to market definition, industrial-organization toolkits, and merger simulation, so note any gaps (e.g., need a telecom-grade cost index or South African procurement benchmark) while the evidence record is still flexible.
+Document every decision from scoping memo to estimation so later chapters can layer on industry-specific models. Begin compiling a reusable appendix with sample interview protocols, diversion survey templates, and code snippets for data validation. Market definition and merger simulation lean on these assets, so note any gaps (e.g., a telecom-grade cost index or South African procurement benchmark) while the evidence record is still flexible.
 
 ## Code box: diff-in-diff scaffold
 ```{r}

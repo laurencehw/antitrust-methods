@@ -2,7 +2,7 @@
 
 Cartels represent the clearest antitrust violations---competitors agreeing to fix prices, rig bids, or allocate markets cause direct and quantifiable harm to consumers. Yet proving collusion and measuring damages requires integrating the research design, market definition, and IO tools from earlier chapters into a coherent evidentiary package.
 
-This chapter shows how to detect collusion, measure its effects, and build cases that survive both economic and legal scrutiny. We emphasize the interplay between quantitative screens and qualitative evidence: econometric analysis can establish that prices were artificially elevated, but leniency statements and internal communications provide the smoking gun that confirms coordination. The two streams of evidence reinforce each other.
+This chapter shows how to detect collusion, measure its effects, and build cases that survive both economic and legal scrutiny. Quantitative screens and qualitative evidence do different jobs. Econometrics can show that prices were elevated above a competitive benchmark; it cannot, on its own, show an agreement. Leniency statements and internal communications supply the agreement. Each is weak without the other, so cartel cases turn on assembling both.
 
 ## Learning goals
 Cartel enforcement hinges on weaving together quantitative screens, econometric estimates, and documentary evidence. This chapter walks through that workflow using established methodologies from the OECD and academic literature on cartel detection.
@@ -408,6 +408,7 @@ Network graphs help visualize suspected coordination patterns by showing which b
 
 ```{r}
 #| label: cartel-rotation-network
+#| fig-cap: "Bid-rotation network. Synthetic data for illustration only."
 #| message: false
 #| warning: false
 #| fig-width: 10
@@ -551,9 +552,95 @@ cat("High betweenness = potential coordinator bridging subgroups\n")
 
 Replace simulated data with actual procurement records (World Bank, TED, US DOT, Stats SA infrastructure tenders). Document bid amounts, dates, and project characteristics in `data/raw/procurement/` with provenance notes.
 
+### A real structural screen: award concentration
+
+The bid-rotation screens above need bid-level data---every bidder on every tender---which open procurement portals rarely publish. A coarser but fully open alternative works from the awards themselves: compute the HHI of contract value by supplier within each country--category--year, and flag the procurement markets where a few suppliers capture most of the spend. This is a structural screen, not proof of anything: persistent concentration is one weak flag among the OECD battery [@oecd_cartel_screens_2013], useful for prioritising where to request bid-level data. The script `program/scripts/06_procurement_cartels.R` derives this screen from the World Bank Major Contract Awards; run it to populate the file read below.
+
+```{r}
+#| label: cartel-award-hhi
+#| fig-cap: "Supplier award-concentration screen from World Bank procurement awards."
+#| message: false
+#| warning: false
+#| fig-width: 9
+#| fig-height: 6
+library(dplyr)
+library(ggplot2)
+library(readr)
+source("program/R/helpers.R")
+
+award_hhi <- tryCatch(
+  read_csv("data/derived/procurement_award_hhi.csv", show_col_types = FALSE),
+  error = function(e) NULL
+)
+
+if (!is.null(award_hhi) && nrow(award_hhi) > 0) {
+  # Honest labelling: 06_procurement_cartels.R tags a synthetic fallback when the
+  # World Bank API is unreachable, so the figure can say whether it is real.
+  award_synth <- "data_source" %in% names(award_hhi) &&
+    any(award_hhi$data_source == "synthetic_fallback")
+  award_src <- if (award_synth) {
+    "SYNTHETIC fallback for illustration only — not real World Bank data; run program/scripts/06_procurement_cartels.R with network access.\n"
+  } else {
+    "Source: World Bank Major Contract Awards (program/scripts/06_procurement_cartels.R).\n"
+  }
+
+  award_hhi <- award_hhi |>
+    mutate(
+      band = cut(hhi,
+                 breaks = c(0, 1500, 2500, 10000),
+                 labels = c("Unconcentrated (<1500)",
+                            "Moderate (1500–2500)",
+                            "Highly conc. (>2500)"),
+                 include.lowest = TRUE)
+    )
+
+  p <- ggplot(award_hhi, aes(x = hhi, fill = band)) +
+    geom_histogram(binwidth = 250, boundary = 0, alpha = 0.85, color = "white") +
+    geom_vline(xintercept = c(1500, 2500), linetype = "dashed", color = "gray30") +
+    scale_fill_manual(values = c("Unconcentrated (<1500)" = "#1B9E77",
+                                 "Moderate (1500–2500)" = "#D95F02",
+                                 "Highly conc. (>2500)" = "#7570B3")) +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+    labs(
+      title = "Supplier Award Concentration in World Bank Procurement",
+      subtitle = paste0(
+        "HHI of contract value by supplier, within country × category × year | ",
+        "N = ", scales::comma(nrow(award_hhi)), " markets, ",
+        sum(award_hhi$hhi > 2500), " highly concentrated"
+      ),
+      x = "Award-value HHI", y = "Number of procurement markets",
+      fill = "Concentration band",
+      caption = paste0(
+        award_src,
+        "Structural screen only: high award concentration flags markets for closer ",
+        "scrutiny; it is not evidence of collusion."
+      )
+    ) +
+    theme_antitrust() +
+    theme(legend.position = "bottom",
+          plot.caption = element_text(size = 7, hjust = 0))
+  print(p)
+
+  cat("\nMost concentrated procurement markets (award-value HHI):\n")
+  award_hhi |>
+    arrange(desc(hhi)) |>
+    slice_head(n = 8) |>
+    mutate(hhi = round(hhi)) |>
+    select(geo, category, fiscal_year, n_suppliers, hhi) |>
+    as.data.frame() |>
+    print(row.names = FALSE)
+} else {
+  cat("Award-concentration screen not available.\n",
+      "Run program/scripts/06_procurement_cartels.R to build ",
+      "data/derived/procurement_award_hhi.csv from World Bank awards.\n", sep = "")
+}
+```
+
+Read the histogram as a triage tool, not a verdict: the markets piling up past the 2,500 line are the ones where a handful of suppliers take most of the contract value, and so the ones worth the cost of assembling bid-level records and running the rotation and variance screens above. Concentration has many innocent explanations---scale economies, specialised capabilities, thin local supply---so the screen narrows the search rather than ending it.
+
 ## Event and break tests
 
-When a cartel is disrupted---by a dawn raid, a leniency application, or a regulatory intervention---prices often shift abruptly. These disruptions create natural experiments: the timing is typically exogenous to market conditions (raids are secret until executed; leniency filings are triggered by internal decisions, not demand shocks), making them attractive for causal inference. Event studies around these breaks test whether price levels, spreads, or quantities change in ways consistent with a transition from collusive to competitive equilibrium. The challenge is isolating the cartel effect from coincident cost or demand changes, which is why pairing econometric break tests with documentary evidence about the timing and mechanism of cartel dissolution is essential.
+When a cartel is disrupted---by a dawn raid, a leniency application, or a regulatory intervention---prices often shift abruptly. These disruptions create natural experiments: the timing is typically exogenous to market conditions (raids are secret until executed; leniency filings are triggered by internal decisions, not demand shocks), making them attractive for causal inference. Event studies around these breaks test whether price levels, spreads, or quantities change in ways consistent with a transition from collusive to competitive equilibrium. The challenge is isolating the cartel effect from coincident cost or demand changes. That is why econometric break tests need documentary evidence about the timing and mechanism of cartel dissolution.
 
 When raids or leniency filings occur, run event studies on prices, spreads, or quantities. Check both cartel participants and outsiders; in public procurement you can also evaluate engineers’ estimates or cost indices.
 
@@ -598,6 +685,7 @@ Placebo tests strengthen causal claims by showing that the estimated effect disa
 
 ```{r}
 #| label: cartel-placebo-test
+#| fig-cap: "Placebo test for the cartel overcharge estimate. Synthetic data for illustration only."
 #| message: false
 #| warning: false
 #| fig-width: 10
@@ -695,7 +783,7 @@ Leniency statements, chats, and board minutes pin down conduct mechanisms (rotat
 - Explain residuals—if econometrics show little effect where documents admit coordination, revisit product mapping or data coverage.  
 - Clarify what is fact (documented) vs. inference (econometric patterns), citing [@oecd_leniency_2015] or agency policies.
 
-The preceding sections have covered the analytical pipeline from screening through estimation. What remains is to integrate these elements into a coherent evidentiary package---one that connects econometric findings to documentary evidence and presents the result in a form that tribunals and courts can evaluate. The boxes below summarize the key methodological, qualitative, and case-based resources that practitioners should assemble when building a cartel matter.
+The remaining task is to integrate screening, estimation, and documentary evidence into a package that tribunals and courts can evaluate. The boxes below summarize the methodological, qualitative, and case-based resources to assemble when building a cartel matter.
 
 ::: {.callout-note title="Method box: econometric toolkit"}
 **Event studies:** Evaluate raid/leniency impact on prices or spreads.
@@ -804,6 +892,20 @@ Replace the public FRED data with product-level transactions to present in litig
 4. **Data/code.** Using the structural break code scaffold with FRED gasoline data (`GASREGW`), test whether the number and timing of breaks change if you adjust the minimum segment length (`h` parameter) from 26 to 13 weeks. What does this sensitivity tell you about the reliability of break detection?
 
 5. **Conceptual.** A leniency applicant provides a statement claiming cartel meetings occurred quarterly from 2015 to 2019, but your price data shows a structural break in 2017 rather than 2015. How would you reconcile this discrepancy? What additional evidence would you seek?
+
+### Data exercise (checkable)
+
+A cartel controlled a market for several years. The but-for (competitive) price is benchmarked at $100/ton; the observed cartel price averaged $120/ton. The plaintiff class purchased 1,000,000 tons during the cartel period.
+
+a. Compute the per-unit overcharge and the overcharge rate.
+b. Compute single (actual) damages.
+c. In a US federal case, what is the exposure after trebling?
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. Overcharge = $120 - $100 = **$20/ton**; rate = 20 / 100 = **20%** over the but-for price.
+b. Single damages = $20 x 1,000,000 = **$20,000,000**.
+c. Trebled = 3 x $20M = **$60,000,000** (before fees and prejudgment interest).
+:::
 
 ## Looking ahead
 The detection screens, overcharge regressions, and pass-through analyses developed here carry forward throughout the book. **@sec-mergers** builds on the same demand estimates and diversion ratios---post-cartel mergers frequently face heightened scrutiny, and the diagnostic tools overlap substantially. **@sec-litigation-practice** revisits damages modeling and expert report preparation, showing how to package cartel evidence for courtroom presentation. The rotation indices, structural break plots, and overcharge tables introduced here will serve as templates you can adapt to new cases and jurisdictions.

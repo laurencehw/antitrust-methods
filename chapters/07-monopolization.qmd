@@ -1,8 +1,8 @@
 # Monopolization and Exclusion {#sec-monopolization}
 
-The previous chapter examined mergers---transactions that combine formerly independent firms. This chapter turns to conduct by firms that already possess substantial market power. How do dominant firms exclude rivals? When does aggressive competition cross the line into antitrust violation? And how do we measure the harm from exclusionary practices?
+Mergers ask what happens when two firms combine. Monopolization asks a harder question, and one courts have struggled with for a century: what may a firm that already holds substantial market power do to keep it? Where is the line between competing hard and excluding rivals unlawfully, and how do we measure the harm when conduct crosses it?
 
-These questions require us to integrate all the tools developed so far. Market definition establishes dominance. The IO toolkit provides pricing and foreclosure models. And research design principles guide our empirical measurement of competitive effects. But monopolization cases also demand particular attention to intent evidence and business justifications, making the interplay between quantitative and qualitative evidence especially critical.
+Answering them draws on the tools developed so far. Market definition establishes dominance. The IO toolkit supplies pricing and foreclosure models. Research design guides the empirical measurement of competitive effects. Monopolization cases also turn on intent evidence and business justifications, so the quantitative and qualitative strands have to be read together.
 
 ## Learning goals
 - Analyze exclusionary conduct (predation, rebates, tying, MFNs, vertical restraints).
@@ -18,13 +18,9 @@ These questions require us to integrate all the tools developed so far. Market d
 
 ## Introduction
 
-Monopolization analysis sits at the intersection of conduct, market structure, and effects. Unlike merger review—which evaluates a prospective transaction—monopolization cases reconstruct historical patterns of behavior and ask whether a dominant firm has maintained or extended its position through exclusionary means rather than through competition on the merits. Section 2 of the Sherman Act in the United States and Article 102 of the Treaty on the Functioning of the European Union (TFEU) frame the legal standards, but enforcement priorities and evidentiary approaches differ substantially across jurisdictions.
+Section 2 of the Sherman Act in the United States and Article 102 of the Treaty on the Functioning of the European Union (TFEU) frame the legal standards for monopolization and abuse of dominance, but enforcement priorities and evidentiary approaches differ substantially across jurisdictions. The workflow runs through market power assessment, then the specific conduct categories---predation, rebates and loyalty programs, tying and bundling, most-favored-nation clauses, vertical restraints, and refusal to deal---pairing the mechanism in each case with an empirical measurement strategy and the qualitative evidence that supports it. It closes with remedy design and case exemplars from the United States, European Union, and Southern Africa.
 
-This chapter provides a structured workflow for analyzing monopolization claims. We begin with market power assessment, drawing on tools from @sec-market-definition and @sec-io-toolkit. We then turn to specific conduct categories—predation, rebates and loyalty programs, tying and bundling, most-favored-nation clauses, vertical restraints, and refusal to deal. For each, we pair theoretical mechanisms with empirical measurement strategies and qualitative evidence that together build a coherent narrative. The chapter concludes with remedy design considerations and a set of case exemplars that illustrate how different jurisdictions approach the same exclusionary practices.
-
-Throughout, we emphasize reproducibility and transparency. Code boxes demonstrate how to compute effective prices, assess foreclosure shares, and visualize event patterns around contract adoptions. Qualitative evidence boxes highlight the documentary and testimonial sources that complement quantitative analyses. Case boxes anchor abstract principles in real enforcement actions, drawing on landmark decisions from the United States, European Union, and Southern Africa.
-
-For deeper context, consult the extensive case law on exclusionary conduct, including landmark decisions like *United States v. Microsoft* [@us_microsoft_2001] and the European Commission's decisions on abuse of dominance [@ec_article102_guidance_2009]. For theoretical foundations, see @whinston_2006 and @salop_scheffman_1983 on raising rivals' costs.
+For deeper context, consult the case law on exclusionary conduct, including *United States v. Microsoft* [@us_microsoft_2001] and the European Commission's decisions on abuse of dominance [@ec_article102_guidance_2009]. For theoretical foundations, see @whinston_2006 and @salop_scheffman_1983 on raising rivals' costs.
 
 ## Market power and the monopolization workflow
 
@@ -291,7 +287,7 @@ p_waterfall / p_evolution +
 
 ### Qualitative evidence for rebates and exclusivity
 
-Internal documents and customer testimony are critical complements to quantitative foreclosure metrics:
+Internal documents and customer testimony complement the quantitative foreclosure metrics:
 
 - **Strategy memos**: Documents revealing intent to foreclose rivals or lock in customers (e.g., "ensure [Rival] cannot reach scale," "defend our share through loyalty programs").
 - **Contract negotiation histories**: Email chains and drafts showing how exclusivity or loyalty terms were introduced, customer resistance, and adjustments to overcome objections.
@@ -1096,8 +1092,22 @@ contracts[, c("customer", "marginal_units", "effective_marginal_price", "margin_
 
 5. **Case discussion.** A dominant platform charges third-party sellers a 30% commission while its own retail arm pays no commission. Is this self-preferencing? What additional evidence would you need to determine whether this practice harms competition vs. reflects legitimate vertical integration efficiencies?
 
+### Data exercise (checkable)
+
+A vertically integrated incumbent sells a wholesale input to downstream rivals at $45 and sells at retail for $75. An equally efficient downstream rival incurs $22 of its own downstream costs.
+
+a. Apply the margin-squeeze (equally-efficient-competitor) test: what margin is left for the downstream rival?
+b. Is there a squeeze on these numbers?
+c. Below what retail price would an equally efficient rival be squeezed (driven to a negative margin)?
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. Imputed margin = retail - wholesale - downstream cost = 75 - 45 - 22 = **$8**.
+b. The margin is positive ($8), so an equally efficient rival can survive -- **no squeeze** on these numbers.
+c. The rival breaks even at retail = 45 + 22 = **$67**; below $67 the spread turns negative and an equally efficient rival is squeezed.
+:::
+
 ## Looking ahead
 
-Monopolization analysis produces artifacts---foreclosure calculations, effective price computations, margin squeeze tests---that reappear throughout the remaining chapters. **@sec-regulation-remedies** addresses what happens after a liability finding: how to design remedies that actually cure the diagnosed harm and how to evaluate whether they work. Many monopolization cases end in consent decrees with behavioral obligations; the next chapter explains how to structure and monitor those commitments.
+Monopolization analysis produces artifacts—foreclosure calculations, effective price computations, margin squeeze tests—that reappear in the chapters ahead. **@sec-regulation-remedies** addresses what happens after a liability finding: how to design remedies that cure the diagnosed harm and how to evaluate whether they work. Many monopolization cases end in consent decrees with behavioral obligations, and the next chapter explains how to structure and monitor those commitments.
 
-The exclusionary conduct frameworks in this chapter also apply directly to **@sec-digital-markets**, where platform self-preferencing, default tying, and data leverage cases build on the same analytical foundations.
+The exclusionary conduct frameworks here also carry into **@sec-digital-markets**, where platform self-preferencing, default tying, and data leverage cases build on the same foundations.

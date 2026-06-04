@@ -10,11 +10,11 @@ format:
     number-sections: false
 ---
 
-Welcome. This book translates lecture notes and practitioner experience into a reproducible playbook for antitrust and regulation. It pairs empirical methods with qualitative evidence, case law, and agency practice.
+This is a working manual for antitrust and regulation analysis. It grew out of lecture notes and casework, and it puts empirical methods next to the qualitative evidence, case law, and agency practice that decide real matters. Every figure is produced by code you can run.
 
-- Audience: upper-undergraduates, early graduate students, and practitioners.
-- Approach: code-forward (R), with “Method,” “Qualitative,” “Case,” and “Debate” callouts in each chapter.
-- Jurisdictions: US focus with comparative notes for EU/UK/Japan/China where relevant.
-- Reproducibility: keys live in `.Renviron`; data are cached in `data/raw` and `data/derived`; figures regenerate from code.
+- Audience: upper-level undergraduates, early graduate students, and practitioners.
+- Approach: code-forward in R, with "Method," "Qualitative," "Case," and "Debate" boxes in each chapter.
+- Jurisdictions: the United States, the European Union, and South Africa carried throughout, with notes on the UK and Asian regimes where they sharpen the point.
+- Reproducibility: API keys live in `.Renviron`; data are cached in `data/raw` and `data/derived`; figures regenerate from code.
 
-Use the navigation to jump into chapters or start with the Preface.
+Start with the Preface, or use the navigation to jump to a chapter.

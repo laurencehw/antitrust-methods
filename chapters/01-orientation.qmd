@@ -1,11 +1,11 @@
 # Orientation: Antitrust and Regulation {#sec-orientation}
 
-Before diving into specific methods, we need to understand the institutional landscape where antitrust analysis occurs. This chapter provides that foundation. Economic analysis does not happen in a vacuum---it responds to legal standards, agency priorities, and procedural constraints that vary across jurisdictions. Understanding these institutions will help you frame your analyses to address the questions that actually matter in practice.
+Economic analysis answers to legal standards, agency priorities, and procedural rules, and all three vary by jurisdiction. So the methods come second. First the institutions: who enforces competition law, what they have to prove, and where the economics enters. Get that frame right and your analysis speaks to the questions that decide a matter rather than the ones that are merely interesting.
 
 ## Learning goals
-This opening chapter orients you to the institutional settings where economists, researchers, and lawyers work side by side. By the end you should be able to articulate how competition authorities define their objectives, how they translate statutes or guidelines into investigative hypotheses, and how evidentiary burdens shift between agencies and courts. You will also learn how to map economic questions—market definition, market power, theory of harm, efficiencies, and remedy selection—onto the specific legal elements regulators must prove or rebut.
+This chapter maps the settings where economists, researchers, and lawyers work side by side. By the end you should be able to say how competition authorities set their objectives, how they turn a statute or guideline into an investigative hypothesis, and how the burden of proof shifts as a matter moves from agency to court. You should also be able to map the economic questions---market definition, market power, theory of harm, efficiencies, remedy---onto the legal elements a regulator has to prove or rebut.
 
-An equally important goal is judgment: when should you push for additional data work, and when is documentary, testimonial, or industry expertise the better marginal investment? Because this course serves practitioners in South Africa who often face multi-jurisdictional matters, we will continually compare US-led doctrines with approaches in the EU, UK, Asia, and regional African regulators. Expect a mix of narrative history, process walkthroughs, and applied examples from roughly 2005–2024.
+The harder skill is judgment: when to push for more data work, and when documentary, testimonial, or industry evidence is the better use of the next dollar. Because many readers face multi-jurisdictional matters, we set US doctrine against the EU, the UK, Asia, and regional African regulators throughout. Expect a mix of narrative history, process walkthroughs, and worked examples from roughly 2005--2024.
 
 ## Core narrative
 ### Institutions and mandates
@@ -14,9 +14,9 @@ Modern antitrust work is anchored by a handful of institutions with overlapping 
 
 Post-2000 history matters for understanding current doctrine. The Clinton-era Microsoft litigation cemented exclusionary conduct frameworks [@us_microsoft_2001]. The 2010 Horizontal Merger Guidelines [@doj_ftc_hmg_2010] elevated unilateral effects analysis, a framework we explore in detail in @sec-mergers. Most recently, the 2023 Merger Guidelines [@doj_ftc_hmg_2023] re-centered structural presumptions and addressed platform dynamics head-on.
 
-Across the Atlantic, the European Commission's Directorate-General for Competition (DG COMP) pairs investigations with inquisitorial decision making, while national authorities like the UK Competition and Markets Authority (CMA) play an increasingly global role—for example, blocking Microsoft/Activision until remedies evolved. Asian agencies—including Japan's JFTC, Korea's KFTC, and China's SAMR—have expanded resources to scrutinize digital markets and cross-border conduct.
+Across the Atlantic, the European Commission's Directorate-General for Competition (DG COMP) pairs investigations with inquisitorial decision making, while national authorities like the UK Competition and Markets Authority (CMA) play an increasingly global role, for example blocking Microsoft/Activision until remedies evolved. Asian agencies—including Japan's JFTC, Korea's KFTC, and China's SAMR—have expanded resources to scrutinize digital markets and cross-border conduct.
 
-For practitioners working in Southern Africa, the Competition Commission and Competition Tribunal are essential reference points. These bodies have expanded their focus to digital markets, food supply chains, and cartels affecting the Southern African Development Community (SADC). Understanding each body's statutory tests, procedural timelines, and evidentiary cultures is essential to crafting persuasive analyses.
+For practitioners working in Southern Africa, the Competition Commission and Competition Tribunal are the reference points. These bodies have expanded their focus to digital markets, food supply chains, and cartels affecting the Southern African Development Community (SADC). A persuasive analysis rests on each body's statutory tests and evidentiary culture.
 
 ::: {.callout-tip title="Definition: Key Antitrust Concepts"}
 | Term | Definition |
@@ -56,7 +56,7 @@ When advising on multi-jurisdictional matters, map the same conduct to each regi
 
 ### Workflow from intake to remedies
 
-Having mapped these institutions and their statutory frameworks, practitioners must translate regulatory mandates into operational workflows. The section below outlines the typical arc from case intake through remedy selection, highlighting key decision points where economic analysis informs legal strategy.
+Regulatory mandates become operational workflows. The section below traces the arc from case intake through remedy selection, marking the decision points where economic analysis informs legal strategy.
 
 ::: {.callout-note title="Investigation Workflow Overview"}
 ```
@@ -85,16 +85,16 @@ INTAKE                 SCOPING                ANALYSIS               DECISION
 **Key decision points:** At each transition, evaluate whether additional data work or qualitative evidence offers the better marginal return given deadlines and burden of proof.
 :::
 
-Regardless of jurisdiction, investigations follow a recognizable arc. Matters typically begin with a complaint, leniency application, or merger notification. Case teams triage with “hot docs” and quick descriptive analytics, draft a plan that allocates legal and economic workstreams, and establish preservation plus data-request protocols. The second phase is scoping: enumerating data systems, prioritizing custodians, negotiating production formats, and deciding whether to run early econometric screens—such as price-cost margins or diversion ratios—before collecting more costly qualitative evidence. In phase three the team synthesizes theory and evidence into statements of issues, white papers, or ultimately pleadings and testimony. Finally, remedies discussions integrate forward-looking modeling with institutional constraints: can the Competition Tribunal in Pretoria supervise behavioral commitments as effectively as US courts, or is divestiture the only reliable fix? We examine remedy design frameworks in @sec-regulation-remedies. Always document these choices so that tribunals (and future teams) can reconstruct the evidentiary chain.
+Regardless of jurisdiction, investigations follow a recognizable arc. Matters typically begin with a complaint, leniency application, or merger notification. Case teams triage with “hot docs” and quick descriptive analytics, draft a plan that allocates legal and economic workstreams, and establish preservation plus data-request protocols. The second phase is scoping: enumerating data systems, prioritizing custodians, negotiating production formats, and deciding whether to run early econometric screens, such as price-cost margins or diversion ratios, before collecting more costly qualitative evidence. In phase three the team synthesizes theory and evidence into statements of issues, white papers, or ultimately pleadings and testimony. Finally, remedies discussions integrate forward-looking modeling with institutional constraints. Can the Competition Tribunal in Pretoria supervise behavioral commitments as effectively as US courts, or is divestiture the only reliable fix? We examine remedy design frameworks in @sec-regulation-remedies. Always document these choices so that tribunals and future teams can reconstruct the evidentiary chain.
 
 ### Scoping data needs early
 Practitioners treat data, documents, and interviews as complements rather than substitutes. Intake meetings should generate inventories of transactional databases, billing systems, CRM extracts, internal forecasts, board presentations, and benchmark studies. The task is to identify what can be measured quickly (e.g., monthly price series, bidding outcomes, churn metrics) and what requires longitudinal assembly (e.g., claims-level healthcare data or network telemetry). Teams should simultaneously plan qualitative work: establish search terms for electronically stored information (ESI), design interview protocols, and identify third parties—customers, suppliers, former employees—whose perspectives sharpen or rebut economic priors. Missing this early sequencing is costly; see the Competition Commission South Africa’s review of Netcare/Community Hospital Group, where late-stage data disputes shortened the time available for substantive modeling.
 
 ### Illustrative vignette: Search dominance diagnostics
-The 2020–2023 DOJ challenge to Google Search [@us_google_search_2023] illustrates how process and substance intertwine. Economists combined browser default share calculations, auction revenue data, and margin analyses with interview testimony from handset makers and browser developers. Those fact narratives clarified why certain regression designs mattered (e.g., estimating counterfactual query volume absent default contracts). Compare that to the Competition Commission South Africa's investigation into digital platforms and app stores [@sa_oipmi_2023], where documentary evidence about self-preferencing and ad-tech fee structures filled gaps in transaction data. The lesson: quantitative rigor carries the day only when tied to institutional detail about distribution agreements, switching costs, and remedy administrability.
+The 2020–2023 DOJ challenge to Google Search [@us_google_search_2023] illustrates how process and substance intertwine. Economists combined browser default share calculations, auction revenue data, and margin analyses with interview testimony from handset makers and browser developers. Those fact narratives clarified why certain regression designs mattered (e.g., estimating counterfactual query volume absent default contracts). Compare that to the Competition Commission South Africa's investigation into digital platforms and app stores [@sa_oipmi_2023], where documentary evidence about self-preferencing and ad-tech fee structures filled gaps in transaction data. The lesson: quantitative rigor carries the day only when tied to institutional detail about distribution agreements and switching costs.
 
 ::: {.callout-note title="Method box: Integrating empirics here"}
-Early-stage screening rarely needs sophisticated econometrics. Build dashboards that pull together market shares, HHI trends, entry/exit indicators, and switching matrices from customer-level data---the market definition tools in @sec-market-definition show how to construct these systematically. Combine transactional datasets with public sources (e.g., SEC filings, the FTC’s merger statistics, Stats SA tariff books) to benchmark plausible margins. When data are thin, like in new fintech or biotech markets pivot, quickly to qualitative or expert evidence rather than forcing underpowered regressions. Document these decisions in a running technical memo so litigators can later explain why the team prioritized one technique over another.
+Early-stage screening rarely needs sophisticated econometrics. Build dashboards that pull together market shares, HHI trends, entry/exit indicators, and switching matrices from customer-level data; the market definition tools in @sec-market-definition show how to construct these systematically. Combine transactional datasets with public sources (e.g., SEC filings, the FTC’s merger statistics, Stats SA tariff books) to benchmark plausible margins. When data are thin, as in new fintech or biotech markets, pivot quickly to qualitative or expert evidence rather than forcing underpowered regressions. Document these decisions in a running technical memo so litigators can later explain why the team prioritized one technique over another.
 :::
 
 ::: {.callout-note title="Qualitative evidence"}
@@ -102,7 +102,7 @@ Treat qualitative work as disciplined research, not anecdote hunting. Begin with
 :::
 
 ::: {.callout-note title="Case box: Quick tour"}
-Recent matters illustrate the diversity of evidentiary mixes. The *US v. Microsoft* [@us_microsoft_2001] legacy is still instructive for tying and exclusion, but newer platform cases—*US v. Google Search* [@us_google_search_2023] and the FTC's Meta/Within suit—highlight how product design data and third-party developer testimony reinforce each other. Airline collaborations such as DOJ v. American Airlines/JetBlue (NEA) show how scheduling data, revenue management simulations, and traveler surveys combine to test unilateral and coordinated effects. Global cartel work remains vibrant: the EU Trucks cartel decisions, the KFTC’s memory chip probes, and South Africa’s construction and bread cartels each turned on leniency statements corroborated by bidding records and cost analyses---screening methods we develop in @sec-cartels. Labor markets are now front-page antitrust: US wage-fixing cases in healthcare and the 2023 consent orders in the poultry industry relied on HR databases and interview evidence from recruiters---analyzed in depth in @sec-labor-markets.
+Recent matters illustrate the diversity of evidentiary mixes. The *US v. Microsoft* [@us_microsoft_2001] legacy is still instructive for tying and exclusion, but newer platform cases, *US v. Google Search* [@us_google_search_2023] and the FTC's Meta/Within suit, highlight how product design data and third-party developer testimony reinforce each other. Airline collaborations such as DOJ v. American Airlines/JetBlue (NEA) show how scheduling data, revenue management simulations, and traveler surveys combine to test unilateral and coordinated effects. Global cartel work continues: the EU Trucks cartel decisions, the KFTC’s memory chip probes, and South Africa’s construction and bread cartels each turned on leniency statements corroborated by bidding records and cost analyses; we develop those screening methods in @sec-cartels. Labor markets are now front-page antitrust. US wage-fixing cases in healthcare and the 2023 consent orders in the poultry industry relied on HR databases and interview evidence from recruiters, analyzed in depth in @sec-labor-markets.
 :::
 
 ::: {.callout-note title="Comparative note"}
@@ -121,17 +121,31 @@ While the US emphasizes adversarial hearings and judicial precedent, DG COMP and
 
 5. **Data/research.** Using publicly available data from agency websites (DOJ, FTC, EC, SA Competition Commission), compile a table of the 5 most recent merger challenges in each jurisdiction. What patterns do you observe in terms of industries targeted, theories of harm, and remedies imposed?
 
+### Data exercise (checkable)
+
+A market has four firms with shares of 40, 30, 20, and 10 percent.
+
+a. Compute the HHI.
+b. The two smallest firms (20% and 10%) propose to merge. Compute the post-merger HHI and the change (delta-HHI).
+c. Under the 2023 US Merger Guidelines (structural presumption at HHI > 1,800 and delta-HHI > 100), does the merger trigger the presumption?
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. HHI = 40^2 + 30^2 + 20^2 + 10^2 = 1,600 + 900 + 400 + 100 = **3,000**.
+b. The merged firm has a 30% share: HHI = 40^2 + 30^2 + 30^2 = 1,600 + 900 + 900 = **3,400**; delta-HHI = 3,400 - 3,000 = **400**. (Shortcut: delta-HHI = 2 x s_1 x s_2 = 2 x 20 x 10 = 400.)
+c. **Yes.** Post-merger HHI 3,400 > 1,800 and delta-HHI 400 > 100, so the merger triggers the structural presumption.
+:::
+
 ## Looking ahead
 
-Orientation work is only useful if it flows directly into research design. In @sec-research-design, we translate the institutional map above into concrete analytical workplans—building case chronology templates, sketching data inventories, and establishing the evidence-integration frameworks that will structure every subsequent chapter.
+The institutional map turns into analytical workplans in @sec-research-design: case chronology templates, data inventories, and the evidence-integration frameworks that structure the chapters that follow.
 
-**Before proceeding, prepare:**
+To prepare:
 
 1. **Case chronology template**: Build a timeline that can accommodate both US and SADC procedural milestones.
 2. **Data inventory**: Sketch which datasets span US, EU, and SADC sources (e.g., FRED for HHI, Stats SA for market shares).
 3. **Flagship dataset**: Identify at least one dataset (claims-level healthcare data, national tender records) that will power the quantitative chapters.
 
-Keep a running list of figures—HHI trends, entry timelines, platform governance maps—that we will revisit throughout the book. This ensures the narrative remains visually anchored and cumulative, with each chapter building on artifacts from previous ones.
+Keep a running list of figures, such as HHI trends and entry timelines, that later chapters will revisit.
 
 ## Visualizations
 
