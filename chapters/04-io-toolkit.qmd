@@ -91,7 +91,7 @@ $$\ln(s_j) - \ln(s_0) = \alpha \, p_j + \mathbf{x}_j' \boldsymbol{\beta} + \xi_j
 
 where $s_j$ is the market share of product $j$, $s_0$ is the outside-good share, $p_j$ is price, $\mathbf{x}_j$ is a vector of observed characteristics, and $\xi_j$ captures unobserved product quality. The coefficient $\alpha$ (expected to be negative) governs price sensitivity, while $\boldsymbol{\beta}$ captures how characteristics shift utility.
 
-The example below uses a cross-section of breakfast cereal brands---a setting familiar from @nevo_2001---to illustrate the mechanics. With 10 inside goods and two predictors, we have adequate degrees of freedom.
+The example below uses a cross-section of breakfast cereal brands, the setting of @nevo_2001, to illustrate the mechanics. With 10 inside goods and two predictors, we have adequate degrees of freedom.
 
 ```{r}
 #| label: io-logit
