@@ -88,7 +88,9 @@ Use chunk options for API-dependent code:
 
 Real data collected: FRED (HHI, prices, wages), stock prices (airlines, tech, healthcare), airline route shares.
 
-Synthetic/placeholder (needs replacement): cartel bid data, labor market HHI, platform usage, patent/FDA data.
+Real-data ingestion wired (run locally to populate): `03_bls_labor.R` pulls BLS QCEW county employment (`data/raw/qcew_county_employment.csv`, feeds Ch.10 HHI proxy) + CES employment; `06_procurement_cartels.R` pulls World Bank contract awards and derives a supplier award-concentration HHI screen. Both fall back to a schema-matched, clearly labelled synthetic file when offline.
+
+Still synthetic (no open source): cartel bid-rotation data (needs every bidder's bid, not just awards), platform usage, patent/FDA data.
 
 Manual downloads required (APIs deprecated): PatentsView bulk files, FDA Orange Book, BLS QCEW county data. See `planning/API_KEYS_SETUP.md`.
 

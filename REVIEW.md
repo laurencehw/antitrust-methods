@@ -84,12 +84,20 @@ that runs against a specific supplied dataset and has a checkable answer.
    all 13 content chapters (integrity-verified: no citation, statute, case, number,
    or code touched).
 2. **Mark or replace synthetic data.** — **Captioning DONE** (13 figures now carry
-   "Synthetic data for illustration only"). **Replacement DEFERRED** by author's
-   choice: the build environment has no outbound network or API keys, so real data
-   cannot be pulled here. When run locally with `FRED_API_KEY`/`BLS_KEY`, the
-   pipeline in `program/scripts/` supplies real series; the open item is wiring the
-   cartel-bid and labor-HHI chunks to a real source (BLS QCEW open CSVs; an open
-   procurement bid set) with the synthetic path as a clearly-labeled fallback.
+   "Synthetic data for illustration only"). **Ingestion WIRED, run pending.** The
+   sandbox has no outbound network, so the scripts can't pull here, but they are now
+   written to do so locally:
+   - `program/scripts/03_bls_labor.R` downloads the BLS QCEW annual singlefile and
+     writes `data/raw/qcew_county_employment.csv` (the exact file Ch.10 reads), plus
+     CES employment via the BLS API; both degrade to a schema-matched, clearly
+     labelled synthetic fallback if offline.
+   - `program/scripts/06_procurement_cartels.R` pulls the World Bank Major Contract
+     Awards and derives a real supplier award-concentration (HHI) screen. The cement
+     **bid-rotation** file stays synthetic-but-labelled because no open portal
+     publishes losing bids; swap in a competition authority's bid-level file at the
+     documented schema to replace it.
+   Open item: run both locally with `FRED_API_KEY`/`BLS_KEY` set, confirm the real
+   files land, and (optionally) add a Ch.5 code box that uses the award-HHI screen.
 3. **De-duplicate chapter front pages.** — **DONE** for the clear offenders (ch.6
    intro/goals/core-topics; ch.3 opener/goals/"why it matters"; ch.7 opener vs. a
    duplicate "Introduction").
