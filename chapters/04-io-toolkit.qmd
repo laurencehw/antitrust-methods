@@ -541,5 +541,17 @@ Bargaining models have become standard tools in several contexts:
 
 5. **Case discussion.** Describe how you would adapt the UPP/GUPPI tornado chart for a presentation to a non-technical audience (e.g., a judge or commission panel). Which parameters would you emphasize and why?
 
+### Data exercise (checkable)
+
+In a logit demand model, products A and B have market shares s_A = 0.20 and s_B = 0.30 (the remainder is the outside good and other products).
+
+a. Compute the diversion ratio from A to B.
+b. Interpret it.
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. Logit diversion D(A->B) = s_B / (1 - s_A) = 0.30 / (1 - 0.20) = 0.30 / 0.80 = **0.375**.
+b. If A raises price and loses sales, **37.5% of the lost volume goes to B**. High diversion to a merging partner is what drives unilateral-effects (UPP/GUPPI) concerns.
+:::
+
 ## Looking ahead
 The demand estimates, diversion matrices, and pass-through diagnostics introduced here form the quantitative backbone of the chapters ahead. In **@sec-cartels**, we apply variance screens and structural break tests to detect collusion, while in **@sec-mergers** we feed these IO primitives directly into merger simulations. The same bargaining and pass-through tools reappear in **@sec-monopolization** and **@sec-digital-markets**, where multi-sided platform dynamics add further complexity.

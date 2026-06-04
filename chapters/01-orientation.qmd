@@ -121,6 +121,20 @@ While the US emphasizes adversarial hearings and judicial precedent, DG COMP and
 
 5. **Data/research.** Using publicly available data from agency websites (DOJ, FTC, EC, SA Competition Commission), compile a table of the 5 most recent merger challenges in each jurisdiction. What patterns do you observe in terms of industries targeted, theories of harm, and remedies imposed?
 
+### Data exercise (checkable)
+
+A market has four firms with shares of 40, 30, 20, and 10 percent.
+
+a. Compute the HHI.
+b. The two smallest firms (20% and 10%) propose to merge. Compute the post-merger HHI and the change (delta-HHI).
+c. Under the 2023 US Merger Guidelines (structural presumption at HHI > 1,800 and delta-HHI > 100), does the merger trigger the presumption?
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. HHI = 40^2 + 30^2 + 20^2 + 10^2 = 1,600 + 900 + 400 + 100 = **3,000**.
+b. The merged firm has a 30% share: HHI = 40^2 + 30^2 + 30^2 = 1,600 + 900 + 900 = **3,400**; delta-HHI = 3,400 - 3,000 = **400**. (Shortcut: delta-HHI = 2 x s_1 x s_2 = 2 x 20 x 10 = 400.)
+c. **Yes.** Post-merger HHI 3,400 > 1,800 and delta-HHI 400 > 100, so the merger triggers the structural presumption.
+:::
+
 ## Looking ahead
 
 The institutional map turns into analytical workplans in @sec-research-design: case chronology templates, data inventories, and the evidence-integration frameworks that structure the chapters that follow.

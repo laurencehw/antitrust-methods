@@ -80,19 +80,31 @@ that runs against a specific supplied dataset and has a checkable answer.
 ## Path to 9.5 — priority order
 
 1. **Finish the voice pass** through the body boxes and "Looking ahead" sections,
-   using `STYLE.md`. Mechanical and high-impact. (~1–2 days)
-2. **Mark or replace synthetic data.** Caption every synthetic figure now; replace
-   the cartel and labor-HHI placeholders with real procurement / QCEW data. (the
-   big substantive lift)
-3. **De-duplicate chapter front pages.** One motivating intro, one tight goals
-   list, no restatement. (~half a day, mechanical)
+   using `STYLE.md`. — **DONE.** Front matter rewritten by hand; body swept across
+   all 13 content chapters (integrity-verified: no citation, statute, case, number,
+   or code touched).
+2. **Mark or replace synthetic data.** — **Captioning DONE** (13 figures now carry
+   "Synthetic data for illustration only"). **Replacement DEFERRED** by author's
+   choice: the build environment has no outbound network or API keys, so real data
+   cannot be pulled here. When run locally with `FRED_API_KEY`/`BLS_KEY`, the
+   pipeline in `program/scripts/` supplies real series; the open item is wiring the
+   cartel-bid and labor-HHI chunks to a real source (BLS QCEW open CSVs; an open
+   procurement bid set) with the synthetic path as a clearly-labeled fallback.
+3. **De-duplicate chapter front pages.** — **DONE** for the clear offenders (ch.6
+   intro/goals/core-topics; ch.3 opener/goals/"why it matters"; ch.7 opener vs. a
+   duplicate "Introduction").
 4. **Verify every case citation and statutory cite.** A methods book that gets
-   *Ryan v. FTC* or a Guidelines section number wrong loses credibility fast. Spot
-   a legal reader to read for cite accuracy.
+   *Ryan v. FTC* or a Guidelines section number wrong loses credibility fast.
+   — **OPEN** (needs a human legal reader).
 5. **Strengthen end-of-chapter exercises** so each has at least one data-backed,
-   checkable problem.
+   checkable problem. — **DONE.** Chapters 1–12 each gained a "Data exercise
+   (checkable)" with inline numbers and a collapsible worked answer (HHI/delta-HHI,
+   DiD, critical loss, logit diversion, overcharge and treble damages, GUPPI, margin
+   squeeze, revenue requirement, self-preferencing traffic loss, labor HHI +
+   markdown, royalty stacking + pay-for-delay, t-stat + damages).
 6. **Author voice consistency.** Decide on "we" vs. "I" once and apply it
    everywhere (the book currently uses editorial "we"; the preface now uses "I" for
    personal acknowledgments, which is the right split — just keep it deliberate).
 
-Do 1, 3, and 4 and the book is a clean 8.5–9. Add 2 and 5 and it is a 9.5.
+Remaining for a clean 9.5: item 4 (a legal-cite read-through), the data-source
+wiring half of item 2, and item 6. The stylistic and structural work is complete.

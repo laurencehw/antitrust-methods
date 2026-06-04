@@ -537,5 +537,17 @@ ggplot(remedy_events_swim, aes(x = date, y = as.numeric(swimlane))) +
 
 5. **Conceptual.** Compare structural vs. behavioral remedies for a horizontal hospital merger that would create a must-have system in a metropolitan area. What are the key considerations for each approach, and which would you recommend? Justify your answer.
 
+### Data exercise (checkable)
+
+A regulated utility has a rate base of $1,000 million, an allowed rate of return of 8%, annual operating expenses of $50 million, and annual depreciation of $30 million.
+
+a. Using Revenue = (Rate base x Allowed return) + Opex + Depreciation, compute the allowed revenue requirement.
+b. Name the incentive problem this cost-plus structure creates.
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. Revenue = (1,000 x 0.08) + 50 + 30 = 80 + 50 + 30 = **$160 million**.
+b. The **Averch-Johnson effect**: because the firm earns a return on its rate base, it has an incentive to over-invest in capital ("gold-plating") whenever the allowed return exceeds its true cost of capital.
+:::
+
 ## Looking ahead
 The remedy design and evaluation tools here carry into the next chapters. @sec-digital-markets applies access mandates, fair-ranking obligations, and interoperability remedies to platform markets, obligations codified in instruments such as the EU Digital Markets Act [@eu_dma_2022], where behavioral remedies and ongoing monitoring matter most. @sec-litigation-practice covers how to present remedy compliance evidence in expert reports and how retrospective evaluations feed into damages proceedings. As you encounter new cases, ask which remedy type---structural, behavioral, or hybrid---best matches the diagnosed harm, and how the benchmarking and diff-in-diff frameworks here can test whether it is working.

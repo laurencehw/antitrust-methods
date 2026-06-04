@@ -1063,6 +1063,20 @@ Replace simulated values with outputs from your actual merger simulation model (
 
 5. **Conceptual.** Explain the difference between a first-order price effect approximation (from UPP) and a full equilibrium merger simulation. When is the approximation likely to overstate or understate the actual price effect?
 
+### Data exercise (checkable)
+
+Two differentiated competitors with market shares of 25% and 15% propose to merge.
+
+a. Using delta-HHI = 2 x s_1 x s_2, compute the change in HHI.
+b. The diversion ratio from product 1 to product 2 is 0.30, product 2's margin is 0.40, and prices are equal. Compute the GUPPI for product 1.
+c. The pre-merger HHI is 1,900. Does the structural presumption (HHI > 1,800, delta-HHI > 100) apply, and what does the GUPPI add?
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. delta-HHI = 2 x 25 x 15 = **750**.
+b. GUPPI_1 = D_12 x m_2 x (p_2 / p_1) = 0.30 x 0.40 x 1 = **0.12 = 12%**.
+c. Post-merger HHI = 1,900 + 750 = 2,650 > 1,800 and delta-HHI 750 > 100, so **the structural presumption applies**. The 12% GUPPI sits well above the 5% screening threshold many agencies use, corroborating a unilateral-effects concern beyond the structural screen.
+:::
+
 ## Looking ahead
 
 Merger analysis produces artifacts—simulation outputs, UPP tables, event-study results—that reappear in **@sec-monopolization** and **@sec-litigation-practice**. The same frameworks apply when assessing whether a dominant firm's conduct harms competition.

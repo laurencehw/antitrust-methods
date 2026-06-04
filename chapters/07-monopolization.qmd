@@ -18,11 +18,7 @@ Answering them draws on the tools developed so far. Market definition establishe
 
 ## Introduction
 
-Merger review evaluates a prospective transaction. Monopolization cases instead reconstruct historical patterns of behavior and ask whether a dominant firm has maintained or extended its position through exclusionary means rather than competition on the merits. Section 2 of the Sherman Act in the United States and Article 102 of the Treaty on the Functioning of the European Union (TFEU) frame the legal standards, but enforcement priorities and evidentiary approaches differ substantially across jurisdictions.
-
-This chapter sets out a workflow for analyzing monopolization claims. It begins with market power assessment, drawing on tools from @sec-market-definition and @sec-io-toolkit. It then turns to specific conduct categories: predation, rebates and loyalty programs, tying and bundling, most-favored-nation clauses, vertical restraints, and refusal to deal. For each, theoretical mechanisms pair with empirical measurement strategies and qualitative evidence. The chapter closes with remedy design and case exemplars showing how different jurisdictions approach the same exclusionary practices.
-
-The code boxes compute effective prices and assess foreclosure shares. The qualitative evidence boxes point to the documentary and testimonial sources that complement them. Case boxes draw on decisions from the United States, European Union, and Southern Africa.
+Section 2 of the Sherman Act in the United States and Article 102 of the Treaty on the Functioning of the European Union (TFEU) frame the legal standards for monopolization and abuse of dominance, but enforcement priorities and evidentiary approaches differ substantially across jurisdictions. The workflow runs through market power assessment, then the specific conduct categories---predation, rebates and loyalty programs, tying and bundling, most-favored-nation clauses, vertical restraints, and refusal to deal---pairing the mechanism in each case with an empirical measurement strategy and the qualitative evidence that supports it. It closes with remedy design and case exemplars from the United States, European Union, and Southern Africa.
 
 For deeper context, consult the case law on exclusionary conduct, including *United States v. Microsoft* [@us_microsoft_2001] and the European Commission's decisions on abuse of dominance [@ec_article102_guidance_2009]. For theoretical foundations, see @whinston_2006 and @salop_scheffman_1983 on raising rivals' costs.
 
@@ -1095,6 +1091,20 @@ contracts[, c("customer", "marginal_units", "effective_marginal_price", "margin_
 4. **Data/code.** Design an event study to measure the effect of exclusive contract adoption on rival market share, using the staggered rollout framework from the chapter. Specify: the unit of observation, the treatment variable, the outcome, and at least two controls.
 
 5. **Case discussion.** A dominant platform charges third-party sellers a 30% commission while its own retail arm pays no commission. Is this self-preferencing? What additional evidence would you need to determine whether this practice harms competition vs. reflects legitimate vertical integration efficiencies?
+
+### Data exercise (checkable)
+
+A vertically integrated incumbent sells a wholesale input to downstream rivals at $45 and sells at retail for $75. An equally efficient downstream rival incurs $22 of its own downstream costs.
+
+a. Apply the margin-squeeze (equally-efficient-competitor) test: what margin is left for the downstream rival?
+b. Is there a squeeze on these numbers?
+c. Below what retail price would an equally efficient rival be squeezed (driven to a negative margin)?
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. Imputed margin = retail - wholesale - downstream cost = 75 - 45 - 22 = **$8**.
+b. The margin is positive ($8), so an equally efficient rival can survive -- **no squeeze** on these numbers.
+c. The rival breaks even at retail = 45 + 22 = **$67**; below $67 the spread turns negative and an equally efficient rival is squeezed.
+:::
 
 ## Looking ahead
 

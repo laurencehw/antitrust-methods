@@ -861,6 +861,16 @@ cat("\nUse these rates to model expected future approvals and consumer harm from
 
 5. **Data/code.** The clinical trial pipeline visualization compares three firms. Suppose Firm A acquires Firm B. Using the pipeline data, calculate: (a) the combined pipeline, (b) the overlap in development stages, and (c) which stages are most vulnerable to post-acquisition discontinuation based on the killer acquisitions framework.
 
+### Data exercise (checkable)
+
+a. **Royalty stacking.** Ten different firms each hold a standard-essential patent and each demands a 5% running royalty on the product price. What is the cumulative royalty burden?
+b. **Pay-for-delay.** A brand drug sells for $100 and the generic would sell for $20. Annual volume is 1,000,000 units, and a reverse-payment settlement delays generic entry by 2 years. Assuming the generic would have captured the market at the generic price, estimate the consumer harm from the delay.
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. 10 x 5% = **50%** cumulative royalty -- the royalty-stacking problem that FRAND commitments are meant to contain.
+b. Harm ~= price difference x volume x delay = ($100 - $20) x 1,000,000 x 2 = **$160,000,000**, an upper bound that assumes full, immediate substitution at the generic price.
+:::
+
 ## Looking ahead
 
 Innovation and IP issues are increasingly central to merger review and monopolization enforcement. The survival models, event studies, and patent network tools in this chapter carry forward into **@sec-litigation-practice**, which covers how to present technical expert testimony alongside economic evidence. The killer acquisitions framework connects to **@sec-mergers** for transactions involving nascent competitors, and the SEP/FRAND analysis informs remedy design in **@sec-regulation-remedies**. When real data become available (PatentsView bulk downloads, FDA Orange Book, SAHPRA filings), replace the synthetic examples with actual patent networks, entry timelines, and R&D panels.

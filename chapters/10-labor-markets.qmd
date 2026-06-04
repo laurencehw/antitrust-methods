@@ -844,6 +844,18 @@ summary(wage_model)
 
 5. **Data/code.** The synthetic control scaffold in this chapter estimates the effect of Washington's no-poach settlement. Describe how you would construct the donor pool (which states to include/exclude and why) and what pre-treatment variables you would match on. What placebo tests would you run?
 
+### Data exercise (checkable)
+
+In a local labor market, three employers account for hiring shares of 50%, 30%, and 20%.
+
+a. Compute the labor-market HHI and classify it against the 2,500 threshold.
+b. The estimated firm-level labor supply elasticity is 2. Using wage / MRPL = eta / (1 + eta), by what percentage does the wage fall below the marginal revenue product of labor?
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. HHI = 50^2 + 30^2 + 20^2 = 2,500 + 900 + 400 = **3,800** -- highly concentrated, well above 2,500.
+b. wage / MRPL = 2 / (1 + 2) = 2/3 ~= 0.667, so the wage is about **33% below** the marginal revenue product of labor.
+:::
+
 ## Looking ahead
 
 Labor antitrust connects to several threads in the remaining chapters. **@sec-innovation-ip** takes up how employment contracts, particularly noncompete clauses and trade secret provisions, interact with innovation incentives. The same monopsony frameworks apply when labor market restrictions affect the pace of technical change.

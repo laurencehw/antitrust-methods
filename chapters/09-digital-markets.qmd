@@ -1068,6 +1068,18 @@ For the latest agency guidance, monitor CMA's AI Foundation Models work and FTC/
 
 5. **Conceptual.** A ride-hailing platform argues that high multi-homing rates among drivers prove the market is competitive. Evaluate this argument. Under what conditions could high multi-homing coexist with significant market power on the rider side?
 
+### Data exercise (checkable)
+
+On a search platform, the click-through rate is 35% for the top organic position and 8% for position 4. The platform demotes a rival comparison-shopping service from position 1 to position 4 on a query that runs 1,000,000 times.
+
+a. Compute the rival's lost clicks from the demotion.
+b. Why does this metric matter for a self-preferencing theory of harm?
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. Lost clicks = (0.35 - 0.08) x 1,000,000 = 0.27 x 1,000,000 = **270,000 clicks**.
+b. It quantifies the causal traffic diversion from a ranking change -- the empirical core of the *Google Shopping* theory of harm. Tying the click loss to the algorithm change, rather than to organic quality differences, is what separates unlawful self-preferencing from legitimate ranking.
+:::
+
 ## Looking ahead
 
 Digital markets move fast, so treat the frameworks here as a starting point. @sec-labor-markets applies similar monopsony frameworks to employer-side platform power---gig economy classification, wage-fixing algorithms, and no-poach agreements. @sec-litigation-practice covers how to package digital market evidence into expert reports and trial exhibits. Many of the same event-study and difference-in-differences techniques used here to evaluate platform conduct reappear when assessing remedy effectiveness and merger retrospectives.

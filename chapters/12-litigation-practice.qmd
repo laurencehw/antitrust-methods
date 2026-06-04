@@ -638,5 +638,15 @@ cat(paste0("Top 10% of class accounts for ",
 
 5. **Case discussion.** Compare evidentiary standards for expert testimony across the US (Daubert), EU (EC best practices), and South Africa (Competition Tribunal rules). How do these differences affect the way you structure an expert report for each jurisdiction?
 
+### Data exercise (checkable)
+
+a. **Common impact.** A class-wide overcharge regression yields a coefficient of 2.5 (percentage points) with a standard error of 0.5. Compute the t-statistic and state whether the overcharge is significant at the 1% level.
+b. **Damages.** Affected commerce is $200 million and the estimated overcharge rate is 15%. Compute single damages and the trebled US exposure.
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. t = 2.5 / 0.5 = **5.0**, above the ~2.58 critical value for a two-sided 1% test, so the overcharge is significant at the 1% level -- evidence of common impact across the class.
+b. Single damages = 0.15 x $200M = **$30M**; trebled = 3 x $30M = **$90M**.
+:::
+
 ## Looking ahead
 The litigation tools in this chapter---reproducible code bundles, Daubert-ready sensitivity analyses, and evidence provenance mapping---apply across every substantive area covered in this book. Whether you are presenting cartel damages (@sec-cartels), merger simulations (@sec-mergers), or labor market harm (@sec-labor-markets), the workflow is the same: link every opinion to specific evidence, document the assumptions, and stress-test your results before cross-examination does it for you. The @sec-empirical-appendix collects reusable diagnostic checklists and code templates that complement the expert report frameworks introduced here.

@@ -6,9 +6,7 @@ This chapter uses the causal toolkit from @sec-research-design to draw those bou
 
 ## Learning goals
 
-Market definition is no longer a rote SSNIP ritual. Yet agencies and courts still expect a disciplined articulation of product and geographic boundaries before debating competitive effects.
-
-This chapter shows you how to frame those boundaries using data and qualitative evidence, evaluate SSNIP/SSNDQ logic, and communicate results across multiple jurisdictions—DOJ/FTC, DG COMP, CMA, SAMR, and Competition Tribunal South Africa.
+Market definition is no longer a rote SSNIP ritual. But agencies and courts still expect a disciplined statement of product and geographic boundaries before any debate about competitive effects, and they expect it to translate across DOJ/FTC, DG COMP, CMA, SAMR, and the Competition Tribunal of South Africa.
 
 By the end of the chapter you should be able to:
 
@@ -18,7 +16,7 @@ By the end of the chapter you should be able to:
 - Reference key precedents (e.g., [@doj_ftc_hmg_2023], [@ec_market_definition_2024], [@cma_merger_assessment_2021]) and literature when defending methodological choices.
 
 ## Why market definition still matters
-Even in unilateral-effects cases where agencies focus on margins, diversion, and price effects directly, courts often ask, "what is the market?" The answer shapes presumptions (HHI thresholds, dominance), jurisdictional hooks (public-interest test vs. consumer welfare), and remedy feasibility. Practitioners should treat market definition as an evidence-integration exercise: describe customer substitution paths, quantify them when possible, and tie those findings to the legal standard at issue (e.g., "reasonable interchangeability" in US case law vs. "sufficiently interchangeable" in EC practice). Keep records of how you screened candidate markets so future teams can expand or narrow scope without re-litigating data prep.
+Even in unilateral-effects cases, where agencies work directly with margins, diversion, and price effects, courts still ask "what is the market?" Treat the answer as an evidence-integration exercise: describe the customer substitution paths, quantify them where you can, and tie the findings to the legal standard at issue---"reasonable interchangeability" in US case law, "sufficiently interchangeable" in EC practice. Keep a record of how you screened candidate markets so a later team can widen or narrow scope without re-doing the data prep.
 
 ::: {.callout-note title="SSNIP Test Decision Flowchart"}
 ```
@@ -664,6 +662,18 @@ A long-running debate centers on whether formal market definition remains necess
 4. **Conceptual.** Explain the SSNDQ (quality degradation) framework and when it is preferable to SSNIP. Give an example of a zero-price market where SSNDQ would be the appropriate test.
 
 5. **Data/code.** Using the diversion ratio code scaffold in this chapter, modify the simulation to create asymmetric diversion (A to B = 35%, B to A = 15%). Compute UPP for both directions and explain why asymmetric diversion matters for merger analysis.
+
+### Data exercise (checkable)
+
+A candidate market has a gross margin of 40%. You run a SSNIP of 5%.
+
+a. Compute the critical loss.
+b. Survey evidence suggests the actual loss from a 5% price rise would be about 8%. Is the candidate market a relevant antitrust market, or is it drawn too narrowly?
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. Critical loss = t / (t + m) = 0.05 / (0.05 + 0.40) = 0.05 / 0.45 = **11.1%**.
+b. Actual loss (8%) < critical loss (11.1%), so the hypothetical monopolist would find the 5% increase profitable. The candidate market **is a relevant market** -- it is not too narrow.
+:::
 
 ## Looking ahead
 

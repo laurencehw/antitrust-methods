@@ -194,6 +194,18 @@ ggplot(cars, aes(x = rel_day, y = car, color = symbol)) +
 
 5. **Conceptual.** A South African Competition Commission investigation has access to 18 months of transaction data from two grocery chains but no natural experiment or policy shock. What research design options are available? Discuss the tradeoffs between before/after, cross-sectional, and structural approaches.
 
+### Data exercise (checkable)
+
+A merger affects one regional market (treated) but not another (control). Mean prices are: treated 100 (pre) and 118 (post); control 100 (pre) and 110 (post).
+
+a. Compute the difference-in-differences estimate of the merger's price effect.
+b. What identifying assumption must hold for this to be causal, and what plot would you show to support it?
+
+::: {.callout-tip collapse="true" title="Worked answer"}
+a. DiD = (118 - 100) - (110 - 100) = 18 - 10 = **8**, an 8-unit (8%) price increase attributable to the merger.
+b. **Parallel trends**: absent the merger, treated and control prices would have moved together. Support it with an event-study / pre-trend plot showing the two series tracking each other before the merger date.
+:::
+
 ## Looking ahead
 Document every decision from scoping memo to estimation so later chapters can layer on industry-specific models. Begin compiling a reusable appendix with sample interview protocols, diversion survey templates, and code snippets for data validation. Market definition and merger simulation lean on these assets, so note any gaps (e.g., a telecom-grade cost index or South African procurement benchmark) while the evidence record is still flexible.
 
