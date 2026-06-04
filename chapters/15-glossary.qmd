@@ -51,7 +51,7 @@ This glossary collects key terms, statutes, cases, and methods referenced throug
 - **TFEU Article 102.** Prohibition on abuse of dominant position.
 - **EU Merger Regulation (139/2004).** SIEC test: "significant impediment to effective competition."
 - **2004 Horizontal Merger Guidelines.** @ec_hmg_2004.
-- **Digital Markets Act (2022/1925).** Ex ante regulation of gatekeeper platforms. @eu_digital_markets_act_2022.
+- **Digital Markets Act (2022/1925).** Ex ante regulation of gatekeeper platforms. @eu_dma_2022.
 
 ### South Africa
 - **Competition Act 89 of 1998.** Prohibits restrictive practices (Chapter 2), abuse of dominance (Chapter 3), and regulates mergers (Chapter 4). Includes public-interest factors. @sa_competition_act_1998.
