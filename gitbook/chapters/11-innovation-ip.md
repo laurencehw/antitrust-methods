@@ -66,8 +66,11 @@ Evidence sources:
 - **FTC v. Qualcomm (2019-2020):** The FTC alleged Qualcomm used its SEP position and chip monopoly to extract supracompetitive royalties through "no license, no chips" policies. The district court found antitrust violations, but the Ninth Circuit reversed, holding that Qualcomm's practices—even if anticompetitive in licensing markets—did not harm competition in chip markets. The case highlights difficulties in applying antitrust to SEP licensing and the importance of identifying the correct market for harm analysis.
 - **EC Qualcomm decisions (2018-2019):** The Commission fined Qualcomm for predatory pricing to exclude Icera and for exclusivity payments to Apple, demonstrating EU willingness to pursue SEP-adjacent conduct.
 
-:::{.callout-note title="Case box: FTC v. Qualcomm (2019--2020)"}
-The FTC alleged that Qualcomm leveraged its monopoly in CDMA and premium LTE modem chips to extract supracompetitive royalties through a "no license, no chips" policy---refusing to supply chips unless manufacturers accepted its SEP licensing terms (*FTC v. Qualcomm*, 2020). Judge Koh's sweeping district court ruling found antitrust violations across licensing and chip markets, ordering Qualcomm to renegotiate agreements at FRAND rates. The Ninth Circuit reversed, holding that Qualcomm's licensing practices---even if they violated FRAND commitments---did not constitute anticompetitive conduct *in chip markets* because OEMs had no alternative chipset suppliers regardless of licensing terms. The decision effectively requires plaintiffs to show harm to competition (not just to competitors) in a properly defined market, raising the bar for SEP-based antitrust claims in the United States. The EU's parallel Qualcomm cases suggest a more receptive environment for such theories in European enforcement.
+{% hint style="info" %}
+**Case box: FTC v. Qualcomm (2019--2020)**
+
+The FTC alleged that Qualcomm used its monopoly in CDMA and premium LTE modem chips to extract supracompetitive royalties through a "no license, no chips" policy: it refused to supply chips unless manufacturers accepted its SEP licensing terms (*FTC v. Qualcomm*, 2020). Judge Koh's sweeping district court ruling found antitrust violations across licensing and chip markets, ordering Qualcomm to renegotiate agreements at FRAND rates. The Ninth Circuit reversed, holding that Qualcomm's licensing practices---even if they violated FRAND commitments---did not constitute anticompetitive conduct *in chip markets* because OEMs had no alternative chipset suppliers regardless of licensing terms. The decision effectively requires plaintiffs to show harm to competition (not just to competitors) in a properly defined market, raising the bar for SEP-based antitrust claims in the United States. The EU's parallel Qualcomm cases suggest a more receptive environment for such theories in European enforcement.
+{% endhint %}
 
 These cases illustrate jurisdictional divergence: EU authorities more readily pursue SEP-related antitrust claims, while US courts after *Qualcomm* require clearer links between licensing conduct and competitive harm.
 
@@ -163,8 +166,11 @@ Replace synthetic returns with `tidyquant::tq_get()` using actual tickers and ev
 ## Pay-for-delay and reverse payments
 
 ### Entry timing and hazard models
-:::{.callout-note title="Case box: FTC v. Actavis --- Pay-for-delay and the rule of reason (2013)"}
+{% hint style="info" %}
+**Case box: FTC v. Actavis --- Pay-for-delay and the rule of reason (2013)**
+
 The Supreme Court rejected the "scope of the patent" test that had shielded reverse payment settlements from antitrust scrutiny, holding instead that such agreements must be evaluated under the rule of reason (*FTC v. Actavis*, 2013). The Court reasoned that a large unexplained payment from a brand-name manufacturer to a generic challenger suggests the patent holder has doubts about patent validity---and that paying to delay entry is an exercise of market power, not a legitimate exploitation of patent rights. The decision established that the *size of the payment* relative to litigation costs and saved royalties is the key indicator of anticompetitive harm. Post-Actavis, pharmaceutical companies restructured settlements to avoid explicit cash transfers, using instead "authorized generics," supply agreements, and co-promotion deals that obscure the economic equivalent of reverse payments. Enforcers must now trace the value of these non-cash transfers to demonstrate that settlements effectively compensate generics for staying out of the market.
+{% endhint %}
 
 Reverse-payment settlements can delay generic entry and harm consumers (*FTC v. Actavis*, 2013). Analyze:
 
@@ -368,16 +374,23 @@ For pharmaceutical and biotech markets, cross-reference FDA and EMA clinical tri
 
 ## Interoperability and data access
 
-Analyze API access restrictions, data sharing, and interoperability constraints:
+Interoperability---the ability of different systems to work together and exchange data---has become a central concern in digital market competition. When a dominant firm controls a platform, standard, or interface that others depend on to compete, restrictions on interoperability can function as exclusionary conduct. The antitrust question is whether the firm has a duty to provide access, and if so, on what terms.
+
+The legal framework varies significantly across jurisdictions. In the EU, the essential facilities doctrine and the interoperability provisions of the Digital Markets Act create affirmative obligations for gatekeeper platforms to provide access to APIs, data, and interoperability features. The DMA's Article 6 specifically requires gatekeepers to allow business users to interoperate with their services, to provide effective data portability, and to refrain from self-preferencing in rankings and access conditions. In the US, the legal standard is more restrictive: *Verizon Communications Inc. v. Law Offices of Curtis V. Trinko, LLP* (2004) established that there is generally no duty to deal with competitors, and *Pacific Bell Telephone Co. v. linkLine Communications, Inc.* (2009) further limited the circumstances under which price-squeeze claims can succeed. South Africa occupies a middle ground: the Competition Act's abuse-of-dominance provisions (Section 8) include an explicit refusal-to-deal clause, and the Competition Tribunal has shown willingness to impose interoperability remedies in sectors like telecommunications and digital platforms.
+
+The empirical analysis of interoperability disputes requires technical and economic evidence. On the technical side, practitioners should examine API documentation, rate limiting policies, response time differentials between internal and external developers, and feature parity across access tiers. Engineering product requirements documents (PRDs), internal technical reviews, and version control logs can reveal whether interoperability restrictions were motivated by legitimate technical concerns or by competitive strategy. On the economic side, the analysis focuses on the competitive impact of restricted access: how many rivals are affected, what is the cost of developing alternative infrastructure, and would mandatory interoperability undermine innovation incentives?
+
+Data portability---the ability of users to transfer their data from one platform to another---is a related concern that sits at the intersection of competition policy, privacy regulation, and consumer protection. The EU's General Data Protection Regulation (GDPR) includes a data portability right (Article 20), and the DMA builds on this framework to require gatekeepers to provide continuous, real-time access to data generated by business users. In the US, data portability remains largely a voluntary commitment, though the FTC has explored it as a remedy in merger consent decrees. The empirical challenge is measuring the competitive significance of data barriers: when does data lock-in constitute a meaningful entry barrier, and when is it simply a reflection of network effects that benefit consumers?
 
 - **API logs:** Compare response times, rate limits, and feature parity between internal and external developers.  
 - **Data portability metrics:** Evaluate export completeness, frequency, and latency.  
 - **Technical documentation:** PRDs and engineering tickets often show intent to foreclose or degrade rivals.
+- **Cost of duplication analysis:** Estimate the investment required for a rival to replicate the platform's data infrastructure or API functionality.
+- **User switching cost surveys:** Measure how data portability barriers affect actual switching behavior.
 
 ## Southern African innovation/IP examples
-- **Telkom vs. Internet Solutions (broadband IP).** Access to APIs and OSS/BSS systems under FRAND-like commitments; margin squeeze tests combined with technical audits.  
-- **Vodacom Zero-Rating commitments (data services inquiry).** Interoperability obligations for educational content, showing how innovation incentives can align with public-interest remedies.  
-- **Pharma patent settlements (Competition Commission investigations into ARV markets).** Settlement analysis combining SAMRC price data, patent landscapes, and clinical trial timelines to assess delay and innovation impact.
+
+South Africa's Competition Commission has addressed innovation and IP issues in several notable matters, though the jurisprudence is less developed than in the US and EU. The **Telkom vs. Internet Solutions** broadband case examined access to APIs and OSS/BSS systems under FRAND-like commitments, combining margin squeeze tests with technical audits to assess whether Telkom's wholesale pricing allowed retail competitors to profitably serve end users. The **Vodacom Zero-Rating commitments** arising from the data services inquiry required interoperability obligations for educational content, showing how innovation incentives can align with the public-interest remedies that are a distinctive feature of South Africa's competition framework. The Commission's **investigations into ARV (antiretroviral) patent settlements** combined SAMRC price data, patent landscape analysis, and clinical trial timelines to assess whether settlement agreements between originator and generic manufacturers delayed market entry and harmed public health outcomes.
 
 ## Enhanced Visualizations
 
@@ -824,6 +837,18 @@ cat("\nUse these rates to model expected future approvals and consumer harm from
 
 5. **Data/code.** The clinical trial pipeline visualization compares three firms. Suppose Firm A acquires Firm B. Using the pipeline data, calculate: (a) the combined pipeline, (b) the overlap in development stages, and (c) which stages are most vulnerable to post-acquisition discontinuation based on the killer acquisitions framework.
 
+### Data exercise (checkable)
+
+a. **Royalty stacking.** Ten different firms each hold a standard-essential patent and each demands a 5% running royalty on the product price. What is the cumulative royalty burden?
+b. **Pay-for-delay.** A brand drug sells for $100 and the generic would sell for $20. Annual volume is 1,000,000 units, and a reverse-payment settlement delays generic entry by 2 years. Assuming the generic would have captured the market at the generic price, estimate the consumer harm from the delay.
+
+{% hint style="success" %}
+**Worked answer**
+
+a. 10 x 5% = **50%** cumulative royalty -- the royalty-stacking problem that FRAND commitments are meant to contain.
+b. Harm ~= price difference x volume x delay = ($100 - $20) x 1,000,000 x 2 = **$160,000,000**, an upper bound that assumes full, immediate substitution at the generic price.
+{% endhint %}
+
 ## Looking ahead
 
-Innovation and IP issues are increasingly central to merger review and monopolization enforcement. The survival models, event studies, and patent network tools developed in this chapter carry forward into **[Chapter 12](chapters/12-litigation-practice.md)**, where we cover how to present technical expert testimony alongside economic evidence. The killer acquisitions framework connects directly to **[Chapter 6](chapters/06-mergers.md)** for transactions involving nascent competitors, and the SEP/FRAND analysis informs remedy design in **[Chapter 8](chapters/08-regulation-remedies.md)**. When real data become available (PatentsView bulk downloads, FDA Orange Book, SAHPRA filings), replace the synthetic examples throughout with actual patent networks, entry timelines, and R&D panels.
+Innovation and IP issues are increasingly central to merger review and monopolization enforcement. The survival models, event studies, and patent network tools in this chapter carry forward into **[Chapter 12](chapters/12-litigation-practice.md)**, which covers how to present technical expert testimony alongside economic evidence. The killer acquisitions framework connects to **[Chapter 6](chapters/06-mergers.md)** for transactions involving nascent competitors, and the SEP/FRAND analysis informs remedy design in **[Chapter 8](chapters/08-regulation-remedies.md)**. When real data become available (PatentsView bulk downloads, FDA Orange Book, SAHPRA filings), replace the synthetic examples with actual patent networks, entry timelines, and R&D panels.

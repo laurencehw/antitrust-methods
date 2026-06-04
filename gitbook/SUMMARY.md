@@ -19,3 +19,4 @@
 * [Litigation Practice: Evidence and Expert Work](chapters/12-litigation-practice.md)
 * [Empirical Appendix and Templates](chapters/13-empirical-appendix.md)
 * [Closing](chapters/14-closing.md)
+* [Glossary and Reference Guide](chapters/15-glossary.md)
