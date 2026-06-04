@@ -209,6 +209,12 @@ bls_emp <- tryCatch({
 }, error = function(e) NULL)
 
 if (!is.null(bls_emp)) {
+  ces_caption <- if ("data_source" %in% names(bls_emp) &&
+                     any(bls_emp$data_source == "synthetic_fallback")) {
+    "SYNTHETIC fallback data for illustration only — run program/scripts/03_bls_labor.R with BLS_KEY for real CES data."
+  } else {
+    "Source: BLS Current Employment Statistics (CES). Real API data."
+  }
   ggplot(bls_emp, aes(x = date, y = employment, color = industry)) +
     geom_line(linewidth = 0.9) +
     scale_y_continuous(labels = scales::comma) +
@@ -216,7 +222,7 @@ if (!is.null(bls_emp)) {
       title = "US Employment by Major Industry (BLS Data)",
       subtitle = "Thousands of employees, seasonally adjusted",
       x = NULL, y = "Employment (thousands)", color = NULL,
-      caption = "Source: BLS Current Employment Statistics (CES). Real API data."
+      caption = ces_caption
     ) +
     theme_antitrust() +
     theme(legend.position = "bottom")
@@ -289,6 +295,13 @@ if (!is.null(qcew_result)) {
   # Panel A: Distribution of employer concentration across all counties
   yr2023 <- qcew_result$yr2023
 
+  # Honest labelling: if 03_bls_labor.R wrote a synthetic fallback, say so.
+  qcew_synth <- "data_source" %in% names(yr2023) &&
+    any(yr2023$data_source == "synthetic_fallback")
+  qcew_note <- if (qcew_synth) {
+    "SYNTHETIC fallback for illustration only — not real QCEW data; run program/scripts/03_bls_labor.R with network access.\n"
+  } else ""
+
   # Create concentration bins matching merger guideline thresholds
   yr2023 <- yr2023 |>
     mutate(
@@ -325,6 +338,7 @@ if (!is.null(qcew_result)) {
       y = "Number of counties",
       fill = "County employment size",
       caption = paste0(
+        qcew_note,
         "Source: BLS Quarterly Census of Employment and Wages, 2023 annual data.\n",
         "Uniform-size proxy is a lower bound: actual employer-level HHI is higher ",
         "because firms vary in size.\nAzar, Marinescu & Steinbaum (2020) find ",
@@ -357,6 +371,7 @@ if (!is.null(qcew_result)) {
       subtitle = "Private-sector counties with ≥ 200 employees, ranked by HHI proxy",
       x = "Estimated HHI (uniform-size proxy)", y = NULL,
       caption = paste0(
+        qcew_note,
         "Source: BLS QCEW, 2023. Labels show establishment count and total ",
         "employment.\nWith only 17–55 establishments, these counties' actual ",
         "employer-level HHI may exceed merger-review thresholds."

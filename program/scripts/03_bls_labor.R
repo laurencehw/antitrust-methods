@@ -2,8 +2,10 @@
 # Produces two real-data files consumed by chapters/10-labor-markets.qmd:
 #   data/raw/bls_industry_employment.csv  -- CES industry employment (BLS API)
 #   data/raw/qcew_county_employment.csv   -- QCEW county employment for HHI proxy
-# Each pull degrades gracefully to a clearly-labelled synthetic fallback with the
-# SAME schema, so the book still renders offline. Status is recorded in metadata.
+# Each pull degrades gracefully to a synthetic fallback with the SAME schema,
+# tagged with a `data_source` column ("real" vs "synthetic_fallback") so the
+# consumer chunks can label placeholder figures honestly. Status is also recorded
+# in data/raw/bls_metadata.csv.
 #
 # Requires BLS_KEY in .Renviron for the CES API pull (register at
 # https://data.bls.gov/registrationEngine/). The QCEW download is an open bulk
@@ -63,14 +65,30 @@ if (requireNamespace("blscrapeR", quietly = TRUE) &&
 
 if (!is.null(ces_data) && nrow(ces_data) > 0) {
   # bls_api() returns columns: year, period, periodName, value, seriesID
+  ces_data$data_source <- "real"
   write_csv(ces_data, "data/raw/bls_industry_employment.csv")
   status$ces <- "real (BLS CES API)"
   cat("✓ CES industry employment saved:", nrow(ces_data), "rows\n")
 } else {
-  status$ces <- "MISSING (set BLS_KEY and install blscrapeR)"
-  cat("⚠ CES employment not pulled. Set BLS_KEY in .Renviron and ",
-      "install.packages('blscrapeR'). Chapter 10's CES figure will show a ",
-      "graceful 'data not available' message.\n", sep = "")
+  # Synthetic fallback with the same schema (year, period, periodName, value,
+  # seriesID) so Chapter 10 renders offline; tagged synthetic so the figure
+  # caption can say so. Monthly periods M01–M12, mild upward drift.
+  set.seed(123)
+  synth_ces <- expand_grid(
+    year = start_year:end_year,
+    period = sprintf("M%02d", 1:12),
+    seriesID = industry_series
+  ) |>
+    mutate(
+      periodName = month.name[as.integer(substr(period, 2, 3))],
+      value = round(pmax(0, rnorm(n(), 15000, 3000) + (year - start_year) * 100)),
+      data_source = "synthetic_fallback"
+    )
+  write_csv(synth_ces, "data/raw/bls_industry_employment.csv")
+  status$ces <- "SYNTHETIC fallback (set BLS_KEY + install blscrapeR for real data)"
+  cat("⚠ CES employment not pulled; wrote SYNTHETIC fallback with the real ",
+      "schema so Chapter 10 still renders. Set BLS_KEY in .Renviron and ",
+      "install.packages('blscrapeR'), then re-run for real data.\n", sep = "")
 }
 
 # ============================================================================
@@ -111,6 +129,7 @@ download_qcew_year <- function(yr) {
 
   inner <- utils::unzip(zip_path, list = TRUE)$Name[1]
   con <- unz(zip_path, inner)
+  on.exit(close(con), add = TRUE)
   df <- readr::read_csv(con, col_types = qcew_cols, progress = FALSE)
 
   df |>
@@ -135,6 +154,7 @@ qcew <- tryCatch(
 )
 
 if (!is.null(qcew) && nrow(qcew) > 0) {
+  qcew$data_source <- "real"
   write_csv(qcew, "data/raw/qcew_county_employment.csv")
   status$qcew <- "real (BLS QCEW annual singlefile)"
   cat("✓ QCEW county employment saved:", nrow(qcew), "county-year rows\n")
@@ -142,10 +162,15 @@ if (!is.null(qcew) && nrow(qcew) > 0) {
   # ---- Synthetic fallback: SAME schema as the real file -------------------
   # Lognormal establishment counts reproduce the real urban/rural spread
   # (a few rural counties with tens of establishments -> high HHI proxy;
-  # large urban counties with thousands -> low HHI proxy). Clearly labelled.
+  # large urban counties with thousands -> low HHI proxy). Tagged synthetic.
   set.seed(123)
-  fips <- maps::county.fips$fips |> unique()
-  fips <- str_pad(as.character(fips), 5, pad = "0")
+  # Real county FIPS make for nicer labels; fall back to generated codes so
+  # the script is self-contained when the 'maps' package is unavailable.
+  if (requireNamespace("maps", quietly = TRUE)) {
+    fips <- str_pad(as.character(unique(maps::county.fips$fips)), 5, pad = "0")
+  } else {
+    fips <- sprintf("%05d", as.integer(round(seq(1001, 56045, length.out = 3000))))
+  }
 
   synth <- expand_grid(area_fips = fips, year = qcew_years) |>
     mutate(
@@ -155,12 +180,14 @@ if (!is.null(qcew) && nrow(qcew) > 0) {
       annual_avg_estabs = pmax(10, round(rlnorm(n(), meanlog = 6, sdlog = 1.4))),
       annual_avg_emplvl = round(annual_avg_estabs *
                                   pmax(3, rlnorm(n(), meanlog = 2.3, sdlog = 0.6))),
-      annual_avg_wkly_wage = round(rnorm(n(), 1050, 220)),
-      total_annual_wages = round(annual_avg_emplvl * annual_avg_wkly_wage * 52)
+      # Clamp wages to a plausible floor so synthetic totals never go negative.
+      annual_avg_wkly_wage = pmax(300, round(rnorm(n(), 1050, 220))),
+      total_annual_wages = round(annual_avg_emplvl * annual_avg_wkly_wage * 52),
+      data_source = "synthetic_fallback"
     ) |>
     select(area_fips, own_code, industry_code, agglvl_code, year,
            annual_avg_estabs, annual_avg_emplvl,
-           total_annual_wages, annual_avg_wkly_wage)
+           total_annual_wages, annual_avg_wkly_wage, data_source)
 
   write_csv(synth, "data/raw/qcew_county_employment.csv")
   status$qcew <- "SYNTHETIC fallback (QCEW download unavailable)"

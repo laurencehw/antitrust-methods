@@ -574,6 +574,16 @@ award_hhi <- tryCatch(
 )
 
 if (!is.null(award_hhi) && nrow(award_hhi) > 0) {
+  # Honest labelling: 06_procurement_cartels.R tags a synthetic fallback when the
+  # World Bank API is unreachable, so the figure can say whether it is real.
+  award_synth <- "data_source" %in% names(award_hhi) &&
+    any(award_hhi$data_source == "synthetic_fallback")
+  award_src <- if (award_synth) {
+    "SYNTHETIC fallback for illustration only — not real World Bank data; run program/scripts/06_procurement_cartels.R with network access.\n"
+  } else {
+    "Source: World Bank Major Contract Awards (program/scripts/06_procurement_cartels.R).\n"
+  }
+
   award_hhi <- award_hhi |>
     mutate(
       band = cut(hhi,
@@ -601,7 +611,7 @@ if (!is.null(award_hhi) && nrow(award_hhi) > 0) {
       x = "Award-value HHI", y = "Number of procurement markets",
       fill = "Concentration band",
       caption = paste0(
-        "Source: World Bank Major Contract Awards (program/scripts/06_procurement_cartels.R).\n",
+        award_src,
         "Structural screen only: high award concentration flags markets for closer ",
         "scrutiny; it is not evidence of collusion."
       )

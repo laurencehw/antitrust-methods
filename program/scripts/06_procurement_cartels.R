@@ -46,7 +46,9 @@ fetch_worldbank <- function() {
     }
     chunk <- content(resp, as = "text", encoding = "UTF-8") |>
       fromJSON(flatten = TRUE)
-    if (length(chunk) == 0 || nrow(chunk) == 0) break
+    # fromJSON may return a list/NULL on an unexpected payload; guard before nrow()
+    # so the loop breaks safely instead of erroring on logical(0).
+    if (is.null(chunk) || !is.data.frame(chunk) || nrow(chunk) == 0) break
     rows[[length(rows) + 1]] <- as_tibble(chunk)
     if (nrow(chunk) < page) break
     offset <- offset + page
@@ -109,7 +111,8 @@ if (!is.null(wb_clean) && nrow(wb_clean) > 0) {
         .groups = "drop"
       ) |>
       filter(n_suppliers >= 5) |>   # only groups with enough suppliers to mean anything
-      arrange(desc(hhi))
+      arrange(desc(hhi)) |>
+      mutate(data_source = "real")
 
     write_csv(award_hhi, "data/derived/procurement_award_hhi.csv")
     status$award_hhi <- "real (derived from World Bank awards)"
@@ -120,7 +123,26 @@ if (!is.null(wb_clean) && nrow(wb_clean) > 0) {
   }
 } else {
   status$worldbank <- "MISSING (World Bank API unreachable)"
-  cat("⚠ World Bank procurement not pulled (offline?). Award screen skipped.\n")
+  # Synthetic fallback for the award screen so Chapter 5 renders offline.
+  # Tagged synthetic via data_source so the figure caption can say so.
+  set.seed(123)
+  geos <- c("Kenya", "Colombia", "India", "Indonesia", "Vietnam",
+            "Bangladesh", "Nigeria", "Mexico")
+  categories <- c("Civil Works", "Consultant Services", "Goods", "Technical Services")
+  synth_hhi <- expand_grid(geo = geos, category = categories,
+                           fiscal_year = 2015:2023) |>
+    mutate(
+      n_suppliers = sample(5:15, n(), replace = TRUE),
+      group_award_value = round(rlnorm(n(), meanlog = 15, sdlog = 1.5)),
+      hhi = pmax(500, pmin(10000, rnorm(n(), mean = 2200, sd = 1200))),
+      data_source = "synthetic_fallback"
+    ) |>
+    arrange(desc(hhi))
+  write_csv(synth_hhi, "data/derived/procurement_award_hhi.csv")
+  status$award_hhi <- "SYNTHETIC fallback (World Bank API unreachable)"
+  cat("⚠ World Bank procurement not pulled; wrote SYNTHETIC fallback for ",
+      "procurement_award_hhi.csv so Chapter 5 still renders. Re-run with ",
+      "network access to replace it with real data.\n", sep = "")
 }
 
 # ============================================================================
