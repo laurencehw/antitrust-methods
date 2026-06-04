@@ -552,6 +552,82 @@ cat("High betweenness = potential coordinator bridging subgroups\n")
 
 Replace simulated data with actual procurement records (World Bank, TED, US DOT, Stats SA infrastructure tenders). Document bid amounts, dates, and project characteristics in `data/raw/procurement/` with provenance notes.
 
+### A real structural screen: award concentration
+
+The bid-rotation screens above need bid-level data---every bidder on every tender---which open procurement portals rarely publish. A coarser but fully open alternative works from the awards themselves: compute the HHI of contract value by supplier within each country--category--year, and flag the procurement markets where a few suppliers capture most of the spend. This is a structural screen, not proof of anything: persistent concentration is one weak flag among the OECD battery [@oecd_cartel_screens_2013], useful for prioritising where to request bid-level data. The script `program/scripts/06_procurement_cartels.R` derives this screen from the World Bank Major Contract Awards; run it to populate the file read below.
+
+```{r}
+#| label: cartel-award-hhi
+#| fig-cap: "Supplier award-concentration screen from World Bank procurement awards."
+#| message: false
+#| warning: false
+#| fig-width: 9
+#| fig-height: 6
+library(dplyr)
+library(ggplot2)
+library(readr)
+source("program/R/helpers.R")
+
+award_hhi <- tryCatch(
+  read_csv("data/derived/procurement_award_hhi.csv", show_col_types = FALSE),
+  error = function(e) NULL
+)
+
+if (!is.null(award_hhi) && nrow(award_hhi) > 0) {
+  award_hhi <- award_hhi |>
+    mutate(
+      band = cut(hhi,
+                 breaks = c(0, 1500, 2500, 10000),
+                 labels = c("Unconcentrated (<1500)",
+                            "Moderate (1500–2500)",
+                            "Highly conc. (>2500)"),
+                 include.lowest = TRUE)
+    )
+
+  p <- ggplot(award_hhi, aes(x = hhi, fill = band)) +
+    geom_histogram(binwidth = 250, boundary = 0, alpha = 0.85, color = "white") +
+    geom_vline(xintercept = c(1500, 2500), linetype = "dashed", color = "gray30") +
+    scale_fill_manual(values = c("Unconcentrated (<1500)" = "#1B9E77",
+                                 "Moderate (1500–2500)" = "#D95F02",
+                                 "Highly conc. (>2500)" = "#7570B3")) +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+    labs(
+      title = "Supplier Award Concentration in World Bank Procurement",
+      subtitle = paste0(
+        "HHI of contract value by supplier, within country × category × year | ",
+        "N = ", scales::comma(nrow(award_hhi)), " markets, ",
+        sum(award_hhi$hhi > 2500), " highly concentrated"
+      ),
+      x = "Award-value HHI", y = "Number of procurement markets",
+      fill = "Concentration band",
+      caption = paste0(
+        "Source: World Bank Major Contract Awards (program/scripts/06_procurement_cartels.R).\n",
+        "Structural screen only: high award concentration flags markets for closer ",
+        "scrutiny; it is not evidence of collusion."
+      )
+    ) +
+    theme_antitrust() +
+    theme(legend.position = "bottom",
+          plot.caption = element_text(size = 7, hjust = 0))
+  print(p)
+
+  cat("\nMost concentrated procurement markets (award-value HHI):\n")
+  award_hhi |>
+    arrange(desc(hhi)) |>
+    slice_head(n = 8) |>
+    mutate(hhi = round(hhi)) |>
+    select(geo, category, fiscal_year, n_suppliers, hhi) |>
+    as.data.frame() |>
+    print(row.names = FALSE)
+} else {
+  cat("Award-concentration screen not available.\n",
+      "Run program/scripts/06_procurement_cartels.R to build ",
+      "data/derived/procurement_award_hhi.csv from World Bank awards.\n", sep = "")
+}
+```
+
+Read the histogram as a triage tool, not a verdict: the markets piling up past the 2,500 line are the ones where a handful of suppliers take most of the contract value, and so the ones worth the cost of assembling bid-level records and running the rotation and variance screens above. Concentration has many innocent explanations---scale economies, specialised capabilities, thin local supply---so the screen narrows the search rather than ending it.
+
 ## Event and break tests
 
 When a cartel is disrupted---by a dawn raid, a leniency application, or a regulatory intervention---prices often shift abruptly. These disruptions create natural experiments: the timing is typically exogenous to market conditions (raids are secret until executed; leniency filings are triggered by internal decisions, not demand shocks), making them attractive for causal inference. Event studies around these breaks test whether price levels, spreads, or quantities change in ways consistent with a transition from collusive to competitive equilibrium. The challenge is isolating the cartel effect from coincident cost or demand changes. That is why econometric break tests need documentary evidence about the timing and mechanism of cartel dissolution.
