@@ -15,17 +15,16 @@ fredr_set_key(Sys.getenv("FRED_API_KEY"))
 # Phase 1: Industry concentration & market power indicators
 # ============================================================================
 
-# Bank concentration (already used in Ch01)
-bank_hhi <- fredr(series_id = "HHMSDODNS", 
-                  observation_start = as.Date("2000-01-01"))
+# Bank concentration, World Bank Global Financial Development series via FRED.
+# These are concentration ratios (percent of banking assets), not HHIs.
+# NOTE: HHMSDODNS (used in an earlier draft and once mislabeled "bank HHI")
+# is household mortgage debt outstanding and must not be presented as a
+# concentration measure.
+bank_conc_5 <- fredr(series_id = "DDOI06USA156NWDB",  # 5-bank asset concentration (%)
+                     observation_start = as.Date("2000-01-01"))
 
-# Retail trade concentration
-retail_hhi <- fredr(series_id = "DDOI06USA156NWDB",  # Retail trade HHI
-                    observation_start = as.Date("2000-01-01"))
-
-# Manufacturing concentration  
-mfg_hhi <- fredr(series_id = "DDOI02USA156NWDB",  # Manufacturing HHI
-                 observation_start = as.Date("2000-01-01"))
+bank_conc_3 <- fredr(series_id = "DDOI02USA156NWDB",  # 3-bank asset concentration (%)
+                     observation_start = as.Date("2000-01-01"))
 
 # ============================================================================
 # Phase 2: Price series for cartel screens & pass-through
@@ -93,9 +92,8 @@ import_prices <- fredr(series_id = "IR",
 
 # Create a master list
 fred_data <- list(
-  bank_hhi = bank_hhi,
-  retail_hhi = retail_hhi,
-  mfg_hhi = mfg_hhi,
+  bank_conc_5 = bank_conc_5,
+  bank_conc_3 = bank_conc_3,
   gas_prices = gas_prices,
   crude_oil = crude_oil,
   bread_cpi = bread_cpi,
@@ -127,9 +125,8 @@ metadata <- tibble(
   series_name = names(fred_data),
   series_id = sapply(fred_data, function(x) unique(x$series_id)),
   description = c(
-    "Bank deposits HHI",
-    "Retail trade HHI",
-    "Manufacturing HHI", 
+    "5-bank asset concentration, percent (World Bank GFDD via FRED)",
+    "3-bank asset concentration, percent (World Bank GFDD via FRED)",
     "Regular gasoline retail price",
     "WTI crude oil spot price",
     "CPI: Bread and bakery products",
@@ -145,8 +142,7 @@ metadata <- tibble(
   ),
   chapter_use = c(
     "Ch01, Ch03",
-    "Ch03, Ch04",
-    "Ch03, Ch04",
+    "Ch01, Ch03",
     "Ch01, Ch02, Ch05",
     "Ch04, Ch05",
     "Ch05",
