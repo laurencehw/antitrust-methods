@@ -2,7 +2,7 @@
 
 The methods chapters taught you how to analyze competition questions. This chapter teaches you how to present that analysis in litigation. The audience changes from academic reviewers or agency staff to judges, juries, and opposing counsel armed with their own experts. The standards shift from "interesting and well-identified" to "reliable and relevant under Daubert" (in US courts) or comparable evidentiary frameworks elsewhere. As @baker_rubinfeld_1999 emphasize, the bridge between academic econometrics and courtroom evidence requires careful attention to both statistical rigor and legal admissibility.
 
-Effective expert work requires more than technical competence. You must structure your analysis for reproducibility, anticipate challenges to your methodology, communicate uncertainty honestly, and tell a coherent story that connects evidence to legal standards [@dickey_rubinfeld_2014]. The quantitative techniques introduced throughout this book---from demand estimation (@sec-market-definition) to merger simulation (@sec-mergers) to cartel screening (@sec-cartels)---all take on new dimensions when subjected to adversarial testing. This chapter covers the workflow from initial data handling through expert report preparation, deposition, and trial testimony, drawing on the methodological foundations in @davis_garces_2010 and the evidentiary standards codified in the *Reference Manual on Scientific Evidence* [@fjc_reference_manual_2011].
+Effective expert work requires more than technical competence. You must structure your analysis for reproducibility, anticipate challenges to your methodology, communicate uncertainty honestly, and tell a coherent story that connects evidence to legal standards [@dickey_rubinfeld_2014]. The quantitative techniques introduced throughout this book---from demand estimation (@sec-io-toolkit) to merger simulation (@sec-mergers) to cartel screening (@sec-cartels)---all take on new dimensions when subjected to adversarial testing. This chapter covers the workflow from initial data handling through expert report preparation, deposition, and trial testimony, drawing on the methodological foundations in @davis_garces_2010 and the evidentiary standards codified in the *Reference Manual on Scientific Evidence* [@fjc_reference_manual_2011].
 
 ## Learning goals
 This chapter translates all prior analytics into courtroom-ready workflows. Drawing on agency guidance (US DOJ/FTC, EC best practices) and established expert practice standards [@fjc_reference_manual_2011; @rubinfeld_2010], we focus on:
@@ -133,9 +133,12 @@ panel <- expand.grid(
     treated = as.integer(class_member <= 160),
     # Interaction: DiD treatment variable
     treatment = post * treated,
-    # Simulate outcome: member FE + period FE + treatment effect + noise
-    member_fe = rep(rnorm(n_members, mean = 100, sd = 10), each = n_periods),
-    period_fe = rep(seq(0, 2, length.out = n_periods), times = n_members),
+    # Simulate outcome: member FE + period FE + treatment effect + noise.
+    # expand.grid varies class_member fastest, so the member effects repeat
+    # the full member vector once per period (times =) and each period
+    # effect repeats across all members (each =).
+    member_fe = rep(rnorm(n_members, mean = 100, sd = 10), times = n_periods),
+    period_fe = rep(seq(0, 2, length.out = n_periods), each = n_members),
     outcome = member_fe + period_fe + 8.5 * treatment + rnorm(n_members * n_periods, sd = 5)
   )
 
@@ -153,11 +156,27 @@ The estimated treatment effect represents the common overcharge (or other harm) 
 #| message: false
 #| warning: false
 library(fixest)
-library(magrittr)
+library(dplyr)
 
-# After estimating ci_model, permute treatment labels to compute empirical p-values
-# ri_p <- permute_plm(ci_model, treat = "treatment", cluster = "class_member", reps = 1000)
+# Permutation test: reassign treatment status at the class-member level
+# (preserving the 160/40 split), re-estimate the DiD model, and compare the
+# actual coefficient to the distribution of permuted coefficients.
+set.seed(101)
+n_reps <- 200
+
+perm_coefs <- replicate(n_reps, {
+  treated_perm <- sample(1:n_members, 160)
+  perm_panel <- panel |>
+    mutate(treatment_perm = post * as.integer(class_member %in% treated_perm))
+  coef(feols(outcome ~ treatment_perm | class_member + period,
+             data = perm_panel))[["treatment_perm"]]
+})
+
+ri_p <- mean(abs(perm_coefs) >= abs(coef(ci_model)[["treatment"]]))
+cat("Randomization-inference p-value:", ri_p, "\n")
 ```
+
+The empirical p-value is the share of permuted placebo coefficients at least as large (in absolute value) as the actual estimate. With a true effect of 8.5 and placebo effects centered at zero, none of the permutations should reach it, so the p-value is effectively zero. In small samples or with few clusters, this design-based p-value is more defensible under cross-examination than asymptotic clustered standard errors.
 
 ## Damages modeling
 
@@ -203,15 +222,23 @@ Effective expert testimony is as much about communication as it is about analysi
 
 **Deposition and cross-examination preparation** matters just as much. Opposing counsel will probe the boundaries of the expert's analysis: what data was excluded and why, what happens when assumptions change, whether the expert considered alternative explanations. Build Q&A outlines that link each opinion to its evidentiary foundation, and rehearse responses to challenges on sensitivity, data limitations, and methodological choices. Common cross-examination strategies include asking the expert to concede that individual specifications differ from the preferred model, then arguing that the results are "fragile." The best defense is a thorough sensitivity analysis presented proactively in the report itself [@rubinfeld_2010; @baker_rubinfeld_1999].
 
+### Concurrent expert evidence ("hot tubbing")
+
+Not every forum hears the experts in sequence. Under concurrent expert evidence---witness conferencing, informally "hot tubbing"---the opposing economists are sworn together, answer the same question in turn, and may put questions to each other directly, with the tribunal rather than counsel directing the exchange. The practice is standard in Australian courts, is used in the UK Competition Appeal Tribunal, and has been used before the South African Competition Tribunal.
+
+The format changes what testifying well means. Counsel no longer mediates the exchange, so an evasive answer draws an immediate response from the economist sitting next to you rather than a follow-up question three weeks later in a rebuttal report. Disagreements narrow in real time: the tribunal can ask both experts whether they accept the same diversion ratio, the same benchmark period, the same clustering level, and record exactly where the models part company. Posturing that survives direct examination tends not to survive a peer asking, in front of the decision-maker, why the preferred specification drops the two years that move the estimate.
+
+One preparation implication follows. Before the hearing, the experts are typically directed to confer and produce a joint statement listing points of agreement and disagreement, with short reasons for each. Treat that document as seriously as the report itself: it fixes the agenda for the concurrent session, and it requires you to understand the opposing model well enough to run it. An economist who can state precisely which assumption drives the gap between the two damages figures---and what evidence would resolve it---is far more useful to the tribunal, in this format, than one who can only defend their own number.
+
 ::: {.callout-note title="Case box: Expert testimony in DOJ v. Google (Search)"}
-The *United States v. Google LLC* search distribution trial (2023--2024) turned on economic expert testimony [@us_google_search_2023]. The DOJ argued that Google maintained its search monopoly through exclusive default agreements with Apple, Android device manufacturers, and browser developers, paying over $26 billion annually to foreclose rival search engines from critical distribution channels. The government's economic expert presented regression analyses showing that default status dramatically increased search engine usage share, and that these agreements raised barriers to entry by denying rivals the query volume needed to improve search quality. Google's expert countered that users could easily switch search engines with a few clicks, arguing that revealed preference---not default status---explained Google's dominance. The court's 2024 ruling found that Google held monopoly power and that the exclusive agreements constituted unlawful maintenance of that monopoly. The case illustrates how competing experts can examine the same market data and reach opposite conclusions about whether consumer behavior reflects genuine preference or the stickiness of default settings. The distinction shapes the remedy.
+The *United States v. Google LLC* search distribution trial (2023--2024) turned on economic expert testimony [@us_google_search_2023]. The DOJ argued that Google maintained its search monopoly through exclusive default agreements with Apple, Android device manufacturers, and browser developers, paying over $26 billion annually to foreclose rival search engines from critical distribution channels. The government's economic expert presented regression analyses showing that default status increased search engine usage share, and that these agreements raised barriers to entry by denying rivals the query volume needed to improve search quality. Google's expert countered that users could easily switch search engines with a few clicks, arguing that revealed preference---not default status---explained Google's dominance. The court's 2024 ruling found that Google held monopoly power and that the exclusive agreements constituted unlawful maintenance of that monopoly. The case illustrates how competing experts can examine the same market data and reach opposite conclusions about whether consumer behavior reflects genuine preference or the stickiness of default settings. The distinction shapes the remedy.
 :::
 
 ## Southern African litigation practice notes
 
 South Africa's Competition Tribunal operates as a specialized court with procedures that differ significantly from both US federal courts and EU administrative proceedings. The Tribunal's rules of procedure are more flexible than conventional court rules, and it has broad discretion over the admission of evidence and expert testimony. Unlike the US *Daubert* standard, which requires judges to act as gatekeepers for scientific evidence, the Tribunal takes a more permissive approach: expert evidence is generally admitted and its weight is assessed as part of the overall merits determination. This means that South African practitioners face a lower threshold for admissibility but must work harder to persuade the Tribunal on the substance of competing expert opinions.
 
-The Tribunal's approach to damages and remedies also differs from US and EU practice. In cartel matters, the Tribunal has accepted a range of damages methodologies, including before/after comparisons, yardstick comparisons with unaffected markets, and regression-based overcharge estimates. The bread cartel proceedings (2007--2010) combined CPI microdata, mill cost studies, and consumer testimony to establish overcharges, with the damages model anchored to structural break analysis that identified the cartel period [@sa_bread_cartel_2007]. The Sasol polypropylene appeal featured extensive documentation of export parity benchmarks, incremental cost models, and technical expert testimony on production processes, illustrating how complex economic evidence is presented in abuse-of-dominance cases. In the Data Services Market Inquiry, the Commission used difference-in-differences to monitor Vodacom and MTN's compliance with price-reduction commitments, with monitoring trustees reporting quarterly KPIs to the Tribunal.
+The Tribunal's approach to damages and remedies also differs from US and EU practice. In cartel matters, the Tribunal has accepted a range of damages methodologies, including before/after comparisons, yardstick comparisons with unaffected markets, and regression-based overcharge estimates. The Commission's bread cartel prosecutions rested on documentary evidence and pricing analysis alongside leniency testimony [@sa_bread_cartel_2007]. The Sasol polypropylene appeal featured extensive documentation of export parity benchmarks, incremental cost models, and technical expert testimony on production processes, illustrating how complex economic evidence is presented in abuse-of-dominance cases. Following the Data Services Market Inquiry, Vodacom and MTN agreed data-price reductions with the Commission; evaluating commitments of that kind is a natural application of the before/after and difference-in-differences tools in this chapter.
 
 A distinctive feature of South African competition litigation is the role of public interest considerations in remedy proceedings. The Tribunal routinely considers employment effects, small business participation, and the impact on historically disadvantaged persons when designing remedies, factors that have no analogue in US or EU antitrust proceedings. Expert reports in South African matters must therefore address competitive effects and the quantified public interest impact of proposed remedies, requiring economists to engage with employment data, procurement patterns, and ownership structures alongside conventional competition metrics.
 
@@ -508,9 +535,12 @@ individual_damages <- tibble(
   avg_overcharge = rnorm(n_class, mean = 5.50, sd = 1.20),  # Per-unit overcharge
   damages = purchases * avg_overcharge
 ) |>
-  arrange(desc(damages)) |>
+  arrange(damages) |>
   mutate(
-    cumulative_damages = cumsum(damages),
+    # Cumulative shares for the Lorenz curve: members sorted from smallest
+    # to largest damages, so the curve bows below the 45-degree line
+    cum_share_members = row_number() / n(),
+    cum_share_damages = cumsum(damages) / sum(damages),
     percentile = percent_rank(damages),
     damages_category = case_when(
       damages < 100 ~ "< $100",
@@ -545,19 +575,18 @@ p1 <- ggplot(individual_damages, aes(x = damages)) +
 
 # Plot 2: Lorenz curve (cumulative damages)
 p2 <- ggplot(individual_damages,
-            aes(x = percent_rank(row_number(member_id)),
-                y = cumulative_damages / max(cumulative_damages))) +
+            aes(x = cum_share_members, y = cum_share_damages)) +
   geom_line(color = "#0072B2", linewidth = 1.2) +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed",
              color = "gray40") +
-  annotate("text", x = 0.3, y = 0.7,
+  annotate("text", x = 0.15, y = 0.55,
           label = "Line of equality\n(uniform damages)",
           hjust = 0, size = 3) +
   scale_x_continuous(labels = scales::percent_format()) +
   scale_y_continuous(labels = scales::percent_format()) +
   labs(
     title = "Cumulative Damages Distribution (Lorenz Curve)",
-    x = "Cumulative % of Class Members (ranked by damages)",
+    x = "Cumulative % of Class Members (smallest damages first)",
     y = "Cumulative % of Total Damages"
   ) +
   theme_antitrust() +

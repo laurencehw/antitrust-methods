@@ -58,13 +58,13 @@ Evidence sources:
 - **EU *Huawei v. ZTE* (2015):** Established framework for when SEP holders may seek injunctions—requiring good-faith negotiations, FRAND offers, and willingness to license before injunctive relief is appropriate.
 - **UK *Unwired Planet* (2020):** Court determined global FRAND rates across patent portfolio; established precedent for courts setting rates when parties cannot agree.
 - **FTC v. Qualcomm (2019-2020):** The FTC alleged Qualcomm used its SEP position and chip monopoly to extract supracompetitive royalties through "no license, no chips" policies. The district court found antitrust violations, but the Ninth Circuit reversed, holding that Qualcomm's practices—even if anticompetitive in licensing markets—did not harm competition in chip markets. The case highlights difficulties in applying antitrust to SEP licensing and the importance of identifying the correct market for harm analysis.
-- **EC Qualcomm decisions (2018-2019):** The Commission fined Qualcomm for predatory pricing to exclude Icera and for exclusivity payments to Apple, demonstrating EU willingness to pursue SEP-adjacent conduct.
+- **EC Qualcomm decisions (2018-2019) and their fate on review:** The Commission fined Qualcomm €997 million for exclusivity payments to Apple (2018) and separately for predatory pricing aimed at excluding Icera (2019). The General Court annulled the Apple-exclusivity decision in 2022 (Case T-235/18), citing procedural failings and an effects analysis that did not match the decision's theory of harm; it largely upheld the Icera fine in 2024, with a modest reduction. The pair shows the Commission's willingness to pursue SEP-adjacent conduct---and the EU courts policing how it does so.
 
 :::{.callout-note title="Case box: FTC v. Qualcomm (2019--2020)"}
-The FTC alleged that Qualcomm used its monopoly in CDMA and premium LTE modem chips to extract supracompetitive royalties through a "no license, no chips" policy: it refused to supply chips unless manufacturers accepted its SEP licensing terms [@us_qualcomm_2020]. Judge Koh's sweeping district court ruling found antitrust violations across licensing and chip markets, ordering Qualcomm to renegotiate agreements at FRAND rates. The Ninth Circuit reversed, holding that Qualcomm's licensing practices---even if they violated FRAND commitments---did not constitute anticompetitive conduct *in chip markets* because OEMs had no alternative chipset suppliers regardless of licensing terms. The decision effectively requires plaintiffs to show harm to competition (not just to competitors) in a properly defined market, raising the bar for SEP-based antitrust claims in the United States. The EU's parallel Qualcomm cases suggest a more receptive environment for such theories in European enforcement.
+The FTC alleged that Qualcomm used its monopoly in CDMA and premium LTE modem chips to extract supracompetitive royalties through a "no license, no chips" policy: it refused to supply chips unless manufacturers accepted its SEP licensing terms [@us_qualcomm_2020]. Judge Koh's sweeping district court ruling found antitrust violations across licensing and chip markets, ordering Qualcomm to renegotiate agreements at FRAND rates. The Ninth Circuit reversed, holding that Qualcomm's licensing practices---even if they violated FRAND commitments---did not constitute anticompetitive conduct *in chip markets* because OEMs had no alternative chipset suppliers regardless of licensing terms. The decision effectively requires plaintiffs to show harm to competition (not just to competitors) in a properly defined market, raising the bar for SEP-based antitrust claims in the United States. The EU's parallel Qualcomm cases looked, for a time, like the receptive contrast: in 2018 the Commission fined Qualcomm €997 million for paying Apple to source baseband chips exclusively from it. The General Court annulled that decision in 2022 (Case T-235/18), finding procedural irregularities in how the Commission built its file and an as-efficient-competitor analysis that did not match the theory of harm the decision actually charged. The separate Icera predatory-pricing fine fared better, largely surviving review in 2024 with a small reduction. The transatlantic lesson is narrower than "the EU is friendlier": both systems demand that the economic analysis presented match the theory of harm pleaded. The FTC lost on market definition and harm; the Commission lost on process and fit.
 :::
 
-These cases illustrate jurisdictional divergence: EU authorities more readily pursue SEP-related antitrust claims, while US courts after *Qualcomm* require clearer links between licensing conduct and competitive harm.
+These cases qualify the usual story of jurisdictional divergence. EU authorities pursue SEP-adjacent conduct more readily than US agencies, but the General Court's Qualcomm annulment shows the EU courts demanding the same discipline---an effects analysis that matches the theory charged---that the Ninth Circuit demanded of the FTC.
 
 ### Royalty stack analysis
 ```{r}
@@ -95,7 +95,9 @@ ggplot(stack, aes(xmin = start, xmax = end, ymin = 0, ymax = 1, fill = component
   geom_text(aes(x = (start + end) / 2, y = 0.5,
                 label = paste0(component, "\n", royalty_percent, "%")),
             size = 3, color = "white", fontface = "bold") +
-  scale_fill_manual(values = antitrust_colors) +
+  # antitrust_colors is a named vector keyed to other levels; unname so the
+  # palette is recycled over these components instead of falling back to gray
+  scale_fill_manual(values = unname(antitrust_colors)) +
   labs(
     title = "Illustrative royalty stack",
     subtitle = paste0("Total cumulative royalty: ", sum(stack$royalty_percent),
@@ -184,7 +186,7 @@ data <- tibble::tribble(
 
 # survival::survfit(Surv(entry_year, status) ~ settlement, data = data)
 ```
-Replace with real pay-for-delay cases (Actavis-style) or EU decisions (Servier, Lundbeck). Use FDA Orange Book, EMA data, or South African SAMRC filings for entry timelines.
+Replace with real pay-for-delay cases (Actavis-style) or EU decisions (Servier, Lundbeck). Use FDA Orange Book, EMA data, or South African SAHPRA registration records for entry timelines.
 
 ### Diff-in-diff for price effects
 ```{r}
@@ -396,7 +398,7 @@ Data portability---the ability of users to transfer their data from one platform
 
 ## Southern African innovation/IP examples
 
-South Africa's Competition Commission has addressed innovation and IP issues in several notable matters, though the jurisprudence is less developed than in the US and EU. The **Telkom vs. Internet Solutions** broadband case examined access to APIs and OSS/BSS systems under FRAND-like commitments, combining margin squeeze tests with technical audits to assess whether Telkom's wholesale pricing allowed retail competitors to profitably serve end users. The **Vodacom Zero-Rating commitments** arising from the data services inquiry required interoperability obligations for educational content, showing how innovation incentives can align with the public-interest remedies that are a distinctive feature of South Africa's competition framework. The Commission's **investigations into ARV (antiretroviral) patent settlements** combined SAMRC price data, patent landscape analysis, and clinical trial timelines to assess whether settlement agreements between originator and generic manufacturers delayed market entry and harmed public health outcomes.
+South Africa's Competition Commission has addressed innovation and IP issues in several notable matters, though the jurisprudence is less developed than in the US and EU. The **Telkom vs. Internet Solutions** broadband case examined access to APIs and OSS/BSS systems under FRAND-like commitments, combining margin squeeze tests with technical audits to assess whether Telkom's wholesale pricing allowed retail competitors to profitably serve end users. The **Vodacom Zero-Rating commitments** arising from the data services inquiry required interoperability obligations for educational content, showing how innovation incentives can align with the public-interest remedies that are a distinctive feature of South Africa's competition framework. The Commission's **investigations into ARV (antiretroviral) patent settlements** combined medicine price data, patent landscape analysis, and SAHPRA registration timelines to assess whether settlement agreements between originator and generic manufacturers delayed market entry and harmed public health outcomes.
 
 ## Enhanced Visualizations
 
@@ -855,7 +857,7 @@ cat("\nUse these rates to model expected future approvals and consumer harm from
 
 2. **Data/code.** Using the royalty stack visualization in this chapter, calculate the total royalty burden if each SEP holder demands a "reasonable" 2% royalty and there are 8 essential patent holders. At what point does royalty stacking make manufacturing unprofitable (assuming a 15% target margin)?
 
-3. **Case discussion.** Compare the outcomes in *FTC v. Qualcomm* (US, reversed on appeal) and the *EC Qualcomm* decisions (fines upheld). What does the divergence tell us about jurisdictional differences in applying antitrust to SEP licensing?
+3. **Case discussion.** Compare the outcomes in *FTC v. Qualcomm* (US: district-court liability reversed by the Ninth Circuit) and the EC Qualcomm matters (the €997M Apple-exclusivity fine annulled by the General Court in 2022; the Icera predatory-pricing fine largely upheld in 2024). What do the three outcomes, taken together, say about the evidentiary discipline reviewing courts impose on SEP-adjacent antitrust theories in each jurisdiction?
 
 4. **Conceptual.** Define "killer acquisitions" and explain the empirical identification strategy from Cunningham, Ederer, and Ma (2021). What data would you need to test whether a specific pharmaceutical acquisition was a killer acquisition?
 

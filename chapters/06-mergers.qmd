@@ -86,9 +86,9 @@ PHASE 1: SCREENING              PHASE 2: DEEP DIVE              PHASE 3: DECISIO
 
 **What UPP measures:** Upward Pricing Pressure (UPP) quantifies the merged firm's incentive to raise prices. When Product A raises its price post-merger, some customers switch to Product B (now owned by the same firm). Pre-merger, those customers were "lost" to a competitor. Post-merger, the merged firm captures that profit—the "diverted profit"—giving it an incentive to raise prices.
 
-**The formula:** $\text{UPP} = \text{Diversion} \times \text{Price} \times \text{Margin} - \text{Efficiency}$
+**The formula:** $\text{UPP}_A = D_{A \to B} \times (P_B - C_B) - E_A$, where $D_{A \to B}$ is the diversion ratio from product A to its merger partner B, $P_B - C_B$ is the *partner's* absolute margin (the profit earned on each diverted sale), and $E_A$ is the per-unit efficiency credit. UPP is in currency units. GUPPI is the index form, $\text{GUPPI}_A = D_{A \to B} \times M_B \times P_B / P_A$: the same diverted profit expressed as a share of A's own price. @sec-io-toolkit states the formulas in that index form; the two agree once you divide by $P_A$.
 
-**What to look for:** UPP > 0 means the merger creates upward pricing pressure. GUPPI (Gross UPP Index) expresses this as a percentage of price. Values above 5-10% typically trigger enhanced scrutiny, though thresholds vary by jurisdiction and context.
+**What to look for:** UPP > 0 means the merger creates upward pricing pressure. GUPPI values above 5-10% typically trigger enhanced scrutiny, though thresholds vary by jurisdiction and context.
 
 ```{r}
 #| label: merger-upp-example
@@ -97,22 +97,23 @@ PHASE 1: SCREENING              PHASE 2: DEEP DIVE              PHASE 3: DECISIO
 library(dplyr)
 
 #' Calculate Upward Pricing Pressure (UPP) for a merger
-#' @param diversion Fraction of lost sales that go to the merger partner
-#' @param price Price of the product losing sales
-#' @param margin Lerner margin (P-MC)/P as decimal
-#' @param efficiency Per-unit cost savings from merger synergies
-upp <- function(diversion, price, margin, efficiency = 0) {
-  # UPP = diverted profit - efficiencies
-  # margin = (P-MC)/P, so price * margin = P - MC = profit per unit
-  diversion * price * margin - efficiency
+#' UPP_A = D(A->B) x (P_B - C_B) - E_A: the diverted profit is valued at the
+#' MERGER PARTNER's price and margin, not those of the product losing sales.
+#' @param diversion Fraction of product A's lost sales diverted to partner B
+#' @param partner_price Merger partner's price (P_B)
+#' @param partner_margin Merger partner's Lerner margin (P_B - C_B)/P_B
+#' @param efficiency Per-unit cost savings (currency units) credited to A
+upp <- function(diversion, partner_price, partner_margin, efficiency = 0) {
+  # partner_price * partner_margin = P_B - C_B = partner's profit per unit
+  diversion * partner_price * partner_margin - efficiency
 }
 
 inputs <- tibble::tribble(
-  ~pair, ~diversion, ~price, ~margin, ~efficiency,
+  ~pair, ~diversion, ~partner_price, ~partner_margin, ~efficiency,
   "A->B", 0.35, 11.50, 0.45, 0.50,
   "B->A", 0.28, 10.00, 0.40, 0.30
 ) |>
-  mutate(upp = upp(diversion, price, margin, efficiency))
+  mutate(upp = upp(diversion, partner_price, partner_margin, efficiency))
 
 inputs
 ```
@@ -129,7 +130,7 @@ Highlight the evidence sources for diversion (switching matrices, conjoint surve
 3. Calculate UPP/GUPPI for the merging products
 4. Predict post-merger price increases
 
-**Key assumptions to scrutinize:** Results depend heavily on the outside share (customers who leave the market entirely), margin data quality, and the logit functional form. Always show sensitivity analysis.
+**Key assumptions to scrutinize:** Results depend heavily on the outside share (customers who leave the market entirely), margin data quality, and the logit functional form. Always show sensitivity analysis. To turn UPP into a predicted price change, the example uses the standard first-order approximation: the price rise is roughly pass-through times UPP, and pass-through is about one-half under linear demand.
 
 This example demonstrates merger simulation using a 3-product differentiated market. The logit demand model allows us to compute diversion ratios, own-price elasticities, and post-merger price effects.
 
@@ -218,36 +219,46 @@ upp_results <- tibble(
   )
 ) |>
   mutate(
-    guppi = upp / price,  # GUPPI as % of price
-    # First-order price effect approximation: ΔP ≈ UPP / (2 * alpha * (1 - s))
-    price_effect_pct = upp / (price * 2 * alpha * (1 - products$share))
+    guppi = upp / price,  # GUPPI as % of own price
+    # First-order price effect: delta-P ~ pass-through x UPP.
+    # Pass-through is ~0.5 under linear demand; state and vary this assumption.
+    pass_through = 0.5,
+    price_effect = pass_through * upp,
+    price_effect_pct = price_effect / price
   )
 
 cat("\nMerger price pressure (UPP/GUPPI):\n")
 upp_results |>
+  select(-pass_through) |>
   mutate(
     upp = scales::dollar(upp, accuracy = 0.01),
     guppi = scales::percent(guppi, accuracy = 0.1),
+    price_effect = scales::dollar(price_effect, accuracy = 0.01),
     price_effect_pct = scales::percent(price_effect_pct, accuracy = 0.1)
   ) |>
   print()
 
 # Step 4: Visualize results
-# Waterfall showing price effect decomposition for Product 3 (acquired product)
-waterfall_data <- tibble::tribble(
-  ~component,                ~value,     ~type,
-  "Pre-merger price",        11.00,      "total",
-  "Diversion to Product 1",  +0.32,      "increase",
-  "Diversion to Product 2",  +0.26,      "increase",
-  "Competitive response",    -0.08,      "decrease",
-  "Post-merger price",       11.50,      "total"
+# Waterfall showing price effect decomposition for Product 3 (acquired product).
+# Each step is a computed UPP component times the 0.5 linear-demand pass-through;
+# total bars (pre- and post-merger price) are drawn from zero, not stacked.
+pass_through <- 0.5
+step_p1 <- pass_through * products$share[1] / (1 - products$share[3]) *
+  (products$price[1] - products$mc[1])
+step_p2 <- pass_through * products$share[2] / (1 - products$share[3]) *
+  (products$price[2] - products$mc[2])
+pre_price3 <- products$price[3]
+post_price3 <- pre_price3 + step_p1 + step_p2
+
+waterfall_data <- tibble(
+  component = c("Pre-merger price", "Diversion to Product 1",
+                "Diversion to Product 2", "Post-merger price"),
+  value = c(pre_price3, step_p1, step_p2, post_price3),
+  start = c(0, pre_price3, pre_price3 + step_p1, 0),
+  end   = c(pre_price3, pre_price3 + step_p1, post_price3, post_price3),
+  type  = c("total", "increase", "increase", "total")
 ) |>
-  mutate(
-    component = factor(component, levels = component),
-    cumulative = cumsum(value),
-    start = lag(cumulative, default = 0),
-    end = cumulative
-  )
+  mutate(component = factor(component, levels = component))
 
 ggplot(waterfall_data) +
   geom_rect(aes(xmin = as.numeric(component) - 0.4,
@@ -258,15 +269,14 @@ ggplot(waterfall_data) +
                 y = (start + end) / 2,
                 label = scales::dollar(value, accuracy = 0.01)),
             size = 4, fontface = "bold") +
-  scale_fill_manual(values = c("total" = "#0072B2", "increase" = "#D55E00",
-                                "decrease" = "#009E73")) +
-  scale_x_continuous(breaks = 1:5, labels = waterfall_data$component) +
+  scale_fill_manual(values = c("total" = "#0072B2", "increase" = "#D55E00")) +
+  scale_x_continuous(breaks = 1:4, labels = levels(waterfall_data$component)) +
   scale_y_continuous(labels = scales::dollar_format()) +
   labs(
     title = "Merger Simulation: Price Effect Decomposition (Product 3)",
-    subtitle = "First-order effects from internalizing diversion to acquired products",
+    subtitle = "First-order approximation: price rise = 0.5 x UPP (linear-demand pass-through)",
     x = NULL, y = "Price ($)",
-    caption = "Based on logit demand calibration. Competitive response estimated at 15% pass-through."
+    caption = "Based on logit demand calibration. No rival repricing is modeled; a full equilibrium simulation would add it."
   ) +
   theme_antitrust() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1),
@@ -286,7 +296,7 @@ cat(paste0("Combined firm post-merger share: ",
 
 1. **Diversion ratios** determine how much pricing pressure the merger creates. Higher diversion between merging products = higher UPP.
 2. **GUPPI** (Gross Upward Pricing Pressure Index) expresses UPP as a percentage of price—values above 5-10% typically warrant further scrutiny.
-3. **Price effects** depend on demand curvature and competitive response. First-order approximations assume linear demand; actual effects may differ.
+3. **Price effects** here use the first-order rule: price rise = pass-through x UPP, with pass-through of 0.5 implied by linear demand. Convex demand raises pass-through, and rival repricing feeds back; a full equilibrium simulation handles both.
 4. **Calibration matters**: Results are sensitive to the outside share assumption and margin data quality.
 
 Before presenting results, show calibration diagnostics: how well the model reproduces pre-merger shares, whether price elasticities fall in plausible ranges, and how sensitive predictions are to alternative marginal-cost assumptions.
@@ -296,9 +306,9 @@ The AA/US Airways merger (announced February 2013, completed December 2013) lets
 
 **Calibration.** To simulate the merger on a given route, we need three ingredients: (1) carrier market shares (from DOT T-100 or DB1B data, as in the route-share heatmap), (2) an outside share representing passengers who would choose alternative transport (driving, rail) or forgo travel entirely---typically 20--40% on short-haul routes like DCA--LGA but much higher on long-haul routes with no driving substitute, and (3) carrier-level margins derived from DOT Form 41 cost reports, which provide operating expenses by carrier and stage length. Legacy carriers like AA and US Airways typically reported operating margins of 8--15% in this period, while low-cost carriers like Southwest operated at 12--18%.
 
-**Where the DOJ focused.** The government's challenge centered on routes where the merging carriers had combined nonstop shares exceeding 50%, particularly at hub airports: DCA (where AA and US together held the vast majority of slots), LGA (a slot-controlled airport with significant overlap), ORD (an AA hub where US Airways offered connecting competition), and PHL (the primary US Airways hub). On routes like DCA--LGA, the merger would have combined the two largest carriers, raising HHI well above the 2,500 threshold of the structural presumption.
+**Where the DOJ focused.** The government's challenge centered on routes where the merging carriers had combined nonstop shares exceeding 50%, particularly at hub airports: DCA (where AA and US together held the vast majority of slots), LGA (a slot-controlled airport with significant overlap), ORD (an AA hub where US Airways offered connecting competition), and PHL (the primary US Airways hub). On routes like DCA--LGA, the merger would have combined the two largest carriers, raising HHI well above the 2,500 threshold of the structural presumption (under the 2010 Guidelines then in force; the 2023 Guidelines later lowered the presumption to 1,800 with a delta above 100).
 
-**The remedy.** Rather than blocking the merger outright, the DOJ required divestitures of 104 slot pairs at DCA and 34 slot pairs at LGA to low-cost carriers, primarily Southwest Airlines, to preserve competitive entry on the most concentrated routes. The logic: if the harm came from eliminating head-to-head overlap at slot-constrained airports, transferring slots to an aggressive competitor could restore the lost competition. Whether the remedy succeeded is an empirical question that the retrospective tools from @sec-research-design can answer, and remedy design is taken up in @sec-regulation-remedies.
+**The remedy.** Rather than blocking the merger outright, the DOJ required divestitures of 104 slots (52 slot pairs) at DCA and 34 slots (17 slot pairs) at LGA to low-cost carriers, primarily Southwest Airlines, to preserve competitive entry on the most concentrated routes. The logic: if the harm came from eliminating head-to-head overlap at slot-constrained airports, transferring slots to an aggressive competitor could restore the lost competition. Whether the remedy succeeded is an empirical question that the retrospective tools from @sec-research-design can answer, and remedy design is taken up in @sec-regulation-remedies.
 :::
 
 ### Coordinated effects
@@ -460,11 +470,11 @@ Combine quantitative screens with qualitative evidence: internal documents refer
 ::: {.callout-tip title="Extended example: Hospital merger analysis"}
 Hospital mergers are among the most actively litigated in US antitrust, with the FTC challenging roughly one per year. Commercial insurance prices can rise 20--40% after consummation of anticompetitive hospital mergers, as documented in retrospective studies by Dafny (2009) and Gaynor and Town (2012). The analytical framework combines differentiated-products merger analysis (hospitals compete on quality, location, and reputation) with bilateral bargaining models, because hospitals negotiate rates with insurers rather than individual patients. The UPP/simulation toolkit from this chapter applies, with one wrinkle: the "price" is not set in a standard posted-price market.
 
-Hospital "prices" emerge from bilateral negotiations between hospital systems and insurance networks. The key metric is the hospital's willingness-to-pay (WTP) value: how much an insurer's enrollees would pay to have the hospital included in their network. A merger that combines two hospitals with high WTP increases the merged system's bargaining leverage, because the insurer cannot drop both hospitals without losing a large share of its enrollees. The change in WTP (delta-WTP) serves as the hospital-market analog of UPP/GUPPI. It quantifies how much additional bargaining power the merger confers. The FTC has deployed WTP models in cases including *Advocate Health Care* (7th Cir. 2017), *Penn State Hershey/PinnacleHealth* (3rd Cir. 2016), and *Hackensack Meridian/Englewood* (2021), establishing WTP analysis as a standard tool in the agency's hospital merger playbook.
+Hospital "prices" emerge from bilateral negotiations between hospital systems and insurance networks. The key metric is the hospital's willingness-to-pay (WTP) value: how much an insurer's enrollees would pay to have the hospital included in their network. A merger that combines two hospitals with high WTP increases the merged system's bargaining leverage, because the insurer cannot drop both hospitals without losing a large share of its enrollees. The change in WTP (delta-WTP) serves as the hospital-market analog of UPP/GUPPI. It quantifies how much additional bargaining power the merger confers. The FTC has deployed WTP models in cases including *Advocate Health Care* (7th Cir. 2016), *Penn State Hershey/PinnacleHealth* (3rd Cir. 2016), and *Hackensack Meridian/Englewood* (2021), establishing WTP analysis as a standard tool in the agency's hospital merger playbook.
 
 Hospital market definition is perennially contentious. Defendants typically argue for broad geographic markets on the grounds that patients can and do travel for care, while the FTC argues for narrower markets based on patient flow data showing that most patients travel less than 15--20 miles for inpatient services. The hypothetical monopolist framework adapts to this setting: instead of asking whether a price increase would be profitable, the relevant question is whether an insurer could market a viable plan excluding the merged system. Patient origin data, insurer testimony, and claims-level analysis of where patients actually receive care constitute the key evidence. The 2023 Merger Guidelines' emphasis on practical market realities, rather than theoretical substitution possibilities, has generally supported the FTC's narrower market definitions in recent hospital cases.
 
-The South African Private Healthcare Market Inquiry (2014--2019) examined similar dynamics in a very different institutional setting. The Commission found HHIs above 4,000 in several provinces and documented limited patient switching despite tariff differentials across hospital groups. The inquiry's central recommendation---the creation of a Supply-Side Regulator for Health---represents a regulatory response to the same market power problem that the FTC addresses through case-by-case merger enforcement. The contrast is instructive: the US approach relies on ex ante merger control to prevent the accumulation of hospital market power, while South Africa's proposed approach would impose ongoing oversight of an already-concentrated sector. Cross-reference @sec-regulation-remedies-remedies for the remedy design implications.
+The South African Private Healthcare Market Inquiry (2014--2019) examined similar dynamics in a very different institutional setting. The Commission found HHIs above 4,000 in several provinces and documented limited patient switching despite tariff differentials across hospital groups. The inquiry's central recommendation---the creation of a Supply-Side Regulator for Health---represents a regulatory response to the same market power problem that the FTC addresses through case-by-case merger enforcement. The contrast is instructive: the US approach relies on ex ante merger control to prevent the accumulation of hospital market power, while South Africa's proposed approach would impose ongoing oversight of an already-concentrated sector. Cross-reference @sec-regulation-remedies for the remedy design implications.
 
 For US hospital mergers, the principal data sources include CMS claims data (Medicare), FAIR Health (commercial claims), state all-payer claims databases (available in roughly 18 states), and the AHA Annual Survey for structural variables such as bed counts, service lines, and system affiliations. For South Africa, the Council for Medical Schemes, SAMRC databases, and provincial hospital utilization records provide analogous information. In both jurisdictions, the key challenge is obtaining commercially insured price data, which is often confidential and requires litigation discovery or regulatory compulsion to access. Budget time for data acquisition and cleaning. Hospital claims data is messy, with inconsistent coding and complex case-mix adjustment requirements.
 :::
@@ -529,19 +539,24 @@ Where:
 - $m_D$: Downstream margin of the merged firm
 - $P_D$: Downstream price
 
+That expression is the *gross* benefit. The net screen subtracts the upstream margin the merged firm forgoes when it stops selling inputs to the rival---a margin earned per unit of *upstream input*, valued at the upstream price, not as a share of the downstream price.
+
 ```{r}
 #| label: merger-vupp
 #| message: false
 #| warning: false
 
-# vUPP calculation
+# vUPP screen following the Moresi-Salop vGUPPI logic. Both terms are dollars
+# per unit of the rival's lost downstream sales: the merged firm gains the
+# downstream margin on diverted sales and loses the upstream margin on the
+# inputs it would have sold to produce that unit.
 vupp_calc <- function(diversion_to_affiliate, downstream_margin, downstream_price,
-                      upstream_margin_on_rivals = 0.20) {
-  # Benefit from foreclosure: captured downstream profits
+                      upstream_margin, upstream_price, inputs_per_unit = 1) {
+  # Benefit: captured downstream profit on diverted sales
   foreclosure_benefit <- diversion_to_affiliate * downstream_margin * downstream_price
 
-  # Cost of foreclosure: lost upstream margin on rivals
-  foreclosure_cost <- upstream_margin_on_rivals * downstream_price
+  # Cost: forgone upstream margin on the inputs behind each lost rival unit
+  foreclosure_cost <- inputs_per_unit * upstream_margin * upstream_price
 
   # Net vUPP
   net_vupp <- foreclosure_benefit - foreclosure_cost
@@ -553,22 +568,26 @@ vupp_calc <- function(diversion_to_affiliate, downstream_margin, downstream_pric
   ))
 }
 
-# Example: Media/content vertical merger
+# Example: media/content vertical merger. Fixed proportions: one unit of
+# licensed content input per subscriber served.
 example <- vupp_calc(
   diversion_to_affiliate = 0.25,  # 25% of rivals' lost sales go to affiliate
-  downstream_margin = 0.35,        # 35% downstream margin
-  downstream_price = 100,          # $100 downstream price
-  upstream_margin_on_rivals = 0.15 # 15% margin on sales to rival distributors
+  downstream_margin = 0.35,       # 35% downstream margin
+  downstream_price = 100,         # $100 downstream price
+  upstream_margin = 0.15,         # 15% margin on input sales to rival distributors
+  upstream_price = 40             # $40 per unit of input sold to rivals
 )
 
 cat("vUPP Analysis (Input Foreclosure):\n")
 cat(paste0("Gross vUPP (foreclosure benefit): $", round(example$gross_vupp, 2), "\n"))
-cat(paste0("Opportunity cost (lost upstream sales): $", round(example$opportunity_cost, 2), "\n"))
+cat(paste0("Opportunity cost (lost upstream margin): $", round(example$opportunity_cost, 2), "\n"))
 cat(paste0("Net vUPP: $", round(example$net_vupp, 2), "\n"))
 cat(paste0("Interpretation: ", ifelse(example$net_vupp > 0,
     "Positive net vUPP suggests incentive to foreclose rivals.",
     "Negative net vUPP suggests foreclosure is unprofitable."), "\n"))
 ```
+
+The back-of-envelope keeps the bookkeeping honest, but it abstracts from two things a full vGUPPI handles: how much of the input price rise the rival passes through to its own customers, which determines how many downstream sales it actually loses, and any departure from fixed-proportions production. Moresi and Salop (2013) develop the complete set of vGUPPI indices for upstream, downstream, and customer foreclosure.
 
 #### Balancing EDM vs. vUPP
 
@@ -613,7 +632,7 @@ ggplot(scenarios, aes(x = edm_magnitude, y = vupp_effect, fill = net_effect)) +
 - **Margin data**: Cost accounting, segment financials, comparable transactions
 - **Raising rivals' costs evidence**: Internal strategy documents discussing input denial, quality degradation, or discriminatory access
 
-See @salop_2018 for the theoretical framework and @doj_ftc_vmg_2020 for agency guidance on vertical merger analysis.
+See @salop_2018 for the theoretical framework. On agency guidance, read the 2020 Vertical Merger Guidelines [@doj_ftc_vmg_2020] as history rather than current policy: the FTC withdrew them in 2021, and the 2023 Merger Guidelines [@doj_ftc_hmg_2023] now carry the agencies' approach to vertical theories of harm.
 
 ### Efficiencies and remedies
 - Synergy claims: require verifiable, merger-specific efficiencies with timelines and implementation costs; stress test with sensitivity tables.
@@ -639,66 +658,81 @@ library(readr)
 library(lubridate)
 source("program/R/helpers.R")
 
-# Real airline stock data from FRED/tidyquant
-airlines <- read_csv("data/raw/finance_airlines.csv", show_col_types = FALSE) |>
-  mutate(date = as.Date(date))
+# Airline stock data pulled by program/scripts/02_finance_extended.R.
+# Guarded read so the chapter renders from a fresh clone.
+airlines <- tryCatch({
+  read_csv("data/raw/finance_airlines.csv", show_col_types = FALSE) |>
+    mutate(date = as.Date(date))
+}, error = function(e) NULL)
 
-# American Airlines/US Airways merger was announced Feb 14, 2013
-event_date <- as.Date("2013-02-14")
+if (!is.null(airlines)) {
+  # American Airlines/US Airways merger was announced Feb 14, 2013.
+  # The merging parties themselves cannot appear in this window: US Airways
+  # (LCC) delisted at closing, American's pre-merger equity traded as AAMRQ
+  # in bankruptcy, and the post-merger AAL ticker only begins trading in
+  # December 2013. This is therefore a RIVALS-ONLY event study.
+  event_date <- as.Date("2013-02-14")
 
-# Filter to event window and compute returns
-prices <- airlines |>
-  filter(between(date, event_date - days(120), event_date + days(60))) |>
-  group_by(symbol) |>
-  arrange(date) |>
-  mutate(ret = log(adjusted) - log(lag(adjusted))) |>
-  ungroup() |>
-  filter(!is.na(ret))
+  # Filter to rivals and event window, compute returns
+  prices <- airlines |>
+    filter(!symbol %in% c("AAL", "LCC", "AAMRQ")) |>
+    filter(between(date, event_date - days(120), event_date + days(60))) |>
+    group_by(symbol) |>
+    arrange(date) |>
+    mutate(ret = log(adjusted) - log(lag(adjusted))) |>
+    ungroup() |>
+    filter(!is.na(ret))
 
-# Market model: use SPY as benchmark
-market <- prices |> filter(symbol == "SPY") |> transmute(date, mkt_ret = ret)
-cars <- prices |> filter(symbol != "SPY") |>
-  left_join(market, by = "date") |>
-  filter(!is.na(mkt_ret)) |>
-  mutate(abnormal = ret - mkt_ret, rel_day = as.integer(date - event_date)) |>
-  filter(between(rel_day, -20, 20)) |>
-  group_by(symbol) |>
-  arrange(rel_day) |>
-  mutate(car = cumsum(abnormal))
+  # Market model: use SPY as benchmark
+  market <- prices |> filter(symbol == "SPY") |> transmute(date, mkt_ret = ret)
+  cars <- prices |> filter(symbol != "SPY") |>
+    left_join(market, by = "date") |>
+    filter(!is.na(mkt_ret)) |>
+    mutate(abnormal = ret - mkt_ret, rel_day = as.integer(date - event_date)) |>
+    filter(between(rel_day, -20, 20)) |>
+    group_by(symbol) |>
+    arrange(rel_day) |>
+    mutate(car = cumsum(abnormal))
 
-# Label mapping for airlines
-airline_labels <- c("AAL" = "American Airlines", "DAL" = "Delta",
-                    "UAL" = "United", "LUV" = "Southwest")
+  # Label mapping for rival airlines
+  airline_labels <- c("DAL" = "Delta", "UAL" = "United", "LUV" = "Southwest",
+                      "JBLU" = "JetBlue", "ALK" = "Alaska")
 
-ggplot(cars |> mutate(label = airline_labels[symbol]),
-       aes(rel_day, car, color = label)) +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "darkred", linewidth = 0.8) +
-  geom_hline(yintercept = 0, linewidth = 0.3, color = "gray70") +
-  geom_line(linewidth = 0.9) +
-  scale_color_manual(values = c(
-    "American Airlines" = "#D55E00",
-    "Delta" = "#0072B2",
-    "United" = "#009E73",
-    "Southwest" = "#CC79A7"
-  )) +
-  labs(title = "Cumulative Abnormal Returns: AA/US Airways Merger Announcement",
-       subtitle = "Real airline stock data. Announcement: Feb 14, 2013. Event window ±20 trading days.",
-       x = "Event time (days)", y = "CAR", color = NULL,
-       caption = "Source: finance_airlines.csv (tidyquant). SPY used as market benchmark.\nPositive CAR for rivals suggests coordination expectations; negative suggests competitive threat.") +
-  theme_antitrust() +
-  theme(legend.position = "bottom")
+  p_cars <- ggplot(cars |> mutate(label = airline_labels[symbol]),
+         aes(rel_day, car, color = label)) +
+    geom_vline(xintercept = 0, linetype = "dashed", color = "darkred", linewidth = 0.8) +
+    geom_hline(yintercept = 0, linewidth = 0.3, color = "gray70") +
+    geom_line(linewidth = 0.9) +
+    scale_color_manual(values = c(
+      "Delta" = "#0072B2",
+      "United" = "#009E73",
+      "Southwest" = "#CC79A7",
+      "JetBlue" = "#E69F00",
+      "Alaska" = "#56B4E9"
+    )) +
+    labs(title = "Rival Airlines' Cumulative Abnormal Returns: AA/US Airways Announcement",
+         subtitle = "Rivals only: the merging parties' tickers (LCC, AAMRQ) are delisted. Announced Feb 14, 2013; window ±20 trading days.",
+         x = "Event time (days)", y = "CAR", color = NULL,
+         caption = "Source: finance_airlines.csv (tidyquant). SPY used as market benchmark.\nPositive CAR for rivals suggests coordination expectations; negative suggests competitive threat.") +
+    theme_antitrust() +
+    theme(legend.position = "bottom")
+  print(p_cars)
 
-# Summary table of cumulative abnormal returns
-car_summary <- cars |>
-  filter(rel_day == max(rel_day)) |>
-  mutate(label = airline_labels[symbol]) |>
-  select(label, CAR = car, final_day = rel_day)
+  # Summary table of cumulative abnormal returns
+  car_summary <- cars |>
+    filter(rel_day == max(rel_day)) |>
+    mutate(label = airline_labels[symbol]) |>
+    select(label, CAR = car, final_day = rel_day)
 
-cat("\nCumulative Abnormal Returns (full event window):\n")
-knitr::kable(car_summary, digits = 4,
-             caption = "CAR for rival airlines around AA/US Airways merger announcement")
+  cat("\nCumulative Abnormal Returns (full event window):\n")
+  print(knitr::kable(car_summary, digits = 4,
+               caption = "CAR for rival airlines around AA/US Airways merger announcement"))
+} else {
+  cat("Airline stock data not available.",
+      "Run program/scripts/02_finance_extended.R to build data/raw/finance_airlines.csv.\n")
+}
 ```
-Use CAR patterns as suggestive evidence of coordination or efficiency expectations, but always pair with operational data (capacity, contracts). Positive abnormal returns for rival airlines on the announcement date suggest the market expects the merger to facilitate coordinated effects—a "umbrella effect" that benefits all carriers. Negative abnormal returns suggest the merged entity is expected to compete more aggressively.
+Use CAR patterns as suggestive evidence of coordination or efficiency expectations, but always pair with operational data (capacity, contracts). The rivals-only design is a necessity, not a choice: standard data feeds do not serve the merging parties' delisted histories (US Airways traded as LCC until closing; American's pre-merger equity traded as AAMRQ in bankruptcy), so the announcement effect is read off Delta, United, Southwest, JetBlue, and Alaska. Positive abnormal returns for rival airlines on the announcement date suggest the market expects the merger to facilitate coordinated effects—an "umbrella effect" that benefits all carriers. Negative abnormal returns suggest the merged entity is expected to compete more aggressively.
 
 ### Southern African merger evidence
 - **Walmart/Massmart (2011).** The Competition Commission and Tribunal analyzed SKU-level sales and procurement data showing Massmart’s 20–25% share in formal general merchandise with limited reach into township grocery segments. Diversion estimates from loyalty-card switching rates indicated minimal unilateral effect, so the case turned on public-interest harms. Conditions ultimately required a R240 million supplier development fund, a two-year moratorium on merger-specific retrenchments, and detailed annual reporting on local procurement shares—providing a template for tying data-backed public-interest claims to remedies.
@@ -726,11 +760,14 @@ See the UPP/GUPPI example above. Expand the template with case-specific diversio
 #| label: merger-sim-skeleton-callout
 #| message: false
 #| warning: false
-# robust path in case execution dir is chapter folder
+# Quarto executes from the project root (execute-dir: project), so this
+# project-relative path works from any chapter.
 source("program/R/helpers.R")
-# products_df: product, firm, price, share, mc (or margin), group (nest)
-# sim <- run_logit_sim(products_df, merging_firms = c("FirmA","FirmB"))
-# sim$summary
+# products_df needs columns: product, firm, price, share, mc
+# sim <- run_logit_sim(products_df, merging_firms = c("FirmA", "FirmB"))
+# sim is a list: alpha, prices_pre, prices_post, delta, ownership_post
+# data.frame(product = products_df$product,
+#            pre = sim$prices_pre, post = sim$prices_post)
 ```
 :::
 
@@ -933,7 +970,9 @@ library(ggplot2)
 source("program/R/helpers.R")
 
 # Simulation components (from a differentiated products model)
-# Replace with actual simulation outputs
+# Replace with actual simulation outputs. The final row is the total: its
+# value is computed from the steps and the bar is drawn from zero, so it
+# cannot drift out of line with the steps above it.
 sim_components <- tibble::tribble(
   ~component,              ~value,     ~description,
   "Base price",            10.00,      "Pre-merger price",
@@ -941,19 +980,22 @@ sim_components <- tibble::tribble(
   "Internalization",       +0.35,      "Portfolio reoptimization",
   "Efficiency offset",     -0.25,      "Verified cost synergies",
   "Competitive response",  -0.15,      "Rival price reactions",
-  "Post-merger price",     10.75,      "Predicted equilibrium"
+  "Post-merger price",     NA,         "Predicted equilibrium (computed)"
 ) |>
   mutate(
-    component = factor(component, levels = component),
-    cumulative = cumsum(value),
-    start = lag(cumulative, default = 0),
-    end = cumulative,
     type = case_when(
       component %in% c("Base price", "Post-merger price") ~ "total",
       value > 0 ~ "increase",
       value < 0 ~ "decrease",
       TRUE ~ "neutral"
-    )
+    ),
+    # Totals contribute no step: the base anchors the running sum, and the
+    # post-merger total is the running sum itself, drawn from zero.
+    step = if_else(component == "Post-merger price", 0, value),
+    end = cumsum(step),
+    start = if_else(type == "total", 0, lag(end, default = 0)),
+    value = if_else(is.na(value), end, value),
+    component = factor(component, levels = component)
   )
 
 # Waterfall plot
@@ -1035,20 +1077,10 @@ cat(paste0("Price increase: ",
 
 Replace simulated values with outputs from your actual merger simulation model (logit, nested logit, BLP, or custom structural model).
 
-::: {.callout-tip title="Key Takeaways"}
-1. **Structural screens come first.** HHI levels and deltas provide the starting point. Mergers creating HHI > 2,500 with delta > 200 face heightened scrutiny under current guidelines.
+::: {.callout-tip title="Key takeaways"}
+Structural screens come first. Under the 2023 Merger Guidelines, the presumption of illegality attaches when post-merger HHI exceeds 1,800 and the merger adds more than 100 points, or when the combined share reaches 30% with the same delta. The presumption opens the argument; diversion settles it. How many customers would switch between the merging parties drives UPP, GUPPI, and every simulation in this chapter, so the quality of the switching evidence---surveys, loyalty data, natural experiments---bounds the quality of the answer. Coordinated effects need different evidence: a maverick removed, symmetry increased, transparency enhanced. Those concerns bite even when unilateral effects are modest.
 
-2. **Diversion is the key variable.** For unilateral effects, what matters is how many customers would switch between the merging parties. Diversion ratios from surveys or switching data drive UPP and simulation results.
-
-3. **Coordinated effects require different evidence.** Look for mavericks being removed, increased symmetry, enhanced transparency, or reduced capacity. These concerns apply even when unilateral effects are modest.
-
-4. **Vertical concerns are real but harder to prove.** Foreclosure and raising rivals' costs require showing both ability and incentive. The elimination of double marginalization creates legitimate efficiency arguments.
-
-5. **Efficiencies must be merger-specific and verifiable.** "Synergies" claimed in press releases rarely survive scrutiny. Focus on cost savings that cannot be achieved through internal growth or contracts.
-
-6. **Retrospectives validate prospective analysis.** Compare your simulation predictions to actual outcomes from similar past mergers. If you predict 5% price increases but comparable mergers show 2%, explain the difference.
-
-7. **Remedies must fix the diagnosed harm.** A divestiture that creates a non-viable competitor is worse than none. Match remedy design to the specific theory of harm identified.
+Vertical theories require showing both ability and incentive to foreclose, weighed against the elimination of double marginalization. Efficiencies count only when they are merger-specific and verifiable; synergies claimed in press releases rarely survive scrutiny. Retrospectives keep simulations honest---if comparable past mergers raised prices 2% and your model predicts 5%, explain the gap. And remedies must fix the diagnosed harm. A divestiture that creates a non-viable competitor is worse than none.
 :::
 
 ## Exercises
