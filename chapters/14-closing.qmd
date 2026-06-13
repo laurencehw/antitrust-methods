@@ -151,7 +151,7 @@ diversion
 ::: {.callout-tip collapse="true" title="Worked answer (steps 2--4)"}
 **Step 2 (HHI).** Shares are 30, 20, 25, 15, 6, and 4 percent. Pre-merger HHI = 900 + 400 + 625 + 225 + 36 + 16 = **2,202**. Delta-HHI = 2 x 30 x 20 = **1,200**, so post-merger HHI = **3,402**. The market is highly concentrated (> 1,800) and the change exceeds 100 points: the 2023 Guidelines structural presumption applies.
 
-**Step 3 (diversion).** Share-proportional (logit) diversion would be D_AB = 20/(100 - 30) = **0.29** and D_BA = 30/(100 - 20) = **0.375**. The patient-flow ratios (0.32 and 0.45) exceed both: A and B are closer substitutes than their shares alone imply, which strengthens the unilateral-effects concern.
+**Step 3 (diversion).** Share-proportional (logit) diversion would be D_AB = 20/(100 - 30) ≈ **0.29** and D_BA = 30/(100 - 20) = **0.375**. The patient-flow ratios (0.32 and 0.45) exceed both: A and B are closer substitutes than their shares alone imply, which strengthens the unilateral-effects concern.
 
 **Step 4 (GUPPI).** GUPPI_A = D_AB x M_B x (P_B/P_A) = 0.32 x 0.35 x (11,000/12,000) = **10.3%**. GUPPI_B = D_BA x M_A x (P_A/P_B) = 0.45 x 0.40 x (12,000/11,000) = **19.6%**. Both sit well above the 5% screening threshold, so the pricing-pressure screen corroborates the structural presumption. Steps 5--7 build from here: the Nash-in-Nash framework asks how the combined system's bargaining leverage with insurers changes, and the retrospective design pre-commits to how you would check the prediction.
 :::
