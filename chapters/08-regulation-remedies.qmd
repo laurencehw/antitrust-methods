@@ -9,7 +9,7 @@ Antitrust analysis often ends with a liability finding, but policy work begins t
 
 - Compare rate-of-return, price-cap, and incentive regulation, and pick the tool that matches industry fundamentals (cost structure, demand volatility, data availability).
 - Design structural and behavioral remedies that map directly to diagnosed harms, with clear monitoring and reporting plans.
-- Evaluate remedy effectiveness using retrospective econometrics---diff-in-diff and event studies, following the design principles in @sec-research-design---and benchmarking models.
+- Evaluate remedy effectiveness using retrospective econometrics (diff-in-diff and event studies, following the design principles in @sec-research-design) and benchmarking models.
 - Integrate qualitative evidence (compliance reports, trustee memos, stakeholder hearings) with quantitative indicators.
 
 ## Why regulation and remedies matter
@@ -111,14 +111,14 @@ When designing access remedies in practice, the economist should document:
 
 #### Access pricing in South Africa: the Telkom precedent
 
-South Africa's Competition Tribunal has used access pricing remedies in several high-profile abuse-of-dominance cases. The **Telkom wholesale settlements** (2013) required Telkom to provide competitors with access to its local loop and wholesale broadband services at regulated prices [@sa_telkom_2013]. The Tribunal's remedy combined a margin squeeze test (ensuring the spread between wholesale and retail prices allowed efficient downstream competition) with ongoing reporting requirements on fault rates, provisioning times, and service quality. The remedy was notable for its quasi-regulatory character: rather than a one-time penalty, it established an ongoing pricing framework that functioned much like sector regulation. The Commission's monitoring team tracked six KPIs quarterly, with escalation procedures for any metric that fell below the committed threshold for two consecutive periods. This approach---using competition law remedies to create de facto regulatory oversight in the absence of a sectoral regulator---has become a distinctive feature of South African competition enforcement, particularly in sectors where ICASA's capacity is limited or where the market structure has evolved faster than the regulatory framework.
+South Africa's Competition Tribunal has used access pricing remedies in several high-profile abuse-of-dominance cases. The **Telkom wholesale settlements** (2013) required Telkom to provide competitors with access to its local loop and wholesale broadband services at regulated prices [@sa_telkom_2013]. The Tribunal's remedy combined a margin squeeze test (ensuring the spread between wholesale and retail prices allowed efficient downstream competition) with ongoing reporting requirements on fault rates, provisioning times, and service quality. The remedy was notable for its quasi-regulatory character: rather than a one-time penalty, it established an ongoing pricing framework that functioned much like sector regulation, with settlement compliance tracked against the committed pricing and service-quality undertakings on a regular reporting cycle. This approach---using competition law remedies to create de facto regulatory oversight in the absence of a sectoral regulator---has become a distinctive feature of South African competition enforcement, particularly in sectors where ICASA's capacity is limited or where the market structure has evolved faster than the regulatory framework.
 
 ## Incentive regulation and benchmarking
 Benchmarking and yardstick competition compare regulated entities to peers to set targets without micromanaging costs. Examples include Ofgem's RIIO model and the planned South African Supply-Side Regulator for Health.
 
-#### Real utility benchmarking: South African provincial electricity and manufacturing
+#### Utility benchmarking: South African provincial electricity and manufacturing
 
-South Africa's electricity crisis provides a real-world benchmarking case. The decline in available generation capacity (measured in GWh) directly constrains manufacturing output across provinces. By comparing provincial manufacturing production to electricity availability, regulators can identify which provinces are most affected by supply constraints and which have managed to maintain productivity despite the crisis.
+South Africa's electricity crisis provides a real-world benchmarking case. The decline in available generation capacity (measured in GWh) directly constrains manufacturing output across provinces. By comparing provincial manufacturing production to electricity availability, regulators can identify which provinces are most affected by supply constraints and which have managed to maintain productivity despite the crisis. The chunk below runs on the author's processed Stats SA series when present; on a fresh clone it substitutes a labelled synthetic panel with the same structure.
 
 ```{r}
 #| label: regulation-sa-benchmark
@@ -133,22 +133,73 @@ library(lubridate)
 library(tidyr)
 source("program/R/helpers.R")
 
-# Load SA electricity data
-elec <- read_csv("../the south african economy/___Contemporary/data/processed/electricity_available_gwh_sa.csv",
-                 show_col_types = FALSE) |>
-  mutate(date = as.Date(date))
+# Real source (author's local copy, outside this repository):
+#   "../the south african economy/___Contemporary/data/processed/" --
+#   electricity_available_gwh_sa.csv (date, value: monthly GWh),
+#   manufacturing_production_index.csv (date, index), and
+#   provincial_gdp_by_sector.csv (year, region, sector, gdp_rmillion),
+#   all processed from Stats SA releases. Guarded so a fresh clone renders:
+#   if the files are absent, a clearly labelled synthetic panel with the same
+#   schema is substituted and the captions say so.
+sa_bench <- tryCatch({
+  list(
+    elec = read_csv("../the south african economy/___Contemporary/data/processed/electricity_available_gwh_sa.csv",
+                    show_col_types = FALSE) |>
+      mutate(date = as.Date(date)),
+    mfg = read_csv("../the south african economy/___Contemporary/data/processed/manufacturing_production_index.csv",
+                   show_col_types = FALSE) |>
+      mutate(date = as.Date(date)),
+    pgdp = read_csv("../the south african economy/___Contemporary/data/processed/provincial_gdp_by_sector.csv",
+                    show_col_types = FALSE)
+  )
+}, error = function(e) NULL)
 
-# Load SA manufacturing production
-mfg <- read_csv("../the south african economy/___Contemporary/data/processed/manufacturing_production_index.csv",
-                show_col_types = FALSE) |>
-  mutate(date = as.Date(date))
+sa_synth <- is.null(sa_bench)
+if (sa_synth) {
+  # Schema-matched synthetic fallback, calibrated to the broad shape of the
+  # published series: generation rising to the late 2000s, then declining
+  # through the load-shedding era, with manufacturing tracking electricity.
+  set.seed(2025)
+  months <- seq(as.Date("2000-01-01"), as.Date("2025-06-01"), by = "month")
+  n_m <- length(months)
+  pre_2008 <- sum(months < as.Date("2008-01-01"))
+  trend <- c(seq(18000, 21000, length.out = pre_2008),
+             seq(21000, 17500, length.out = n_m - pre_2008))
+  seasonal <- 800 * cos(2 * pi * (as.numeric(format(months, "%m")) - 7) / 12)
+  elec <- tibble(date = months, value = trend + seasonal + rnorm(n_m, 0, 350))
+  mfg <- tibble(date = months,
+                index = 100 * (elec$value / mean(elec$value)) *
+                  exp(rnorm(n_m, 0, 0.02)))
+  prov <- c("South Africa", "Gauteng", "Western Cape", "KwaZulu-Natal",
+            "Eastern Cape", "Free State")
+  prov_share <- c(1, 0.40, 0.15, 0.21, 0.08, 0.04)
+  pgdp <- expand.grid(year = 2000:2024, region = prov,
+                      stringsAsFactors = FALSE) |>
+    left_join(tibble(region = prov, share = prov_share), by = "region") |>
+    mutate(
+      sector = "Manufacturing",
+      # gdp_rmillion in R million (constant prices): national manufacturing
+      # near R400bn, slowing after 2008
+      gdp_rmillion = share *
+        (360000 + 4000 * (year - 2000) - 3000 * pmax(0, year - 2008)) *
+        exp(rnorm(n(), 0, 0.02))
+    )
+} else {
+  elec <- sa_bench$elec
+  mfg <- sa_bench$mfg
+  pgdp <- sa_bench$pgdp
+}
 
-# Load provincial GDP by sector
-pgdp <- read_csv("../the south african economy/___Contemporary/data/processed/provincial_gdp_by_sector.csv",
-                 show_col_types = FALSE) |>
+pgdp <- pgdp |>
   filter(sector == "Manufacturing",
          region %in% c("South Africa", "Gauteng", "Western Cape", "KwaZulu-Natal",
                        "Eastern Cape", "Free State"))
+
+sa_src <- if (sa_synth) {
+  "Synthetic data for illustration (Stats SA schema)."
+} else {
+  "Source: Stats SA. Real data."
+}
 
 # Panel A: Electricity availability over time
 p1 <- ggplot(elec, aes(x = date, y = value)) +
@@ -156,13 +207,13 @@ p1 <- ggplot(elec, aes(x = date, y = value)) +
   geom_smooth(method = "loess", span = 0.3, color = "#0072B2", linewidth = 1.2, se = FALSE) +
   labs(
     title = "South African Electricity Availability (2000–2025)",
-    subtitle = "Monthly GWh available. Blue line: loess smooth. Source: Stats SA.",
+    subtitle = paste("Monthly GWh available. Blue line: loess smooth.", sa_src),
     x = NULL, y = "GWh Available"
   ) +
   theme_antitrust()
 
 # Panel B: Provincial manufacturing GDP trends
-p2 <- ggplot(pgdp, aes(x = year, y = gdp_rmillion / 1e6, color = region)) +
+p2 <- ggplot(pgdp, aes(x = year, y = gdp_rmillion / 1e3, color = region)) +
   geom_line(linewidth = 1) +
   scale_color_manual(values = c(
     "South Africa" = "#333333",
@@ -174,7 +225,7 @@ p2 <- ggplot(pgdp, aes(x = year, y = gdp_rmillion / 1e6, color = region)) +
   )) +
   labs(
     title = "Provincial Manufacturing GDP (Constant 2015 Rand)",
-    subtitle = "Top 5 provinces. Source: Stats SA provincial accounts.",
+    subtitle = paste("Top 5 provinces plus national total.", sa_src),
     x = NULL, y = "Manufacturing GDP (R billion)", color = NULL
   ) +
   theme_antitrust() +
@@ -204,7 +255,7 @@ cat(paste0("Correlation between electricity availability and manufacturing: ",
            round(cor(elec_mfg$value_elec, elec_mfg$index, use = "complete.obs"), 3), "\n"))
 ```
 
-This real-data benchmarking exercise reveals the structural relationship between electricity supply and manufacturing output. The correlation between available GWh and the manufacturing production index quantifies the extent to which load-shedding constrains industrial activity, an input for regulatory remedy design. When the Supply-Side Regulator for Health is established, similar benchmarking methods will compare hospital costs and quality outcomes across provinces, using the same yardstick competition framework that Ofgem applies to UK energy networks.
+Run on the real Stats SA series, this benchmarking exercise reveals the structural relationship between electricity supply and manufacturing output: the correlation between available GWh and the manufacturing production index quantifies the extent to which load-shedding constrains industrial activity, an input for regulatory remedy design. When the Supply-Side Regulator for Health is established, similar benchmarking methods will compare hospital costs and quality outcomes across provinces, using the same yardstick competition framework that Ofgem applies to UK energy networks.
 
 ## Remedy design after antitrust findings
 
@@ -244,16 +295,16 @@ Effective remedy monitoring requires a dashboard of key performance indicators t
 | Price cap | Tariff compliance, cost pass-through | Quarterly | Price exceeds cap by >2% |
 | Data sharing | Data completeness, timeliness, format parity | Monthly | >15% data fields missing |
 
-The South African Data Services Market Inquiry provides a model for remedy monitoring: the Commission required Vodacom and MTN to report quarterly on prepaid data prices, zero-rated services, and MVNO access terms, with an independent monitoring trustee verifying compliance. The Commission's monitoring dashboard tracked six KPIs over a two-year period, with escalation procedures for any KPI that fell below the committed threshold for two consecutive quarters.
+The South African Data Services Market Inquiry provides a model for remedy monitoring: compliance with the operators' pricing and access commitments was tracked against defined KPIs, with sustained shortfalls subject to escalation. The case box below describes the inquiry and its monitoring architecture.
 
 ::: {.callout-note title="Case box: South Africa's Data Services Market Inquiry --- Remedy Design and Monitoring"}
 In 2017, the South African Competition Commission launched a market inquiry into data services, responding to public concern that mobile data prices were unaffordable for low-income consumers. The Commission's approach combined multiple analytical methods: (1) international price benchmarking across 70+ countries, controlling for income levels and network costs; (2) profitability analysis using publicly reported financials to show that Vodacom and MTN earned returns on capital significantly above their weighted average cost of capital; and (3) cost modeling to determine the efficient cost of providing data services.
 
 The inquiry's final report (December 2019) recommended that both operators reduce the headline price of sub-1GB prepaid data bundles---the packages most used by low-income consumers---within defined timeframes. Both operators agreed to price reductions, with Vodacom cutting its 500MB bundle price by over 30%. The Commission also mandated open-access APN regulations to lower barriers for MVNOs and required zero-rating of essential public websites.
 
-The remedial framework is notable for its monitoring architecture. The Commission established a compliance dashboard tracking six KPIs: (1) prepaid data prices for bundles under 1GB, (2) per-MB out-of-bundle rates, (3) zero-rated website availability, (4) MVNO access terms, (5) network quality metrics, and (6) complaint resolution times. Vodacom and MTN reported quarterly, with an independent monitoring trustee verifying the data. Any KPI that fell below the committed threshold for two consecutive quarters triggered an escalation procedure, including public hearings and potential referral to the Competition Tribunal for enforcement.
+The remedial framework is notable for its monitoring architecture. Compliance with the commitments was tracked against defined indicators covering the committed prepaid bundle prices, out-of-bundle rates, zero-rated content, and MVNO access terms, with the Commission monitoring the operators' reports and sustained shortfalls open to escalation, including referral to the Competition Tribunal for enforcement.
 
-This inquiry demonstrates how competition authorities can use benchmarking and profitability analysis to design targeted, consumer-facing remedies without resorting to full-scale price regulation. The monitoring framework---with its specific KPIs, reporting cadence, and escalation procedures---provides a model for remedy design in other concentrated sectors.
+This inquiry demonstrates how competition authorities can use benchmarking and profitability analysis to design targeted, consumer-facing remedies without resorting to full-scale price regulation. The monitoring framework---defined KPIs, a regular reporting cadence, and escalation procedures---provides a model for remedy design in other concentrated sectors.
 :::
 
 #### Retrospective diff-in-diff scaffold

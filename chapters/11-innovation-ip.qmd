@@ -224,7 +224,7 @@ Data sources: IQVIA (if available), CMS reimbursement data, Stats SA medicine pr
 - **Pipeline probability models:** For pharmaceuticals, use clinical trial progression rates.  
 - **Product roadmaps:** Qualitative review of technical plans to confirm or rebut innovation harm narratives.
 
-The following charts use real PatentsView data---the USPTO's public bulk download---to show innovation trends relevant to antitrust analysis. Patent counts are an imperfect proxy for innovation, but they are the most widely available and standardized measure, and they feature in merger review (as indicators of innovation incentives) and in SEP/FRAND disputes (where patent portfolios determine licensing leverage).
+The following charts are built for PatentsView data---the USPTO's public bulk download (the bulk files must be fetched manually; the API route is deprecated). When the files are absent, the chunk substitutes a clearly labelled synthetic series with the same schema so the book renders from a fresh clone. Patent counts are an imperfect proxy for innovation, but they are the most widely available and standardized measure, and they feature in merger review (as indicators of innovation incentives) and in SEP/FRAND disputes (where patent portfolios determine licensing leverage).
 
 ```{r}
 #| label: innovation-patent-trends
@@ -233,19 +233,72 @@ The following charts use real PatentsView data---the USPTO's public bulk downloa
 #| echo: true
 #| fig-width: 10
 #| fig-height: 7
-#| fig-cap: "Source: PatentsView (USPTO bulk download). Real data."
+#| fig-cap: "US utility patent grants, total and by technology sector. The in-figure caption states whether the rendered series is the real PatentsView data or a labelled synthetic stand-in."
 library(dplyr)
 library(ggplot2)
 library(patchwork)
 source("program/R/helpers.R")
 
-tryCatch({
-  # --- Panel 1: Total US utility patents by year ---
-  total_df <- read.csv("data/raw/patents_total_by_year.csv",
-                       stringsAsFactors = FALSE) |>
-    filter(year >= 1976, year <= 2024)
+# Real source: PatentsView bulk downloads (USPTO), aggregated to
+# data/raw/patents_total_by_year.csv (year, total_utility_patents) and
+# data/raw/patents_by_sector_year.csv (year, sector, patent_count).
+# Guarded read with a schema-matched synthetic fallback.
+patents_raw <- tryCatch({
+  list(
+    total  = read.csv("data/raw/patents_total_by_year.csv",
+                      stringsAsFactors = FALSE),
+    sector = read.csv("data/raw/patents_by_sector_year.csv",
+                      stringsAsFactors = FALSE)
+  )
+}, error = function(e) NULL)
 
-  p1 <- ggplot(total_df, aes(x = year, y = total_utility_patents / 1000)) +
+patents_synth <- is.null(patents_raw) ||
+  ("data_source" %in% names(patents_raw$total) &&
+     any(patents_raw$total$data_source == "synthetic_fallback"))
+
+if (is.null(patents_raw)) {
+  # Synthetic fallback for illustration only: exponential growth with noise,
+  # calibrated to the broad shape of US utility patent grants.
+  set.seed(1976)
+  yrs_total <- 1976:2024
+  total_df <- data.frame(
+    year = yrs_total,
+    total_utility_patents = round(
+      70000 * exp(0.035 * (yrs_total - 1976)) *
+        exp(rnorm(length(yrs_total), 0, 0.03))
+    )
+  )
+  synth_sectors <- c("Computer/Electronics", "Pharmaceuticals",
+                     "Semiconductors", "Clean Energy", "Motor Vehicles")
+  synth_base    <- c(40000, 12000, 15000, 3000, 8000)
+  synth_growth  <- c(0.040, 0.010, 0.030, 0.070, 0.015)
+  sector_df <- do.call(rbind, lapply(seq_along(synth_sectors), function(i) {
+    yrs <- 2000:2024
+    data.frame(
+      year = yrs,
+      sector = synth_sectors[i],
+      patent_count = round(
+        synth_base[i] * exp(synth_growth[i] * (yrs - 2000)) *
+          exp(rnorm(length(yrs), 0, 0.04))
+      )
+    )
+  }))
+} else {
+  total_df <- patents_raw$total
+  sector_df <- patents_raw$sector
+}
+
+patents_src <- if (patents_synth) {
+  "Synthetic data for illustration; replace with PatentsView bulk download (USPTO)."
+} else {
+  "Source: PatentsView (USPTO bulk download). Real data."
+}
+
+# --- Panel 1: Total US utility patents by year ---
+total_df <- total_df |>
+  filter(year >= 1976, year <= 2024)
+
+p1 <- ggplot(total_df, aes(x = year, y = total_utility_patents / 1000)) +
     geom_line(color = "#0072B2", linewidth = 1.1) +
     geom_point(color = "#0072B2", size = 0.8, alpha = 0.5) +
     # Key antitrust-relevant annotations
@@ -272,9 +325,8 @@ tryCatch({
     ) +
     theme_antitrust()
 
-  # --- Panel 2: Patent grants by technology sector (2000+) ---
-  sector_df <- read.csv("data/raw/patents_by_sector_year.csv",
-                        stringsAsFactors = FALSE) |>
+# --- Panel 2: Patent grants by technology sector (2000+) ---
+sector_df <- sector_df |>
     filter(year >= 2000, year <= 2024) |>
     filter(sector %in% c("Computer/Electronics", "Pharmaceuticals",
                           "Semiconductors", "Clean Energy",
@@ -314,16 +366,9 @@ tryCatch({
           legend.text = element_text(size = 8)) +
     guides(color = guide_legend(nrow = 1))
 
-  # --- Combine with patchwork ---
-  p1 / p2 +
-    plot_annotation(
-      caption = "Source: PatentsView (USPTO bulk download). Real data."
-    )
-}, error = function(e) {
-  message("Could not load PatentsView data: ", e$message)
-  message("Ensure data/raw/patents_total_by_year.csv and ",
-          "data/raw/patents_by_sector_year.csv exist.")
-})
+# --- Combine with patchwork ---
+p1 / p2 +
+  plot_annotation(caption = patents_src)
 ```
 
 The acceleration in patent grants since 2000---driven particularly by computer/electronics, telecommunications, and biotech---coincides with the period of most active antitrust scrutiny of innovation markets. Rising patent density increases the risk of patent thickets and royalty stacking (see the royalty stack visualization above), while sector-level trends help identify where killer acquisition concerns are most acute.

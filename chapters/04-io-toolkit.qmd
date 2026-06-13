@@ -513,12 +513,15 @@ source("program/R/helpers.R")
 # Simplified Nash-in-Nash: hospital-insurer bargaining
 # Pre-merger: each hospital bargains separately
 # Post-merger: combined entity bargains as one
+# The bargaining weight is held FIXED at 0.6 throughout, so the price
+# increase comes entirely from the superadditive disagreement payoff
+# ($120M > $80M + $20M), not from an assumed gain in bargaining skill.
 
 bargaining <- tibble::tribble(
   ~scenario, ~hospital, ~wtp_loss_per_enrollee, ~enrollees, ~bargaining_weight,
   "Pre-merger", "Hospital A", 800, 100000, 0.6,
-  "Pre-merger", "Hospital B", 200, 100000, 0.3,
-  "Post-merger", "Merged A+B", 1200, 100000, 0.8
+  "Pre-merger", "Hospital B", 200, 100000, 0.6,
+  "Post-merger", "Merged A+B", 1200, 100000, 0.6
 ) |>
   mutate(
     total_wtp_loss = wtp_loss_per_enrollee * enrollees,
@@ -535,16 +538,17 @@ ggplot(bargaining, aes(x = hospital, y = negotiated_rate, fill = scenario)) +
   scale_fill_manual(values = c("Pre-merger" = "#0072B2", "Post-merger" = "#D55E00")) +
   scale_y_continuous(labels = scales::dollar) +
   labs(
-    title = "Nash-in-Nash: Hospital Merger Increases Negotiated Rates",
-    subtitle = "Merged entity's improved outside option raises prices for both hospitals",
+    title = "Nash-in-Nash: Superadditive Disagreement Payoff Raises Average Rates",
+    subtitle = "Bargaining weight fixed at 0.6; volume-weighted average rate rises from $3,000 to $3,600 (+20%)",
     x = NULL, y = "Negotiated Reimbursement Rate per Admission", fill = NULL,
-    caption = "Illustrative calculation. WTP loss = value to insurer of having hospital in-network.\nBargaining weight reflects relative leverage in Nash bargaining solution."
+    caption = "Illustrative calculation. WTP loss = value to insurer of having hospital in-network.\nThe merged rate applies to all 20,000 admissions; compare it with the pre-merger\nvolume-weighted average of $3,000, not with Hospital A's rate alone."
   ) +
   theme_antitrust() +
   theme(legend.position = "bottom")
 
-cat("\nPrice increase from merger:\n")
-pre_avg <- bargaining |> filter(scenario == "Pre-merger") |> summarise(avg = mean(negotiated_rate)) |> pull(avg)
+cat("\nPrice increase from merger (volume-weighted average rate):\n")
+pre <- bargaining |> filter(scenario == "Pre-merger")
+pre_avg <- sum(pre$negotiated_rate * pre$admissions) / sum(pre$admissions)
 post <- bargaining |> filter(scenario == "Post-merger") |> pull(negotiated_rate)
 cat(paste0("Pre-merger average: ", scales::dollar(pre_avg, accuracy = 1), "\n"))
 cat(paste0("Post-merger: ", scales::dollar(post, accuracy = 1), "\n"))
@@ -555,18 +559,18 @@ cat(paste0("Increase: ", scales::percent((post - pre_avg) / pre_avg, accuracy = 
 
 Bargaining models have become standard tools in several contexts:
 
-- **Hospital mergers.** Since the FTC's successful challenge of *Advocate Health Care / NorthShore University HealthSystem* (2017) and its use of WTP-based analysis, bargaining models have been central to hospital merger review. The 2023 Merger Guidelines explicitly recognize bargaining leverage as a theory of harm.
+- **Hospital mergers.** Since the FTC's successful challenge of *Advocate Health Care / NorthShore University HealthSystem* (7th Cir. 2016) and its use of WTP-based analysis, bargaining models have been central to hospital merger review. The 2023 Merger Guidelines explicitly recognize bargaining leverage as a theory of harm.
 - **Media and content licensing.** Disputes between cable distributors and content providers (e.g., blackout threats during carriage negotiations) are naturally modeled as bilateral bargaining problems.
 - **Pharmaceutical negotiations.** PBM-manufacturer negotiations over formulary placement and rebates involve bargaining dynamics that standard posted-price models cannot capture.
 - **Digital platforms.** App store commission disputes (e.g., Epic v. Apple) and news publisher negotiations with platforms involve bargaining over revenue shares where outside options are asymmetric.
 
 ## Exercises
 
-1. **Data/code.** Using the logit demand skeleton in this chapter, add a fourth product ("D") with price=$8, share=0.10, and feature_score=0.3. Re-estimate the model and compute the full 4x4 diversion matrix. How does adding a budget product change the diversion ratios for the existing products?
+1. **Data/code.** Using the logit demand skeleton in this chapter, add an eleventh inside product---a budget cereal at price $2.49, share 0.05, and feature_score 0.20---and reduce the outside share to 0.365 so shares still sum to one. Re-estimate the model and recompute the diversion matrix across all eleven products. How does adding a budget product change the diversion ratios among the existing brands?
 
 2. **Conceptual.** Explain the difference between UPP and GUPPI. When would you present one vs. the other to an agency? What are the advantages of each for communicating merger effects to non-economists?
 
-3. **Data/code.** The pass-through regression uses gasoline PPI and CPI data. Replace the series IDs with steel PPI (`WPUSI012011`) and overall CPI (`CPIAUCSL`). Run the pass-through regression and compare the coefficient to the gasoline result. What might explain any differences?
+3. **Data/code.** The pass-through regression uses crude oil and retail gasoline. Re-run it with the pre-pulled steel PPI (`data/raw/fred_steel_ppi.csv`) and the all-items CPI (`data/raw/fred_cpi_all.csv`), keeping the log-difference specification with lags. Compare the cumulative coefficient to the gasoline result. What might explain any differences?
 
 4. **Conceptual.** A structural merger simulation predicts a 3% price increase, but a retrospective DiD study of a similar past merger found a 7% increase. How would you reconcile these findings? What does each method's assumptions imply about the source of the discrepancy?
 
