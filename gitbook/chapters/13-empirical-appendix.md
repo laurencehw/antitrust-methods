@@ -16,7 +16,7 @@ This appendix is the shared workspace for reusable diagnostics, qualitative prot
 | Research design & methods | [Causal Inference: The Mixtape](https://mixtape.scunning.com/), Angrist & Pischke (Angrist & Pischke, 2009); (Angrist & Pischke, 2015) |
 | Cartels & collusion | [OECD Cartel Guidance](https://www.oecd.org/daf/competition/cartels/) |
 | Mergers | US/EU/UK Merger Guidelines (DOJ/FTC Merger Guidelines, 2023); (EC Horizontal Merger Guidelines, 2004); (CMA Merger Assessment Guidelines, 2021) |
-| Digital markets | [EU DMA](https://ec.europa.eu/dma), CMA Digital Markets Unit |
+| Digital markets | [EU DMA](https://ec.europa.eu/dma), CMA digital markets regime (DMCCA 2024) |
 | Labor markets | [BLS data](https://www.bls.gov/), [Census LEHD](https://lehd.ces.census.gov/) |
 
 Use this table alongside external references such as (Ashenfelter & Hosken, 2010) and agency guidelines.
@@ -106,7 +106,7 @@ Matching and weighting methods come into play whenever you need to construct a c
 
 **Synthetic control** (Abadie, Diamond & Hainmueller, 2010) constructs a weighted combination of untreated units that matches the treated unit's pre-treatment trajectory. It is the method of choice for "N=1" cases: a single national merger, a one-off regulatory intervention, or a market inquiry affecting a specific sector. The key diagnostics are pre-treatment fit (the synthetic control should closely track the treated unit before the intervention) and placebo tests (applying the same method to each donor unit should produce smaller effects than the treated unit).
 
-For all matching and weighting methods, balance plots showing standardized differences before and after matching should be included in expert reports. Store reusable plotting code in `R/helpers.R` (`plot_balance()`). For general guidance on matching methods, see (Angrist & Pischke, 2009) and (Austin, 2009).
+For all matching and weighting methods, balance plots showing standardized differences before and after matching should be included in expert reports. The Love-plot code in the diagnostic gallery below (chunk `diagnostic-balance`) is the reusable template; adapt it rather than rewriting. For general guidance on matching methods, see (Angrist & Pischke, 2009) and (Austin, 2009).
 
 ### Panel FE and inference choices
 - Two-way FE with staggered treatment: document estimator choice and weights; cite the relevant methodological literature.
@@ -123,7 +123,7 @@ This section maps each diagnostic template to the specific chapters where it is 
 
 **Merger analysis (Chapter 6).** The case chronology template tracks the deal timeline from initial approach through agency review to consummation. Use the matching and weighting methods (PSM, entropy balancing, synthetic control) to construct control groups for merger retrospectives. The diff-in-diff template with staggered treatment estimators evaluates post-merger price effects. The data inventory should capture customer-level transaction data, capacity records, and internal strategy documents.
 
-**Monopolization (Chapter 7).** The margin squeeze test and pass-through diagnostics are the core quantitative tools. The document coding lexicon should include tags for exclusive dealing, tying, self-preferencing, and retaliation. The survey and interview kit is critical for gathering customer testimony about foreclosure effects and switching costs.
+**Monopolization (Chapter 7).** The margin squeeze test and pass-through diagnostics are the core quantitative tools. The document coding lexicon should include tags for exclusive dealing, tying, self-preferencing, and retaliation. The survey and interview kit gathers customer testimony about foreclosure effects and switching costs.
 
 **Digital markets (Chapter 9).** The data inventory should capture platform telemetry: user activity logs, ranking data, API access records, and multi-homing patterns. The self-preferencing detection regression and algorithmic collusion Q-learning simulation provide distinctive analytical tools not available in traditional antitrust toolkits.
 
@@ -199,7 +199,7 @@ ggplot(chronology, aes(x = date, y = category, color = category)) +
 This section provides reusable diagnostic visualizations that apply across chapters. Use these templates to validate identification assumptions, assess robustness, and communicate uncertainty in expert reports.
 
 ### Pre-trends and parallel trends checks
-Essential for difference-in-differences designs (mergers, labor, remedies).
+Run these before any difference-in-differences design (mergers, labor, remedies).
 
 ```r
 library(dplyr)
@@ -258,11 +258,13 @@ event_study <- feols(
   data = panel
 )
 
-# Extract coefficients
+# Extract coefficients. Names look like "period::1:treated", so pull the
+# integer between "period::" and the first ":" rather than gsub-ing the prefix.
+keep <- grepl("^period::", names(coef(event_study)))
 coef_data <- tibble(
-  period = as.numeric(gsub("period::", "", names(coef(event_study)))),
-  estimate = coef(event_study),
-  se = se(event_study)
+  period = as.numeric(sub("^period::(-?[0-9]+).*$", "\\1", names(coef(event_study))[keep])),
+  estimate = coef(event_study)[keep],
+  se = se(event_study)[keep]
 ) |>
   mutate(
     ci_lower = estimate - 1.96 * se,
@@ -303,7 +305,9 @@ cat("\nPre-trends test:\n")
 cat(paste0("Number of pre-period coefficients: ", nrow(pre_period_coefs), "\n"))
 cat(paste0("Mean pre-period coefficient: ",
           round(mean(pre_period_coefs$estimate), 3), "\n"))
-cat(paste0("Joint F-test p-value: [run wald_test on event_study model]\n"))
+# Joint Wald test that all pre-period leads (periods 1-8; reference is 9)
+# are zero. fixest::wald() prints the F-statistic and p-value.
+fixest::wald(event_study, keep = "period::[1-8]:")
 ```
 
 ![Pre-trends diagnostic. Synthetic data for illustration only.](../images/diagnostic-pretrends-1.png)
@@ -540,9 +544,11 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 
-# Fit model (use your actual model)
-model_data <- panel_spec |>
-  filter(period >= 10)
+# Fit model (use your actual model). Estimate on the full panel: treatment
+# is treated x post, which varies within firm, so it survives the firm fixed
+# effects. Subsetting to post-treatment periods would make treatment constant
+# within firm and fixest would silently drop it.
+model_data <- panel_spec
 
 model <- feols(outcome ~ treatment + control1 + control2 | firm + period,
               data = model_data)
@@ -647,6 +653,15 @@ power_grid <- expand.grid(
   ) |>
   ungroup()
 
+# Smallest sample size on the grid reaching 80% power, per effect size.
+# (A band filter like power >= 0.79 & power <= 0.81 would drop d = 0.8,
+# whose power already exceeds 0.95 at the grid minimum.)
+power_minimum <- power_grid |>
+  filter(power >= 0.80) |>
+  group_by(effect_label) |>
+  slice_min(n, n = 1) |>
+  ungroup()
+
 # Power curve
 ggplot(power_grid, aes(x = n, y = power, color = effect_label)) +
   geom_hline(yintercept = 0.80, linetype = "dashed",
@@ -655,8 +670,7 @@ ggplot(power_grid, aes(x = n, y = power, color = effect_label)) +
           label = "80% power threshold", hjust = 0, vjust = -0.5,
           size = 3, color = "darkgreen") +
   geom_line(linewidth = 1.2) +
-  geom_point(data = filter(power_grid, power >= 0.79, power <= 0.81),
-            size = 3) +
+  geom_point(data = power_minimum, size = 3) +
   scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) +
   scale_color_manual(values = c(
     "Small effect (d = 0.2)" = "#D55E00",
@@ -678,11 +692,7 @@ ggplot(power_grid, aes(x = n, y = power, color = effect_label)) +
   )
 
 # Summary table
-power_summary <- power_grid |>
-  filter(power >= 0.79, power <= 0.81) |>
-  group_by(effect_label) |>
-  slice_min(n, n = 1) |>
-  ungroup() |>
+power_summary <- power_minimum |>
   select(effect_label, n_required = n, power)
 
 cat("\nMinimum sample size for 80% power:\n")
@@ -718,24 +728,28 @@ The following code scaffold illustrates a basic random forest classifier for car
 library(ranger)
 library(dplyr)
 
+# One row per bid: the screens need every bidder's bid in each project,
+# not just the winning award (the winning bid is constant within a project,
+# so its within-project sd would be zero by construction)
 bids <- read.csv("data/derived/cartel_cement_bids.csv")
 
-# Feature engineering
+# Feature engineering: within-project dispersion across all submitted bids
 features <- bids |>
   group_by(project_id) |>
   summarise(
-    cv_bids = sd(winning_bid) / mean(winning_bid),
+    cv_bids = sd(bid) / mean(bid),
     n_bidders = n(),
-    spread = max(winning_bid) - min(winning_bid),
+    spread = (max(bid) - min(bid)) / min(bid),
     cartel = first(cartel_period)  # label
   )
 
-# Train random forest
+# Train random forest (importance = "impurity" is required for importance())
 rf_model <- ranger(
   cartel ~ cv_bids + n_bidders + spread,
   data = features,
   probability = TRUE,
-  num.trees = 500
+  num.trees = 500,
+  importance = "impurity"
 )
 
 # Variable importance

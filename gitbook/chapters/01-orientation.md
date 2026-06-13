@@ -39,7 +39,7 @@ For multi-jurisdictional practitioners, the table below maps common conduct type
 |:-------------|:--------------|:---------------|:-------------|
 | **Cartels / Horizontal agreements** | Sherman Act §1 (15 U.S.C. §1) | TFEU Article 101 | Competition Act 89/1998, §4 |
 | **Monopolization / Abuse of dominance** | Sherman Act §2 (15 U.S.C. §2) | TFEU Article 102 | Competition Act 89/1998, §8 |
-| **Vertical restraints** | Sherman Act §1; Rule of reason | TFEU Art. 101 + VBER | Competition Act §4(1)(b), §5 |
+| **Vertical restraints** | Sherman Act §1; Rule of reason | TFEU Art. 101 + VBER | Competition Act §5; §8(1)(d) for dominant firms |
 | **Mergers (horizontal)** | Clayton Act §7 (15 U.S.C. §18) | EUMR (Reg. 139/2004) | Competition Act §12, §12A |
 | **Mergers (vertical/conglomerate)** | Clayton Act §7 | EUMR Art. 2 | Competition Act §12A |
 | **Price discrimination** | Robinson-Patman Act | Art. 102(c) (dominant firms) | §9 (price discrimination by dominant firm) |
@@ -47,8 +47,8 @@ For multi-jurisdictional practitioners, the table below maps common conduct type
 
 **Key differences to note:**
 
-- **Standards**: US uses "monopoly power" (typically >70% share); EU/SA use "dominance" (typically >40-50% share with barriers).
-- **Effects vs. object**: EU Art. 101 distinguishes "object" restrictions (per se illegal) from "effects" analysis; US separates per se from rule of reason.
+- **Standards**: US courts ask for "monopoly power," typically inferred above a 70% share. The EU uses "dominance," in practice from around 40% with entry barriers, with a rebuttable presumption at 50% under *AKZO*. South Africa's thresholds are statutory (§7): a firm at 45% or more is presumed dominant; between 35% and 45% it is dominant unless it shows it lacks market power; below 35% only if market power is proven.
+- **Effects vs. object**: EU Art. 101 treats "object" restrictions as presumptively restrictive---no proof of effects is required---though the Art. 101(3) exemption remains formally available; US law separates per se rules from the rule of reason.
 - **Public interest**: South Africa uniquely incorporates public interest factors (employment, SME participation, ownership) in merger review under §12A(3) (SA Competition Act, 1998).
 - **Private enforcement**: US allows treble damages; EU/SA have more limited private action frameworks.
 
@@ -158,10 +158,10 @@ The institutional map turns into analytical workplans in [Chapter 2](chapters/02
 To prepare:
 
 1. **Case chronology template**: Build a timeline that can accommodate both US and SADC procedural milestones.
-2. **Data inventory**: Sketch which datasets span US, EU, and SADC sources (e.g., FRED for HHI, Stats SA for market shares).
+2. **Data inventory**: Sketch which datasets span US, EU, and SADC sources (e.g., FRED for concentration ratios, Stats SA for market shares).
 3. **Flagship dataset**: Identify at least one dataset (claims-level healthcare data, national tender records) that will power the quantitative chapters.
 
-Keep a running list of figures, such as HHI trends and entry timelines, that later chapters will revisit.
+Keep a running list of figures, such as concentration trends and entry timelines, that later chapters will revisit.
 
 ## Visualizations
 
@@ -176,10 +176,8 @@ This timeline pairs statutory milestones with landmark enforcement actions so re
 The timeline shows convergence in competition enforcement approaches: South Africa's 1998 Competition Act (SA Competition Act, 1998) drew heavily on EU precedent, while the 2023 US Merger Guidelines (DOJ/FTC Merger Guidelines, 2023) moved closer to EU-style structural presumptions. Note how major cases (Microsoft (*United States v. Microsoft*, 2001), Google (*United States v. Google (Search)*, 2023); (*Google Shopping*, 2017)) often span jurisdictions with related but distinct theories of harm.
 {% endhint %}
 
-### HHI trend example
-Track concentration trends using FRED data as a baseline for cross-jurisdictional comparisons.
-
-![US Bank Concentration (HHI)](../images/us-bank-hhi-1.png)
+### Concentration trend example
+Track concentration trends using FRED data as a baseline for cross-jurisdictional comparisons. Concentration ratios---the combined share of the largest *k* firms---are coarser than the HHI but are published for most countries, which makes them the natural starting series.
 
 ### Commodity price trends
 Concentration in input markets can have downstream effects on consumer prices. Real commodity price data from FRED provides a baseline for understanding how cost shocks propagate through supply chains—a key input for cartel screens and merger analysis.

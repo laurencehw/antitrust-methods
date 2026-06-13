@@ -73,7 +73,7 @@ Document every known communication, meeting, or enforcement action in a single t
 ## Descriptives and screens
 Start with `ggplot2` dashboards that overlay prices with cost indices, demand proxies, and competitor prices. Flag regimes where prices remain static despite volatile costs or where margins converge across firms.
 
-- **Variance/dispersion screens:** Check price spreads, standard deviations, and coefficents of variation across firms or regions (Abrantes-Mello, 2010).  
+- **Variance/dispersion screens:** Check price spreads, standard deviations, and coefficients of variation across firms or regions (Abrantes-Mello, 2010).
 - **Procurement rotation:** Rank bids chronologically to flag turn-taking, convenient price endings, or geographic allocations (Porter & Zona, 1993); (Conley & Decarolis, 2016).  
 - **Digit/Benford checks:** Use sparingly and only when invoice conventions support the assumptions.  
 - **Correlation screens:** High correlations in supposedly independent bids can justify deeper probes (Harrington, 2008).
@@ -91,23 +91,59 @@ library(readr)
 library(lubridate)
 source("program/R/helpers.R")
 
-# Load real FRED price series
-bread <- read_csv("data/raw/fred_bread_cpi.csv", show_col_types = FALSE) |>
-  mutate(date = as.Date(paste0(date, "-01")),
-         series = "Bread & bakery CPI")
+# Pre-pulled FRED price series (program/scripts/01_fred_extended.R).
+# Guarded reads with a labelled synthetic fallback so the chapter renders
+# from a fresh clone with no data/raw/ files.
+read_fred <- function(path, label) {
+  tryCatch(
+    read_csv(path, show_col_types = FALSE) |>
+      filter(!is.na(value)) |>
+      transmute(date = as.Date(date), value, series = label),
+    error = function(e) NULL
+  )
+}
 
-cement <- read_csv("data/raw/fred_cement_ppi.csv", show_col_types = FALSE) |>
-  mutate(date = as.Date(paste0(date, "-01")),
-         series = "Cement PPI")
+bread <- read_fred("data/raw/fred_bread_cpi.csv", "Bread & bakery CPI")
+cement <- read_fred("data/raw/fred_cement_ppi.csv", "Cement PPI")
+steel <- read_fred("data/raw/fred_steel_ppi.csv", "Steel PPI")
+crude <- read_fred("data/raw/fred_crude_oil.csv", "WTI Crude Oil")
 
-steel <- read_csv("data/raw/fred_steel_ppi.csv", show_col_types = FALSE) |>
-  mutate(date = as.Date(paste0(date, "-01")),
-         series = "Steel PPI")
+fred_synth <- any(vapply(list(bread, cement, steel, crude), is.null, logical(1)))
+if (fred_synth) {
+  # Synthetic monthly series matching the FRED schema, calibrated so the
+  # smooth-vs-volatile contrast discussed in the text still appears.
+  make_series <- function(label, drift, vol, seed) {
+    set.seed(seed)
+    n <- 192  # Jan 2010 - Dec 2025
+    tibble(
+      date = seq(as.Date("2010-01-01"), by = "month", length.out = n),
+      value = 100 * exp(cumsum(rnorm(n, drift, vol))),
+      series = label
+    )
+  }
+  bread <- make_series("Bread & bakery CPI", 0.002, 0.003, 101)
+  cement <- make_series("Cement PPI", 0.003, 0.008, 102)
+  steel <- make_series("Steel PPI", 0.001, 0.025, 103)
+  crude <- make_series("WTI Crude Oil", 0.000, 0.090, 104)
+}
 
-crude <- read_csv("data/raw/fred_crude_oil.csv", show_col_types = FALSE) |>
-  filter(!is.na(value)) |>
-  mutate(date = as.Date(date),
-         series = "WTI Crude Oil")
+# Aggregate (daily) crude to monthly so the YoY lags align across series
+crude <- crude |>
+  mutate(date = floor_date(date, "month")) |>
+  group_by(series, date) |>
+  summarise(value = mean(value), .groups = "drop")
+
+# Source labels switch with the data actually plotted
+fred_subtitle <- if (fred_synth) {
+  "Synthetic data for illustration only. Run program/scripts/01_fred_extended.R for the real series."
+} else {
+  "Normalized to 100 in January 2010. Source: FRED."
+}
+fred_caption <- if (fred_synth) {
+  "Synthetic data for illustration only."
+} else {
+  "Bread CPI: CUSR0000SAF112 | Cement PPI: PCU327310327310 | Steel PPI: PCU331331 | WTI Crude: DCOILWTICO"
+}
 
 # Combine and normalize to 100 at first observation
 combined <- bind_rows(bread, cement, steel, crude) |>
@@ -128,10 +164,10 @@ p1 <- ggplot(combined, aes(x = date, y = normalized, color = series)) +
     "WTI Crude Oil" = "#CC79A7"
   )) +
   labs(
-    title = "Real Price Series: Cartel-Relevant Commodities (2010–2026)",
-    subtitle = "Normalized to 100 in January 2010. Source: FRED.",
+    title = "Price Series: Cartel-Relevant Commodities (2010–2026)",
+    subtitle = fred_subtitle,
     x = NULL, y = "Index (Jan 2010 = 100)", color = NULL,
-    caption = "Bread CPI: CUSR0000SAF112 | Cement PPI: PCU327310327310 | Steel PPI: PCU331331 | WTI Crude: DCOILWTICO"
+    caption = fred_caption
   ) +
   theme_antitrust() +
   theme(legend.position = "bottom")
@@ -157,7 +193,8 @@ p2 <- ggplot(yoy, aes(x = date, y = yoy_pct, color = series)) +
     title = "Year-over-Year Price Changes: Volatility as Cartel Screen",
     subtitle = "Sticky prices despite volatile costs may warrant deeper investigation",
     x = NULL, y = "Year-over-year change (%)", color = NULL,
-    caption = "Low volatility in bread/cement vs. crude oil suggests price rigidity consistent with coordination."
+    caption = paste0(fred_caption,
+                     "\nLow volatility in bread/cement vs. crude oil suggests price rigidity consistent with coordination.")
   ) +
   theme_antitrust() +
   theme(legend.position = "bottom")
@@ -172,7 +209,7 @@ if (requireNamespace("patchwork", quietly = TRUE)) {
 }
 ```
 
-These real price series illustrate a key cartel-screen insight: **bread and bakery prices** (orange) show remarkably smooth upward trajectories with minimal year-over-year volatility, while **crude oil** (purple) exhibits dramatic swings. **Cement** (blue) and **steel** (green) fall in between. In a competitive market, bread prices should track wheat and energy costs, which are volatile; persistent price smoothness despite volatile inputs is a red flag that warrants deeper investigation using firm-level bid data. The year-over-year chart makes this contrast stark: bread CPI rarely deviates more than ±5% year-over-year, while crude oil swings ±40%.
+These price series illustrate a key cartel-screen insight: **bread and bakery prices** (orange) show remarkably smooth upward trajectories with minimal year-over-year volatility, while **crude oil** (purple) exhibits dramatic swings. **Cement** (blue) and **steel** (green) fall in between. In a competitive market, bread prices should track wheat and energy costs, which are volatile; persistent price smoothness despite volatile inputs is a red flag that warrants deeper investigation using firm-level bid data. The year-over-year chart makes this contrast stark: in the real FRED data, bread CPI rarely deviates more than ±5% year-over-year, while crude oil swings ±40%.
 
 ### South African CPI and manufacturing data for cartel screens
 
@@ -186,11 +223,71 @@ library(lubridate)
 library(tidyr)
 source("program/R/helpers.R")
 
-# Load SA CPI division data
-sa_cpi <- read_csv("../the south african economy/___Contemporary/data/processed/cpi_division_index.csv",
-                   show_col_types = FALSE) |>
-  filter(!is.na(index)) |>
-  mutate(date = as.Date(date))
+# Real source: processed Stats SA series from the author's companion
+# repository ("the south african economy"), which lives OUTSIDE this repo.
+# The reads are guarded: on failure each falls back to a clearly labelled
+# synthetic series with the same schema, so the figure always renders.
+# To wire the real data, copy the processed CSVs into data/ with metadata.
+sa_path <- "../the south african economy/___Contemporary/data/processed"
+
+sa_cpi <- tryCatch(
+  read_csv(file.path(sa_path, "cpi_division_index.csv"), show_col_types = FALSE) |>
+    filter(!is.na(index)) |>
+    mutate(date = as.Date(date)),
+  error = function(e) NULL
+)
+
+sa_mfg <- tryCatch(
+  read_csv(file.path(sa_path, "manufacturing_production_index.csv"), show_col_types = FALSE) |>
+    mutate(date = as.Date(date)),
+  error = function(e) NULL
+)
+
+sa_comm <- tryCatch(
+  read_csv(file.path(sa_path, "commodity_prices.csv"), show_col_types = FALSE),
+  error = function(e) NULL
+)
+
+sa_synth <- is.null(sa_cpi) || is.null(sa_mfg) || is.null(sa_comm)
+if (sa_synth) {
+  # Schema-matched synthetic fallbacks: CPI division index (monthly, 2008-),
+  # manufacturing production index (monthly), and annual commodity prices.
+  set.seed(2008)
+  sa_months <- seq(as.Date("2008-01-01"), as.Date("2025-06-01"), by = "month")
+  n_m <- length(sa_months)
+  synth_div <- function(label, drift, vol) {
+    tibble(date = sa_months,
+           DivisionDescription = label,
+           index = 100 * exp(cumsum(rnorm(n_m, drift, vol))))
+  }
+  sa_cpi <- bind_rows(
+    synth_div("Food and non-alcoholic beverages", 0.005, 0.003),
+    synth_div("Clothing and footwear", 0.003, 0.004),
+    synth_div("Transport", 0.004, 0.015)
+  )
+  sa_mfg <- tibble(date = sa_months,
+                   index = 100 * exp(cumsum(rnorm(n_m, 0.001, 0.010))))
+  sa_years <- 2010:2024
+  n_y <- length(sa_years)
+  sa_comm <- tibble(
+    year = sa_years,
+    gold_usd_oz = 1200 * exp(cumsum(rnorm(n_y, 0.03, 0.10))),
+    platinum_usd_oz = 1500 * exp(cumsum(rnorm(n_y, -0.02, 0.12))),
+    coal_usd_tonne = 90 * exp(cumsum(rnorm(n_y, 0.01, 0.20))),
+    iron_ore_usd_tonne = 120 * exp(cumsum(rnorm(n_y, 0.00, 0.25)))
+  )
+}
+
+sa_subtitle_cpi <- if (sa_synth) {
+  "Synthetic data for illustration only. Real source: processed Stats SA series (author's companion repository)."
+} else {
+  "Normalized to 100 in January 2008. Source: Stats SA."
+}
+sa_subtitle_comm <- if (sa_synth) {
+  "Synthetic data for illustration only. Real source: processed Stats SA series (author's companion repository)."
+} else {
+  "Normalized to 100 in 2010. Source: Stats SA commodity prices."
+}
 
 # Focus on key cartel-relevant categories
 cartel_divisions <- c("Food and non-alcoholic beverages",
@@ -204,16 +301,6 @@ sa_cpi_filtered <- sa_cpi |>
   mutate(normalized = index / first(index) * 100) |>
   ungroup()
 
-# Load SA manufacturing production
-sa_mfg <- read_csv("../the south african economy/___Contemporary/data/processed/manufacturing_production_index.csv",
-                   show_col_types = FALSE) |>
-  mutate(date = as.Date(date))
-
-# Load commodity prices
-sa_comm <- read_csv("../the south african economy/___Contemporary/data/processed/commodity_prices.csv",
-                    show_col_types = FALSE) |>
-  mutate(date = as.Date(paste0(year, "-01-01")))
-
 # Panel A: SA CPI price trends
 p1 <- ggplot(sa_cpi_filtered, aes(x = date, y = normalized, color = DivisionDescription)) +
   geom_line(linewidth = 0.9) +
@@ -225,15 +312,16 @@ p1 <- ggplot(sa_cpi_filtered, aes(x = date, y = normalized, color = DivisionDesc
   )) +
   labs(
     title = "South African CPI by Division (2008–2025)",
-    subtitle = "Normalized to 100 in January 2008. Source: Stats SA.",
+    subtitle = sa_subtitle_cpi,
     x = NULL, y = "Index (Jan 2008 = 100)", color = NULL
   ) +
   theme_antitrust() +
   theme(legend.position = "bottom")
 
-# Panel B: Manufacturing production vs. commodity prices
-# Normalize commodity prices
+# Panel B: Commodity prices (normalized)
 comm_long <- sa_comm |>
+  select(year, any_of(c("gold_usd_oz", "platinum_usd_oz",
+                        "coal_usd_tonne", "iron_ore_usd_tonne"))) |>
   pivot_longer(cols = -year, names_to = "commodity", values_to = "value") |>
   mutate(date = as.Date(paste0(year, "-01-01"))) |>
   group_by(commodity) |>
@@ -252,7 +340,7 @@ p2 <- ggplot(comm_long, aes(x = date, y = normalized, color = commodity)) +
   )) +
   labs(
     title = "South African Commodity Prices (2010–2024)",
-    subtitle = "Normalized to 100 in 2010. Source: Stats SA commodity prices.",
+    subtitle = sa_subtitle_comm,
     x = NULL, y = "Index (2010 = 100)", color = NULL
   ) +
   theme_antitrust() +
@@ -293,8 +381,32 @@ library(dplyr)
 library(ggplot2)
 source("program/R/helpers.R")
 
-# Load cartel bid data (synthetic for illustration)
-bids_df <- read.csv("data/derived/cartel_cement_bids.csv")
+# Load cartel bid data (synthetic — no public source publishes losing bids).
+# Guarded read with an in-line synthetic fallback so a fresh clone renders
+# without first running the data scripts.
+make_synth_bids <- function() {
+  set.seed(42)
+  n_proj <- 80
+  firms <- paste("Firm", LETTERS[1:5])
+  cartel <- seq_len(n_proj) <= 50
+  # Cartel period: noisy rotation (mostly turn-taking, occasional repeats);
+  # competitive period: random winners
+  rotation <- firms[(seq_len(n_proj) - 1) %% 5 + 1]
+  noisy <- runif(n_proj) < 0.15
+  rotation[noisy] <- sample(firms, sum(noisy), replace = TRUE)
+  data.frame(
+    project_id = seq_len(n_proj),
+    winner = ifelse(cartel, rotation, sample(firms, n_proj, replace = TRUE)),
+    winning_bid = round(1000 + 50 * cartel +
+                          rnorm(n_proj, 0, ifelse(cartel, 10, 40))),
+    cartel_period = cartel
+  )
+}
+
+bids_df <- tryCatch(
+  read.csv("data/derived/cartel_cement_bids.csv"),
+  error = function(e) make_synth_bids()
+)
 
 # Analyze win patterns by firm
 rotation <- bids_df |>
@@ -329,8 +441,13 @@ library(tidyr)
 library(ggplot2)
 source("program/R/helpers.R")
 
-# Load real cartel bid data
-bids_df <- read.csv("data/derived/cartel_cement_bids.csv")
+# Load cartel bid data (synthetic — no public source publishes losing bids).
+# Guarded read; falls back to the generator defined in the bid-rotation
+# chunk above if the derived file is absent.
+bids_df <- tryCatch(
+  read.csv("data/derived/cartel_cement_bids.csv"),
+  error = function(e) make_synth_bids()
+)
 
 # Create lagged winner variable for transition analysis
 transitions <- bids_df |>
@@ -371,10 +488,10 @@ ggplot(cartel_transitions, aes(x = winner, y = prev_winner, fill = prob)) +
     panel.grid = element_blank()
   )
 
-# Rotation index: ratio of off-diagonal to diagonal transitions
-diag_prob <- cartel_transitions |>
-  filter(prev_winner == winner) |>
-  summarise(diag = sum(prob * count) / sum(count)) |>
+# Rotation index: share of repeat wins among cartel-period transitions
+diag_prob <- transitions |>
+  filter(period == "Cartel period") |>
+  summarise(diag = mean(prev_winner == winner)) |>
   pull(diag)
 
 cat("\nRotation diagnostics:\n")
@@ -383,7 +500,7 @@ cat(paste0("Off-diagonal (rotation) share: ", scales::percent(1 - diag_prob, acc
 cat("Note: Competitive markets typically show >50% diagonal; rotation schemes show <30%.\n")
 ```
 
-![](../images/cartel-transition-matrix-1.png)
+![Bid-rotation transition matrix. Synthetic data for illustration only.](../images/cartel-transition-matrix-1.png)
 
 **How to interpret the transition matrix:**
 
@@ -655,6 +772,8 @@ Selecting a counterfactual is the single most consequential methodological choic
 
 Robustness: alternative functional forms (log vs. level), trimming outliers, placebo periods, heteroskedasticity checks, and randomization inference when N is small. For pass-through, regress downstream prices on upstream costs with lags to quantify harm on intermediaries vs. end-users.
 
+Pass-through is also where the economics meets a sharp jurisdictional split in damages law. In US federal actions, pass-through is not a defense---*Hanover Shoe v. United Shoe Machinery* bars defendants from arguing that the direct purchaser passed the overcharge on (Us Hanover Shoe, 1968)---and indirect purchasers generally cannot sue under federal law at all [*Illinois Brick v. Illinois*; (Us Illinois Brick, 1977)], though many states have "repealer" statutes restoring indirect-purchaser claims under state law. The EU Damages Directive (2014/104/EU) takes the opposite position on both points: it recognizes a passing-on defense and gives indirect purchasers standing. The same pass-through regression therefore answers an allocation-across-plaintiffs question in the United States and a liability-and-quantum question in Europe.
+
 ### Placebo tests for causal validation
 
 Placebo tests strengthen causal claims by showing that the estimated effect disappears when applied to situations where no effect should exist. Two common approaches:
@@ -673,14 +792,22 @@ set.seed(456)
 n_periods <- 60
 raid_date <- 36  # Raid occurs at period 36
 
+# Generate ONE 60-period cost path and join it to both products, so the
+# cost shock is genuinely common (cumsum on the stacked 120-row frame would
+# give the two products different cost paths)
+cost_path <- tibble(
+  period = 1:n_periods,
+  cost = 50 + cumsum(rnorm(n_periods, 0, 1))
+)
+
 panel <- expand.grid(
  period = 1:n_periods,
  product = c("Cement (cartel)", "Gravel (control)")
 ) |>
+ left_join(cost_path, by = "period") |>
  mutate(
    post_raid = period >= raid_date,
    cartel_product = product == "Cement (cartel)",
-   cost = 50 + cumsum(rnorm(n(), 0, 1)),  # Common cost shock
    # Cartel product has elevated prices pre-raid, drops after
    price = case_when(
      cartel_product & !post_raid ~ 100 + 0.8 * cost + 15 + rnorm(n(), 0, 3),
@@ -789,7 +916,7 @@ Treat qualitative materials as structured data:
 {% hint style="info" %}
 **Case box: Illustrative matters**
 
-**Apple eBooks (US).** Hub-and-spoke coordination with agency-model contracts and SSNDQ logic (*United States v. Apple Inc.*, 2013).
+**Apple eBooks (US).** Hub-and-spoke coordination through agency-model contracts paired with a retail-price MFN, which aligned the publishers' incentives to raise prices simultaneously (*United States v. Apple Inc.*, 2013).
 **Lysine & DRAM (US/EU).** Classic dawn-raid analyses with overcharge estimates of 17--20% (lysine) and 10--15% (DRAM), illustrating how leniency programs can expose sophisticated international price-fixing (Us Lysine Cartel, 1996); (Eu Dram Cartel, 2010). These cases anchor the empirical literature on cartel overcharges.
 **Construction bid-rigging (EU, SA, JFTC).** Rotation matrices and dawn raids aligned with procurement archives.
 **Digital advertising (SAMR).** Algorithms and platform policies as qualitative evidence.
@@ -805,15 +932,37 @@ Treat qualitative materials as structured data:
 
 ## Code box: structural break illustration
 ```r
-library(fredr)
 library(dplyr)
+library(readr)
 library(strucchange)
 library(ggplot2)
 source("program/R/helpers.R")
 
-fredr_set_key(Sys.getenv("FRED_API_KEY"))
-gas <- fredr(series_id = "GASREGW", observation_start = as.Date("2015-01-01")) |>
-  rename(price = value) |>
+# Pre-pulled FRED gasoline series (program/scripts/01_fred_extended.R), so no
+# API call happens at render. Guarded read with a labelled synthetic fallback.
+gas <- tryCatch(
+  read_csv("data/raw/fred_gas_prices.csv", show_col_types = FALSE) |>
+    mutate(date = as.Date(date)) |>
+    filter(date >= as.Date("2015-01-01"), !is.na(value)) |>
+    rename(price = value),
+  error = function(e) NULL
+)
+
+gas_synth <- is.null(gas)
+if (gas_synth) {
+  # Synthetic weekly series with deliberate regime shifts so the break test
+  # still has something to find
+  set.seed(7)
+  n_wk <- 520
+  regime_mean <- rep(c(2.4, 1.9, 2.6, 3.9, 3.2), times = c(120, 100, 110, 90, 100))
+  gas <- tibble(
+    date = seq(as.Date("2015-01-05"), by = "week", length.out = n_wk),
+    price = regime_mean + cumsum(rnorm(n_wk, 0, 0.02))
+  )
+}
+
+gas <- gas |>
+  arrange(date) |>
   mutate(week = row_number())
 
 bp_full <- breakpoints(price ~ week, data = gas, h = 26)
@@ -829,7 +978,11 @@ ggplot(gas, aes(date, price, color = regime)) +
   ) +
   labs(
     title = "Gasoline Prices: Structural Break Detection",
-    subtitle = "FRED series GASREGW (weekly, US average)",
+    subtitle = if (gas_synth) {
+      "Synthetic data for illustration only. Run program/scripts/01_fred_extended.R for FRED series GASREGW."
+    } else {
+      "FRED series GASREGW (weekly, US average)"
+    },
     x = NULL,
     y = "USD per gallon",
     color = "Regime"
@@ -852,19 +1005,11 @@ Replace the public FRED data with product-level transactions to present in litig
 {% endhint %}
 
 {% hint style="success" %}
-**Key Takeaways**
+**Key takeaways**
 
-1. **Screens are triage tools, not proof.** Variance screens, rotation patterns, and price correlations identify suspicious markets worth investigating. They rarely prove collusion alone.
+Screens triage; they do not convict. Variance compression, rotation patterns, and price correlations identify markets worth the cost of deeper investigation, and little more. The strongest cases anchor the econometrics to leniency evidence: known communication dates set the regression windows, and documented mechanisms explain why the breaks appear where they do. Overcharge estimation stands or falls on the counterfactual---before/after, yardstick, or difference-in-differences, say plainly what prices would have been absent the cartel and defend that claim.
 
-2. **Leniency evidence anchors timelines.** The strongest cartel cases combine econometric analysis with documentary evidence from leniency applicants. Build your analysis around known communication dates.
-
-3. **Overcharge estimation requires a credible counterfactual.** Whether using before-after, yardstick, or difference-in-differences, clearly articulate what prices would have been absent the cartel.
-
-4. **Pass-through matters for damages.** If overcharges were passed through to downstream customers, direct purchasers may not bear the full harm. Document pass-through assumptions.
-
-5. **Structural breaks are not self-interpreting.** A price drop after a raid is consistent with cartel breakdown---but also with demand shocks, cost changes, or confounding events. Triangulate with qualitative evidence.
-
-6. **Document everything.** Cartel analysis often leads to litigation. Keep code reproducible, data hashed, and methodology memos contemporaneous.
+Pass-through then determines who bears the harm, and the legal weight of the answer differs by forum: a US federal court will not hear a passing-on defense after *Hanover Shoe*, while the EU Damages Directive requires courts to entertain one. A price drop after a raid is consistent with cartel breakdown, but also with demand shocks or cost changes, so triangulate before you testify. And document everything. Cartel work ends in litigation; keep code reproducible, data hashed, and methodology memos contemporaneous.
 {% endhint %}
 
 ## Exercises

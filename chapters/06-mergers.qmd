@@ -468,7 +468,7 @@ Combine quantitative screens with qualitative evidence: internal documents refer
 :::
 
 ::: {.callout-tip title="Extended example: Hospital merger analysis"}
-Hospital mergers are among the most actively litigated in US antitrust, with the FTC challenging roughly one per year. Commercial insurance prices can rise 20--40% after consummation of anticompetitive hospital mergers, as documented in retrospective studies by Dafny (2009) and Gaynor and Town (2012). The analytical framework combines differentiated-products merger analysis (hospitals compete on quality, location, and reputation) with bilateral bargaining models, because hospitals negotiate rates with insurers rather than individual patients. The UPP/simulation toolkit from this chapter applies, with one wrinkle: the "price" is not set in a standard posted-price market.
+Hospital mergers are among the most actively litigated in US antitrust, with the FTC challenging roughly one per year. Commercial insurance prices can rise 20--40% after consummation of anticompetitive hospital mergers, as documented in retrospective studies [@dafny_2009; @gaynor_town_2012]. The analytical framework combines differentiated-products merger analysis (hospitals compete on quality, location, and reputation) with bilateral bargaining models, because hospitals negotiate rates with insurers rather than individual patients. The UPP/simulation toolkit from this chapter applies, with one wrinkle: the "price" is not set in a standard posted-price market.
 
 Hospital "prices" emerge from bilateral negotiations between hospital systems and insurance networks. The key metric is the hospital's willingness-to-pay (WTP) value: how much an insurer's enrollees would pay to have the hospital included in their network. A merger that combines two hospitals with high WTP increases the merged system's bargaining leverage, because the insurer cannot drop both hospitals without losing a large share of its enrollees. The change in WTP (delta-WTP) serves as the hospital-market analog of UPP/GUPPI. It quantifies how much additional bargaining power the merger confers. The FTC has deployed WTP models in cases including *Advocate Health Care* (7th Cir. 2016), *Penn State Hershey/PinnacleHealth* (3rd Cir. 2016), and *Hackensack Meridian/Englewood* (2021), establishing WTP analysis as a standard tool in the agency's hospital merger playbook.
 
@@ -587,7 +587,7 @@ cat(paste0("Interpretation: ", ifelse(example$net_vupp > 0,
     "Negative net vUPP suggests foreclosure is unprofitable."), "\n"))
 ```
 
-The back-of-envelope keeps the bookkeeping honest, but it abstracts from two things a full vGUPPI handles: how much of the input price rise the rival passes through to its own customers, which determines how many downstream sales it actually loses, and any departure from fixed-proportions production. Moresi and Salop (2013) develop the complete set of vGUPPI indices for upstream, downstream, and customer foreclosure.
+The back-of-envelope keeps the bookkeeping honest, but it abstracts from two things a full vGUPPI handles: how much of the input price rise the rival passes through to its own customers, which determines how many downstream sales it actually loses, and any departure from fixed-proportions production. @moresi_salop_2013 develop the complete set of vGUPPI indices for upstream, downstream, and customer foreclosure.
 
 #### Balancing EDM vs. vUPP
 
