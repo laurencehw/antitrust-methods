@@ -409,3 +409,35 @@ engineering exercise, not a writing one.
 Items 1–3 are the score. A methods book earns trust by being *checkable*, and
 the book's own best feature — exercises a reader can recompute — sets exactly
 the standard the rest of the text now has to meet.
+
+---
+
+## Status addendum (13 June 2026)
+
+The truth, currency, and build passes above were executed on this branch
+(commits `984ba8f` through `6167896`). Done: all items in §§A–G except as
+noted; the §H guards (every fragile read now has a tryCatch fallback; no
+out-of-repo read can break a render; install manifest complete; crossrefs
+fixed; appendices moved under `appendices:`); the §I coverage gaps
+(Cellophane and critical-loss fallacies, Brown Shoe indicia, smallest-market
+principle, aggregate diversion, Hanover Shoe/Illinois Brick, hot tubbing,
+capstone dataset with checkable answer, seven glossary entries); and the §D
+currency updates with a 2024–2026 case-law section in the bibliography.
+Citation check passes (158 keys / 187 entries); gitbook mirror regenerated.
+
+Still open (needs the author or a local environment):
+1. **Render locally and commit `_freeze/`** (§H-55) — R/Quarto are not
+   available in this sandbox, so the fixed chunks have not been executed.
+   Render the book once, eyeball every figure the fixes touched (waterfalls,
+   Q-learning, event studies, Lorenz curve, margin squeeze), and commit the
+   freeze cache.
+2. **Run the data pipeline with keys** to populate `data/raw`/`data/derived`
+   and replace the synthetic fallbacks the guards now draw.
+3. **Human legal read-through** — especially the South African case numbers,
+   the 2024–2026 docket details added to `references.bib`, and the softened
+   inquiry summaries (GRMI paragraph in ch. 10 still carries unverified
+   specifics; ch. 8's Stats SA panel units need confirming against the real
+   file).
+4. **Residual polish** — remaining "Enhanced Visualizations" bullet stacks in
+   chs. 10–11; the 13-/14- file names still contradict render order (the
+   `appendices:` key resolves the substance; renaming is cosmetic).
