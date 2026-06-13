@@ -37,7 +37,7 @@ For multi-jurisdictional practitioners, the table below maps common conduct type
 |:-------------|:--------------|:---------------|:-------------|
 | **Cartels / Horizontal agreements** | Sherman Act §1 (15 U.S.C. §1) | TFEU Article 101 | Competition Act 89/1998, §4 |
 | **Monopolization / Abuse of dominance** | Sherman Act §2 (15 U.S.C. §2) | TFEU Article 102 | Competition Act 89/1998, §8 |
-| **Vertical restraints** | Sherman Act §1; Rule of reason | TFEU Art. 101 + VBER | Competition Act §4(1)(b), §5 |
+| **Vertical restraints** | Sherman Act §1; Rule of reason | TFEU Art. 101 + VBER | Competition Act §5; §8(1)(d) for dominant firms |
 | **Mergers (horizontal)** | Clayton Act §7 (15 U.S.C. §18) | EUMR (Reg. 139/2004) | Competition Act §12, §12A |
 | **Mergers (vertical/conglomerate)** | Clayton Act §7 | EUMR Art. 2 | Competition Act §12A |
 | **Price discrimination** | Robinson-Patman Act | Art. 102(c) (dominant firms) | §9 (price discrimination by dominant firm) |
@@ -45,8 +45,8 @@ For multi-jurisdictional practitioners, the table below maps common conduct type
 
 **Key differences to note:**
 
-- **Standards**: US uses "monopoly power" (typically >70% share); EU/SA use "dominance" (typically >40-50% share with barriers).
-- **Effects vs. object**: EU Art. 101 distinguishes "object" restrictions (per se illegal) from "effects" analysis; US separates per se from rule of reason.
+- **Standards**: US courts ask for "monopoly power," typically inferred above a 70% share. The EU uses "dominance," in practice from around 40% with entry barriers, with a rebuttable presumption at 50% under *AKZO*. South Africa's thresholds are statutory (§7): a firm at 45% or more is presumed dominant; between 35% and 45% it is dominant unless it shows it lacks market power; below 35% only if market power is proven.
+- **Effects vs. object**: EU Art. 101 treats "object" restrictions as presumptively restrictive---no proof of effects is required---though the Art. 101(3) exemption remains formally available; US law separates per se rules from the rule of reason.
 - **Public interest**: South Africa uniquely incorporates public interest factors (employment, SME participation, ownership) in merger review under §12A(3) [@sa_competition_act_1998].
 - **Private enforcement**: US allows treble damages; EU/SA have more limited private action frameworks.
 
@@ -142,10 +142,10 @@ The institutional map turns into analytical workplans in @sec-research-design: c
 To prepare:
 
 1. **Case chronology template**: Build a timeline that can accommodate both US and SADC procedural milestones.
-2. **Data inventory**: Sketch which datasets span US, EU, and SADC sources (e.g., FRED for HHI, Stats SA for market shares).
+2. **Data inventory**: Sketch which datasets span US, EU, and SADC sources (e.g., FRED for concentration ratios, Stats SA for market shares).
 3. **Flagship dataset**: Identify at least one dataset (claims-level healthcare data, national tender records) that will power the quantitative chapters.
 
-Keep a running list of figures, such as HHI trends and entry timelines, that later chapters will revisit.
+Keep a running list of figures, such as concentration trends and entry timelines, that later chapters will revisit.
 
 ## Visualizations
 
@@ -172,7 +172,7 @@ milestones <- tibble::tribble(
   1976, "HSR Act", "Statute", "US",
   # EU Milestones
   1957, "Treaty of Rome\n(Art. 85/86)", "Statute", "EU",
-  2004, "EUMR Modernization", "Guidance", "EU",
+  2004, "EUMR recast\n(Reg. 139/2004)", "Statute", "EU",
   # South Africa
   1998, "Competition Act 89", "Statute", "SA",
   2019, "SA Amendment Act", "Statute", "SA",
@@ -254,15 +254,15 @@ ggplot(milestones, aes(x = year, y = y)) +
 The timeline shows convergence in competition enforcement approaches: South Africa's 1998 Competition Act [@sa_competition_act_1998] drew heavily on EU precedent, while the 2023 US Merger Guidelines [@doj_ftc_hmg_2023] moved closer to EU-style structural presumptions. Note how major cases (Microsoft [@us_microsoft_2001], Google [@us_google_search_2023; @eu_google_shopping_2017]) often span jurisdictions with related but distinct theories of harm.
 :::
 
-### HHI trend example
-Track concentration trends using FRED data as a baseline for cross-jurisdictional comparisons.
+### Concentration trend example
+Track concentration trends using FRED data as a baseline for cross-jurisdictional comparisons. Concentration ratios---the combined share of the largest *k* firms---are coarser than the HHI but are published for most countries, which makes them the natural starting series.
 
 ```{r}
-#| label: us-bank-hhi
+#| label: us-bank-concentration
 #| message: false
 #| warning: false
 #| echo: false
-#| fig-cap: "US Bank Concentration (HHI)"
+#| fig-cap: "US 5-Bank Asset Concentration"
 #| fig-width: 8
 #| fig-height: 5
 library(dplyr)
@@ -271,26 +271,27 @@ library(readr)
 source("program/R/helpers.R")
 
 # Use pre-downloaded FRED data (no API key required)
-hhi <- tryCatch({
-  read_csv("data/raw/fred_bank_hhi.csv", show_col_types = FALSE) |>
+conc5 <- tryCatch({
+  read_csv("data/raw/fred_bank_conc_5.csv", show_col_types = FALSE) |>
     mutate(date = as.Date(date))
 }, error = function(e) NULL)
 
-if (!is.null(hhi)) {
-  ggplot(hhi, aes(date, value)) +
+if (!is.null(conc5)) {
+  ggplot(conc5, aes(date, value)) +
     geom_vline(xintercept = as.Date("2008-09-15"), linetype="dashed", color="darkred") +
-    annotate("text", x = as.Date("2009-01-01"), y = max(hhi$value) * 0.95, label = "2008 Crisis",
+    annotate("text", x = as.Date("2009-01-01"), y = max(conc5$value, na.rm = TRUE) * 0.95,
+             label = "2008 Crisis",
              color = "darkred", hjust = 0, vjust = 0, size = 3) +
     geom_line(color = "#0072B2", linewidth = 1) +
     labs(
-      title = "US Bank Concentration (HHI)",
-      subtitle = "Bank deposits (Commercial & Savings). Source: FRED Series HHMSDODNS. Real data.",
+      title = "5-bank asset concentration, United States",
+      subtitle = "Share of commercial banking assets held by the five largest banks (%).\nSource: World Bank Global Financial Development Database via FRED (DDOI06USA156NWDB). Real data.",
       x = NULL,
-      y = "HHI Index"
+      y = "Percent of commercial banking assets"
     ) +
     theme_antitrust()
 } else {
-  cat("Bank HHI data not available. Run program/scripts/01_fred_extended.R first.\n")
+  cat("Bank concentration data not available. Run program/scripts/01_fred_extended.R first.\n")
 }
 ```
 

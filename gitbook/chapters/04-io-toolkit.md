@@ -65,6 +65,8 @@ In modern practice, these approaches reinforce each other. You might use a **red
 | **Critical Loss** = SSNIP / (SSNIP + Margin) | Break-even loss for SSNIP | Market definition |
 | **HHI** = Sum of squared shares | Concentration index | Structural presumption |
 | **Delta HHI** = 2 x Share1 x Share2 | Merger-induced HHI change | Screening threshold |
+
+Units note: the UPP and GUPPI rows state the index form, a share of price. In currency units, UPP~A~ = D~A→B~ × (P~B~ − C~B~) − E~A~, the form used in [Chapter 6](chapters/06-mergers.md); dividing by P~A~ gives GUPPI~A~ = D~A→B~ × M~B~ × P~B~/P~A~. With equal prices the index reduces to Diversion × Margin, as in the table.
 {% endhint %}
 
 {% hint style="info" %}
@@ -266,34 +268,36 @@ The DOJ's 2011 challenge to AT&T's proposed $39 billion acquisition of T-Mobile 
 
 Airline demand is typically estimated using a **nested logit** model, with nests defined by airport (e.g., all flights from DCA in one nest, all flights from IAD in another) or by service type (nonstop vs. connecting). The nesting structure relaxes the IIA assumption of the plain logit: passengers choosing among nonstop options at the same airport substitute more readily with each other than with connecting flights from a different airport. This matters because the diversion ratios that drive UPP depend on the substitution pattern.
 
-For the American Airlines/US Airways merger (2013), consider a route like DCA--LGA where both carriers offered nonstop service. Using plausible parameters from the airline literature---diversion ratios of 0.25--0.35 between the merging carriers (reflecting their large combined slot holdings at DCA) and operating margins of 10--15% (typical for legacy carriers on competitive routes)---we can compute a rough GUPPI:
+For the American Airlines/US Airways merger (2013), consider a dense overlap route such as DCA--BOS, where both legacy networks served the same slot-constrained endpoints (the parameters here are illustrative, not a reconstruction of 2013 schedules). The margin that belongs in a GUPPI is the *incremental* margin on diverted passengers, not the operating margin. An extra passenger on a flight that will operate anyway costs the carrier little beyond distribution fees, catering, and a small fuel increment, so incremental margins on marginal seats run far above the 8--15% operating margins legacy carriers reported---figures of 60--80% are common in airline demand work, consistent with the 40--55% wireless margins in the AT&T/T-Mobile box. Using diversion of 0.25--0.35 between the merging carriers and an incremental margin of 70%:
 
 $$
-\text{GUPPI}_{AA \to US} = D_{AA \to US} \times M_{US} \approx 0.30 \times 0.12 = 3.6\%
+\text{GUPPI}_{AA \to US} = D_{AA \to US} \times M_{US} \approx 0.30 \times 0.70 = 21\%
 $$
 
-A 3.6% GUPPI is below the 5% rule-of-thumb threshold, but this is sensitive to input assumptions. If diversion is at the high end (0.35, reflecting limited alternatives at slot-constrained DCA) and margins are 15%, GUPPI rises to 5.3%---crossing into the concern zone. The tornado chart above shows exactly this kind of sensitivity. In practice, different data sources yield different diversion estimates: DOT booking data captures actual itineraries, frequent-flyer program data reveals loyalty-driven switching, and customer surveys measure stated preferences. The DOJ's economic experts would have triangulated across these sources, weighting each by reliability. The market definitions from [Chapter 3](chapters/03-market-definition.md) determine which routes to screen, and the simulation framework in [Chapter 6](chapters/06-mergers.md) translates these UPP estimates into predicted price effects.
+A 21% GUPPI sits far above the 5% rule-of-thumb threshold; even the low end of the ranges (diversion 0.25, incremental margin 0.60) gives 15%. The screen's sensitivity now runs through the margin concept itself: substitute the 10--15% *operating* margin by mistake and the GUPPI collapses to 3--5%, flipping the conclusion. The tornado chart above shows exactly this kind of sensitivity. In practice, different data sources yield different diversion estimates: DOT booking data captures actual itineraries, frequent-flyer program data reveals loyalty-driven switching, and customer surveys measure stated preferences. The DOJ's economic experts would have triangulated across these sources, weighting each by reliability. The market definitions from [Chapter 3](chapters/03-market-definition.md) determine which routes to screen, and the simulation framework in [Chapter 6](chapters/06-mergers.md) translates these UPP estimates into predicted price effects.
 {% endhint %}
 
 ## Visualizations
 
 ### Pass-through diagnostic using public price indices
-Pass-through analysis estimates how much of a cost change flows through to consumer prices. It matters for cartel damages (upstream overcharge → downstream harm), merger analysis (will cost savings benefit consumers?), and vertical restraints. This example uses real FRED data for gasoline prices.
+Pass-through analysis estimates how much of a cost change flows through to consumer prices. It matters for cartel damages (upstream overcharge → downstream harm), merger analysis (will cost savings benefit consumers?), and vertical restraints. This example uses pre-pulled FRED data: WTI crude oil (the refiner's input cost) and the US retail gasoline price.
+
+One specification choice does most of the work here. Two trending price series regressed on each other in *levels* will produce a coefficient near one and an R² near one whatever the true pass-through---the spurious-regression trap. The honest regression is in log-differences with a lag or two: when crude moves x% this month, how much does the pump price move over the next few months?
 
 ![](../images/cost-pass-through-1.png)
 
 **Interpretation:**
-- **Pass-through coefficient**: Measures how much a 1% increase in producer prices flows through to consumer prices. Values < 1 indicate incomplete pass-through (firms absorb some cost increases); values > 1 indicate over-shifting (firms amplify cost increases, possibly due to market power).
-- **R-squared**: Indicates how well producer prices explain consumer price variation. High R² suggests tight cost-price linkage.
-- **Incomplete pass-through**: Common in competitive markets where firms absorb cost shocks to retain customers. Can also occur with sticky prices or menu costs.
-- **Over-shifting**: May signal market power (firms use cost increases as "focal points" to raise prices beyond the cost change) or complementarities/network effects.
+- **The cumulative coefficient is an elasticity.** It answers: a 1% rise in crude raises the retail price by how many percent within three months? Crude accounts for roughly half of the pump price (the rest is refining, distribution, and taxes), so an elasticity near 0.5 is consistent with close to complete pass-through of the crude cost change measured in cents per gallon. Translate the elasticity into the cost-share-adjusted rate before calling pass-through "incomplete."
+- **The R² in differences will be modest---that is the honest story.** Month-to-month retail price changes also reflect refining margins, taxes, and seasonality, so crude explains only part of the variance even when pass-through of crude costs is nearly complete. A levels regression would report R² near 1 regardless of the true relationship; do not present that as validation.
+- **Lags carry economics.** Retail prices respond to crude with a delay (the "rockets and feathers" literature finds faster upward than downward adjustment), so report the cumulative coefficient, not just the contemporaneous one.
+- **Over-shifting** (cost-share-adjusted pass-through above 100%) may signal market power---firms using cost increases as focal points to raise prices beyond the cost change.
 
 **Applications in antitrust:**
 - **Cartel damages**: If pass-through is 80%, a $10 upstream overcharge causes an $8 downstream price increase.
 - **Merger efficiencies**: If parties claim $5M in cost savings but pass-through is only 30%, consumers benefit by only $1.5M.
 - **Vertical mergers**: Estimate pass-through separately for upstream and downstream stages to predict EDM (Elimination of Double Marginalization) benefits.
 
-Swap series IDs for your industry (e.g., `WPUSI012011` for steel PPI, `CPIAUCSL` for overall CPI) or use firm-specific cost and price data when available.
+Swap in other pre-pulled series (`data/raw/fred_steel_ppi.csv`, `data/raw/fred_cpi_all.csv`) or firm-specific cost and price data when available.
 
 ## Bargaining frameworks {#sec-bargaining}
 
@@ -339,7 +343,7 @@ The gains from trade for each pair are:
 | A--Insurer | $800 × 100,000 = $80M | Reimbursement rate × volume | High (A is "must-have") |
 | B--Insurer | $200 × 100,000 = $20M | Reimbursement rate × volume | Lower (B is substitutable) |
 
-Now suppose Hospitals A and B merge. The insurer's disagreement payoff if it fails to reach a deal with the *merged* system is the loss of *both* hospitals---say, $1,200 per enrollee, or $120M total. This is more than the sum of the individual disagreement payoffs ($80M + $20M = $100M) because the hospitals together form a "must-have" network that neither is alone. The merged system's bargaining leverage increases, and the Nash bargaining solution yields higher negotiated prices for both hospitals---even though no beds closed and no services changed.
+Now suppose Hospitals A and B merge. The insurer's disagreement payoff if it fails to reach a deal with the *merged* system is the loss of *both* hospitals---say, $1,200 per enrollee, or $120M total. This is more than the sum of the individual disagreement payoffs ($80M + $20M = $100M) because the hospitals together form a "must-have" network that neither is alone. Hold the bargaining weight fixed at 0.6 for every negotiation and the arithmetic is direct. Pre-merger, the insurer concedes 0.6 × $80M = $48M to Hospital A (10,000 admissions, a $4,800 rate) and 0.6 × $20M = $12M to Hospital B (10,000 admissions, a $1,200 rate): $60M across 20,000 admissions, an average rate of $3,000. Post-merger it concedes 0.6 × $120M = $72M across the same 20,000 admissions, an average rate of $3,600. The 20% increase matches the 20% superadditivity in the disagreement payoff ($120M against $100M) exactly---no beds closed, no services changed, and no extra bargaining skill was assumed.
 
 This is the mechanism that drives price increases in hospital mergers. The effect is largest when the merging parties are each other's closest substitutes from the insurer's perspective---precisely the condition that also drives unilateral effects in standard merger analysis. The bargaining framework makes this intuition precise by quantifying how the merger changes disagreement payoffs.
 
@@ -351,12 +355,15 @@ source("program/R/helpers.R")
 # Simplified Nash-in-Nash: hospital-insurer bargaining
 # Pre-merger: each hospital bargains separately
 # Post-merger: combined entity bargains as one
+# The bargaining weight is held FIXED at 0.6 throughout, so the price
+# increase comes entirely from the superadditive disagreement payoff
+# ($120M > $80M + $20M), not from an assumed gain in bargaining skill.
 
 bargaining <- tibble::tribble(
   ~scenario, ~hospital, ~wtp_loss_per_enrollee, ~enrollees, ~bargaining_weight,
   "Pre-merger", "Hospital A", 800, 100000, 0.6,
-  "Pre-merger", "Hospital B", 200, 100000, 0.3,
-  "Post-merger", "Merged A+B", 1200, 100000, 0.8
+  "Pre-merger", "Hospital B", 200, 100000, 0.6,
+  "Post-merger", "Merged A+B", 1200, 100000, 0.6
 ) |>
   mutate(
     total_wtp_loss = wtp_loss_per_enrollee * enrollees,
@@ -373,16 +380,17 @@ ggplot(bargaining, aes(x = hospital, y = negotiated_rate, fill = scenario)) +
   scale_fill_manual(values = c("Pre-merger" = "#0072B2", "Post-merger" = "#D55E00")) +
   scale_y_continuous(labels = scales::dollar) +
   labs(
-    title = "Nash-in-Nash: Hospital Merger Increases Negotiated Rates",
-    subtitle = "Merged entity's improved outside option raises prices for both hospitals",
+    title = "Nash-in-Nash: Superadditive Disagreement Payoff Raises Average Rates",
+    subtitle = "Bargaining weight fixed at 0.6; volume-weighted average rate rises from $3,000 to $3,600 (+20%)",
     x = NULL, y = "Negotiated Reimbursement Rate per Admission", fill = NULL,
-    caption = "Illustrative calculation. WTP loss = value to insurer of having hospital in-network.\nBargaining weight reflects relative leverage in Nash bargaining solution."
+    caption = "Illustrative calculation. WTP loss = value to insurer of having hospital in-network.\nThe merged rate applies to all 20,000 admissions; compare it with the pre-merger\nvolume-weighted average of $3,000, not with Hospital A's rate alone."
   ) +
   theme_antitrust() +
   theme(legend.position = "bottom")
 
-cat("\nPrice increase from merger:\n")
-pre_avg <- bargaining |> filter(scenario == "Pre-merger") |> summarise(avg = mean(negotiated_rate)) |> pull(avg)
+cat("\nPrice increase from merger (volume-weighted average rate):\n")
+pre <- bargaining |> filter(scenario == "Pre-merger")
+pre_avg <- sum(pre$negotiated_rate * pre$admissions) / sum(pre$admissions)
 post <- bargaining |> filter(scenario == "Post-merger") |> pull(negotiated_rate)
 cat(paste0("Pre-merger average: ", scales::dollar(pre_avg, accuracy = 1), "\n"))
 cat(paste0("Post-merger: ", scales::dollar(post, accuracy = 1), "\n"))
@@ -393,18 +401,18 @@ cat(paste0("Increase: ", scales::percent((post - pre_avg) / pre_avg, accuracy = 
 
 Bargaining models have become standard tools in several contexts:
 
-- **Hospital mergers.** Since the FTC's successful challenge of *Advocate Health Care / NorthShore University HealthSystem* (2017) and its use of WTP-based analysis, bargaining models have been central to hospital merger review. The 2023 Merger Guidelines explicitly recognize bargaining leverage as a theory of harm.
+- **Hospital mergers.** Since the FTC's successful challenge of *Advocate Health Care / NorthShore University HealthSystem* (7th Cir. 2016) and its use of WTP-based analysis, bargaining models have been central to hospital merger review. The 2023 Merger Guidelines explicitly recognize bargaining leverage as a theory of harm.
 - **Media and content licensing.** Disputes between cable distributors and content providers (e.g., blackout threats during carriage negotiations) are naturally modeled as bilateral bargaining problems.
 - **Pharmaceutical negotiations.** PBM-manufacturer negotiations over formulary placement and rebates involve bargaining dynamics that standard posted-price models cannot capture.
 - **Digital platforms.** App store commission disputes (e.g., Epic v. Apple) and news publisher negotiations with platforms involve bargaining over revenue shares where outside options are asymmetric.
 
 ## Exercises
 
-1. **Data/code.** Using the logit demand skeleton in this chapter, add a fourth product ("D") with price=$8, share=0.10, and feature_score=0.3. Re-estimate the model and compute the full 4x4 diversion matrix. How does adding a budget product change the diversion ratios for the existing products?
+1. **Data/code.** Using the logit demand skeleton in this chapter, add an eleventh inside product---a budget cereal at price $2.49, share 0.05, and feature_score 0.20---and reduce the outside share to 0.365 so shares still sum to one. Re-estimate the model and recompute the diversion matrix across all eleven products. How does adding a budget product change the diversion ratios among the existing brands?
 
 2. **Conceptual.** Explain the difference between UPP and GUPPI. When would you present one vs. the other to an agency? What are the advantages of each for communicating merger effects to non-economists?
 
-3. **Data/code.** The pass-through regression uses gasoline PPI and CPI data. Replace the series IDs with steel PPI (`WPUSI012011`) and overall CPI (`CPIAUCSL`). Run the pass-through regression and compare the coefficient to the gasoline result. What might explain any differences?
+3. **Data/code.** The pass-through regression uses crude oil and retail gasoline. Re-run it with the pre-pulled steel PPI (`data/raw/fred_steel_ppi.csv`) and the all-items CPI (`data/raw/fred_cpi_all.csv`), keeping the log-difference specification with lags. Compare the cumulative coefficient to the gasoline result. What might explain any differences?
 
 4. **Conceptual.** A structural merger simulation predicts a 3% price increase, but a retrospective DiD study of a similar past merger found a 7% increase. How would you reconcile these findings? What does each method's assumptions imply about the source of the discrepancy?
 

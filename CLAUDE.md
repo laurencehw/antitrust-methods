@@ -80,23 +80,23 @@ Use chunk options for API-dependent code:
 |------|---------|
 | `_quarto.yml` | Book metadata, chapter order, PDF/HTML settings |
 | `references/references.bib` | Bibliography (papers, cases, agency materials) |
-| `references/CITATION_QUICK_REFERENCE.md` | Common citation keys by topic |
-| `planning/DATA_INTEGRATION_GUIDE.md` | How to replace synthetic scaffolds with real data |
-| `planning/visualization-roadmap.md` | Chapter-by-chapter visualization status |
+| `REVIEW.md`, `REVIEW-2026-06-AUDIT.md` | Editorial review and full manuscript audit |
+| `STYLE.md` | Target prose voice and AI-tic sweep patterns |
+| `program/scripts/check_citations.py` | Citation key checker (run in CI) |
 
 ## Data Status
 
-Real data collected: FRED (HHI, prices, wages), stock prices (airlines, tech, healthcare), airline route shares.
+Real data collected: FRED (prices, wages, bank concentration ratios), stock prices (airlines, tech, healthcare), airline route shares.
 
 Real-data ingestion wired (run locally to populate): `03_bls_labor.R` pulls BLS QCEW county employment (`data/raw/qcew_county_employment.csv`, feeds Ch.10 HHI proxy) + CES employment; `06_procurement_cartels.R` pulls World Bank contract awards and derives a supplier award-concentration HHI screen. Both fall back to a schema-matched, clearly labelled synthetic file when offline.
 
 Still synthetic (no open source): cartel bid-rotation data (needs every bidder's bid, not just awards), platform usage, patent/FDA data.
 
-Manual downloads required (APIs deprecated): PatentsView bulk files, FDA Orange Book, BLS QCEW county data. See `planning/API_KEYS_SETUP.md`.
+Manual downloads required (APIs deprecated): PatentsView bulk files, FDA Orange Book, BLS QCEW county data.
 
 ## Citation Format
 
-Pandoc-style citations in text: `@author_year` or `[@author_year]`. Bibliography entries use BibTeX keys like `@areeda_turner_1975`, `@us_microsoft_2001`, `@doj_ftc_hmg_2023`. See `references/CITATION_QUICK_REFERENCE.md` for common keys.
+Pandoc-style citations in text: `@author_year` or `[@author_year]`. Bibliography entries use BibTeX keys like `@areeda_turner_1975`, `@us_microsoft_2001`, `@doj_ftc_hmg_2023`.
 
 ## Conventions
 

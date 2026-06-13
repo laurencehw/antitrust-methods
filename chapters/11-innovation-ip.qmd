@@ -58,13 +58,13 @@ Evidence sources:
 - **EU *Huawei v. ZTE* (2015):** Established framework for when SEP holders may seek injunctions—requiring good-faith negotiations, FRAND offers, and willingness to license before injunctive relief is appropriate.
 - **UK *Unwired Planet* (2020):** Court determined global FRAND rates across patent portfolio; established precedent for courts setting rates when parties cannot agree.
 - **FTC v. Qualcomm (2019-2020):** The FTC alleged Qualcomm used its SEP position and chip monopoly to extract supracompetitive royalties through "no license, no chips" policies. The district court found antitrust violations, but the Ninth Circuit reversed, holding that Qualcomm's practices—even if anticompetitive in licensing markets—did not harm competition in chip markets. The case highlights difficulties in applying antitrust to SEP licensing and the importance of identifying the correct market for harm analysis.
-- **EC Qualcomm decisions (2018-2019):** The Commission fined Qualcomm for predatory pricing to exclude Icera and for exclusivity payments to Apple, demonstrating EU willingness to pursue SEP-adjacent conduct.
+- **EC Qualcomm decisions (2018-2019) and their fate on review:** The Commission fined Qualcomm €997 million for exclusivity payments to Apple (2018) and separately for predatory pricing aimed at excluding Icera (2019). The General Court annulled the Apple-exclusivity decision in 2022 [@eu_qualcomm_gc_2022], citing procedural failings and an effects analysis that did not match the decision's theory of harm; it largely upheld the Icera fine in 2024, with a modest reduction. The pair shows the Commission's willingness to pursue SEP-adjacent conduct---and the EU courts policing how it does so.
 
 :::{.callout-note title="Case box: FTC v. Qualcomm (2019--2020)"}
-The FTC alleged that Qualcomm used its monopoly in CDMA and premium LTE modem chips to extract supracompetitive royalties through a "no license, no chips" policy: it refused to supply chips unless manufacturers accepted its SEP licensing terms [@us_qualcomm_2020]. Judge Koh's sweeping district court ruling found antitrust violations across licensing and chip markets, ordering Qualcomm to renegotiate agreements at FRAND rates. The Ninth Circuit reversed, holding that Qualcomm's licensing practices---even if they violated FRAND commitments---did not constitute anticompetitive conduct *in chip markets* because OEMs had no alternative chipset suppliers regardless of licensing terms. The decision effectively requires plaintiffs to show harm to competition (not just to competitors) in a properly defined market, raising the bar for SEP-based antitrust claims in the United States. The EU's parallel Qualcomm cases suggest a more receptive environment for such theories in European enforcement.
+The FTC alleged that Qualcomm used its monopoly in CDMA and premium LTE modem chips to extract supracompetitive royalties through a "no license, no chips" policy: it refused to supply chips unless manufacturers accepted its SEP licensing terms [@us_qualcomm_2020]. Judge Koh's sweeping district court ruling found antitrust violations across licensing and chip markets, ordering Qualcomm to renegotiate agreements at FRAND rates. The Ninth Circuit reversed, holding that Qualcomm's licensing practices---even if they violated FRAND commitments---did not constitute anticompetitive conduct *in chip markets* because OEMs had no alternative chipset suppliers regardless of licensing terms. The decision effectively requires plaintiffs to show harm to competition (not just to competitors) in a properly defined market, raising the bar for SEP-based antitrust claims in the United States. The EU's parallel Qualcomm cases looked, for a time, like the receptive contrast: in 2018 the Commission fined Qualcomm €997 million for paying Apple to source baseband chips exclusively from it. The General Court annulled that decision in 2022 (Case T-235/18), finding procedural irregularities in how the Commission built its file and an as-efficient-competitor analysis that did not match the theory of harm the decision actually charged. The separate Icera predatory-pricing fine fared better, largely surviving review in 2024 with a small reduction. The transatlantic lesson is narrower than "the EU is friendlier": both systems demand that the economic analysis presented match the theory of harm pleaded. The FTC lost on market definition and harm; the Commission lost on process and fit.
 :::
 
-These cases illustrate jurisdictional divergence: EU authorities more readily pursue SEP-related antitrust claims, while US courts after *Qualcomm* require clearer links between licensing conduct and competitive harm.
+These cases qualify the usual story of jurisdictional divergence. EU authorities pursue SEP-adjacent conduct more readily than US agencies, but the General Court's Qualcomm annulment shows the EU courts demanding the same discipline---an effects analysis that matches the theory charged---that the Ninth Circuit demanded of the FTC.
 
 ### Royalty stack analysis
 ```{r}
@@ -95,7 +95,9 @@ ggplot(stack, aes(xmin = start, xmax = end, ymin = 0, ymax = 1, fill = component
   geom_text(aes(x = (start + end) / 2, y = 0.5,
                 label = paste0(component, "\n", royalty_percent, "%")),
             size = 3, color = "white", fontface = "bold") +
-  scale_fill_manual(values = antitrust_colors) +
+  # antitrust_colors is a named vector keyed to other levels; unname so the
+  # palette is recycled over these components instead of falling back to gray
+  scale_fill_manual(values = unname(antitrust_colors)) +
   labs(
     title = "Illustrative royalty stack",
     subtitle = paste0("Total cumulative royalty: ", sum(stack$royalty_percent),
@@ -184,7 +186,7 @@ data <- tibble::tribble(
 
 # survival::survfit(Surv(entry_year, status) ~ settlement, data = data)
 ```
-Replace with real pay-for-delay cases (Actavis-style) or EU decisions (Servier, Lundbeck). Use FDA Orange Book, EMA data, or South African SAMRC filings for entry timelines.
+Replace with real pay-for-delay cases (Actavis-style) or EU decisions (Servier, Lundbeck). Use FDA Orange Book, EMA data, or South African SAHPRA registration records for entry timelines.
 
 ### Diff-in-diff for price effects
 ```{r}
@@ -222,7 +224,7 @@ Data sources: IQVIA (if available), CMS reimbursement data, Stats SA medicine pr
 - **Pipeline probability models:** For pharmaceuticals, use clinical trial progression rates.  
 - **Product roadmaps:** Qualitative review of technical plans to confirm or rebut innovation harm narratives.
 
-The following charts use real PatentsView data---the USPTO's public bulk download---to show innovation trends relevant to antitrust analysis. Patent counts are an imperfect proxy for innovation, but they are the most widely available and standardized measure, and they feature in merger review (as indicators of innovation incentives) and in SEP/FRAND disputes (where patent portfolios determine licensing leverage).
+The following charts are built for PatentsView data---the USPTO's public bulk download (the bulk files must be fetched manually; the API route is deprecated). When the files are absent, the chunk substitutes a clearly labelled synthetic series with the same schema so the book renders from a fresh clone. Patent counts are an imperfect proxy for innovation, but they are the most widely available and standardized measure, and they feature in merger review (as indicators of innovation incentives) and in SEP/FRAND disputes (where patent portfolios determine licensing leverage).
 
 ```{r}
 #| label: innovation-patent-trends
@@ -231,19 +233,72 @@ The following charts use real PatentsView data---the USPTO's public bulk downloa
 #| echo: true
 #| fig-width: 10
 #| fig-height: 7
-#| fig-cap: "Source: PatentsView (USPTO bulk download). Real data."
+#| fig-cap: "US utility patent grants, total and by technology sector. The in-figure caption states whether the rendered series is the real PatentsView data or a labelled synthetic stand-in."
 library(dplyr)
 library(ggplot2)
 library(patchwork)
 source("program/R/helpers.R")
 
-tryCatch({
-  # --- Panel 1: Total US utility patents by year ---
-  total_df <- read.csv("data/raw/patents_total_by_year.csv",
-                       stringsAsFactors = FALSE) |>
-    filter(year >= 1976, year <= 2024)
+# Real source: PatentsView bulk downloads (USPTO), aggregated to
+# data/raw/patents_total_by_year.csv (year, total_utility_patents) and
+# data/raw/patents_by_sector_year.csv (year, sector, patent_count).
+# Guarded read with a schema-matched synthetic fallback.
+patents_raw <- tryCatch({
+  list(
+    total  = read.csv("data/raw/patents_total_by_year.csv",
+                      stringsAsFactors = FALSE),
+    sector = read.csv("data/raw/patents_by_sector_year.csv",
+                      stringsAsFactors = FALSE)
+  )
+}, error = function(e) NULL)
 
-  p1 <- ggplot(total_df, aes(x = year, y = total_utility_patents / 1000)) +
+patents_synth <- is.null(patents_raw) ||
+  ("data_source" %in% names(patents_raw$total) &&
+     any(patents_raw$total$data_source == "synthetic_fallback"))
+
+if (is.null(patents_raw)) {
+  # Synthetic fallback for illustration only: exponential growth with noise,
+  # calibrated to the broad shape of US utility patent grants.
+  set.seed(1976)
+  yrs_total <- 1976:2024
+  total_df <- data.frame(
+    year = yrs_total,
+    total_utility_patents = round(
+      70000 * exp(0.035 * (yrs_total - 1976)) *
+        exp(rnorm(length(yrs_total), 0, 0.03))
+    )
+  )
+  synth_sectors <- c("Computer/Electronics", "Pharmaceuticals",
+                     "Semiconductors", "Clean Energy", "Motor Vehicles")
+  synth_base    <- c(40000, 12000, 15000, 3000, 8000)
+  synth_growth  <- c(0.040, 0.010, 0.030, 0.070, 0.015)
+  sector_df <- do.call(rbind, lapply(seq_along(synth_sectors), function(i) {
+    yrs <- 2000:2024
+    data.frame(
+      year = yrs,
+      sector = synth_sectors[i],
+      patent_count = round(
+        synth_base[i] * exp(synth_growth[i] * (yrs - 2000)) *
+          exp(rnorm(length(yrs), 0, 0.04))
+      )
+    )
+  }))
+} else {
+  total_df <- patents_raw$total
+  sector_df <- patents_raw$sector
+}
+
+patents_src <- if (patents_synth) {
+  "Synthetic data for illustration; replace with PatentsView bulk download (USPTO)."
+} else {
+  "Source: PatentsView (USPTO bulk download). Real data."
+}
+
+# --- Panel 1: Total US utility patents by year ---
+total_df <- total_df |>
+  filter(year >= 1976, year <= 2024)
+
+p1 <- ggplot(total_df, aes(x = year, y = total_utility_patents / 1000)) +
     geom_line(color = "#0072B2", linewidth = 1.1) +
     geom_point(color = "#0072B2", size = 0.8, alpha = 0.5) +
     # Key antitrust-relevant annotations
@@ -270,9 +325,8 @@ tryCatch({
     ) +
     theme_antitrust()
 
-  # --- Panel 2: Patent grants by technology sector (2000+) ---
-  sector_df <- read.csv("data/raw/patents_by_sector_year.csv",
-                        stringsAsFactors = FALSE) |>
+# --- Panel 2: Patent grants by technology sector (2000+) ---
+sector_df <- sector_df |>
     filter(year >= 2000, year <= 2024) |>
     filter(sector %in% c("Computer/Electronics", "Pharmaceuticals",
                           "Semiconductors", "Clean Energy",
@@ -312,16 +366,9 @@ tryCatch({
           legend.text = element_text(size = 8)) +
     guides(color = guide_legend(nrow = 1))
 
-  # --- Combine with patchwork ---
-  p1 / p2 +
-    plot_annotation(
-      caption = "Source: PatentsView (USPTO bulk download). Real data."
-    )
-}, error = function(e) {
-  message("Could not load PatentsView data: ", e$message)
-  message("Ensure data/raw/patents_total_by_year.csv and ",
-          "data/raw/patents_by_sector_year.csv exist.")
-})
+# --- Combine with patchwork ---
+p1 / p2 +
+  plot_annotation(caption = patents_src)
 ```
 
 The acceleration in patent grants since 2000---driven particularly by computer/electronics, telecommunications, and biotech---coincides with the period of most active antitrust scrutiny of innovation markets. Rising patent density increases the risk of patent thickets and royalty stacking (see the royalty stack visualization above), while sector-level trends help identify where killer acquisition concerns are most acute.
@@ -396,7 +443,7 @@ Data portability---the ability of users to transfer their data from one platform
 
 ## Southern African innovation/IP examples
 
-South Africa's Competition Commission has addressed innovation and IP issues in several notable matters, though the jurisprudence is less developed than in the US and EU. The **Telkom vs. Internet Solutions** broadband case examined access to APIs and OSS/BSS systems under FRAND-like commitments, combining margin squeeze tests with technical audits to assess whether Telkom's wholesale pricing allowed retail competitors to profitably serve end users. The **Vodacom Zero-Rating commitments** arising from the data services inquiry required interoperability obligations for educational content, showing how innovation incentives can align with the public-interest remedies that are a distinctive feature of South Africa's competition framework. The Commission's **investigations into ARV (antiretroviral) patent settlements** combined SAMRC price data, patent landscape analysis, and clinical trial timelines to assess whether settlement agreements between originator and generic manufacturers delayed market entry and harmed public health outcomes.
+South Africa's Competition Commission has addressed innovation and IP issues in several notable matters, though the jurisprudence is less developed than in the US and EU. The **Telkom vs. Internet Solutions** broadband case examined access to APIs and OSS/BSS systems under FRAND-like commitments, combining margin squeeze tests with technical audits to assess whether Telkom's wholesale pricing allowed retail competitors to profitably serve end users. The **Vodacom Zero-Rating commitments** arising from the data services inquiry required interoperability obligations for educational content, showing how innovation incentives can align with the public-interest remedies that are a distinctive feature of South Africa's competition framework. The Commission's **investigations into ARV (antiretroviral) patent settlements** combined medicine price data, patent landscape analysis, and SAHPRA registration timelines to assess whether settlement agreements between originator and generic manufacturers delayed market entry and harmed public health outcomes.
 
 ## Enhanced Visualizations
 
@@ -855,7 +902,7 @@ cat("\nUse these rates to model expected future approvals and consumer harm from
 
 2. **Data/code.** Using the royalty stack visualization in this chapter, calculate the total royalty burden if each SEP holder demands a "reasonable" 2% royalty and there are 8 essential patent holders. At what point does royalty stacking make manufacturing unprofitable (assuming a 15% target margin)?
 
-3. **Case discussion.** Compare the outcomes in *FTC v. Qualcomm* (US, reversed on appeal) and the *EC Qualcomm* decisions (fines upheld). What does the divergence tell us about jurisdictional differences in applying antitrust to SEP licensing?
+3. **Case discussion.** Compare the outcomes in *FTC v. Qualcomm* (US: district-court liability reversed by the Ninth Circuit) and the EC Qualcomm matters (the €997M Apple-exclusivity fine annulled by the General Court in 2022; the Icera predatory-pricing fine largely upheld in 2024). What do the three outcomes, taken together, say about the evidentiary discipline reviewing courts impose on SEP-adjacent antitrust theories in each jurisdiction?
 
 4. **Conceptual.** Define "killer acquisitions" and explain the empirical identification strategy from Cunningham, Ederer, and Ma (2021). What data would you need to test whether a specific pharmaceutical acquisition was a killer acquisition?
 

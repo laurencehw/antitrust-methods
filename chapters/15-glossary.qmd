@@ -18,9 +18,9 @@ This glossary collects key terms, statutes, cases, and methods referenced throug
 
 **Evidence triad.** The book's organizing framework: the integration of empirical analysis (quantitative estimation), documentary evidence (qualitative context), and expert judgment (translation to legal standards).
 
-**GUPPI (Gross Upward Pricing Pressure Index).** A merger screening metric equal to the diversion ratio from one merging product to the other, multiplied by the other product's margin. Expressed as a percentage of price; values above 5% typically warrant closer scrutiny.
+**GUPPI (Gross Upward Pricing Pressure Index).** A merger screening metric for product 1: GUPPI_1 = D_12 x M_2 x (P_2/P_1), the diversion ratio to the merging partner times the partner's percentage margin times the price ratio. Expressed as a percentage of price; values above 5% typically warrant closer scrutiny.
 
-**HHI (Herfindahl-Hirschman Index).** The sum of squared market shares (multiplied by 10,000) for all firms in a market. The primary concentration measure in US, EU, and South African merger guidelines. Thresholds: below 1,500 (unconcentrated), 1,500--2,500 (moderately concentrated), above 2,500 (highly concentrated).
+**HHI (Herfindahl-Hirschman Index).** The sum of squared market shares expressed as percentages (equivalently, squared fractional shares times 10,000) for all firms in a market. The primary concentration measure in US, EU, and South African merger guidelines. Under the 2023 US Merger Guidelines, a market is highly concentrated above 1,800, and a merger producing a post-merger HHI above 1,800 with a change of more than 100 points (or a combined share of 30% or more with a change of more than 100) triggers a structural presumption. The 2010 Guidelines used 1,500/2,500 bands, still encountered in older case law.
 
 **Labor supply elasticity.** The responsiveness of employment to wage changes at the firm level. Elasticities below 2--3 indicate meaningful monopsony power. See @sec-labor-markets.
 
@@ -54,7 +54,7 @@ This glossary collects key terms, statutes, cases, and methods referenced throug
 - **Digital Markets Act (2022/1925).** Ex ante regulation of gatekeeper platforms. @eu_dma_2022.
 
 ### South Africa
-- **Competition Act 89 of 1998.** Prohibits restrictive practices (Chapter 2), abuse of dominance (Chapter 3), and regulates mergers (Chapter 4). Includes public-interest factors. @sa_competition_act_1998.
+- **Competition Act 89 of 1998.** Chapter 2 prohibits restrictive practices (Part A) and abuse of dominance (Part B, ss. 8--9); Chapter 3 regulates mergers. Includes public-interest factors. @sa_competition_act_1998.
 - **2023 Merger Guidelines.** Competition Commission guidelines on merger assessment. @sa_merger_guidelines_2023.
 - **Competition Amendment Act 18 of 2018.** Expanded abuse-of-dominance provisions to address buyer power, price discrimination, and refusal to deal.
 
@@ -66,8 +66,8 @@ This glossary collects key terms, statutes, cases, and methods referenced throug
 - *United States v. Microsoft Corp.*, 253 F.3d 34 (D.C. Cir. 2001). Platform monopolization and tying. @us_microsoft_2001.
 - *Ohio v. American Express Co.*, 585 U.S. 529 (2018). Two-sided market definition. @us_amex_2018.
 - *United States v. Google LLC* (Search), No. 1:20-cv-03010 (D.D.C. 2024). Digital platform monopolization. @us_google_search_2023.
-- *United States v. JetBlue Airways Corp. & Spirit Airlines*, No. 1:22-cv-02439 (D.D.C. 2023). Airline merger blocked. @us_spirit_jetblue_2023.
-- *United States v. DaVita Inc. and Kent Thiry*, No. 1:21-CR-00229 (D. Colo. 2022). Criminal no-poach prosecution. @us_davita_2022.
+- *United States v. JetBlue Airways Corp. & Spirit Airlines*, No. 1:23-cv-10511 (D. Mass. 2024). Airline merger blocked, January 2024. @us_spirit_jetblue_2023.
+- *United States v. DaVita Inc. and Kent Thiry*, No. 1:21-CR-00229 (D. Colo. 2022). Criminal no-poach prosecution; the jury acquitted on all counts in April 2022. @us_davita_2022.
 - *Daubert v. Merrell Dow Pharmaceuticals, Inc.*, 509 U.S. 579 (1993). Expert testimony admissibility. @daubert_1993.
 
 ### European Union
@@ -77,11 +77,11 @@ This glossary collects key terms, statutes, cases, and methods referenced throug
 
 ### South Africa
 - *Competition Commission v. Pioneer Food (Pty) Ltd et al.* (Bread Cartel), Tribunal Case 15/CR/Feb07 (2007). @sa_bread_cartel_2007.
-- *Competition Commission v. Sasol Chemical Industries* (Polypropylene), Tribunal Case 107/CR/Sep11 (2014). @sa_sasol_2014.
+- *Competition Commission v. Sasol Chemical Industries* (Polypropylene), Competition Tribunal (2014), reversed by the Competition Appeal Court (2015). @sa_sasol_2014.
 - *Competition Commission v. Telkom SA SOC Ltd*, Tribunal Case 60/CR/Oct12 (2013). @sa_telkom_2013.
-- *Walmart/Massmart*, Tribunal Case 127/CR/Sep10 (2011). Merger with public-interest conditions.
+- *Walmart/Massmart*, Tribunal Case 73/LM/Nov10 (2011). Merger with public-interest conditions.
 - *Mediclinic/Matlosana*, Tribunal Case 94/LM/Nov14 (2014). Prohibited hospital merger.
-- *Heineken/Distell/Capevin*, Tribunal Case 133/CR/Sep21 (2022). Conditional approval with investment commitments.
+- *Heineken/Distell/Capevin*, Competition Tribunal large merger, conditionally approved (2023) with investment and employment commitments.
 
 ## Methods Index
 
@@ -103,16 +103,30 @@ This glossary collects key terms, statutes, cases, and methods referenced throug
 
 ## Additional Terms
 
+**But-for world.** The counterfactual scenario in which the challenged conduct never occurred, against which actual outcomes are compared to quantify harm. Every damages model---before/after, yardstick, difference-in-differences---is a method for constructing the but-for world. See @sec-litigation-practice.
+
 **Cellophane fallacy.** The error of defining a market too broadly by using the prevailing (monopoly) price as the benchmark for substitution analysis. Named after *United States v. E.I. du Pont de Nemours & Co.* (1956), where the Supreme Court found that cellophane competed with other flexible wrapping materials, ignoring that du Pont's monopoly pricing had already made substitutes appear competitive. Relevant to SSNIP analysis: the hypothetical monopolist test should start from the competitive price, not the current price.
+
+**Daubert standard.** The US framework for admissibility of expert testimony, from *Daubert v. Merrell Dow Pharmaceuticals* (1993) [@daubert_1993]. The trial judge acts as gatekeeper, asking whether the expert's method is testable, peer-reviewed, has a known error rate, and is generally accepted. In antitrust, it is the principal vehicle for challenging econometric damages and class-certification models. See @sec-litigation-practice.
 
 **ECPR (Efficient Component Pricing Rule).** An access pricing formula that sets the wholesale charge equal to the incumbent's incremental cost of providing access plus the opportunity cost of lost retail sales. Also known as the Baumol-Willig rule. Used in telecommunications and rail access remedies. See @sec-regulation-remedies.
 
-**Per se vs. rule of reason.** Two standards of antitrust analysis. *Per se* illegality applies to conduct that is presumed anticompetitive without detailed economic analysis (e.g., horizontal price-fixing, bid-rigging). The *rule of reason* requires a full economic analysis of the conduct's competitive effects, weighing pro-competitive justifications against anti-competitive harms. Most conduct---including vertical restraints, most mergers, and unilateral conduct---is evaluated under the rule of reason. South Africa uses a similar distinction, with certain horizontal agreements subject to a "per se prohibition" under Section 4(1)(a) of the Competition Act.
+**FRAND (fair, reasonable and non-discriminatory).** Licensing commitments that holders of standard-essential patents give to standard-setting organizations in exchange for inclusion in the standard. Disputes over what royalty satisfies FRAND, and whether seeking injunctions against willing licensees abuses dominance, sit at the boundary of patent and competition law. See @sec-innovation-ip.
+
+**Leniency / corporate immunity.** Programs that grant the first cartel participant to confess and cooperate full immunity from fines or prosecution, with reduced sanctions for later cooperators. The DOJ's leniency policy and South Africa's Corporate Leniency Policy are the main examples in this book; most cartel prosecutions begin with a leniency application. See @sec-cartels.
+
+**Lerner index.** A firm's price-cost margin, (P − MC)/P. It equals the inverse of the elasticity of demand facing the firm at the profit-maximizing price, making it the standard summary of market power; a Lerner index of zero corresponds to perfect competition.
+
+**Per se vs. rule of reason.** Two standards of antitrust analysis. *Per se* illegality applies to conduct that is presumed anticompetitive without detailed economic analysis (e.g., horizontal price-fixing, bid-rigging). The *rule of reason* requires a full economic analysis of the conduct's competitive effects, weighing pro-competitive justifications against anti-competitive harms. Most conduct---including vertical restraints, most mergers, and unilateral conduct---is evaluated under the rule of reason. South Africa uses a similar distinction, with cartel conduct (price fixing, market division, collusive tendering) subject to a per se prohibition under Section 4(1)(b) of the Competition Act; Section 4(1)(a) is the effects-based provision for other horizontal agreements.
+
+**Predominance.** The requirement under Federal Rule of Civil Procedure 23(b)(3) that questions common to the class predominate over individualized ones before a damages class can be certified. After *Comcast Corp. v. Behrend* (2013), the damages model must match the theory of liability and be capable of class-wide measurement. Common-impact regressions are the standard economic evidence on this question. See @sec-litigation-practice.
 
 **Public interest test.** A feature of South African merger review (and some other emerging-economy regimes) that requires the Competition Tribunal to consider factors beyond competitive effects, including employment impacts, small business participation, the ability of historically disadvantaged persons to participate in the economy, and the effect on specific industries or regions. No direct analogue in US or EU merger law.
 
 **SIEC test (Significant Impediment to Effective Competition).** The EU's substantive test for merger review under the EU Merger Regulation. Broader than the US "substantial lessening of competition" (SLC) test in that it explicitly captures non-coordinated effects in oligopolistic markets (the "gap" created by the removal of a maverick firm) without requiring proof of collective dominance.
 
 **SSNDQ (Small but Significant Non-transitory Decrease in Quality).** The zero-price analogue of SSNIP, used to define markets where users pay with attention or data rather than money. Asks whether a hypothetical monopolist could profitably degrade quality (e.g., increase ad load, reduce privacy protections) by a small but significant amount. Used in digital market investigations.
+
+**Treble damages.** Under Section 4 of the Clayton Act, a successful private antitrust plaintiff recovers three times its actual damages plus costs and attorney's fees. Trebling is automatic, not discretionary, and is the main reason US private enforcement dwarfs that of other jurisdictions; the EU and South Africa compensate single (actual) damages. See @sec-litigation-practice.
 
 **Trinko doctrine.** The US Supreme Court's holding in *Verizon v. Trinko* (2004) that there is generally no duty to deal with competitors under Section 2 of the Sherman Act, narrowing the essential facilities doctrine. Contrasts with the EU's more expansive approach under @eu_bronner_1998 and @eu_ims_2004.

@@ -144,12 +144,15 @@ plot_timeline <- function(events, title = "Event Timeline", date_breaks = "3 mon
   }
 
   events$date <- as.Date(events$date)
-  events$y_position <- seq_len(nrow(events)) %% 3
+  # Stagger labels across three non-zero heights so no stem has zero length
+  events$y_position <- (seq_len(nrow(events)) - 1) %% 3 + 1
+  # Nudge labels by 2% of the date span rather than a fixed number of days
+  nudge_days <- max(1, round(0.02 * as.numeric(diff(range(events$date)))))
 
   p <- ggplot(events, aes(x = date, y = y_position)) +
     geom_segment(aes(xend = date, yend = 0), color = "#666666", linewidth = 0.5) +
     geom_point(size = 3, color = "#0072B2") +
-    geom_text(aes(label = event), hjust = 0, nudge_x = 5, size = 3) +
+    geom_text(aes(label = event), hjust = 0, nudge_x = nudge_days, size = 3) +
     scale_x_date(date_breaks = date_breaks, date_labels = "%b %Y") +
     labs(title = title, x = "Date", y = NULL) +
     theme_antitrust() +
@@ -314,12 +317,15 @@ plot_waterfall <- function(data,
     val = data[[value_col]]
   )
 
-  # Handle NAs to prevent cumsum propagation
-  df$val[is.na(df$val)] <- 0
-
-  # Calculate running totals for waterfall positioning
-  df$end <- cumsum(df$val)
-  df$start <- c(0, head(df$end, -1))
+  # Rows with NA value are treated as totals: drawn from zero up to the
+  # running sum of the preceding steps (see the example in the docs)
+  is_total <- is.na(df$val)
+  step_vals <- ifelse(is_total, 0, df$val)
+  running <- cumsum(step_vals)
+  df$end <- running
+  df$start <- c(0, head(running, -1))
+  df$start[is_total] <- 0
+  df$val[is_total] <- df$end[is_total]
 
   # Add total bar if requested
   if (!is.null(total_label)) {
@@ -406,11 +412,11 @@ plot_waterfall <- function(data,
 #' Calculate HHI and change from market share data
 #'
 #' Computes HHI before and after a merger, with the change (delta HHI).
-#' Uses the 2023 Merger Guidelines thresholds:
-#' - HHI < 1,500: Unconcentrated
-#' - HHI 1,500-2,500: Moderately concentrated
-#' - HHI > 2,500: Highly concentrated
-#' - Delta HHI > 100: May warrant scrutiny
+#' Under the 2023 Merger Guidelines, a market with HHI above 1,800 is
+#' highly concentrated, and a merger is presumed to substantially lessen
+#' competition when post-merger HHI exceeds 1,800 and delta HHI exceeds
+#' 100 (or the combined share is at least 30% with delta HHI above 100).
+#' (The withdrawn 2010 Guidelines used 1,500/2,500 bands.)
 #'
 #' @param shares Data frame with columns: firm, share (as decimal 0-1)
 #' @param merging_firms Character vector of merging firm names
@@ -435,9 +441,10 @@ calc_hhi_change <- function(shares, merging_firms) {
   merged_share <- sum(shares$share_pct[shares$firm %in% merging_firms])
   merged_name <- paste(merging_firms, collapse = "+")
 
-  shares_post <- shares[!shares$firm %in% merging_firms, ]
+  shares_post <- shares[!shares$firm %in% merging_firms,
+                        c("firm", "share", "share_pct")]
   shares_post <- rbind(
-    shares_post,
+    as.data.frame(shares_post),
     data.frame(
       firm = merged_name,
       share = merged_share / 100,

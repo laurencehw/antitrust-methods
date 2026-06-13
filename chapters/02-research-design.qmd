@@ -19,26 +19,23 @@ Treat the data pipeline as infrastructure. Raw productions, public datasets, and
 ### Pre-analysis and litigation deliverables
 Before estimating anything, write a pre-analysis plan that documents main outcomes, treatment definitions, control groups, identifying assumptions, and robustness checks. Agencies expect this too: DOJ and FTC staff frequently ask for pre-specified models, DG COMP expects methodological appendices, and South African tribunals often require plain-language summaries usable in simultaneous interpretation. Include sensitivity tests (e.g., alternative market definitions, exclusion of outlier distributors, placebo periods) and specify the qualitative evidence that will contextualize results. As you progress, convert technical memos into courtroom-ready outputs—slide decks, white papers, expert declarations—without sacrificing reproducibility.
 
-## The Modern Causal Toolkit: The Credibility Revolution
+## The modern causal toolkit: the credibility revolution
 
 Modern antitrust economics increasingly relies on the "credibility revolution" in applied microeconomics—a shift from complex structural adjustments to transparent research designs that mimic randomized experiments. As championed by @angrist_pischke_2009 and popularized in *Causal Inference: The Mixtape* [@cunningham_2021], the goal is to identify a "natural experiment" where treatment (e.g., a merger, a cartel breakdown, or a regulation) is as good as randomly assigned.
 
-### The "Design-Based" Philosophy
+### The design-based philosophy
 Instead of asking "what controls do I need to fix my model?", design-based thinking asks "where does the variation come from?" If you cannot draw a Directed Acyclic Graph (DAG) showing how the treatment was assigned independent of the outcome, no amount of regression control will save the analysis [@pearl_2009]. This "reduced form" approach contrasts with the "structural" methods used in merger simulation (see @sec-io-toolkit), which rely on theoretical models to estimate "deep parameters".
 
-This approach prioritizes:
-1.  **Clean Identification:** Finding shocks (institutional details, policy boundaries, timing quirks) that separate treated and control groups.
-2.  **Transparency:** Presenting raw data visuals (like the event study plots below) before showing regression tables.
-3.  **Falsification:** Rigorously testing "placebos" (e.g., testing for effects before the merger happened, showing no effects in a time period where the treatment is not expected to have an effect) to prove the design is valid.
+The approach prioritizes clean identification: shocks---institutional details, policy boundaries, timing quirks---that separate treated and control groups. It shows the raw data first, with event-study plots before regression tables. And it demands falsification: placebo tests on pre-treatment periods or unaffected markets, where any "effect" would expose a broken design.
 
-### Core Causal Toolkit
+### Core causal toolkit
 While the toolkit is vast, antitrust practitioners lean heavily on a few workhorses:
 -   **Difference-in-Differences (DiD):** The gold standard for retrospective merger analysis.
 -   **Synthetic Control:** For "N=1" cases (e.g., a single national merger) where no single control unit exists.
 -   **Instrumental Variables (IV):** Used when prices are endogenous; we look for "shifters" (like tax changes or weather) that move supply but not demand.
 -   **Regression Discontinuity (RDD):** Exploits arbitrary cutoffs (e.g., population thresholds for regulation) to compare similar firms on either side of the line.
 
-::: {.callout-note title="Method Selection Guide"}
+::: {.callout-note title="Method selection guide"}
 ```
                             WHAT IS YOUR QUESTION?
                                      |
@@ -51,8 +48,8 @@ While the toolkit is vast, antitrust practitioners lean heavily on a few workhor
           v                          v                           v
    Do you have a             Use STRUCTURAL               Calculate
    control group?            SIMULATION                   overcharge or
-          |                  (Chapter 4, 6)               lost profits
-    +-----+-----+                                         (Chapter 12)
+          |                  (IO toolkit and              lost profits
+    +-----+-----+            mergers chapters)            (litigation chapter)
     |           |
     v           v
    YES          NO
@@ -88,16 +85,16 @@ While the toolkit is vast, antitrust practitioners lean heavily on a few workhor
 | **RDD** | Sharp cutoff determines treatment | Continuity at threshold | Regulatory thresholds, antitrust exemptions |
 | **Structural** | Forward-looking prediction needed | Model correctly specified | Merger simulation, counterfactual pricing |
 
-### The Evolution of DiD
+### The evolution of DiD
 A key development in recent years is the realization that the standard Two-Way Fixed Effects (TWFE) estimator can be biased when treatment timing varies (staggered adoption). If you are analyzing a rollup strategy where a firm buys competitors in 2018, 2019, and 2020, standard regressions might compare early-treated units to late-treated units in ways that invert the sign of the effect.
 
 Modern estimators like @callaway_santanna_2021 or @sun_abraham_2021 (implemented in R packages `did` and `fixest`) explicitly handle this heterogeneity. In litigation, relying on "old" TWFE without robustness checks is now a vulnerability.
 
-::: {.callout-tip title="Getting Up to Speed"}
+::: {.callout-tip title="Getting up to speed"}
 For a practical guide to these methods, we recommend three complementary resources:
 1.  **"Causal Inference: The Mixtape"** [@cunningham_2021]: Excellent for intuition and history. [mixtape.scunning.com](https://mixtape.scunning.com/)
 2.  **"The Effect"** [@huntington_klein_2021]: A highly accessible introduction to design-based thinking. [theeffectbook.net](https://theeffectbook.net/)
-3.  **"Causal Inference for the Brave and True"** [@alves_2022]: Covers intermediate topics including machine-learning approaches to interference. [matheusfacure.github.io/python-causality-handbook](https://matheusfacure.github.io/python-causality-handbook/)
+3.  **"Causal Inference for the Brave and True"** [@alves_2022]: Covers intermediate topics including machine-learning approaches to inference. [matheusfacure.github.io/python-causality-handbook](https://matheusfacure.github.io/python-causality-handbook/)
 
 For the academic foundations, see @angrist_pischke_2009 and their companion *Mastering 'Metrics* [@angrist_pischke_2015].
 :::
@@ -118,13 +115,13 @@ For the academic foundations, see @angrist_pischke_2009 and their companion *Mas
 :::
 
 ::: {.callout-note title="Debate"}
-Three debates recur in nearly every case. First, **stated vs. revealed preferences**: surveys can illuminate multi-sided platforms where transaction data are limited (app stores, adtech), but agencies often prefer revealed behavior. One compromise is to calibrate survey responses against observable churn or clickstream metrics, as seen in the DOJ’s ad-tech inquiries [@us_google_search_2023]. Second, **parallel trends under innovation**: in markets with rapid product cycles (semiconductors, fintech), clean control groups may not exist. Explain how you use feature-adjusted indices, synthetic controls, or machine-learning prognostics to approximate counterfactuals, and disclose residual risk. Third, **placebo tests**: courts increasingly expect falsification exercises. In wage-fixing litigation (e.g., poultry processors [@us_jindal_2021], US tech no-poach cases [@us_high_tech_nopoach_2015]), teams ran placebo periods and alternative employee groups to show effects were specific to collusive periods rather than macro shocks---labor market concentration analysis is developed in @sec-labor-markets.
+Three debates recur in nearly every case. First, **stated vs. revealed preferences**: surveys can illuminate multi-sided platforms where transaction data are limited (app stores, adtech), but agencies often prefer revealed behavior. One compromise is to calibrate survey responses against observable churn or clickstream metrics, as seen in the DOJ’s ad-tech inquiries [@us_google_search_2023]. Second, **parallel trends under innovation**: in markets with rapid product cycles (semiconductors, fintech), clean control groups may not exist. Explain how you use feature-adjusted indices, synthetic controls, or machine-learning prognostics to approximate counterfactuals, and disclose residual risk. Third, **placebo tests**: courts increasingly expect falsification exercises. In wage-fixing litigation (e.g., physical-therapist staffing [@us_jindal_2021], US tech no-poach cases [@us_high_tech_nopoach_2015]), teams ran placebo periods and alternative employee groups to show effects were specific to collusive periods rather than macro shocks---labor market concentration analysis is developed in @sec-labor-markets.
 :::
 
 ## Visualizations
 
 ### Event study around a merger announcement
-This figure uses publicly available equity data to demonstrate how to structure an event-study diagnostic for merger retrospectives or policy shocks. Replace tickers and the `event_date` to align with a specific matter; the scaffold keeps everything tidy for quick reporting.
+This figure structures an event-study diagnostic around the February 2013 American Airlines/US Airways announcement---for the *rivals*, not the merging parties. Neither party can appear in the window: American's parent AMR was in Chapter 11 and traded over the counter as AAMRQ, US Airways traded as LCC, and neither delisted history is served by free equity data sources (AAL only began trading in December 2013, after the merger closed). That gap is itself a methods lesson. Survivorship bias in free price data silently removes exactly the firms a merger retrospective cares about, so check ticker histories before designing the study. Rival returns still carry signal: positive rival abnormal returns on announcement are consistent with expected market power (softer competition ahead), negative ones with expected efficiencies. Replace tickers and the `event_date` to align with a specific matter.
 
 ```{r}
 #| label: research-design-merger-event
@@ -132,61 +129,71 @@ This figure uses publicly available equity data to demonstrate how to structure 
 #| warning: false
 #| echo: false
 #| cache: true
+#| cache.extra: !expr file.mtime("data/raw/finance_airlines.csv")
 #| fig-width: 9
 #| fig-height: 5
-library(tidyquant)
 library(dplyr)
 library(ggplot2)
+library(readr)
 source("program/R/helpers.R")
 
 event_date <- as.Date("2013-02-14") # American Airlines/US Airways announcement
-tickers <- c("AAL", "DAL", "LUV", "SPY") # SPY proxy for market return
+rivals <- c("DAL", "LUV", "UAL")    # rival carriers; SPY proxies the market
 
-prices <- tq_get(
-  tickers,
-  from = event_date - lubridate::days(180),
-  to   = event_date + lubridate::days(180)
-) |>
-  dplyr::group_by(symbol) |>
-  dplyr::arrange(date) |>
-  dplyr::mutate(ret = log(adjusted) - log(dplyr::lag(adjusted))) |>
-  dplyr::ungroup()
+prices <- tryCatch(
+  read_csv("data/raw/finance_airlines.csv", show_col_types = FALSE),
+  error = function(e) NULL
+)
 
-market <- prices |>
-  dplyr::filter(symbol == "SPY") |>
-  dplyr::select(date, mkt_ret = ret)
+if (!is.null(prices)) {
+  prices <- prices |>
+    filter(symbol %in% c(rivals, "SPY"),
+           date >= event_date - 180, date <= event_date + 180) |>
+    group_by(symbol) |>
+    arrange(date) |>
+    mutate(ret = log(adjusted) - log(lag(adjusted))) |>
+    ungroup()
 
-cars <- prices |>
-  dplyr::filter(symbol != "SPY") |>
-  dplyr::left_join(market, by = "date") |>
-  dplyr::mutate(
-    abnormal_ret = ret - mkt_ret,
-    rel_day = as.integer(date - event_date)
-  ) |>
-  dplyr::filter(rel_day >= -30, rel_day <= 30, !is.na(abnormal_ret)) |>
-  dplyr::group_by(symbol) |>
-  dplyr::arrange(rel_day) |>
-  dplyr::mutate(car = cumsum(abnormal_ret))
+  market <- prices |>
+    filter(symbol == "SPY") |>
+    select(date, mkt_ret = ret)
 
-ggplot(cars, aes(x = rel_day, y = car, color = symbol)) +
-  geom_hline(yintercept = 0, linewidth = 0.3, color = "gray65") +
-  geom_line(linewidth = 0.9) +
-  labs(
-    title = "Cumulative Abnormal Returns Around Merger Announcement",
-    subtitle = "Airline equities vs. SPY benchmark (±30 trading days)",
-    x = "Event time (days relative to 2013-02-14)",
-    y = "Cumulative abnormal return",
-    color = NULL
-  ) +
-  theme_antitrust() +
-  theme(legend.position = "bottom")
+  cars <- prices |>
+    filter(symbol != "SPY") |>
+    left_join(market, by = "date") |>
+    mutate(
+      abnormal_ret = ret - mkt_ret,
+      rel_day = as.integer(date - event_date)
+    ) |>
+    filter(rel_day >= -30, rel_day <= 30, !is.na(abnormal_ret)) |>
+    group_by(symbol) |>
+    arrange(rel_day) |>
+    mutate(car = cumsum(abnormal_ret))
+
+  ggplot(cars, aes(x = rel_day, y = car, color = symbol)) +
+    geom_hline(yintercept = 0, linewidth = 0.3, color = "gray65") +
+    geom_line(linewidth = 0.9) +
+    labs(
+      title = "Rival Carriers' Cumulative Abnormal Returns: AA/US Airways Announcement",
+      subtitle = "Delta (DAL), Southwest (LUV), and United (UAL) vs. SPY benchmark (±30 trading days).\nMerging parties absent by construction: AAMRQ and LCC delisted; see text.",
+      x = "Event time (days relative to 2013-02-14)",
+      y = "Cumulative abnormal return",
+      color = NULL
+    ) +
+    theme_antitrust() +
+    theme(legend.position = "bottom")
+} else {
+  cat("Airline price data not available.",
+      "Run program/scripts/02_finance_extended.R to build",
+      "data/raw/finance_airlines.csv.\n")
+}
 ```
 
 ## Exercises
 
 1. **Conceptual.** Draw a DAG for a hospital merger analysis where the treatment is the merger, the outcome is price, and potential confounders include local demand shocks and insurer network changes. Identify at least one valid instrument and explain why it satisfies the exclusion restriction.
 
-2. **Data/code.** Using the event study code scaffold in this chapter, modify the tickers to analyze the cumulative abnormal returns around a different merger announcement of your choosing. Compare the pattern for the merging parties vs. rivals vs. the market index.
+2. **Data/code.** The chapter's event study shows rivals only, because the merging parties' tickers (AAMRQ, LCC) are delisted and free sources no longer serve them. (a) Modify the scaffold to analyze rival cumulative abnormal returns around a different merger announcement of your choosing, and interpret the sign: what would positive rival returns suggest about expected competitive effects? (b) Obtain AAMRQ and LCC price histories from a survivorship-bias-free source (e.g., CRSP via WRDS) and add the merging parties to the figure. What does comparing party and rival returns add to the rivals-only picture?
 
 3. **Conceptual.** Explain why standard two-way fixed effects (TWFE) can produce biased estimates under staggered treatment timing. Sketch a scenario in antitrust (e.g., a serial acquirer buying firms in 2018, 2019, 2020) where this bias would be particularly severe.
 

@@ -141,7 +141,7 @@ To compute effective prices:
 - Calculate the marginal benefit of reaching the threshold: if a buyer purchases 95 units at the list price and buying 5 more units triggers a 10% rebate on all 100 units, the effective price of those last 5 units is deeply negative.
 - Compare effective prices to rivals' costs or list prices to assess whether contestation is feasible.
 
-The European Commission's Intel decision [@eu_intel_2017] applied a version of this test, focusing on whether the rebates made it unprofitable for AMD to compete for incremental volumes even when AMD's products were technically competitive. The as-efficient competitor (AEC) test, refined post-Intel, requires showing that an equally efficient rival would be foreclosed.
+The European Commission's 2009 *Intel* decision applied a version of this test, asking whether the rebates made it unprofitable for AMD to compete for incremental volumes even when AMD's products were technically competitive. The litigation that followed turned the AEC analysis itself into the battleground. The Court of Justice held in 2017 that the Commission had to engage with Intel's criticisms of its AEC analysis [@eu_intel_2017]; on remand the General Court annulled the rebates finding in 2022, identifying errors in the Commission's AEC analysis; and the CJEU dismissed the Commission's appeal in October 2024 [@cjeu_intel_2024]. The Commission's re-adopted €376 million fine (September 2023) covers only the naked restrictions — payments to delay or cancel AMD-based products — not the rebates. The AEC test survives as the analytical framework. The lesson of *Intel* is that the analysis must be executed well enough to withstand an as-efficient cross-examination.
 
 #### Effective price waterfall for loyalty rebates
 
@@ -159,72 +159,58 @@ library(ggplot2)
 library(patchwork)
 source("program/R/helpers.R")
 
-rebates <- tibble::tribble(
-  ~tier, ~volume, ~list_price, ~rebate,
-  "Baseline (0-79%)", 79, 100, 0,
-  "Threshold units (80-99%)", 20, 100, 0,
-  "Bonus units (100%+)", 10, 100, 0
-) |>
-  mutate(
-    revenue = volume * list_price,
-    cumulative_volume = cumsum(volume)
-  )
-
 # Scenario: Customer buying ~100 units, loyalty rebate triggers at 95% share
 # List price $100/unit, 10% retroactive rebate at 95% threshold
 # Rival has incremental cost of $75/unit
 
-# Calculate effective prices under retroactive rebate
+# Buying the last 5 units triggers a 10% rebate on ALL 100 units ($1,000).
+# The rebate recaptured per incremental unit is $1,000 / 5 = $200, so the
+# effective price of those 5 units is 100 - 200 = -$100 each.
 list_price <- 100
-rebate_pct <- 0.10  # 10% retroactive rebate
+rebate_value <- 100 * list_price * 0.10        # $1,000 across all 100 units
+marginal_units <- 5
+rebate_per_unit <- rebate_value / marginal_units  # $200 per incremental unit
+effective_price <- list_price - rebate_per_unit   # -$100
 
-# For the customer at threshold: buying 5 more units from incumbent triggers
-# rebate on ALL 100 units = $1000 benefit, so effective price of last 5 units
-# is (5 * 100 - 1000) / 5 = -$100 per unit
-
-effective_price_data <- tibble::tribble(
-  ~component,                      ~value,   ~category,
-  "List price",                    100,      "baseline",
-  "Incremental units to threshold", 100,     "marginal",
-  "Value of retroactive rebate",   -1000/5,  "rebate",  # $1000 rebate / 5 marginal units
-  "Effective price (last 5 units)", -100,    "effective"
+waterfall_steps <- tibble::tibble(
+  component = factor(
+    c("List price",
+      "Rebate recaptured\n($1,000 over 5 units)",
+      "Effective price\n(last 5 units)"),
+    levels = c("List price",
+               "Rebate recaptured\n($1,000 over 5 units)",
+               "Effective price\n(last 5 units)")
+  ),
+  start = c(0, list_price, 0),
+  end = c(list_price, effective_price, effective_price),
+  category = c("baseline", "rebate", "effective"),
+  id = 1:3
 )
 
 # Waterfall chart showing effective price calculation
-p_waterfall <- effective_price_data |>
-  filter(component != "Effective price (last 5 units)") |>
-  mutate(
-    component = factor(component, levels = c("List price",
-                                              "Incremental units to threshold",
-                                              "Value of retroactive rebate")),
-    end = cumsum(value),
-    start = lag(end, default = 0),
-    id = row_number()
-  ) |>
+p_waterfall <- waterfall_steps |>
   ggplot(aes(x = component)) +
   geom_rect(aes(xmin = id - 0.4, xmax = id + 0.4,
-                ymin = start, ymax = end, fill = category),
+                ymin = pmin(start, end), ymax = pmax(start, end), fill = category),
             color = "white", linewidth = 0.8) +
   geom_hline(yintercept = 75, linetype = "dashed", color = "#E69F00", linewidth = 1) +
   geom_hline(yintercept = 0, color = "gray30") +
-  annotate("text", x = 2.5, y = 80,
+  annotate("text", x = 1.6, y = 85,
            label = "Rival incremental cost ($75)",
            color = "#E69F00", fontface = "bold", size = 3.5) +
-  annotate("segment", x = 2.8, xend = 3.2, y = -100, yend = -100,
-           color = "#D55E00", linewidth = 2) +
-  annotate("text", x = 3, y = -115,
+  annotate("text", x = 3, y = effective_price - 18,
            label = "Effective price:\n-$100/unit",
            color = "#D55E00", fontface = "bold", size = 4) +
   scale_fill_manual(values = c("baseline" = "#0072B2",
-                                "marginal" = "#56B4E9",
-                                "rebate" = "#D55E00")) +
+                                "rebate" = "#56B4E9",
+                                "effective" = "#D55E00")) +
   scale_y_continuous(labels = scales::dollar_format()) +
   labs(
     title = "Effective price waterfall under retroactive loyalty rebate",
-    subtitle = "Customer at 95-unit threshold: effective price of last 5 units to reach 100% share",
+    subtitle = "Customer at 95-unit threshold: the last 5 units carry an effective price of -$100",
     x = NULL,
     y = "Price per unit",
-    caption = "Scenario: $100 list price, 10% retroactive rebate at 95% volume share.\nRival with $75 incremental cost cannot profitably compete for marginal units."
+    caption = "Scenario: $100 list price, 10% retroactive rebate at 95% volume share.\nThe rebate recaptured per incremental unit ($200) exceeds the list price, so the effective price is -$100.\nA rival with $75 incremental cost cannot profitably compete for these units."
   ) +
   theme_antitrust() +
   theme(
@@ -283,7 +269,7 @@ p_waterfall / p_evolution +
 
 **Data replacement:** Use actual customer purchase data and contract terms from litigation discovery. Calculate effective prices per customer segment; overlay rival cost estimates from cost studies or public financial statements. For share evolution, use market monitoring data or customer panel data tracking purchases before/after contract adoption.
 
-**As-efficient competitor (AEC) test:** The waterfall shows that even an equally efficient rival (cost = $75) cannot profitably compete for the marginal units that trigger the rebate, as the effective price faced by the customer is deeply negative. This satisfies the AEC framework established in *Intel* [@eu_intel_2017] and subsequent EU enforcement.
+**As-efficient competitor (AEC) test:** The waterfall shows that even an equally efficient rival (cost = $75) cannot profitably compete for the marginal units that trigger the rebate: the effective price of those units is -$100. An AEC analysis of this kind sits at the center of EU rebates enforcement, but *Intel* is the cautionary tale on execution rather than a safe harbor. The General Court annulled the Commission's rebates finding in 2022 because its AEC analysis contained errors, and the CJEU dismissed the Commission's appeal in October 2024 [@eu_intel_2017]. The test remains analytically central; a flawed AEC analysis is fatal to the case built on it.
 
 ### Qualitative evidence for rebates and exclusivity
 
@@ -362,11 +348,12 @@ event_fit <- feols(
   data = panel_contracts
 )
 
-# Extract coefficients for plotting
+# Extract coefficients for plotting. fixest names i() terms like
+# "rel_period::-3:treated", so pull the (possibly negative) integer after "::".
 event_coefs <- broom::tidy(event_fit, conf.int = TRUE) |>
-  filter(grepl("rel_period", term)) |>
+  filter(grepl("rel_period::", term)) |>
   mutate(
-    rel_period = as.numeric(gsub("rel_period::(.*):treated::TRUE", "\\1", term))
+    rel_period = as.numeric(sub("^rel_period::(-?[0-9]+).*$", "\\1", term))
   ) |>
   # Add reference period (-1) with zero effect
   bind_rows(tibble(rel_period = -1, estimate = 0, std.error = 0,
@@ -461,7 +448,7 @@ Where price-cost tests are ambiguous—prices near AAC, cost allocation disputes
 - **Share and capacity shifts**: Plot market shares and capacity utilization over time; sharp increases in the alleged predator's share coinciding with rival exits support the predation narrative.
 - **Subsequent price increases**: If prices rose significantly after rivals exited, recoupment is more plausible. Use difference-in-differences with unaffected markets as controls to isolate the predation effect.
 
-In the EU *AKZO* case [@eu_akzo_1991], internal documents referencing a plan to eliminate a competitor were central to the finding of abuse, even though the price-cost analysis was contested. Similarly, in the Southern African *Media24* case (discussed earlier), predatory intent combined with below-cost pricing over an extended period led to liability.
+In the EU *AKZO* case [@eu_akzo_1991], internal documents referencing a plan to eliminate a competitor were central to the finding of abuse, even though the price-cost analysis was contested. The Southern African *Media24* case (discussed later in this chapter) shows the limit of that strategy. The Tribunal's 2015 predation finding rested on prices above avoidable cost but below average total cost, with intent evidence supplying the rest; the Competition Appeal Court overturned it in 2019. Intent could not substitute for a price-cost test the conduct actually failed.
 
 ## Tying, bundling, and technical integration
 
@@ -486,7 +473,7 @@ Tying occurs when a seller conditions the sale of one product (the tying product
 
 Tying and bundling often generate legitimate efficiencies: cost savings from unified billing, improved interoperability, or enhanced user experience. The key question is whether the same efficiencies could be achieved through less-restrictive means.
 
-For example, in *United States v. Microsoft* [@us_microsoft_2001], the court found that tying Internet Explorer to Windows foreclosed Netscape and Java, undermining the middleware threat to Microsoft's operating system monopoly. For economic analysis of tying and bundling, see @whinston_2006. While Microsoft argued integration benefits, the court found that much of the integration could have been accomplished without contractual or technical restrictions on rivals' ability to compete.
+*United States v. Microsoft* [@us_microsoft_2001] is the canonical example, but read the appellate holding carefully. The D.C. Circuit *vacated* the district court's per se tying ruling and remanded it for rule-of-reason analysis (the government later dropped the claim). What it affirmed was Section 2 monopoly maintenance: the OEM license restrictions, the commingling of Internet Explorer code with Windows, and the Java conduct that together suppressed the middleware threat to Microsoft's operating-system monopoly. For economic analysis of tying and bundling, see @whinston_2006. While Microsoft argued integration benefits, the court found that much of the integration could have been accomplished without contractual or technical restrictions on rivals' ability to compete.
 
 Similarly, in *Google Android* [@eu_google_android_2018], the European Commission found that Google's requirement that manufacturers pre-install Google Search and Chrome as a condition of licensing the Play Store foreclosed rivals, even though the Commission acknowledged integration efficiencies. The remedy required Google to offer Android without the mandatory pre-installation bundle, demonstrating the feasibility of less-restrictive alternatives.
 
@@ -659,7 +646,7 @@ Most-favored-nation (MFN) or parity clauses require sellers to offer the platfor
 - **Fee pass-through**: Absent MFNs, platforms that lower fees should see sellers reduce retail prices. With MFNs, pass-through is muted.
 - **Entry and platform switching**: Document whether rival platforms grew or stagnated after MFN adoption; interview sellers about constraints on multi-homing strategies.
 
-The European Commission challenged Amazon's across-platform MFN (parity requirement) in several member states, finding that it insulated Amazon from price competition and reduced sellers' incentives to join rival platforms [@eu_amazon_parity]. The UK Competition and Markets Authority similarly required removal of broad MFNs in online hotel booking following its investigation [@cma_hotel_booking].
+The enforcement record against Amazon's across-platform price parity was national, not Commission-led: Germany's Bundeskartellamt moved against the clauses in 2013, the UK Office of Fair Trading pursued a parallel investigation, and Amazon dropped the parity requirement across the EU. The European Commission's later Amazon commitments addressed analogous parity clauses in e-books [@eu_amazon_parity]. The UK record on hotel booking is also more equivocal than often remembered — the CMA closed its online hotel-booking investigation in 2015 without imposing remedies. Where the UK did prohibit wide MFNs was private motor insurance, following the CMA's 2014 market investigation [@cma_hotel_booking].
 
 #### MFN effects on price dispersion and fee pass-through
 
@@ -802,7 +789,7 @@ p_passthrough <- fee_passthrough |>
 # Combine panels
 (p_dispersion | p_platform_prices) / p_passthrough +
   plot_annotation(
-    caption = "Data: Synthetic for illustration. Replace with platform transaction data and hotel pricing across channels.\nSee CMA hotel booking investigation and EC Amazon parity cases for real applications."
+    caption = "Data: Synthetic for illustration. Replace with platform transaction data and hotel pricing across channels.\nSee the Bundeskartellamt's Amazon price-parity case (2013) and the CMA's private motor insurance MFN prohibition (2014) for real applications."
   )
 ```
 
@@ -851,8 +838,10 @@ set.seed(456)
 
 margin_squeeze_data <- tibble(
   quarter = quarters,
-  # Incumbent's wholesale access price to rivals
-  wholesale_price_external = 45 + rnorm(length(quarters), 0, 2),
+  # Incumbent's wholesale access price to rivals: $45 through Q10,
+  # raised by $10 from Q11 onward (the squeeze episode)
+  wholesale_price_external = 45 + if_else(quarter >= 11, 10, 0) +
+    rnorm(length(quarters), 0, 2),
   # Incumbent's retail price (end-user)
   retail_price_incumbent = 75 + rnorm(length(quarters), 0, 3),
   # Downstream costs (customer acquisition, support, billing)
@@ -873,10 +862,14 @@ margin_squeeze_data <- tibble(
 p_margin <- margin_squeeze_data |>
   ggplot(aes(x = quarter)) +
   geom_hline(yintercept = 0, color = "gray30", linetype = "solid") +
+  geom_vline(xintercept = 10.5, linetype = "dashed", color = "gray50") +
   geom_ribbon(aes(ymin = pmin(rival_margin, 0), ymax = 0),
               fill = "#D55E00", alpha = 0.3) +
   geom_line(aes(y = rival_margin), color = "#0072B2", linewidth = 1.2) +
   geom_point(aes(y = rival_margin, color = squeeze), size = 3) +
+  annotate("text", x = 10.5, y = 12,
+           label = "Wholesale price\n+$10 (Q11)",
+           hjust = -0.1, size = 3.2, color = "gray40") +
   scale_color_manual(values = c("TRUE" = "#D55E00", "FALSE" = "#0072B2"),
                      labels = c("No squeeze", "Margin squeeze")) +
   labs(
@@ -889,39 +882,40 @@ p_margin <- margin_squeeze_data |>
   theme_antitrust() +
   theme(legend.position = "bottom")
 
-# Panel 2: Price waterfall showing squeeze mechanism
+# Panel 2: Price waterfall showing squeeze mechanism (pre-increase quarters)
+# Uses the DGP means for Q1-Q10: retail $75, wholesale $45, downstream $22,
+# leaving a rival margin of 75 - 45 - 22 = $8. The final bar is a total
+# (drawn from zero), not another cumulative step.
+rival_margin_avg <- 75 - 45 - 22  # $8
 waterfall_data <- tibble(
   component = factor(c("Retail price", "Wholesale access", "Downstream costs", "Rival margin"),
                      levels = c("Retail price", "Wholesale access", "Downstream costs", "Rival margin")),
-  value = c(75, -47, -22, 75 - 47 - 22),
-  category = c("revenue", "cost", "cost", "margin")
-) |>
-  mutate(
-    end = cumsum(value),
-    start = lag(end, default = 0),
-    id = row_number()
-  )
+  start = c(0, 75, 30, 0),
+  end = c(75, 30, rival_margin_avg, rival_margin_avg),
+  category = c("revenue", "cost", "cost", "margin"),
+  id = 1:4
+)
 
 p_waterfall_margin <- waterfall_data |>
   ggplot(aes(x = component)) +
   geom_rect(aes(xmin = id - 0.4, xmax = id + 0.4,
-                ymin = start, ymax = end, fill = category),
+                ymin = pmin(start, end), ymax = pmax(start, end), fill = category),
             color = "white", linewidth = 0.8) +
   geom_hline(yintercept = 0, color = "gray30") +
   geom_hline(yintercept = 10, linetype = "dashed", color = "#E69F00", linewidth = 1) +
   annotate("text", x = 3.5, y = 12,
            label = "Minimum viable margin",
            color = "#E69F00", size = 3.5) +
-  annotate("text", x = 4, y = waterfall_data$end[4] + 1.5,
-           label = paste0("$", round(waterfall_data$value[4], 1)),
+  annotate("text", x = 4, y = rival_margin_avg + 2.5,
+           label = paste0("$", rival_margin_avg),
            color = "#D55E00", fontface = "bold", size = 4.5) +
   scale_fill_manual(values = c("revenue" = "#0072B2",
                                 "cost" = "#D55E00",
                                 "margin" = "#E69F00")) +
   scale_y_continuous(labels = scales::dollar_format()) +
   labs(
-    title = "Margin squeeze waterfall (average Q1-Q16)",
-    subtitle = "Rival margin of $6 insufficient to sustain operations",
+    title = "Margin waterfall (average Q1-Q10, before the increase)",
+    subtitle = "An $8 margin clears the strict AEC test; the Q11 wholesale increase pushes it below zero",
     x = NULL,
     y = "Price per customer ($)"
   ) +
@@ -962,7 +956,7 @@ p_wholesale_compare <- margin_squeeze_data |>
   )
 ```
 
-**Interpretation:** The margin squeeze test shows that an equally efficient rival—one with the same downstream costs as the incumbent—cannot break even when paying the incumbent's wholesale access price and competing at the incumbent's retail price. The waterfall reveals that the rival margin ($6) is well below the minimum required to sustain operations (~$10). The wholesale price comparison shows that the incumbent implicitly transfers wholesale access to its own retail arm at a lower price than charged to rivals, violating the non-discrimination principle.
+**Interpretation:** Through quarter 10 the imputed rival margin averages $8 — positive, so no squeeze under the strict as-efficient-competitor test, though already below the roughly $10 needed to fund fixed costs and customer acquisition at scale. From quarter 11 the incumbent raises the wholesale access price by $10 and the margin turns negative: an equally efficient rival — one with the same downstream costs as the incumbent — now loses money on every customer it serves at the incumbent's retail price. That switch from thin-but-positive to negative is what the squeeze test is built to detect. The wholesale comparison adds the discrimination evidence: the incumbent implicitly transfers access to its own retail arm at about $38, below the $45 (and later $55) charged to rivals.
 
 **Data replacement:** Use regulatory cost accounting data, interconnection agreements, and retail tariff schedules. For telecommunications, water, electricity, or transport access cases, request separated accounts showing upstream and downstream cost allocations. Cross-check implicit transfer prices against actual wholesale prices charged to third parties.
 
@@ -972,8 +966,8 @@ For FRAND-committed standard-essential patents (SEPs), the analysis shifts to wh
 
 ### Southern African exclusion case evidence
 - **Telkom wholesale broadband (Competition Commission v. Telkom SA, 2013 settlement).** Using bitstream and IPConnect price data from 2005–2009, the Commission demonstrated that Telkom’s effective wholesale prices exceeded its retail DSL tariffs for 91% of line-speed combinations once access and backhaul costs were included, yielding a classic margin squeeze. The Tribunal-approved settlement paired a R200 million administrative penalty with mandated price cuts (down to cost-plus 8%) and functional separation of wholesale and retail reporting lines, providing a replicable margin-test template for regulated utilities.
-- **Media24 community newspapers (Competition Commission v. Media24, Tribunal case 122/CR/Dec12).** Investigators constructed four-year panel data on advertising volumes, pagination, and production costs for Forum and Gold-Net News titles in Welkom. The Tribunal relied on an avoidable-cost test showing that Forum’s ad rates sat 20–30% below incremental costs for 18 consecutive months, combined with internal documents targeting rival exit, to find predatory pricing. The remedy required cost-based pricing governance and quarterly reporting on advertising discounts.
-- **Polypropylene feedstock (Competition Commission v. Sasol Chemical Industries, 2014 CAC judgment).** The Commission benchmarked Sasol’s propylene prices against export parity and long-run incremental cost, revealing margins 41–47% above competitive levels despite surplus capacity. The Tribunal’s excessive-pricing ruling—upheld by the Competition Appeal Court—ordered R534 million in penalties and compelled publication of a transparent pricing formula, underlining how cost benchmarking can support exploitation and exclusion theories simultaneously.
+- **Media24 community newspapers (Competition Commission v. Media24, Tribunal case 122/CR/Dec12).** Investigators constructed four-year panel data on advertising volumes, pagination, and production costs for the Forum and Gold-Net News titles in Welkom. Forum's ad rates covered avoidable cost but sat below average total cost, so the Tribunal's 2015 predation finding rested on that ATC shortfall plus internal documents targeting rival exit. The Competition Appeal Court overturned the finding in 2019, rejecting the ATC-plus-intent theory as a basis for predation liability. The episode is the region's clearest statement that intent evidence cannot rescue prices that pass the avoidable-cost test.
+- **Polypropylene feedstock (Competition Commission v. Sasol Chemical Industries).** The Commission benchmarked Sasol’s propylene and polypropylene prices against export parity and long-run cost, and in 2014 the Tribunal found excessive pricing and imposed a R534 million penalty. The Competition Appeal Court set the finding aside in June 2015. It faulted the cost side of the case — the Tribunal had reallocated Sasol’s actual costs and capital values in ways the CAC found unjustified — and the comparator benchmarks built on them. The reversal is itself the methods lesson: an excessive-pricing finding stands or falls on cost-allocation and comparator choices that survive appellate scrutiny.
 
 ::: {.callout-note title="Method box: Foreclosure share calculation"}
 When evaluating exclusive dealing or loyalty rebate programs, compute the share of demand or capacity that is foreclosed to rivals:
@@ -1023,7 +1017,7 @@ contracts_data |>
   theme_antitrust()
 ```
 
-Interpretation: If the foreclosed share (here 58%) exceeds the threshold needed for rivals to reach minimum efficient scale, and contracts are long-duration with staggered renewals, foreclosure concerns are substantial.
+Interpretation: If the foreclosed share (here 47.1%) exceeds the threshold needed for rivals to reach minimum efficient scale, and contracts are long-duration with staggered renewals, foreclosure concerns are substantial.
 :::
 
 ::: {.callout-note title="Method box: Event study around contract rollout"}
@@ -1075,10 +1069,22 @@ contracts[, c("customer", "marginal_units", "effective_marginal_price", "margin_
 ::: {.callout-note title="Jurisdictional comparison: Monopolization standards"}
 **United States (Sherman Act Section 2):** Requires monopoly power *plus* willful acquisition or maintenance through exclusionary conduct. The rule of reason applies; courts weigh procompetitive justifications against anticompetitive effects. Key standards include *Brooke Group* (predation requires below-cost pricing + recoupment) [@us_brooke_group_1993], *Trinko* (no general duty to deal) [@us_trinko_2004], and *Amex* (two-sided platform analysis) [@us_amex_2018].
 
-**European Union (Article 102 TFEU):** Applies to firms in a "dominant position." The as-efficient competitor (AEC) test is the primary framework for pricing abuses post-*Intel* [@eu_intel_2017]. Explicit recoupment proof is not required for predatory pricing. Self-preferencing is recognized as a standalone theory of harm (*Google Shopping*) [@eu_google_shopping_2017]. Remedies tend toward behavioral obligations.
+**European Union (Article 102 TFEU):** Applies to firms in a "dominant position." The as-efficient competitor (AEC) test frames pricing abuses post-*Intel* [@eu_intel_2017] — and *Intel* shows the test cuts both ways: the General Court annulled the Commission's rebates finding in 2022 for errors in its AEC analysis, the CJEU dismissed the appeal in October 2024, and the re-imposed €376 million fine covers only the naked restrictions. Explicit recoupment proof is not required for predatory pricing. Self-preferencing is recognized as a standalone theory of harm (*Google Shopping*) [@eu_google_shopping_2017]. Remedies tend toward behavioral obligations.
 
 **South Africa (Competition Act Section 8):** Prohibits abuse of dominance with explicit provisions for excessive pricing (Section 8(a)) and exclusionary acts (Section 8(c)/(d)). The Tribunal has applied both price-cost tests (*Media24*) and margin squeeze analyses (*Telkom*), with public-interest considerations (employment, SME development) shaping remedy design.
 :::
+
+## The US record, 2024--2026
+
+For two decades the newest landmark US monopolization judgment was *Microsoft*. Three district court decisions between August 2024 and November 2025 changed that, and each turns on a theme this chapter has developed.
+
+**Google search: liability, then a behavioral remedy.** In August 2024, Judge Mehta found that Google had unlawfully maintained monopolies in general search services and general search text advertising under Section 2 [*United States v. Google LLC*; @us_google_search_liability_2024]. The mechanism was distribution. Exclusive default and preinstallation agreements — including the multibillion-dollar payments that made Google the default on Safari and on Android devices — locked up the channels through which queries arrive and denied rivals the scale needed to compete. The September 2025 remedies opinion [@us_google_search_remedies_2025] is the document to study alongside step 6 of this chapter's workflow. The court declined the government's request to divest Chrome. It barred exclusive default and preinstallation agreements, required Google to share certain search index and user-interaction data with qualified competitors, and placed compliance under technical-committee oversight. The remedy targets the diagnosed mechanism — foreclosed distribution and denied scale — rather than the firm's structure, the fit logic that @sec-regulation-remedies develops. Appeals were pending as of this writing, so treat the remedy package as provisional.
+
+**Google ad tech: tying plus monopoly maintenance.** In April 2025, Judge Brinkema found Section 2 liability in two markets — publisher ad servers and ad exchanges — and held that Google unlawfully tied its publisher ad server (DFP) to its exchange (AdX) [*United States v. Google LLC*; @us_google_adtech_2025]. The claim that Google monopolized a third market, advertiser ad networks, failed. The split result rewards close reading: the same defendant and the same integrated stack produced liability only where the evidence established durable power in a properly defined market and a tie that foreclosed rivals. Remedies proceedings followed.
+
+**FTC v. Meta: market power must be proven, and proven current.** In November 2025, Judge Boasberg entered judgment for Meta, holding that the FTC had failed to prove that Meta currently holds monopoly power in the alleged market for personal social networking services [*FTC v. Meta Platforms, Inc.*; @us_ftc_meta_2025]. The case failed at this chapter's step 2. Monopoly power must be shown now, in a market that survives substitution evidence — and evidence of competition from short-video rivals undercut the boundaries the complaint had drawn years earlier. Shares computed within a contested market definition could not carry the burden.
+
+Read together, the three cases confirm the framework rather than replace it. Conduct theories — default tying, technical tying — win where both the foreclosure mechanism and current market power are proven; they fail where market power is not. And the search remedy marks where US relief currently sits: behavioral obligations plus data access, with structural separation held in reserve.
 
 ## Exercises
 

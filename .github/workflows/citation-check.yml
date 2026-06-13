@@ -34,8 +34,8 @@ jobs:
           # --no-execute skips R chunks (no data/keys needed) but pandoc + citeproc
           # still run, so unresolved citations surface as warnings.
           quarto render --no-execute 2>&1 | tee render.log || true
-          if grep -Eni "citeproc|citation[^.]*not found|reference[^.]*not found" render.log; then
-            echo "::error::Unresolved citation warning(s) in render log (see matches above)"
+          if grep -Eni "citeproc|citation[^.]*not found|reference[^.]*not found|unable to resolve crossref|cross-reference not found" render.log; then
+            echo "::error::Unresolved citation or crossref warning(s) in render log (see matches above)"
             exit 1
           fi
-          echo "No unresolved-citation warnings in render log."
+          echo "No unresolved citation or crossref warnings in render log."

@@ -5,7 +5,7 @@ The tools and frameworks from the preceding chapters---market definition ([Chapt
 We also introduce new evidence types that matter especially in digital markets: telemetry data, clickstream analysis, API documentation, and product requirements documents. The intersection of technical product knowledge and economic reasoning defines much of the frontier in digital platform enforcement, from the US cases against Google and Meta to the EU's Digital Markets Act and South Africa's Online Intermediation Platforms Market Inquiry.
 
 ## Learning goals
-Digital markets combine traditional IO concepts with product design, governance, and behavioral nudges. Drawing on DMA/Digital Markets Unit briefings and recent enforcement actions, this chapter helps you:
+Digital markets combine traditional IO concepts with product design, governance, and behavioral nudges. Drawing on DMA compliance materials, the UK's digital-markets regime under the Digital Markets, Competition and Consumers Act 2024, and recent enforcement actions, this chapter helps you:
 
 - Analyze multi-sided participation, indirect network effects, and multi-homing incentives.
 - Quantify self-preferencing, ranking changes, and default effects on user/merchant behavior.
@@ -24,7 +24,7 @@ Expect to combine telemetry, clickstream data, partner contracts, and qualitativ
 
 In June 2017, the European Commission fined Google 2.42 billion euros for systematically favoring its own comparison-shopping service in search results---a decision that launched a decade of platform antitrust. The case turned on a deceptively simple empirical question: did Google's algorithmic ranking decisions steer traffic away from rival comparison-shopping sites and toward Google Shopping? The answer required analyzing terabytes of clickstream data, modeling user behavior across search result positions, and disentangling algorithmic design choices from organic quality differences.
 
-The South African Competition Commission's OIPMI inquiry (2020--2023) confronted parallel questions in a developing-market context: whether Takealot's marketplace algorithm favored its own retail arm, whether food-delivery commission structures foreclosed small restaurants, and whether Google's search dominance warranted the same remedies in Johannesburg as in Brussels. These cases, and the US DOJ's subsequent monopolization suits against Google in search and advertising technology, show that digital platform enforcement is now global, with common empirical challenges that recur across jurisdictions even as legal standards diverge.
+The South African Competition Commission's OIPMI inquiry (2020--2023) confronted parallel questions in a developing-market context: whether Takealot's marketplace algorithm favored its own retail arm, whether food-delivery commission structures foreclosed small restaurants, and whether Google's search dominance warranted the same remedies in Johannesburg as in Brussels. The US DOJ's monopolization suits against Google followed — and both have now produced liability findings, in search (D.D.C. 2024) and in advertising technology (E.D. Va. 2025). Digital platform enforcement is global, with common empirical challenges that recur across jurisdictions even as legal standards diverge.
 
 Digital platform analysis extends traditional IO tools to multi-sided markets where network effects, data advantages, and zero-price business models create distinct competitive dynamics. This section covers the key mechanisms and evidence types.
 
@@ -271,13 +271,26 @@ cat(paste0("Would monopolist profit? Depends on ad revenue vs. user loss tradeof
 {% hint style="info" %}
 **Case box: European Commission v. Google Shopping (2017)**
 
-The Commission found that Google systematically positioned its own comparison shopping service at the top of search results while demoting rival comparison shopping sites through algorithmic adjustments (*Google Shopping*, 2017). Evidence showed click-through rates for Google's own service were 35 times higher than for organically listed rivals on the first page. The €2.42 billion fine---the largest antitrust penalty at the time---rested on empirical analysis of traffic differentials: rival comparison shopping sites lost 85% of their traffic after algorithmic changes, while Google Shopping's traffic increased 45-fold. The remedy required Google to give rival comparison services equal treatment through an auction-based mechanism for product listing ad slots. The General Court upheld the decision in 2021, confirming that self-preferencing by a dominant platform can constitute abuse even absent a traditional leveraging theory.
+The Commission found that Google systematically positioned its own comparison shopping service at the top of search results while demoting rival comparison shopping sites through algorithmic adjustments (*Google Shopping*, 2017). Position drove the harm: the Commission's evidence showed the top generic search result receives roughly 35% of clicks, with click-through rates falling steeply down the page. The €2.42 billion fine---the largest antitrust penalty at the time---rested on empirical analysis of traffic differentials; in the United Kingdom, the decision found, rival comparison shopping sites lost around 85% of their traffic after the algorithmic changes while traffic to Google's own service increased roughly 45-fold. The remedy required Google to give rival comparison services equal treatment through an auction-based mechanism for product listing ad slots. The General Court upheld the decision in 2021, and the Court of Justice dismissed Google's further appeal in September 2024 (Cjeu Google Shopping, 2024), definitively confirming the fine and that self-preferencing by a dominant platform can constitute abuse even absent a traditional leveraging theory.
 {% endhint %}
 
 {% hint style="info" %}
 **Case box: Epic Games v. Apple (2021)**
 
-Epic challenged Apple's 30% App Store commission and anti-steering rules that prevented developers from directing users to cheaper external payment options (*Epic Games v. Apple*, 2021). Judge Gonzalez Rogers found Apple was *not* a monopolist under the Sherman Act, partly because the relevant market was defined as "digital mobile gaming transactions"---a two-sided market where Apple competed with Google Play and console platforms. However, Apple violated California's Unfair Competition Law by preventing developers from communicating alternative payment methods to users. The injunction requiring Apple to allow external payment links reshaped app store economics globally. The case demonstrated the stakes of market definition in platform cases: a narrower single-sided market (iOS app distribution) might have yielded a monopoly finding, while the broader two-sided framing shielded Apple from Section 2 liability.
+Epic challenged Apple's 30% App Store commission and anti-steering rules that prevented developers from directing users to cheaper external payment options (*Epic Games v. Apple*, 2021). Judge Gonzalez Rogers found Apple was *not* a monopolist under the Sherman Act, partly because the relevant market was defined as "digital mobile gaming transactions"---a two-sided market where Apple competed with Google Play and console platforms. However, Apple violated California's Unfair Competition Law by preventing developers from communicating alternative payment methods to users. The injunction requiring Apple to allow external payment links reshaped app store economics globally. The case demonstrated the stakes of market definition in platform cases: a narrower single-sided market (iOS app distribution) might have yielded a monopoly finding, while the broader two-sided framing shielded Apple from Section 2 liability. The injunction also grew teeth: in April 2025 the same judge found Apple in willful violation of the anti-steering order, barred the 27% commission Apple had imposed on off-app purchases and its "scare screens" around external links, and referred the matter for possible criminal contempt (Us Epic Apple Contempt, 2025).
+{% endhint %}
+
+{% hint style="info" %}
+**Where the platform cases stand (mid-2026)**
+
+The headline investigations this chapter discusses now have outcomes.
+
+- ***United States v. Google* (search), D.D.C.** August 2024: Judge Mehta found Google unlawfully maintained monopolies in general search services and general search text ads through exclusive default agreements (Us Google Search Liability, 2024). The September 2025 remedies opinion declined the government's request to divest Chrome; it barred exclusive default and preinstallation agreements, required Google to share certain search index and user-interaction data with qualified competitors, and installed technical-committee oversight (Us Google Search Remedies, 2025). Appeals were pending as of this writing.
+- ***United States v. Google* (ad tech), E.D. Va.** April 2025: Judge Brinkema found Section 2 liability in the publisher ad server and ad exchange markets and unlawful tying of DFP to AdX; the advertiser ad network claim failed (Us Google Adtech, 2025). Remedies proceedings followed.
+- ***FTC v. Meta*, D.D.C.** November 2025: judgment for Meta. Judge Boasberg held the FTC failed to prove that Meta currently holds monopoly power in the alleged personal-social-networking market (Us Ftc Meta, 2025).
+- **DMA enforcement.** The Commission issued its first non-compliance fines in April 2025 --- €500 million against Apple (App Store anti-steering) and €200 million against Meta ("consent or pay") (Ec Dma Apple Meta, 2025) --- and adopted interoperability specification decisions against Apple in March 2025.
+- **Google Shopping.** The CJEU dismissed Google's appeal in September 2024 (C-48/22 P), upholding the €2.42 billion fine.
+- **United Kingdom.** The Digital Markets, Competition and Consumers Act 2024 (Uk Dmcca, 2024) brought the digital-markets regime into force in January 2025. The CMA opened strategic-market-status investigations into Google's general search business and the Apple and Google mobile ecosystems in 2025 and, as of this writing, has begun making designations.
 {% endhint %}
 
 ## Ranking, self-preferencing, and defaults
@@ -348,10 +361,11 @@ panel <- expand.grid(market_id = 1:n_markets, month = 1:n_periods) |>
 es <- feols(default_share ~ i(rel_month, treated, ref = -1) |
               market_id + month, data = panel)
 
-# Extract and plot coefficients
+# Extract and plot coefficients. fixest names i() terms like
+# "rel_month::-3:treated", so pull the (possibly negative) integer after "::".
 coefs <- broom::tidy(es, conf.int = TRUE) |>
-  filter(grepl("rel_month", term)) |>
-  mutate(rel_month = as.numeric(gsub("rel_month::(.*):treated::TRUE", "\\1", term))) |>
+  filter(grepl("rel_month::", term)) |>
+  mutate(rel_month = as.numeric(sub("^rel_month::(-?[0-9]+).*$", "\\1", term))) |>
   bind_rows(tibble(rel_month = -1, estimate = 0, conf.low = 0, conf.high = 0))
 
 ggplot(coefs, aes(x = rel_month, y = estimate)) +
@@ -405,9 +419,9 @@ Replace the synthetic panel with DMA compliance reports, CMA choice screen exper
 
 ### Algorithmic collusion: a Q-learning simulation
 
-One of the most distinctive challenges in digital market competition is the possibility that pricing algorithms---even when independently developed and deployed---may learn to coordinate on supra-competitive prices without any explicit communication between firms. This is not hypothetical: laboratory experiments have shown that simple reinforcement learning agents (Q-learning algorithms) playing repeated pricing games converge to prices well above the Nash equilibrium, approaching collusive outcomes (Calvano Vijay, 2023); (Oecd Algorithms, 2017).
+One of the most distinctive challenges in digital market competition is the possibility that pricing algorithms---even when independently developed and deployed---may learn to coordinate on supra-competitive prices without any explicit communication between firms. This is not hypothetical: in simulation, Q-learning pricing agents playing a repeated Bertrand game systematically converge to prices well above the one-shot Nash equilibrium and sustain them with punishment-and-recovery responses to deviations (Calvano Etal, 2020); (Oecd Algorithms, 2017).
 
-The mechanism is straightforward. Each algorithm observes the current state (the vector of prices set by all firms in the previous period), chooses an action (raise, lower, or maintain price), and receives a reward (profit). Over repeated iterations, the algorithm learns a Q-table mapping states to actions that maximizes cumulative reward. When two such algorithms interact, they discover that mutual price increases yield higher rewards than price competition---and they learn to punish deviations by reverting to competitive pricing, creating a self-enforcing collusive equilibrium that mirrors the grim-trigger strategies of repeated-game theory.
+The mechanism is straightforward. Each algorithm observes the current state (the prices set in the previous period), chooses an action (a price from a discrete grid), and receives a reward (profit). Over repeated iterations, the algorithm learns a Q-table mapping states to actions that maximizes cumulative reward. When two such algorithms interact, they discover that mutual price increases yield higher rewards than price competition---and they learn to punish deviations by reverting toward competitive pricing, creating a self-enforcing collusive pattern that mirrors the trigger strategies of repeated-game theory.
 
 ```r
 library(dplyr)
@@ -416,124 +430,122 @@ library(zoo)
 source("program/R/helpers.R")
 
 # Q-learning pricing simulation: two firms, repeated Bertrand game
-# Each firm has 3 possible prices: low (competitive), medium, high (collusive)
-# Demand: linear with cross-price effects
+# Demand: q_i = 100 - 4*p_i + 2*p_j, marginal cost c = 5.
+# On the grid {20, 24, 28}, p = 20 is each firm's best response to EVERY
+# rival price (one-shot profits: 900 vs. 836/644 against a rival at 20), so
+# (20, 20) is the unique stage-game Nash. Symmetric pricing at 28 earns
+# 1012 each -- more than Nash -- but a unilateral cut to 20 earns 1140, so
+# sustaining 28 requires learned punishment. That makes 28 genuinely
+# collusive, not just another static equilibrium.
 
 set.seed(42)
-n_iterations <- 5000
-price_levels <- c(8, 12, 16)  # Low, medium, high
+n_iterations <- 20000
+price_levels <- c(20, 24, 28)  # Nash, intermediate, collusive
 n_prices <- length(price_levels)
+p_nash <- 20
+p_collusive <- 28
 
-# Demand function: q_i = 100 - 2*p_i + p_j
-demand <- function(p_i, p_j) max(0, 100 - 2 * p_i + p_j)
+demand <- function(p_i, p_j) max(0, 100 - 4 * p_i + 2 * p_j)
+profit <- function(p_i, p_j) demand(p_i, p_j) * (p_i - 5)
 
-# Profit function
-profit <- function(p_i, p_j) {
-  cost <- 5  # marginal cost
-  demand(p_i, p_j) * (p_i - cost)
-}
-
-# Q-learning agent (symmetric two-player)
+# Two independent learners. Each firm keeps its OWN Q-matrix:
+# rows index the state (last period's price pair), columns the action
+# (this period's own price).
 q_learning_sim <- function(n_iter, lr = 0.1, discount = 0.95,
-                            eps_start = 0.3, eps_end = 0.01) {
-  Q <- matrix(0, nrow = n_prices, ncol = n_prices)
-  dimnames(Q) <- list(my = as.character(price_levels),
-                       rival = as.character(price_levels))
+                            eps_start = 0.5, eps_end = 0.001) {
+  n_states <- n_prices^2
+  Q1 <- matrix(0, nrow = n_states, ncol = n_prices)
+  Q2 <- matrix(0, nrow = n_states, ncol = n_prices)
+
+  state_index <- function(a_own, a_rival) (a_own - 1) * n_prices + a_rival
+
+  choose_action <- function(Q, s, eps) {
+    if (runif(1) < eps) return(sample.int(n_prices, 1))
+    best <- which(Q[s, ] == max(Q[s, ]))
+    if (length(best) > 1) best <- sample(best, 1)
+    best
+  }
 
   prices_out <- matrix(0, nrow = n_iter, ncol = 2)
   eps <- eps_start
-  eps_decay <- (eps_end / eps_start) ^ (1 / n_iter)
+  eps_decay <- (eps_end / eps_start)^(1 / n_iter)
+
+  # Random initial price pair
+  a1 <- sample.int(n_prices, 1)
+  a2 <- sample.int(n_prices, 1)
+  s1 <- state_index(a1, a2)  # firm 1's view: (own last, rival last)
+  s2 <- state_index(a2, a1)  # firm 2's view
 
   for (t in 1:n_iter) {
-    # State: rival's previous price
-    if (t == 1) {
-      s <- sample(n_prices, 1)
-    } else {
-      s <- which(price_levels == prices_out[t - 1, 2])
-    }
+    a1_new <- choose_action(Q1, s1, eps)
+    a2_new <- choose_action(Q2, s2, eps)
 
-    # Epsilon-greedy
-    if (runif(1) < eps) {
-      a <- sample(n_prices, 1)
-    } else {
-      a <- which.max(Q[, s])
-      if (length(a) > 1) a <- sample(a, 1)
-    }
+    r1 <- profit(price_levels[a1_new], price_levels[a2_new])
+    r2 <- profit(price_levels[a2_new], price_levels[a1_new])
 
-    # Rival (symmetric Q-learning)
-    if (runif(1) < eps) {
-      a_r <- sample(n_prices, 1)
-    } else {
-      a_r <- which.max(Q[s, ])
-      if (length(a_r) > 1) a_r <- sample(a_r, 1)
-    }
+    s1_new <- state_index(a1_new, a2_new)
+    s2_new <- state_index(a2_new, a1_new)
 
-    p_i <- price_levels[a]
-    p_j <- price_levels[a_r]
-    pi_i <- profit(p_i, p_j)
-    pi_j <- profit(p_j, p_i)
+    Q1[s1, a1_new] <- Q1[s1, a1_new] +
+      lr * (r1 + discount * max(Q1[s1_new, ]) - Q1[s1, a1_new])
+    Q2[s2, a2_new] <- Q2[s2, a2_new] +
+      lr * (r2 + discount * max(Q2[s2_new, ]) - Q2[s2, a2_new])
 
-    # Q-update
-    Q[a, s] <- Q[a, s] + lr * (pi_i + discount * max(Q[, a_r]) - Q[a, s])
-
-    prices_out[t, ] <- c(p_i, p_j)
+    s1 <- s1_new
+    s2 <- s2_new
+    prices_out[t, ] <- price_levels[c(a1_new, a2_new)]
     eps <- eps * eps_decay
   }
   prices_out
 }
 
-results <- q_learning_sim(n_iterations = 5000)
+results <- q_learning_sim(n_iterations)
 
 collusion_data <- tibble(
   iteration = 1:n_iterations,
   firm1 = results[, 1],
   firm2 = results[, 2],
   avg = (firm1 + firm2) / 2,
-  rolling = zoo::rollmean(avg, k = 100, fill = NA)
+  rolling = zoo::rollmean(avg, k = 500, fill = NA)
 )
 
 ggplot(collusion_data, aes(x = iteration)) +
-  geom_line(aes(y = firm1), color = "#0072B2", alpha = 0.3, linewidth = 0.3) +
-  geom_line(aes(y = firm2), color = "#D55E00", alpha = 0.3, linewidth = 0.3) +
+  geom_line(aes(y = firm1), color = "#0072B2", alpha = 0.15, linewidth = 0.3) +
+  geom_line(aes(y = firm2), color = "#D55E00", alpha = 0.15, linewidth = 0.3) +
   geom_line(aes(y = rolling), color = "#333333", linewidth = 1.2) +
-  geom_hline(yintercept = 5, linetype = "dotted", color = "gray40", linewidth = 0.8) +
-  geom_hline(yintercept = 8, linetype = "dashed", color = "#009E73", linewidth = 0.8) +
-  geom_hline(yintercept = 16, linetype = "dashed", color = "#D55E00", linewidth = 0.8) +
-  annotate("text", x = 4800, y = 5.5, label = "Marginal cost",
-           color = "gray40", hjust = 0, size = 3) +
-  annotate("text", x = 4800, y = 8.5, label = "Nash equilibrium",
-           color = "#009E73", hjust = 0, size = 3) +
-  annotate("text", x = 4800, y = 16.5, label = "Collusive price",
-           color = "#D55E00", hjust = 0, size = 3) +
+  geom_hline(yintercept = p_nash, linetype = "dashed", color = "#009E73", linewidth = 0.8) +
+  geom_hline(yintercept = p_collusive, linetype = "dashed", color = "#D55E00", linewidth = 0.8) +
+  annotate("text", x = n_iterations * 0.96, y = p_nash - 0.5,
+           label = "One-shot Nash (20)",
+           color = "#009E73", hjust = 1, size = 3) +
+  annotate("text", x = n_iterations * 0.96, y = p_collusive + 0.5,
+           label = "Collusive price (28)",
+           color = "#D55E00", hjust = 1, size = 3) +
   labs(
     title = "Algorithmic Collusion: Q-Learning Price Convergence",
-    subtitle = "Two independent pricing algorithms converge to supra-competitive prices without communication",
+    subtitle = "Two independent pricing algorithms, each with its own Q-matrix and no communication",
     x = "Iteration", y = "Price",
-    caption = "Simulation: Q-learning agents in repeated Bertrand game. Black line: 100-period rolling average."
+    caption = "Simulation: independent Q-learning agents in a repeated Bertrand game (q = 100 - 4p + 2p_rival, c = 5).\nBlack line: 500-period rolling average of the two firms' prices."
   ) +
   theme_antitrust() +
   theme(legend.position = "none")
 
-cat("
-Price convergence summary:
-")
-cat(paste0("First 500 iterations (learning): mean = ",
-           round(mean(collusion_data[1:500]), 2), "
-"))
-cat(paste0("Last 500 iterations (convergence): mean = ",
-           round(mean(collusion_data[4501:5000]), 2), "
-"))
-cat(paste0("Nash equilibrium: 8.00 | Collusive: 16.00
-"))
-cat(paste0("Convergence ratio: ",
-           round((mean(collusion_data[4501:5000]) - 8) / (16 - 8) * 100, 1),
-           "% of the way from Nash to collusion
-"))
+early_mean <- mean(collusion_data$avg[1:1000])
+late_mean <- mean(collusion_data$avg[(n_iterations - 999):n_iterations])
+conv_ratio <- (late_mean - p_nash) / (p_collusive - p_nash)
+
+cat("\nPrice convergence summary:\n")
+cat(sprintf("First 1,000 iterations (exploration): mean price = %.2f\n", early_mean))
+cat(sprintf("Last 1,000 iterations (after learning): mean price = %.2f\n", late_mean))
+cat(sprintf("One-shot Nash on the grid: %.2f | Joint-profit price on the grid: %.2f\n",
+            p_nash, p_collusive))
+cat(sprintf("Convergence ratio: %.0f%% of the gap from Nash toward the collusive price\n",
+            100 * conv_ratio))
 ```
 
-**Interpretation.** The simulation shows that two independent Q-learning algorithms, each maximizing its own profit with no communication or coordination, converge to prices well above the Nash equilibrium of 8.00 and approach the collusive price of 16.00. The convergence ratio of approximately 80--90% means the algorithms sustain prices close to monopoly levels---not through explicit agreement, but through the emergent logic of repeated interaction and punishment strategies.
+**Interpretation.** Read the convergence ratio as the share of the Nash-to-collusion price gap the algorithms close: 0% means they settle at the one-shot Nash price of 20, 100% at the joint-profit price of 28. In repeated runs of this deliberately small simulation (three prices, 20,000 episodes), final prices typically land a third to a half of the way up the gap---supra-competitive, sustained by each agent's learned response of reverting toward 20 when its rival cuts price, though short of full monopoly pricing. The full-scale result is (Calvano Etal, 2020): with finer price grids and millions of training episodes, their Q-learning agents systematically converged on supra-competitive prices and enforced them with punishment-and-recovery schemes---a deviation triggers a price war, followed by a gradual return to the collusive level---without any communication between the agents.
 
-**Antitrust implications.** This result challenges the traditional legal framework for cartel enforcement, which requires proof of an "agreement" or "concerted practice." Q-learning algorithms achieve collusive outcomes through independent optimization---there is no meeting of minds, no communication, no explicit coordination. Competition authorities are grappling with how to address this gap. The OECD's 2017 report on algorithms and collusion (Oecd Algorithms, 2017) identified four scenarios: (1) messenger algorithms (humans collude, algorithms implement), (2) hub-and-spoke (common algorithm provider), (3) predictable agent (algorithms respond to each other's predictable behavior), and (4) autonomous machine (algorithms independently learn to collude). The first three fit within existing legal frameworks; the fourth does not. The EU's Digital Markets Act and the UK's CMA digital markets unit are developing ex ante tools to address algorithmic coordination, while US enforcement remains focused on traditional conspiracy doctrine.
+**Antitrust implications.** This result challenges the traditional legal framework for cartel enforcement, which requires proof of an "agreement" or "concerted practice." Q-learning algorithms achieve collusive outcomes through independent optimization---there is no meeting of minds, no communication, no explicit coordination. Competition authorities are grappling with how to address this gap. The OECD's 2017 report on algorithms and collusion (Oecd Algorithms, 2017) identified four scenarios: (1) messenger algorithms (humans collude, algorithms implement), (2) hub-and-spoke (common algorithm provider), (3) predictable agent (algorithms respond to each other's predictable behavior), and (4) autonomous machine (algorithms independently learn to collude). The first three fit within existing legal frameworks; the fourth does not. The EU's Digital Markets Act and the UK's digital-markets regime under the Digital Markets, Competition and Consumers Act 2024 (in force since January 2025) give regulators ex ante tools that do not depend on proving agreement, while US enforcement remains anchored in conspiracy doctrine.
 
 ### Southern African digital enforcement snapshots
 - **Online Intermediation Platforms Market Inquiry (OIPMI, 2020–2023).** The Competition Commission collected transaction-level data from e-commerce marketplaces, app stores, food delivery apps, and travel platforms. Findings highlighted Google Search’s >90% share of general search queries, food-delivery commissions clustering at 25–30%, and marketplace buy-box algorithms that favored first-party listings (e.g., Takealot Retail) over third-party sellers with identical fulfillment metrics. Final remedies require fair-ranking reports, caps on marketplace storage/fulfillment fees for SMEs, and anti-steering relief that lets restaurants promote direct-order channels inside aggregator apps.
@@ -728,52 +740,105 @@ Track platform market share over time to identify tipping points and competitive
 
 ```r
 library(dplyr)
+library(tidyr)
 library(ggplot2)
 library(readr)
-library(lubridate)
 source("program/R/helpers.R")
 
-# Real platform market share data from EU/US/SA competition authorities
-platform_shares <- read_csv("data/derived/platform_market_shares.csv", show_col_types = FALSE)
+# Platform shares and commission rates compiled by
+# program/scripts/07_digital_platforms.R from public case documents.
+# Guard both reads: fall back to inline values (same public sources) if the
+# derived CSVs have not been generated, and say so in the caption.
+platform_shares <- tryCatch(
+  read_csv("data/derived/platform_market_shares.csv", show_col_types = FALSE),
+  error = function(e) NULL
+)
+commissions <- tryCatch(
+  read_csv("data/derived/platform_commission_rates.csv", show_col_types = FALSE),
+  error = function(e) NULL
+)
+used_fallback <- is.null(platform_shares) || is.null(commissions)
 
-# Commission rate changes from public filings
-commissions <- read_csv("data/derived/platform_commission_rates.csv", show_col_types = FALSE)
+if (is.null(platform_shares)) {
+  platform_shares <- tibble::tribble(
+    ~case, ~jurisdiction, ~year, ~platform, ~market, ~share, ~source,
+    "Google Search", "EU", 2017, "Google", "General search", 0.90, "EC Case AT.39740",
+    "Google Search", "EU", 2017, "Bing", "General search", 0.05, "EC Case AT.39740",
+    "Google Search", "EU", 2017, "Others", "General search", 0.05, "EC Case AT.39740",
+    "Google Android", "EU", 2018, "Android", "Mobile OS", 0.75, "EC Case AT.40099",
+    "Google Android", "EU", 2018, "iOS", "Mobile OS", 0.20, "EC Case AT.40099",
+    "Google Android", "EU", 2018, "Others", "Mobile OS", 0.05, "EC Case AT.40099",
+    "App Store", "US", 2021, "Apple App Store", "iOS app distribution", 1.00, "Epic v. Apple",
+    "Amazon Marketplace", "EU", 2020, "Amazon", "Online marketplace", 0.47, "EC Case AT.40462",
+    "Amazon Marketplace", "EU", 2020, "eBay", "Online marketplace", 0.15, "EC Case AT.40462",
+    "Amazon Marketplace", "EU", 2020, "Others", "Online marketplace", 0.38, "EC Case AT.40462",
+    "Google Shopping", "SA", 2019, "Google", "Comparison shopping", 0.95, "CC Case 2016Sep0005",
+    "Google Shopping", "SA", 2019, "Others", "Comparison shopping", 0.05, "CC Case 2016Sep0005"
+  )
+}
+if (is.null(commissions)) {
+  commissions <- tibble::tribble(
+    ~platform, ~year, ~standard_rate, ~small_developer_rate, ~notes,
+    "Apple App Store", 2020, 0.30, 0.30, "Pre-small business program",
+    "Apple App Store", 2021, 0.30, 0.15, "Small Business Program (<$1M revenue)",
+    "Apple App Store", 2023, 0.30, 0.15, "Continued",
+    "Google Play", 2020, 0.30, 0.30, "Pre-reduction",
+    "Google Play", 2021, 0.30, 0.15, "Reduced rate for first $1M",
+    "Google Play", 2023, 0.30, 0.15, "Continued",
+    "Amazon Appstore", 2020, 0.30, 0.30, "Standard",
+    "Amazon Appstore", 2023, 0.30, 0.20, "Small developer program"
+  )
+}
 
-# Panel A: Market shares by platform (from regulatory filings)
-p1 <- ggplot(platform_shares, aes(x = reorder(platform, share), y = share, fill = jurisdiction)) +
+provenance_note <- if (used_fallback) {
+  "Inline fallback values (same public case documents); run program/scripts/07_digital_platforms.R to regenerate the CSVs."
+} else {
+  "Source: data/derived/platform_*.csv built by program/scripts/07_digital_platforms.R."
+}
+
+# Panel A: Market shares as reported in the cited proceedings
+shares_plot <- platform_shares |>
+  filter(!platform %in% c("Others", "Other")) |>
+  mutate(label = paste0(platform, " (", case, ", ", year, ")"))
+
+p1 <- ggplot(shares_plot, aes(x = reorder(label, share), y = share, fill = jurisdiction)) +
   geom_col(width = 0.7, alpha = 0.85) +
   geom_hline(yintercept = 0.5, linetype = "dashed", color = "darkred", linewidth = 0.8) +
   geom_hline(yintercept = 0.7, linetype = "dotted", color = "darkred", linewidth = 0.8) +
-  annotate("text", x = 5.5, y = 0.52, label = "50%", color = "darkred", hjust = 0, size = 3) +
-  annotate("text", x = 5.5, y = 0.72, label = "70%", color = "darkred", hjust = 0, size = 3) +
   scale_y_continuous(labels = scales::percent_format()) +
   scale_fill_manual(values = c(
     "EU" = "#0072B2", "US" = "#D55E00", "SA" = "#009E73"
   )) +
   coord_flip() +
   labs(
-    title = "Platform Market Shares from Regulatory Filings",
-    subtitle = "Real data from EU, US, and South African competition authorities",
+    title = "Platform Market Shares as Reported in Competition Proceedings",
+    subtitle = "Compiled from public case documents (EU decisions, US litigation, SA OIPMI)",
     x = NULL, y = "Market Share", fill = "Jurisdiction",
-    caption = "Source: platform_market_shares.csv. Compiled from EU Commission decisions, US litigation filings, SA OIPMI."
+    caption = paste0(provenance_note,
+                     "\nShares are as pleaded or found in each proceeding; markets and dates differ across bars.")
   ) +
   theme_antitrust() +
   theme(legend.position = "bottom")
 
-# Panel B: Commission rate changes over time
-p2 <- ggplot(commissions, aes(x = as.Date(date), y = commission_rate, color = platform)) +
-  geom_line(linewidth = 1.2) +
+# Panel B: App store commission rates over time (standard vs. small developer)
+comm_long <- commissions |>
+  pivot_longer(c(standard_rate, small_developer_rate),
+               names_to = "tier", values_to = "rate") |>
+  mutate(tier = if_else(tier == "standard_rate", "Standard", "Small developer"))
+
+p2 <- ggplot(comm_long, aes(x = year, y = rate, color = platform, linetype = tier)) +
+  geom_line(linewidth = 1.1) +
   geom_point(size = 2.5) +
-  scale_y_continuous(labels = scales::percent_format()) +
+  scale_y_continuous(labels = scales::percent_format(), limits = c(0, 0.35)) +
   scale_color_manual(values = c(
     "Apple App Store" = "#0072B2", "Google Play" = "#D55E00",
-    "Amazon" = "#E69F00", "Uber Eats" = "#009E73"
+    "Amazon Appstore" = "#E69F00"
   )) +
   labs(
-    title = "Platform Commission Rate Changes",
-    subtitle = "Real commission rates from public filings and regulatory disclosures",
-    x = NULL, y = "Commission Rate", color = NULL,
-    caption = "Source: platform_commission_rates.csv. From public filings and regulatory proceedings."
+    title = "App Store Commission Rates",
+    subtitle = "Standard vs. small-developer rates, from public platform documentation",
+    x = NULL, y = "Commission Rate", color = NULL, linetype = NULL,
+    caption = provenance_note
   ) +
   theme_antitrust() +
   theme(legend.position = "bottom")
@@ -787,10 +852,11 @@ if (requireNamespace("patchwork", quietly = TRUE)) {
   print(p2)
 }
 
-# HHI summary
-cat("\nPlatform market concentration (HHI by case):\n")
+# HHI summary, within each case-market (shares from different markets
+# must not be pooled into one HHI)
+cat("\nPlatform market concentration (HHI by case and market):\n")
 platform_shares |>
-  group_by(case_name) |>
+  group_by(case, market) |>
   summarise(
     n_firms = n(),
     hhi = sum((share * 100)^2),
@@ -799,24 +865,12 @@ platform_shares |>
     .groups = "drop"
   ) |>
   knitr::kable(digits = 0,
-               caption = "HHI computed from real platform market share data")
+               caption = "HHI computed from shares reported in the cited proceedings")
 ```
 
 ![](../images/digital-market-evolution-1.png)
 
-These real market share figures from EU, US, and South African regulatory proceedings illustrate the concentration patterns that define digital platform markets. The commission rate panel shows how platform fees have evolved in response to regulatory pressure---Apple's reduction from 30% to 15% for small developers (2020), Google's matching response (2021), and the EU's Digital Markets Act requirements for greater fee transparency.
-
-**Data sources:**
-- **StatCounter**: Global browser, OS, search engine stats
-- **SimilarWeb**: Website and app traffic data
-- **Sensor Tower / App Annie**: Mobile app market intelligence
-- **Regulatory filings**: EC, CMA, FTC, DMA compliance reports
-- **OIPMI**: South African platform market shares
-
-**Use cases:**
-- Demonstrate sustained dominance or competitive entry
-- Identify tipping points or competitive interventions
-- Support market definition and dominance assessments
+The shares are compiled from public case documents---European Commission decisions, US litigation filings, and the OIPMI report---so each bar carries the market definition and date of its own proceeding, and the figures should be read case by case rather than as a single cross-section. The companion datasets written by `program/scripts/07_digital_platforms.R` mix provenance: the shares and commission rates above come from public documents, while the usage, ranking, and multi-homing files are synthetic scaffolds for illustration; the script's metadata table records which is which. The commission panel shows the standard 30% rate holding steady while both Apple and Google introduced 15% small-developer tiers in 2021 under litigation and regulatory pressure. For richer or more current series---StatCounter for browser and search shares, SimilarWeb or Sensor Tower for app traffic, DMA compliance reports and CMA studies for regulator-grade data---swap the inputs and keep the same charts, which serve the usual purposes in a dominance assessment: persistence of share, tipping points, and the response to interventions.
 
 ## Generative AI and foundation models
 
@@ -826,7 +880,7 @@ This section surveys early enforcement thinking on AI markets, adapting concepts
 
 ### Market structure concerns
 
-**Vertical integration and compute access:** A small number of cloud providers (AWS, Azure, Google Cloud) control the compute infrastructure essential for training frontier models. Vertical integration between cloud providers and AI model developers (Microsoft/OpenAI, Google/DeepMind, Amazon/Anthropic) creates potential foreclosure concerns similar to traditional media/distribution cases.
+**Vertical integration and compute access:** A small number of cloud providers (AWS, Azure, Google Cloud) control the compute infrastructure essential for training frontier models. Vertical ties between cloud providers and AI model developers---outright integration in Google's case, partnership structures in Microsoft/OpenAI and Amazon/Anthropic---create potential foreclosure concerns similar to traditional media/distribution cases.
 
 **Data moats:** Training data advantages may create barriers to entry that are difficult to replicate. Key questions include:
 - Whether data access is essential for competitive AI development
@@ -845,11 +899,9 @@ This section surveys early enforcement thinking on AI markets, adapting concepts
 | **Distribution bundling** | Tying AI features to dominant platforms | Default/pre-installation analysis (cf. browser cases) |
 | **Talent concentration** | Acqui-hires and non-competes limiting rival innovation | Labor market analysis (see [Chapter 10](chapters/10-labor-markets.md)) |
 
-### Emerging regulatory frameworks
+### Regulatory frameworks
 
-- **EU AI Act (2024):** Establishes tiered obligations based on risk level; interacts with DMA gatekeeper obligations for AI-integrated platforms.
-- **US Executive Order on AI (2023):** Directs agencies to monitor competitive dynamics; potential FTC Section 5 authority for unfair methods.
-- **CMA AI Foundation Models review (2023-ongoing):** Examines compute concentration, partnerships, and potential competition concerns.
+The regulatory picture has moved fast and unevenly. The EU AI Act (2024) establishes tiered obligations based on risk level and interacts with DMA gatekeeper obligations for AI-integrated platforms. The United States went the other way: the 2023 Executive Order on AI, which had directed agencies to monitor competitive dynamics, was rescinded in January 2025, leaving case-by-case enforcement (including potential FTC Section 5 authority) as the operative US tool. In the United Kingdom, the CMA's AI Foundation Models review (2023--2024) mapped compute concentration and partnership structures, and the DMCCA's strategic-market-status regime---in force since January 2025---now gives the CMA ex ante powers over designated digital activities, with the first designations under way as of this writing.
 
 ### Practical implications
 
@@ -860,7 +912,7 @@ When analyzing AI market competition:
 3. **Consider dynamic competition:** AI capabilities evolve rapidly; static market shares may understate competitive dynamics or overstate durability of positions.
 4. **Examine data and compute access:** These inputs may function as essential facilities; apply raising rivals' costs and foreclosure frameworks.
 
-For the latest agency guidance, monitor CMA's AI Foundation Models work and FTC/DOJ statements on AI competition.
+For the latest agency guidance, monitor the CMA's digital-markets and AI work and FTC/DOJ statements on AI competition.
 
 ## Exercises
 

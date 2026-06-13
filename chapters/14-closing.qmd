@@ -6,7 +6,7 @@ The table below summarizes the core methods covered in this book and the chapter
 
 | Method | Chapter | Primary Use | Key Diagnostics |
 |--------|---------|-------------|-----------------|
-| HHI & concentration indices | @sec-market-definition | Market structure screening | Thresholds: 1,500 / 2,500 |
+| HHI & concentration indices | @sec-market-definition | Market structure screening | Highly concentrated > 1,800; presumption at ΔHHI > 100 (2023 Guidelines; 2010: 1,500/2,500) |
 | SSNIP / critical loss | @sec-market-definition | Market definition | Substitution patterns, margin estimates |
 | Difference-in-differences | @sec-research-design | Causal inference | Pre-trends, placebo tests |
 | Synthetic control | @sec-research-design | Single-unit treatment effects | Pre-treatment fit, donor placebos |
@@ -33,11 +33,11 @@ The field moves quickly. The citations below point to work that extends or compl
 
 **Causal inference and econometric methods.** For the latest on staggered difference-in-differences, see @goodman_bacon_2021 and @sun_abraham_2021, which diagnose the biases in standard two-way fixed effects estimators when treatment timing varies across units. @callaway_santanna_2021 proposes an alternative estimator that avoids these pitfalls. For synthetic control extensions, @athey_bayati_imbens_2021 develop matrix completion methods that generalize the synthetic control framework to multiple treated units and time-varying treatment.
 
-**Digital platform competition.** The Stigler Committee on Digital Platforms (@stigler_committee_2019) provided the foundational analysis that shaped subsequent regulatory proposals, including the EU's Digital Markets Act. For empirical work on platform market power, see @crawford_etal_2022 on search bias measurement and @johnson_etal_2023 on the competitive effects of default positions. The intersection of AI and antitrust is addressed by @calvano_vijay_2023, who show that pricing algorithms can sustain supra-competitive outcomes without explicit communication.
+**Digital platform competition.** The Stigler Committee on Digital Platforms (@stigler_committee_2019) provided the foundational analysis that shaped subsequent regulatory proposals, including the EU's Digital Markets Act. See @cremer_etal_2019 for the European policy framework and @decarolis_rovigatti_2021 on concentration and buyer power in online advertising. The intersection of AI and antitrust is addressed by @calvano_etal_2020, who show in simulation that independent Q-learning pricing algorithms can converge on supra-competitive prices with punishment strategies, without communication.
 
-**Labor market power.** @azab_etal_2024 survey the rapidly growing empirical literature on labor monopsony, covering concentration measurement, supply elasticity estimation, and the wage effects of noncompete enforcement. For policy analysis, @naidu_posner_weyl_2018 remain the essential reference on the institutional design of labor antitrust enforcement.
+**Labor market power.** @azar_etal_2020 measure concentration in US labor markets from online vacancy data; @naidu_posner_weyl_2018 remain the essential reference on the institutional design of labor antitrust enforcement.
 
-**Merger retrospectives and empirical IO.** @weinberg_hosken_2013 provide a comprehensive survey of merger retrospective studies, while @miller_weinberg_2017 demonstrate how structural models can be validated against post-merger price data. For the latest on differentiated-products merger simulation, @conlon_gortmaker_2020 update the PyBLP framework for modern computational environments.
+**Merger retrospectives and empirical IO.** @weinberg_hosken_2013 assess the accuracy of merger simulations against retrospective price outcomes, while @miller_weinberg_2017 demonstrate how structural models can be validated against post-merger price data. For the latest on differentiated-products merger simulation, @conlon_gortmaker_2020 update the PyBLP framework for modern computational environments.
 
 ## Reading paths by audience
 
@@ -51,7 +51,7 @@ Three routes through the book, depending on why you picked it up:
 
 ## What we have built
 
-The book has worked from one claim: antitrust analysis is at its best when it draws on three kinds of evidence together---quantitative estimation, documentary context, and expert judgment---and uses them in the institutional setting where the matter is actually decided. We called this the **evidence triad**, and it has run through every chapter. It is not a new theory; it is how the cases that win get built. An overcharge estimate persuades when it lines up with the internal pricing documents. A merger simulation gains credibility when customers describe the switching costs it assumes. A bid-rotation screen becomes actionable when a leniency statement names the same firms. The chapters showed how to build each leg and how to fit them together.
+The book has worked from one claim: antitrust analysis is at its best when it draws on three kinds of evidence together---quantitative estimation, documentary context, and expert judgment---and uses them in the institutional setting where the matter is actually decided. The orientation chapter named this the **evidence triad**, and the framework---if not always the label---runs through every chapter. It is not a new theory; it is how the cases that win get built. An overcharge estimate persuades when it lines up with the internal pricing documents. A merger simulation gains credibility when customers describe the switching costs it assumes. A bid-rotation screen becomes actionable when a leniency statement names the same firms. The chapters showed how to build each leg and how to fit them together.
 
 The three jurisdictions---United States, European Union, and South Africa---have been just as central. They are not three copies of one regime. They differ in legal standard (per se versus rule of reason, effects-based versus form-based), in institutional architecture (two federal agencies, a single Commission, a Commission-Tribunal pair), in remedial tradition (consent decrees, commitment decisions, public-interest conditions), and in the data a practitioner can get. The US offers the deepest case law and the most developed econometrics. The EU offers the clearest effects-based framework and the most advanced approach to digital markets. South Africa shows how competition law can take on structural inequality, employment, and small-business participation alongside consumer welfare. Cross-border mergers and global platforms mean more matters now touch all three at once, and an analyst who can move between them is worth more for it.
 
@@ -77,7 +77,7 @@ Three developments are worth watching.
 
 **Labor market enforcement.** As documented in @sec-labor-markets, labor antitrust has moved from the periphery to the center of enforcement priorities. Criminal wage-fixing prosecutions, civil challenges to no-poach agreements, and the FTC's attempted noncompete ban (enjoined in *Ryan LLC v. FTC* but likely to re-emerge in some form) have established that employer conduct in labor markets is subject to the same antitrust scrutiny as product-market conduct. The empirical toolkit --- labor market HHI, supply elasticity estimation, diff-in-diff designs exploiting policy variation --- is directly transferable from the product-market methods developed throughout this book. The conceptual challenge is communicating monopsony to courts and juries accustomed to thinking about consumer harm in terms of price increases rather than wage suppression.
 
-**Digital markets and platform regulation.** The EU's Digital Markets Act, the UK's Digital Markets Unit, and similar initiatives worldwide represent a shift from ex post antitrust enforcement to ex ante platform regulation. The empirical questions --- how to measure multi-sided market power, how to assess the competitive effects of self-preferencing and data aggregation, how to design interoperability remedies --- are at the frontier of the field. The methods in @sec-digital-markets provide a starting point, but the regulatory framework is evolving rapidly. Practitioners should expect that the boundary between competition policy and sectoral regulation will continue to blur, particularly in markets where a small number of platforms serve as gatekeepers for entire ecosystems.
+**Digital markets and platform regulation.** The EU's Digital Markets Act, the UK's strategic-market-status regime under the Digital Markets, Competition and Consumers Act 2024, and similar initiatives worldwide represent a shift from ex post antitrust enforcement to ex ante platform regulation. The empirical questions --- how to measure multi-sided market power, how to assess the competitive effects of self-preferencing and data aggregation, how to design interoperability remedies --- are at the frontier of the field. The methods in @sec-digital-markets provide a starting point, but the regulatory framework is evolving rapidly. Practitioners should expect that the boundary between competition policy and sectoral regulation will continue to blur, particularly in markets where a small number of platforms serve as gatekeepers for entire ecosystems.
 
 ## A note on intellectual honesty
 
@@ -87,7 +87,7 @@ The same honesty applies to choosing the method. No single approach is correct f
 
 ## Looking ahead
 
-The toolkit keeps turning over. The economists who testified in *United States v. Aluminum Co. of America* or *Brown Shoe Co. v. United States* had nothing like the staggered DiD estimators, synthetic controls, machine-learning screens, matched employer-employee data, or platform telemetry that a 2020s practitioner reaches for by default. The methods of the 2040s will make today's look thin in turn. The point of the book is not a finished methodology but a habit: keep sharpening the tools so that enforcement rests on the best evidence available, read honestly and explained clearly.
+The toolkit keeps turning over. The economists who testified in *United States v. Aluminum Co. of America* or *Brown Shoe Co. v. United States* had nothing like the staggered DiD estimators, synthetic controls, machine-learning screens, matched employer-employee data, or platform telemetry that a 2020s practitioner reaches for by default. The methods of the 2040s will make today's look thin in turn. The book teaches a habit, not a finished methodology: keep the tools current, read the evidence honestly, and explain it clearly.
 
 The open problems are hard. Global platforms operate across regimes that do not line up, which opens enforcement gaps and invites forum-shopping. Pricing and matching algorithms can coordinate without anything that meets the legal definition of an agreement. Concentration in the gig economy turns the line between employee and contractor---a line antitrust never set out to police---into a competition question. Sustainability agreements run straight into the cartel prohibition, and competition authorities are still working out how to handle them. None of these yields to a single method or a single jurisdiction.
 
@@ -117,6 +117,44 @@ The following exercises integrate methods from multiple chapters, simulating the
 5. Assess bargaining leverage effects using the Nash-in-Nash framework (@sec-bargaining).
 6. Design a retrospective DiD study to evaluate the merger's effects after consummation (@sec-research-design).
 7. Draft a one-page memo summarizing your findings and recommending approval, conditional approval, or prohibition.
+
+Use the data below for steps 2--4. Hospital A proposes to acquire Hospital B. The metro area has six general acute-care hospitals; the diversion ratios come from patient-flow data (where each hospital's patients went when it was temporarily out of network). Hospital A's average commercial price per admission is $12,000 with a 40% margin; Hospital B's is $11,000 with a 35% margin.
+
+```{r}
+#| label: capstone-hospital-data
+#| message: false
+#| warning: false
+library(dplyr)
+
+hospitals <- tibble::tribble(
+  ~hospital,      ~discharges,
+  "Hospital A",   30000,
+  "Hospital B",   20000,
+  "Hospital C",   25000,
+  "Hospital D",   15000,
+  "Hospital E",    6000,
+  "Hospital F",    4000
+) |>
+  mutate(share_pct = 100 * discharges / sum(discharges))
+
+diversion <- tibble::tribble(
+  ~from,         ~to,           ~diversion_ratio,
+  "Hospital A",  "Hospital B",  0.32,
+  "Hospital A",  "Hospital C",  0.30,
+  "Hospital B",  "Hospital A",  0.45
+)
+
+hospitals
+diversion
+```
+
+::: {.callout-tip collapse="true" title="Worked answer (steps 2--4)"}
+**Step 2 (HHI).** Shares are 30, 20, 25, 15, 6, and 4 percent. Pre-merger HHI = 900 + 400 + 625 + 225 + 36 + 16 = **2,202**. Delta-HHI = 2 x 30 x 20 = **1,200**, so post-merger HHI = **3,402**. The market is highly concentrated (> 1,800) and the change exceeds 100 points: the 2023 Guidelines structural presumption applies.
+
+**Step 3 (diversion).** Share-proportional (logit) diversion would be D_AB = 20/(100 - 30) ≈ **0.29** and D_BA = 30/(100 - 20) = **0.375**. The patient-flow ratios (0.32 and 0.45) exceed both: A and B are closer substitutes than their shares alone imply, which strengthens the unilateral-effects concern.
+
+**Step 4 (GUPPI).** GUPPI_A = D_AB x M_B x (P_B/P_A) = 0.32 x 0.35 x (11,000/12,000) = **10.3%**. GUPPI_B = D_BA x M_A x (P_A/P_B) = 0.45 x 0.40 x (12,000/11,000) = **19.6%**. Both sit well above the 5% screening threshold, so the pricing-pressure screen corroborates the structural presumption. Steps 5--7 build from here: the Nash-in-Nash framework asks how the combined system's bargaining leverage with insurers changes, and the retrospective design pre-commits to how you would check the prediction.
+:::
 
 **Exercise 2: Cartel detection and damages.** You are retained by a plaintiffs' class to estimate damages from an alleged cartel in the cement industry. Using the tools from this book:
 1. Screen for cartel indicators using variance tests and price correlation analysis (@sec-cartels).

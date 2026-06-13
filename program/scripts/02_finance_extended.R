@@ -13,6 +13,12 @@ library(lubridate)
 # Phase 1: Airline mergers (already used in Ch02, Ch06)
 # ============================================================================
 
+# NOTE on the AA/US Airways (Feb 2013) event window: AAL only began trading
+# in December 2013 after the merger closed. Pre-merger, American's parent AMR
+# traded OTC as AAMRQ and US Airways as LCC; neither delisted history is
+# served by Yahoo Finance. Event-study figures around the February 2013
+# announcement therefore show RIVAL carriers (DAL, LUV, UAL, JBLU, ALK)
+# against SPY, and the chapter text says so.
 airline_tickers <- c("AAL", "DAL", "LUV", "UAL", "JBLU", "ALK", "SPY")
 airline_start <- as.Date("2010-01-01")
 airline_end <- Sys.Date()
