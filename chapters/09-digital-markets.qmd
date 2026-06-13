@@ -359,10 +359,11 @@ panel <- expand.grid(market_id = 1:n_markets, month = 1:n_periods) |>
 es <- feols(default_share ~ i(rel_month, treated, ref = -1) |
               market_id + month, data = panel)
 
-# Extract and plot coefficients
+# Extract and plot coefficients. fixest names i() terms like
+# "rel_month::-3:treated", so pull the (possibly negative) integer after "::".
 coefs <- broom::tidy(es, conf.int = TRUE) |>
-  filter(grepl("rel_month", term)) |>
-  mutate(rel_month = as.numeric(gsub("rel_month::(.*):treated::TRUE", "\\1", term))) |>
+  filter(grepl("rel_month::", term)) |>
+  mutate(rel_month = as.numeric(sub("^rel_month::(-?[0-9]+).*$", "\\1", term))) |>
   bind_rows(tibble(rel_month = -1, estimate = 0, conf.low = 0, conf.high = 0))
 
 ggplot(coefs, aes(x = rel_month, y = estimate)) +
@@ -933,52 +934,105 @@ Track platform market share over time to identify tipping points and competitive
 #| fig-width: 11
 #| fig-height: 7
 library(dplyr)
+library(tidyr)
 library(ggplot2)
 library(readr)
-library(lubridate)
 source("program/R/helpers.R")
 
-# Real platform market share data from EU/US/SA competition authorities
-platform_shares <- read_csv("data/derived/platform_market_shares.csv", show_col_types = FALSE)
+# Platform shares and commission rates compiled by
+# program/scripts/07_digital_platforms.R from public case documents.
+# Guard both reads: fall back to inline values (same public sources) if the
+# derived CSVs have not been generated, and say so in the caption.
+platform_shares <- tryCatch(
+  read_csv("data/derived/platform_market_shares.csv", show_col_types = FALSE),
+  error = function(e) NULL
+)
+commissions <- tryCatch(
+  read_csv("data/derived/platform_commission_rates.csv", show_col_types = FALSE),
+  error = function(e) NULL
+)
+used_fallback <- is.null(platform_shares) || is.null(commissions)
 
-# Commission rate changes from public filings
-commissions <- read_csv("data/derived/platform_commission_rates.csv", show_col_types = FALSE)
+if (is.null(platform_shares)) {
+  platform_shares <- tibble::tribble(
+    ~case, ~jurisdiction, ~year, ~platform, ~market, ~share, ~source,
+    "Google Search", "EU", 2017, "Google", "General search", 0.90, "EC Case AT.39740",
+    "Google Search", "EU", 2017, "Bing", "General search", 0.05, "EC Case AT.39740",
+    "Google Search", "EU", 2017, "Others", "General search", 0.05, "EC Case AT.39740",
+    "Google Android", "EU", 2018, "Android", "Mobile OS", 0.75, "EC Case AT.40099",
+    "Google Android", "EU", 2018, "iOS", "Mobile OS", 0.20, "EC Case AT.40099",
+    "Google Android", "EU", 2018, "Others", "Mobile OS", 0.05, "EC Case AT.40099",
+    "App Store", "US", 2021, "Apple App Store", "iOS app distribution", 1.00, "Epic v. Apple",
+    "Amazon Marketplace", "EU", 2020, "Amazon", "Online marketplace", 0.47, "EC Case AT.40462",
+    "Amazon Marketplace", "EU", 2020, "eBay", "Online marketplace", 0.15, "EC Case AT.40462",
+    "Amazon Marketplace", "EU", 2020, "Others", "Online marketplace", 0.38, "EC Case AT.40462",
+    "Google Shopping", "SA", 2019, "Google", "Comparison shopping", 0.95, "CC Case 2016Sep0005",
+    "Google Shopping", "SA", 2019, "Others", "Comparison shopping", 0.05, "CC Case 2016Sep0005"
+  )
+}
+if (is.null(commissions)) {
+  commissions <- tibble::tribble(
+    ~platform, ~year, ~standard_rate, ~small_developer_rate, ~notes,
+    "Apple App Store", 2020, 0.30, 0.30, "Pre-small business program",
+    "Apple App Store", 2021, 0.30, 0.15, "Small Business Program (<$1M revenue)",
+    "Apple App Store", 2023, 0.30, 0.15, "Continued",
+    "Google Play", 2020, 0.30, 0.30, "Pre-reduction",
+    "Google Play", 2021, 0.30, 0.15, "Reduced rate for first $1M",
+    "Google Play", 2023, 0.30, 0.15, "Continued",
+    "Amazon Appstore", 2020, 0.30, 0.30, "Standard",
+    "Amazon Appstore", 2023, 0.30, 0.20, "Small developer program"
+  )
+}
 
-# Panel A: Market shares by platform (from regulatory filings)
-p1 <- ggplot(platform_shares, aes(x = reorder(platform, share), y = share, fill = jurisdiction)) +
+provenance_note <- if (used_fallback) {
+  "Inline fallback values (same public case documents); run program/scripts/07_digital_platforms.R to regenerate the CSVs."
+} else {
+  "Source: data/derived/platform_*.csv built by program/scripts/07_digital_platforms.R."
+}
+
+# Panel A: Market shares as reported in the cited proceedings
+shares_plot <- platform_shares |>
+  filter(!platform %in% c("Others", "Other")) |>
+  mutate(label = paste0(platform, " (", case, ", ", year, ")"))
+
+p1 <- ggplot(shares_plot, aes(x = reorder(label, share), y = share, fill = jurisdiction)) +
   geom_col(width = 0.7, alpha = 0.85) +
   geom_hline(yintercept = 0.5, linetype = "dashed", color = "darkred", linewidth = 0.8) +
   geom_hline(yintercept = 0.7, linetype = "dotted", color = "darkred", linewidth = 0.8) +
-  annotate("text", x = 5.5, y = 0.52, label = "50%", color = "darkred", hjust = 0, size = 3) +
-  annotate("text", x = 5.5, y = 0.72, label = "70%", color = "darkred", hjust = 0, size = 3) +
   scale_y_continuous(labels = scales::percent_format()) +
   scale_fill_manual(values = c(
     "EU" = "#0072B2", "US" = "#D55E00", "SA" = "#009E73"
   )) +
   coord_flip() +
   labs(
-    title = "Platform Market Shares from Regulatory Filings",
-    subtitle = "Real data from EU, US, and South African competition authorities",
+    title = "Platform Market Shares as Reported in Competition Proceedings",
+    subtitle = "Compiled from public case documents (EU decisions, US litigation, SA OIPMI)",
     x = NULL, y = "Market Share", fill = "Jurisdiction",
-    caption = "Source: platform_market_shares.csv. Compiled from EU Commission decisions, US litigation filings, SA OIPMI."
+    caption = paste0(provenance_note,
+                     "\nShares are as pleaded or found in each proceeding; markets and dates differ across bars.")
   ) +
   theme_antitrust() +
   theme(legend.position = "bottom")
 
-# Panel B: Commission rate changes over time
-p2 <- ggplot(commissions, aes(x = as.Date(date), y = commission_rate, color = platform)) +
-  geom_line(linewidth = 1.2) +
+# Panel B: App store commission rates over time (standard vs. small developer)
+comm_long <- commissions |>
+  pivot_longer(c(standard_rate, small_developer_rate),
+               names_to = "tier", values_to = "rate") |>
+  mutate(tier = if_else(tier == "standard_rate", "Standard", "Small developer"))
+
+p2 <- ggplot(comm_long, aes(x = year, y = rate, color = platform, linetype = tier)) +
+  geom_line(linewidth = 1.1) +
   geom_point(size = 2.5) +
-  scale_y_continuous(labels = scales::percent_format()) +
+  scale_y_continuous(labels = scales::percent_format(), limits = c(0, 0.35)) +
   scale_color_manual(values = c(
     "Apple App Store" = "#0072B2", "Google Play" = "#D55E00",
-    "Amazon" = "#E69F00", "Uber Eats" = "#009E73"
+    "Amazon Appstore" = "#E69F00"
   )) +
   labs(
-    title = "Platform Commission Rate Changes",
-    subtitle = "Real commission rates from public filings and regulatory disclosures",
-    x = NULL, y = "Commission Rate", color = NULL,
-    caption = "Source: platform_commission_rates.csv. From public filings and regulatory proceedings."
+    title = "App Store Commission Rates",
+    subtitle = "Standard vs. small-developer rates, from public platform documentation",
+    x = NULL, y = "Commission Rate", color = NULL, linetype = NULL,
+    caption = provenance_note
   ) +
   theme_antitrust() +
   theme(legend.position = "bottom")
@@ -992,10 +1046,11 @@ if (requireNamespace("patchwork", quietly = TRUE)) {
   print(p2)
 }
 
-# HHI summary
-cat("\nPlatform market concentration (HHI by case):\n")
+# HHI summary, within each case-market (shares from different markets
+# must not be pooled into one HHI)
+cat("\nPlatform market concentration (HHI by case and market):\n")
 platform_shares |>
-  group_by(case_name) |>
+  group_by(case, market) |>
   summarise(
     n_firms = n(),
     hhi = sum((share * 100)^2),
@@ -1004,22 +1059,10 @@ platform_shares |>
     .groups = "drop"
   ) |>
   knitr::kable(digits = 0,
-               caption = "HHI computed from real platform market share data")
+               caption = "HHI computed from shares reported in the cited proceedings")
 ```
 
-These real market share figures from EU, US, and South African regulatory proceedings illustrate the concentration patterns that define digital platform markets. The commission rate panel shows how platform fees have evolved in response to regulatory pressure---Apple's reduction from 30% to 15% for small developers (2020), Google's matching response (2021), and the EU's Digital Markets Act requirements for greater fee transparency.
-
-**Data sources:**
-- **StatCounter**: Global browser, OS, search engine stats
-- **SimilarWeb**: Website and app traffic data
-- **Sensor Tower / App Annie**: Mobile app market intelligence
-- **Regulatory filings**: EC, CMA, FTC, DMA compliance reports
-- **OIPMI**: South African platform market shares
-
-**Use cases:**
-- Demonstrate sustained dominance or competitive entry
-- Identify tipping points or competitive interventions
-- Support market definition and dominance assessments
+The shares are compiled from public case documents---European Commission decisions, US litigation filings, and the OIPMI report---so each bar carries the market definition and date of its own proceeding, and the figures should be read case by case rather than as a single cross-section. The companion datasets written by `program/scripts/07_digital_platforms.R` mix provenance: the shares and commission rates above come from public documents, while the usage, ranking, and multi-homing files are synthetic scaffolds for illustration; the script's metadata table records which is which. The commission panel shows the standard 30% rate holding steady while both Apple and Google introduced 15% small-developer tiers in 2021 under litigation and regulatory pressure. For richer or more current series---StatCounter for browser and search shares, SimilarWeb or Sensor Tower for app traffic, DMA compliance reports and CMA studies for regulator-grade data---swap the inputs and keep the same charts, which serve the usual purposes in a dominance assessment: persistence of share, tipping points, and the response to interventions.
 
 ## Generative AI and foundation models
 
@@ -1029,7 +1072,7 @@ This section surveys early enforcement thinking on AI markets, adapting concepts
 
 ### Market structure concerns
 
-**Vertical integration and compute access:** A small number of cloud providers (AWS, Azure, Google Cloud) control the compute infrastructure essential for training frontier models. Vertical integration between cloud providers and AI model developers (Microsoft/OpenAI, Google/DeepMind, Amazon/Anthropic) creates potential foreclosure concerns similar to traditional media/distribution cases.
+**Vertical integration and compute access:** A small number of cloud providers (AWS, Azure, Google Cloud) control the compute infrastructure essential for training frontier models. Vertical ties between cloud providers and AI model developers---outright integration in Google's case, partnership structures in Microsoft/OpenAI and Amazon/Anthropic---create potential foreclosure concerns similar to traditional media/distribution cases.
 
 **Data moats:** Training data advantages may create barriers to entry that are difficult to replicate. Key questions include:
 - Whether data access is essential for competitive AI development
@@ -1048,11 +1091,9 @@ This section surveys early enforcement thinking on AI markets, adapting concepts
 | **Distribution bundling** | Tying AI features to dominant platforms | Default/pre-installation analysis (cf. browser cases) |
 | **Talent concentration** | Acqui-hires and non-competes limiting rival innovation | Labor market analysis (see @sec-labor-markets) |
 
-### Emerging regulatory frameworks
+### Regulatory frameworks
 
-- **EU AI Act (2024):** Establishes tiered obligations based on risk level; interacts with DMA gatekeeper obligations for AI-integrated platforms.
-- **US Executive Order on AI (2023):** Directs agencies to monitor competitive dynamics; potential FTC Section 5 authority for unfair methods.
-- **CMA AI Foundation Models review (2023-ongoing):** Examines compute concentration, partnerships, and potential competition concerns.
+The regulatory picture has moved fast and unevenly. The EU AI Act (2024) establishes tiered obligations based on risk level and interacts with DMA gatekeeper obligations for AI-integrated platforms. The United States went the other way: the 2023 Executive Order on AI, which had directed agencies to monitor competitive dynamics, was rescinded in January 2025, leaving case-by-case enforcement (including potential FTC Section 5 authority) as the operative US tool. In the United Kingdom, the CMA's AI Foundation Models review (2023--2024) mapped compute concentration and partnership structures, and the DMCCA's strategic-market-status regime---in force since January 2025---now gives the CMA ex ante powers over designated digital activities, with the first designations under way as of this writing.
 
 ### Practical implications
 
@@ -1063,7 +1104,7 @@ When analyzing AI market competition:
 3. **Consider dynamic competition:** AI capabilities evolve rapidly; static market shares may understate competitive dynamics or overstate durability of positions.
 4. **Examine data and compute access:** These inputs may function as essential facilities; apply raising rivals' costs and foreclosure frameworks.
 
-For the latest agency guidance, monitor CMA's AI Foundation Models work and FTC/DOJ statements on AI competition.
+For the latest agency guidance, monitor the CMA's digital-markets and AI work and FTC/DOJ statements on AI competition.
 
 ## Exercises
 
