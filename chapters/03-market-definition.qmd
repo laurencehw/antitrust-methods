@@ -63,30 +63,23 @@ START: Define candidate market (products + geography)
    Expand candidate            Proceed with
    market and repeat           current definition
 ```
-**Key insight:** High-margin firms face lower critical loss thresholds, making it easier to sustain a narrow market definition. Low-margin firms face higher thresholds, often requiring broader markets.
+**Key insight:** X/(X + M) is the *breakeven* critical loss --- the share loss at which a SSNIP of size X stops paying, given margin M. A profit-maximizing variant asks instead whether the hypothetical monopolist would choose to raise price at all; it yields lower thresholds, so say which version you are using. High margins push the breakeven threshold down; low margins push it up.
 :::
 
-> "The 'relevant market' is not an intrinsic feature of the economy, but a tool for analyzing competitive effects... It is defined by the constraints that prevent a hypothetical monopolist from raising prices." — *United States v. Google LLC*, Memorandum Opinion (D.D.C. 2024)
+A low critical loss does not, by itself, justify a narrow market. High pre-merger margins are themselves evidence of inelastic demand: the same margins that lower the critical loss also predict a low *actual* loss. Comparing a margin-based critical loss against an actual loss estimated under unrelated demand assumptions is the critical-loss fallacy, and opposing experts will name it. Derive both numbers from one internally consistent demand model [@katz_shapiro_2003]; O'Brien and Wickelgren's 2003 *Antitrust Law Journal* critique develops the same point.
+
+*Market definition is a tool for analyzing competitive effects, not an end in itself --- a point the general-search market findings in* United States v. Google *(D.D.C. 2024) make concrete.*
 
 ## Core tools and workflow
 
-Modern market-definition work cycles through four approaches, each suited to different data environments and legal standards.
+Modern market-definition work cycles through four approaches, each suited to different data environments and legal standards. Each produces artifacts that feed directly into merger simulations (@sec-mergers) and cartel analysis (@sec-cartels).
 
-1. **Descriptive analytics.** Price/volume trends, seasonality, and policy shocks that reveal when products or regions move together. Use `ggplot2` quick looks before heavy modeling.
-2. **Demand elasticities & diversion.** Log-log regressions, AIDS-lite models, discrete choice, or churn-based diversion ratios that quantify substitutability. Always document instruments, fixed effects, or controls used.
-3. **Critical-loss vs. actual-loss.** Compare hypothetical post-SSNIP losses to observed switching, stating margin assumptions and capacity constraints. Highlight when brand repositioning or supply limits break the classic calculations.
-4. **Geographic screens.** Shipment flows, travel-time analyses, or catchment-area heatmaps built from loyalty data, mobile location pings, or Stats SA transport datasets. Pair with qualitative evidence on delivery commitments or regulatory boundaries.
+1. **Descriptive analytics.** Price/volume trends, seasonality, cointegration, variance ratios, and shock responses that reveal when products or regions move together. Use `ggplot2` quick looks before heavy modeling.
+2. **Demand elasticities & diversion.** Log-log or `fixest` panel regressions, AIDS-lite models, discrete choice on customer-level data (`mlogit`, `apollo`), or churn-based diversion ratios that quantify substitutability. Always document instruments, fixed effects, or controls used.
+3. **Critical-loss vs. actual-loss.** Compare hypothetical post-SSNIP losses to observed switching, stating margin assumptions and capacity constraints. Highlight when brand repositioning, supply limits, or multi-product margins break the classic calculations.
+4. **Geographic screens.** Shipment flows, travel-time analyses, switching matrices, gravity models, or catchment-area heatmaps built from loyalty data, mobile location pings, or Stats SA transport datasets. Pair with qualitative evidence on delivery commitments or regulatory boundaries.
 
 The workflow mirrors @sec-research-design's research design steps: scoping memo → data inventory → qualitative plan → estimation → memo/slide deck. Revisit `chapters/13-empirical-appendix.qmd` for templates.
-
-## Core diagnostic tools
-
-The workflow says *what* to do; the diagnostics below show *how*. Each produces artifacts that feed directly into merger simulations (@sec-mergers) and cartel analysis (@sec-cartels):
-
-- **Price/quantity dashboards.** Track cointegration, variance ratios, and shock responses to see which products move together.
-- **Elasticities/diversion.** Estimate log-log or `fixest` panel regressions; or use choice data (`mlogit`, `apollo`) when products are differentiated.
-- **Critical vs. actual loss.** Compare theoretical thresholds to observed share loss; revisit margin assumptions for multi-product firms.
-- **Switching matrices, flows, and gravity models.** Summarize customer-level churn or shipment adjacency to motivate geographic splits.
 
 ### Critical-loss worksheet
 
@@ -123,11 +116,13 @@ observed <- tibble::tribble(
 ) |>
   mutate(
     critical_loss = cl_threshold,
-    passes_test = observed_share_loss > critical_loss
+    exceeds_critical = observed_share_loss > critical_loss
   )
 
 knitr::kable(observed, caption="Illustrative Critical Loss by Customer Segment")
 ```
+
+Read `exceeds_critical` directly: `TRUE` means observed switching exceeds the critical loss, so a SSNIP over that segment would lose money and the candidate market is too narrow. `FALSE` means the hypothetical monopolist could profitably raise price, supporting the candidate definition.
 
 ### Critical-loss vs. actual-loss curve
 This visualization compares the theoretical critical loss threshold to observed share losses across different margin assumptions. It helps communicate whether a candidate market "passes" the SSNIP test.
@@ -193,9 +188,9 @@ p1 <- ggplot(cl_curves, aes(x = margin, y = critical_loss, color = price_increas
 # Companion table showing specific calculations
 cl_table <- tibble::tribble(
   ~margin, ~price_increase, ~critical_loss, ~actual_loss, ~interpretation,
-  0.25, 0.05, 0.167, 0.08, "Market likely too narrow (actual < critical)",
-  0.25, 0.10, 0.286, 0.12, "Market likely too narrow (actual < critical)",
-  0.40, 0.05, 0.111, 0.15, "Market likely too broad (actual > critical)"
+  0.25, 0.05, 0.167, 0.08, "Market well-defined (SSNIP profitable; actual < critical)",
+  0.25, 0.10, 0.286, 0.12, "Market well-defined (SSNIP profitable; actual < critical)",
+  0.40, 0.05, 0.111, 0.15, "Too narrow --- expand the candidate market (actual > critical)"
 ) |>
   mutate(
     across(c(margin, price_increase, critical_loss, actual_loss),
@@ -211,6 +206,16 @@ knitr::kable(cl_table, digits=3, caption="Critical Loss Decision Table")
 **How to use this chart:** For a given margin estimate (horizontal axis), find the critical loss threshold (the curve). If your observed or estimated actual loss (from switching data, surveys, or diversion ratios) falls *above* the curve, customers switch too readily for a hypothetical monopolist to profitably raise prices by 5-10%, suggesting the candidate market is too narrow and should be expanded. Conversely, if actual loss is *below* the curve, the market definition may be defensible.
 
 Swap `margin` and `price_increase` with matter-specific values. For theoretical derivations, see @katz_shapiro_2003. For alternatives to traditional market definition, see @farrell_shapiro_2010 and @schmalensee_2009. For quantitative techniques, consult @davis_garces_2010.
+
+### Four principles that discipline the exercise
+
+**The Cellophane fallacy.** A SSNIP run from prevailing prices assumes those prices are competitive. In monopolization cases --- Sherman Act §2, Article 102, §8 of the South African Competition Act --- they often are not. A monopolist has already raised price to the point where demand turns elastic, so substitutes look constraining at the margin even though they would not constrain a competitive price. The Supreme Court fell into this trap in the 1956 *du Pont* cellophane decision, accepting flexible wrapping materials as substitutes at du Pont's monopoly price. In abuse-of-dominance work, run the test from a competitive benchmark price, or rest the boundary on evidence other than observed substitution at current prices.
+
+**The smallest-market principle.** The hypothetical monopolist test is typically satisfied by many nested candidate markets: if a SSNIP is profitable over a narrow product group, it is usually profitable over any broader group containing it. Convention resolves the ambiguity by selecting the smallest group of products that satisfies the test. State this when defending a narrow market. The question is not whether a broader market would also pass, but whether the narrow one does.
+
+***Brown Shoe* practical indicia.** Courts still ask for the qualitative checklist from *Brown Shoe* [@us_brown_shoe_1962]: industry or public recognition of the submarket, the product's peculiar characteristics and uses, unique production facilities, distinct customers, distinct prices, sensitivity to price changes, and specialized vendors. Treat the indicia as an evidence-organization device rather than a separate test. Each maps onto something the quantitative tools measure: distinct prices onto price-correlation screens, distinct customers onto switching matrices, sensitivity to price changes onto elasticities.
+
+**Aggregate diversion.** The bridge between diversion ratios and critical loss. The aggregate diversion ratio is the share of sales lost by one product after a price increase that is recaptured by *other products inside the candidate market*. If aggregate diversion exceeds the critical loss, the candidate market passes the breakeven test [@katz_shapiro_2003]. The same switching matrix that flags unilateral effects in @sec-mergers therefore closes the market-definition argument here --- estimate it once, use it twice.
 
 ### Route-share heatmap: NYC airline concentration
 This heatmap visualizes carrier concentration on specific routes, helping identify whether route-by-route markets are appropriate or whether broader origin-destination-pairs should be considered. High concentration (dark colors) on specific routes may signal competitive concerns.
