@@ -37,6 +37,9 @@ data/derived/
 *.doc
 *.zip
 
+# Course slide decks are a deliverable: keep them tracked
+!teaching/slides/*.pptx
+
 # External materials
 _literature/
 notes and slides/
@@ -52,3 +55,4 @@ DATA_COLLECTION_SUMMARY.md
 DATA_INTEGRATION_GUIDE.md
 CITATION_QUICK_REFERENCE.md
 visualization-roadmap.md
+teaching/__pycache__/
