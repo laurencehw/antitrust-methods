@@ -1,0 +1,230 @@
+---
+title: "Day 1 — Foundations"
+subtitle: "Institutions, evidence, market definition, and market power"
+author: "Antitrust Methods: Research and Practice · Practitioner short course"
+format:
+  pptx:
+    slide-level: 2
+execute:
+  echo: true
+  eval: false
+  warning: false
+---
+
+# Module 1.1 — The competition-law landscape
+
+## Why institutions come before methods
+
+- Economic analysis answers to **legal standards, agency priorities, and procedural rules** — all three vary by jurisdiction.
+- Get the frame right and your analysis speaks to the questions that *decide* a matter, not the ones that are merely interesting.
+- Three questions to ask of any matter:
+  - Who **enforces** the law here?
+  - What must they **prove** (the legal elements)?
+  - Where does the **economics** enter (which element does my number go to)?
+
+## South Africa: the institutions
+
+- **Competition Act 89 of 1998** (as amended, incl. the 2019 Amendment Act).
+- **Competition Commission** — investigates, screens mergers, refers cases.
+- **Competition Tribunal** — adjudicates (Pretoria); decides large mergers and prohibited-practice referrals.
+- **Competition Appeal Court (CAC)** — hears appeals; several headline economic findings have been *set aside* on appeal.
+- Distinctive: a statutory **public-interest test** in merger review, and **market inquiries** (Grocery Retail, Healthcare, Online Intermediation Platforms).
+- Regional reach: conduct affecting **SADC** markets is in scope.
+
+## The Competition Act, by conduct type
+
+| Conduct | South Africa | United States | EU |
+|:--|:--|:--|:--|
+| Cartels / horizontal | §4 (per se: §4(1)(b)) | Sherman §1 | Art. 101 |
+| Abuse of dominance | §8 | Sherman §2 | Art. 102 |
+| Vertical restraints | §5; §8(1)(d) if dominant | Sherman §1 (RoR) | Art. 101 + VBER |
+| Mergers | §12, §12A (+ public interest §12A(3)) | Clayton §7 | EUMR 139/2004 |
+| Price discrimination | §9 (by dominant firm) | Robinson-Patman | Art. 102(c) |
+
+::: notes
+Vertical restraints fall under §5 (and §8(1)(d) for a dominant firm), **not** the per se horizontal provision §4(1)(b). This is a common slip.
+:::
+
+## Dominance thresholds are statutory in SA (§7)
+
+Unlike the US "monopoly power" inference or EU practice, **SA fixes the thresholds in the statute**:
+
+> - **≥ 45%** → presumed dominant
+> - **35–45%** → dominant *unless* it shows it lacks market power
+> - **< 35%** → dominant only if market power is *proven*
+
+- US: "monopoly power", in practice inferred above ~70% share.
+- EU: "dominance", from ~40% with entry barriers; rebuttable presumption at 50% (*AKZO*).
+- **Why it matters:** in SA the share number does legal work directly — the economist's market-share estimate can decide the burden.
+
+## The same conduct, three regimes
+
+- **Object vs. effects:** EU Art. 101 treats "object" restrictions as presumptively restrictive (101(3) still formally available); US separates per se from rule of reason; SA §4(1)(b) lists per se horizontal practices.
+- **Public interest:** SA uniquely weighs employment, SME participation, and spread of ownership (incl. by historically disadvantaged persons) in merger review.
+- **Private enforcement:** US treble damages; SA/EU narrower (SA: follow-on civil claims after a Tribunal finding).
+- **Habit:** map the same theory of harm to each regime's statutory test *early*.
+
+# Module 1.2 — Research design & the evidence triad
+
+## The evidence triad — the spine of the course
+
+- Every matter is built from three kinds of evidence; good work integrates all three.
+  - **Empirical** — quantitative estimation (prices, shares, diversion, damages).
+  - **Documentary** — internal memos, board decks, emails ("hot docs"), discovery.
+  - **Expert judgment** — translating the first two into the legal standard.
+- We return to this triad in *every* session. Of any claim, ask: **which leg supports it?**
+
+## The investigation workflow: intake → remedy
+
+- **Intake** — complaint, leniency application, or merger notification; triage "hot docs" + quick analytics.
+- **Scoping** — inventory data systems, prioritise custodians, run early screens (margins, shares/HHI, diversion).
+- **Analysis** — test theories: market definition, unilateral/coordinated effects, DiD / IV / simulation, married to documents.
+- **Decision & remedy** — statement of issues, then forward-looking remedy within institutional constraints.
+- At each hand-off: does the next dollar buy **more data** or **better documents/testimony**?
+
+## Mapping economics onto legal elements
+
+:::: {.columns}
+::: {.column width="50%"}
+**Economic question**
+
+- Relevant market
+- Market power / dominance
+- Theory of harm
+- Efficiencies / justification
+- Remedy
+:::
+::: {.column width="50%"}
+**Legal element it serves**
+
+- Defines shares, the field of analysis
+- An element of every abuse / §2 / Art. 102 case
+- The causal mechanism the agency must prove
+- The rebuttal / §4(1) or 101(3) defence
+- Must be effective **and** administrable by the Tribunal
+:::
+::::
+
+## Code as demo — the multi-jurisdiction timeline
+
+Book Ch. 1, figure `antitrust-timeline`. Run live or show the output.
+
+```{r}
+library(ggplot2); source("program/R/helpers.R")
+milestones <- tibble::tribble(
+  ~year, ~event,                ~type,      ~jurisdiction,
+  1998,  "Competition Act 89",  "Statute",  "SA",
+  2019,  "SA Amendment Act",    "Statute",  "SA",
+  2023,  "US Merger Guidelines","Guidance", "US")
+ggplot(milestones, aes(year, 0, colour = jurisdiction)) +
+  geom_point(size = 4) + theme_antitrust()
+```
+
+**Point at:** SA's 1998 Act drew on EU precedent; the 2023 US Guidelines moved toward EU-style structural presumptions — convergence over time.
+
+# Module 1.3 — Market definition
+
+## The hypothetical monopolist test (SSNIP)
+
+Start with a candidate market. Could a hypothetical monopolist over *just these products* profitably impose a **SSNIP** (a Small but Significant Non-transitory Increase in Price, typically 5–10%)?
+
+> - **YES** → the candidate market **is** a relevant market
+> - **NO** → widen the market and test again
+
+- Mechanises the question "what constrains this firm?"
+- Zero-price digital markets: use **SSNDQ** (a small but significant decrease in *quality* — ad load, data extraction).
+
+## Critical loss — and the fallacy to avoid
+
+A SSNIP is profitable if the sales actually lost are smaller than the most you could afford to lose:
+
+> **Critical loss   CL = t / (t + m)**  — t = SSNIP size, m = gross margin
+
+- Example: t = 5%, m = 40% → CL = 5/(5+40) = **11.1%**.
+- ACTUAL loss < CL → SSNIP profitable → market is **well defined** (do not widen).
+- ACTUAL loss > CL → widen the candidate market.
+- **THE FALLACY:** high margins give a *low* critical loss — but high margins often go with *low actual loss* too. Citing only the low critical loss to claim a narrow market is the classic error (O'Brien–Wickelgren; Katz–Shapiro).
+
+## Two traps the tribunal will test
+
+- **The Cellophane fallacy.** At the already-monopolised price, other products look like substitutes — but only because the price is already supra-competitive. Define the market at the **competitive** price. Central wherever you start from an abuse/§8/Art. 102 allegation.
+- **Brown Shoe practical indicia.** Beyond SSNIP arithmetic: peculiar uses, distinct customers, distinct prices, specialised vendors, industry recognition. Useful when the data are thin.
+
+## Measuring concentration: HHI
+
+> **HHI = Σ (share_i)²        ΔHHI = 2 × s₁ × s₂**
+
+- Shares as percentages (monopoly = 10,000). Merger short-cut: ΔHHI = 2 × s₁ × s₂.
+- **2023 US Merger Guidelines** structural presumption: post-merger HHI > **1,800** *and* ΔHHI > **100** (or combined share ≥ 30% with ΔHHI > 100).
+- The 2010 Guidelines' 1,500/2,500 bands still appear in older case law — know which standard a cited case used.
+
+## Code as demo — HHI in two lines
+
+```{r}
+source("program/R/helpers.R")
+shares <- c(A = 0.40, B = 0.30, C = 0.20, D = 0.10)
+calc_hhi_change(shares, merging_firms = c("C", "D"))
+#> pre_hhi 3000 ; post_hhi 3400 ; delta_hhi 400  (= 2*20*10)
+```
+
+**Point at:** Pre 3,000; post 3,400; Δ 400. Both triggers met (>1,800 and >100) → structural presumption. The class warm-up.
+
+## Case — Grocery Retail Market Inquiry (SA)
+
+- Inquiry into national supermarket chains (Shoprite, Pick n Pay, Spar, Woolworths) and the long-term **exclusive lease agreements** in shopping centres.
+- Exclusivity foreclosed entry by rivals and informal traders — a market-definition and barriers question, not price-fixing.
+- Brings together SSNIP/critical-loss reasoning and the **public-interest** lens (SME / township-trader participation).
+
+**Why it matters:** market definition is where the public-interest story and the competition story first meet in SA practice.
+
+# Module 1.4 — The IO toolkit
+
+## Elasticity and the Lerner index
+
+Market power shows up in the price–marginal-cost gap. For a profit-maximising firm:
+
+> **L = (P − MC) / P = − 1 / ε**
+
+- L = Lerner index (the margin); ε = own-price elasticity of demand.
+- Inelastic demand (small |ε|) → high margin → market power.
+- Caveat: a high margin alone is not proof — it can reflect fixed-cost recovery or quality. Pair it with other evidence.
+
+## Diversion ratios — the unilateral-effects engine
+
+When product 1's price rises, where do its lost sales go?
+
+> **D₁₂ = (sales gained by 2) / (sales lost by 1)**
+
+- If 1 and 2 are owned by merging firms, sales "lost" to 2 are recaptured → less reason to compete on price (Day 3).
+- Estimated from switching data, win/loss data, surveys, or a demand model. Feeds **UPP** and **GUPPI**.
+
+## Pass-through — and a trap
+
+- Pass-through = how much of a cost change reaches price. Converts an overcharge or cost-saving into a price effect (Days 2–3).
+- **Estimate in changes / log-differences with lags — NOT on price/cost index LEVELS.** Regressing one trending index on another (CPI on PPI in levels) is the spurious-regression trap.
+- Rule of thumb: a merger's first-order price effect ≈ pass-through × UPP (≈ UPP/2). State the assumption.
+
+## Day 1 live-demo toolbox (book helpers)
+
+- `calc_hhi_change(shares, merging_firms)` — HHI, post-HHI, ΔHHI.
+- `run_logit_sim(products, merging_firms)` — static logit merger simulation (Day 3).
+- `theme_antitrust()` / `scale_colour_antitrust()` — consistent figures.
+- `fetch_fred()` — pull a real concentration/price series (needs key).
+- All in `program/R/helpers.R`; each concept ≈ one function call.
+
+## Day 1 — takeaways
+
+1. Map any conduct to §4 / §5 / §8 / §9 / §12 and to its US and EU homes.
+2. State the SA §7 dominance thresholds from memory and explain why the share does legal work.
+3. Run the hypothetical-monopolist test, compute critical loss, avoid the Cellophane and critical-loss fallacies.
+4. Compute HHI / ΔHHI and apply the 2023 structural presumption.
+5. Read off the four IO parameters every later method consumes: elasticity, margin/Lerner, diversion, pass-through.
+
+## Day 1 — exercises
+
+1. **HHI & presumption** [checkable]: shares 40/30/20/10; two smallest merge.
+2. **Critical loss** [checkable]: t = 5%, m = 35%, predicted loss 9%.
+3. **Mapping memo** [discussion]: exclusive dealing by a 48%-share firm, SA/US/EU.
+4. **Public interest** [discussion]: one §12A(3) example that flips a clearance.
+
+*Worked answers in `teaching/exercises/day1_exercises.md`.*
