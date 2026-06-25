@@ -624,8 +624,8 @@ d.bullets("SA hook & the monopsony evidence", [
     "SA tools reach this through market inquiries and §8 dominance in the "
     "buying market — the buyer-power case is statutorily available.",
     "For the expert: build the labour HHI by occupation × region, then "
-    "connect concentration to the wage markdown the supply elasticity "
-    "implies.",
+    "connect concentration to the wage markdown implied by the supply "
+    "elasticity.",
 ], footer=FT)
 
 d.code_demo("Code as demo — labour HHI and the markdown",

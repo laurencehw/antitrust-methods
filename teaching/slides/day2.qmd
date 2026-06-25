@@ -378,7 +378,7 @@ Define the market as **occupation × commuting zone**, then apply the same HHI:
 - **Healthcare Market Inquiry:** a few hospital groups hold **>80% of private beds** → a structural **monopsony over nurses** and clinical labour in many regions.
 - The same concentration that raises **prices to patients** also **depresses wages** to clinical staff — one structure, two harms.
 - SA tools reach this through **market inquiries** and **§8 dominance** in the buying market — the buyer-power case is statutorily available.
-- For the expert: build the **labour HHI by occupation × region**, then connect concentration to the **wage markdown** the supply elasticity implies.
+- For the expert: build the **labour HHI by occupation × region**, then connect concentration to the **wage markdown** implied by the supply elasticity.
 
 ## Code as demo — labour HHI and the markdown
 
