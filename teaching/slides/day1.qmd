@@ -162,7 +162,7 @@ A SSNIP is profitable if the sales actually lost are smaller than the most you c
 
 ```{r}
 source("program/R/helpers.R")
-shares <- c(A = 0.40, B = 0.30, C = 0.20, D = 0.10)
+shares <- data.frame(firm = c("A","B","C","D"), share = c(0.40, 0.30, 0.20, 0.10))
 calc_hhi_change(shares, merging_firms = c("C", "D"))
 #> pre_hhi 3000 ; post_hhi 3400 ; delta_hhi 400  (= 2*20*10)
 ```

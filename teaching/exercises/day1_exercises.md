@@ -27,7 +27,7 @@ A market has four firms with shares **40, 30, 20, 10** (percent).
 > 3. **Yes** — 3,400 > 1,800 and 400 > 100, so the structural presumption
 >    applies.
 >
-> *R check:* `calc_hhi_change(c(.40,.30,.20,.10), merging_firms = c(3,4))`.
+> *R check:* `calc_hhi_change(data.frame(firm=c("A","B","C","D"), share=c(.40,.30,.20,.10)), merging_firms = c("C","D"))`.
 
 ---
 

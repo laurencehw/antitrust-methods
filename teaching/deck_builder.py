@@ -324,7 +324,7 @@ class Deck:
             runs.append([(("" if lvl else "") + txt,
                           {"size": 19 if lvl == 0 else 16,
                            "color": DARK if lvl == 0 else GREY,
-                           "bold": lvl == 0 and txt.endswith("?") is False and False,
+                           "bold": lvl == 0 and not txt.endswith("?"),
                            "level": lvl})])
         self._text(s, Inches(1.0), Inches(1.45), Inches(11.7), Inches(4.0),
                    runs, space_after=10, line_spacing=1.1)

@@ -161,7 +161,7 @@ Diversion: A→B = 0.32, A→C = 0.30, B→A = 0.45. **A and B propose to merge.
 >   GUPPIs are high, and diversion shows close substitution; efficiencies/entry
 >   would have to be substantial, merger-specific, and verifiable to rebut.
 >
-> *R checks:* `calc_hhi_change(c(.30,.20,.25,.15,.06,.04), merging_firms=c(1,2))`
+> *R checks:* `calc_hhi_change(data.frame(firm=c("A","B","C","D","E","F"), share=c(.30,.20,.25,.15,.06,.04)), merging_firms=c("A","B"))`
 > for step 2; `run_logit_sim()` to extend step 4 into a full simulation.
 
 ---
