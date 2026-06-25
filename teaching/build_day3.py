@@ -177,6 +177,22 @@ d.case_box("Burger King (Grand Parade / ECP)", "SA",
            "analysis — in SA it can be the whole case.",
            footer=FT)
 
+d.case_box("Bayer / Monsanto — an innovation merger", "EU",
+           "A $63bn deal cleared in 30+ jurisdictions with a coordinated remedy",
+           ["Theory of harm: not just horizontal overlap in seeds/traits/"
+            "herbicides but innovation competition — fewer independent R&D "
+            "pipelines, overlapping development projects, concentrated patents; "
+            "plus vertical integration across the chain and digital agriculture.",
+            "Remedy: a ~$9bn divestiture package to BASF (vegetable seeds, "
+            "glufosinate herbicide, Liberty traits) — BASF pre-cleared as a "
+            "capable, independent buyer with no new overlaps.",
+            "Method: agencies coordinated across borders, defined narrow seed/"
+            "trait markets, and weighed R&D-pipeline overlap as a distinct harm."],
+           "In concentrated, R&D-heavy industries the binding concern is lost "
+           "innovation, and the remedy must rebuild an independent competitor — "
+           "early buyer identification is half the battle.",
+           footer=FT)
+
 # ============================================================ MODULE 3.2
 d.section("Module 3.2 — Merger retrospectives and natural experiments",
           "Predicting effects is half the job; checking the predictions is "
@@ -255,6 +271,24 @@ d.case_box("Whirlpool / Maytag — appliances", "US",
             "control, and a transparent before/after anyone can replicate."],
            "Ex-post evidence like this is exactly what should discipline the "
            "next appliance-merger prediction.",
+           footer=FT)
+
+d.case_box("MillerCoors — coordinated effects, confirmed", "US",
+           "A retrospective that validated the theory of harm",
+           ["The 2008 MillerCoors JV (SABMiller + Molson Coors, ~29% combined) "
+            "took US brewing from 3 major players to 2 alongside Anheuser-Busch "
+            "(~48%); DOJ cleared it without conditions.",
+            "Design: Nielsen retail scanner data, difference-in-differences "
+            "exploiting regional variation in market structure, robust across "
+            "specifications.",
+            "Findings (2008–2011): ~6–8% price increase, ~17–18% rise in price-"
+            "cost margins, larger in premium/light and concentrated regions; "
+            "Anheuser-Busch raised prices in parallel; ~$300m/yr consumer loss.",
+            "Mechanism: with 3→2 and transparent pricing, coordinated (not just "
+            "unilateral) effects materialised despite the efficiency claims."],
+           "A clean retrospective validated the coordinated-effects theory and "
+           "showed efficiency defences can be overstated — partial mergers / "
+           "JVs deserve the same scrutiny.",
            footer=FT)
 
 # ============================================================ MODULE 3.3
@@ -420,6 +454,39 @@ d.bullets("Appellate caution — Qualcomm, both sides", [
     "This is the IP-and-dominance counterpart to the recurring habit: cite "
     "outcomes, not headlines (Sasol, Media24, Intel, Qualcomm).",
 ], footer=FT)
+
+d.case_box("Questcor / Synacthen — a killer acquisition", "US",
+           "Buying and shelving a nascent rival",
+           ["Setup: Questcor (later Mallinckrodt) held a US monopoly in ACTH "
+            "therapy with Acthar, whose price rose from ~$40 to $38,000+ per vial.",
+            "The acquisition: in 2013 Questcor bought the US rights to "
+            "Synacthen — a synthetic, lower-cost rival in development — and then "
+            "discontinued it, removing the only nascent competitive threat.",
+            "Economics: an incumbent monopolist has a stronger incentive to buy "
+            "and shelve a nascent rival than to compete, because competition "
+            "would erode monopoly rents.",
+            "Outcome: the FTC sued (2017) and settled with divestiture of the "
+            "Synacthen rights to a new licensee."],
+           "The harm is a discontinued pipeline, not a price-fixing agreement — "
+           "proving it needs the counterfactual (what Synacthen would have "
+           "become), the test from the killer-acquisitions slide.",
+           footer=FT)
+
+d.case_box("Bell Labs and the 1956 AT&T consent decree", "US",
+           "A licensing remedy that unlocked an industry",
+           ["The matter: DOJ alleged AT&T was foreclosing the telecoms-equipment "
+            "market by refusing to license its patents — 7,820 patents (~1.3% "
+            "of all US patents then), including the transistor (1947).",
+            "The remedy (1956): compulsory, royalty-free licensing of all "
+            "existing patents plus technical know-how, and AT&T confined to "
+            "telecommunications — no structural breakup (defence concerns).",
+            "The effect: the transistor and related advances diffused rapidly; "
+            "Gordon Moore called it 'one of the most important developments for "
+            "the commercial semiconductor industry.'"],
+           "A licensing remedy can unlock innovation as powerfully as a "
+           "divestiture — the IP-access counterpart to the structural-vs-"
+           "behavioural debate in Module 3.3.",
+           footer=FT)
 
 d.case_box("ARV / antiretroviral access", "SA",
            "IP, access to medicines, and competition law together",

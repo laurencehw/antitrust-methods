@@ -316,6 +316,24 @@ A firm dominant in an **input** squeezes downstream rivals who must buy that inp
 - **US Microsoft (2001):** the D.C. Circuit **VACATED the tying ruling**; the liability that stood was **§2 monopoly maintenance**. Cite it for **maintenance**, not tying.
 - **Lesson:** exclusion tests (AEC, foreclosure shares) are **live and jurisdiction-specific** — anchor your method in the forum's *current* law, not a famous old headline.
 
+## Case deep-dive — *US v. Microsoft*: the conduct (US)
+
+The canonical §2 **monopoly-maintenance** case. MIT's **Franklin Fisher** for the DOJ:
+
+- **Monopoly power:** ~**95%** of Intel-compatible PC operating systems; sustained high margins; the **"applications barrier to entry"** (developers write for Windows because users are on Windows, and vice versa) protects the position.
+- **The browser threat:** Netscape + Java threatened to become a cross-platform layer that *eroded* the applications barrier — so Microsoft moved to foreclose it.
+- **The conduct:** bundling IE into Windows at zero marginal price; **OEM restrictions** (can't remove IE / promote rivals); exclusive ISP & content deals; technical integration making IE hard to remove — the **"embrace, extend, extinguish"** pattern.
+
+**Why it matters:** the harm was to the *competitive process and innovation* (maintaining the OS monopoly), not a simple price rise — the template for platform-monopoly theory.
+
+## Case deep-dive — *US v. Microsoft*: findings, remedy, legacy (US)
+
+- **Findings of fact (Jackson J., Nov 1999):** monopoly power established; exclusionary conduct harmed consumers, degraded quality, stifled innovation.
+- **Remedy whiplash:** a 2000 order to **break Microsoft in two** (OS vs. applications) was **reversed on appeal (D.C. Cir. 2001)** — which also **vacated the tying ruling** but **upheld §2 maintenance** — and remanded. The 2001 settlement was **behavioural only** (API disclosure, OEM freedom, uniform licensing, anti-retaliation; 10-year consent decree).
+- **Legacy:** the structural-vs-behavioural remedy debate; the line from Microsoft → Google (search/ad-tech) → Apple/Amazon app-store and self-preferencing cases.
+
+**Why it matters:** even a won §2 case can end in a *behavioural* remedy a court can administer — and the appellate record, not the headline, is what you cite.
+
 # Module 2.4 — Antitrust and labour markets
 
 ## Employer market power — the spectrum

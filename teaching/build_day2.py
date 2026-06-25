@@ -518,6 +518,42 @@ d.bullets("Comparative note: the AEC framework is contested abroad", [
     "not a famous old headline.",
 ], footer=FT)
 
+d.case_box("US v. Microsoft — the conduct (Fisher's analysis)", "US",
+           "The canonical §2 monopoly-maintenance case",
+           ["Monopoly power: ~95% of Intel-compatible PC operating systems; "
+            "sustained high margins; the 'applications barrier to entry' "
+            "(developers write for Windows because users are on Windows) "
+            "protects the position — MIT's Franklin Fisher for the DOJ.",
+            "The browser threat: Netscape + Java threatened a cross-platform "
+            "layer that would erode the applications barrier — so Microsoft "
+            "moved to foreclose it.",
+            "The conduct: bundling IE into Windows at zero marginal price; OEM "
+            "restrictions (no removing IE / promoting rivals); exclusive ISP & "
+            "content deals; technical integration — 'embrace, extend, "
+            "extinguish'."],
+           "The harm was to the competitive process and innovation (maintaining "
+           "the OS monopoly), not a simple price rise — the template for "
+           "platform-monopoly theory.",
+           footer=FT)
+
+d.case_box("US v. Microsoft — findings, remedy, legacy", "US",
+           "A won §2 case that ended in a behavioural remedy",
+           ["Findings of fact (Jackson J., Nov 1999): monopoly power established; "
+            "exclusionary conduct harmed consumers, degraded quality, stifled "
+            "innovation.",
+            "Remedy whiplash: a 2000 order to break Microsoft in two (OS vs. "
+            "applications) was reversed on appeal (D.C. Cir. 2001) — which also "
+            "vacated the tying ruling but upheld §2 maintenance — and remanded.",
+            "2001 settlement: behavioural only (API disclosure, OEM freedom, "
+            "uniform licensing, anti-retaliation; 10-year consent decree).",
+            "Legacy: the structural-vs-behavioural remedy debate; the line from "
+            "Microsoft to Google (search/ad-tech) to Apple/Amazon app-store and "
+            "self-preferencing."],
+           "Even a won §2 case can end in a behavioural remedy a court can "
+           "administer — and the appellate record, not the headline, is what "
+           "you cite.",
+           footer=FT)
+
 # ============================================================ MODULE 2.4
 d.section("Module 2.4 — Antitrust and labour markets",
           "Buyer power over workers: monopsony is the mirror image of "
