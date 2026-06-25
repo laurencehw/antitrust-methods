@@ -13,12 +13,21 @@ execute:
 
 # Module 3.1 — Merger analysis and simulation
 
+## Mergers are prospective — the job is prediction
+
+- Conduct cases look backwards at what a firm *did*; merger review looks **forward** at what a combined firm *will do*. The evidence is largely predictive, not historical.
+- Three economic theories of harm, plus — in SA — a **fourth, non-competition question** that can override them.
+- The agency carries an initial burden (a **prima facie** case); the parties then **rebut** with efficiencies, entry, or failing-firm arguments.
+- Outputs are not just "block / clear": the realistic menu is **clear, condition (remedy), or prohibit**.
+- Screen cheap, quantify dear: GUPPI and diversion screens come first; full simulation only where the screen flags concern.
+
 ## The three theories of merger harm
 
 - **Unilateral effects.** The merged firm raises price on its own because sales lost to a price rise are recaptured by the partner (diversion). No coordination needed.
-- **Coordinated effects.** The merger makes tacit collusion among the remaining firms easier (fewer players, more symmetry/transparency).
-- **Vertical / conglomerate effects.** Input or customer foreclosure, leverage across products.
-- Plus the SA fourth question that can override all three: the **public-interest test (§12A(3))**.
+- **Coordinated effects.** The merger makes tacit collusion among the remaining firms easier — fewer players, more symmetry, more transparency, or removal of a maverick.
+- **Vertical / conglomerate effects.** Input foreclosure, customer foreclosure, or leverage/bundling across products.
+- Plus the SA fourth question that can override all three: the **public-interest test (§12A(3))** — employment, SMEs, spread of ownership, ability of national industry to compete.
+- A clean matter names *which* theory it is running early — the data you collect differ for each.
 
 ## Unilateral effects: UPP and GUPPI
 
@@ -28,6 +37,16 @@ execute:
 - D_AB = diversion A→B; (P_B − C_B) = the **partner's** dollar margin; E_A = efficiency credit. Use the partner's margin, not A's own.
 - GUPPI expresses the same pressure as a % of A's price (M_B = partner's % margin; (P_B/P_A) rescales).
 - Rule of thumb: GUPPI above ~5% warrants a closer look. First-order price rise ≈ pass-through × UPP (≈ UPP/2).
+- The economics: each lost sale that *returns* to the family is no longer a cost of raising price — the merged firm internalises the externality.
+
+## Diversion ratios — where the lost sales go
+
+> **D₁₂ = (sales gained by 2) / (sales lost by 1 when P₁ rises)**
+
+- Diversion is the **direction and strength of competition** between two products — the single most load-bearing number in unilateral-effects work.
+- Sources: switching/win-loss data, customer surveys (the "second-choice" question), a demand model, or — weakest — **share-proportional** diversion (D ≈ s_B / (1 − s_A)).
+- Patient-flow, geographic catchment, and second-choice data usually beat share-proportional; when supplied diversion exceeds the proportional benchmark, the parties are **closer** rivals than shares imply.
+- Aggregate diversion (sum to all merging products) gauges total recapture and the overall upward pricing pressure.
 
 ## Code as demo — a logit merger simulation
 
@@ -42,30 +61,115 @@ run_logit_sim(products, merging_firms = c("A","B"))
 
 **Point at:** simulation needs a demand model + margins; GUPPI needs only diversion + margin. **Screen with GUPPI, quantify with simulation.**
 
+## Coordinated effects — the maverick and the conditions
+
+- **Maverick-firm theory:** harm often comes from the merger **removing or absorbing a maverick** — the disruptive price-cutter that destabilises tacit coordination.
+- Facilitating factors (the checklist): **transparency** of prices/terms, product **homogeneity**, **symmetric** firms and costs, stable demand, and **high entry barriers**.
+- A workable tacit scheme needs three things: reach a common understanding, **detect** deviation, and **punish** it credibly.
+- Evidence: count the firms, measure symmetry, look for price-announcement / information-exchange practices, and ask whether the target *is* the maverick.
+- Coordinated-effects theories are harder to prove than unilateral ones — courts want a plausible mechanism, not just "few firms".
+
+## The merger review process — burden and outcomes
+
+- **Notification:** turnover/asset thresholds trigger mandatory filing (SA: large/intermediate mergers to the Commission; US: HSR; EU: EUMR turnover tests).
+- **Second phase:** a "second request" (US) / Phase II (EU) / referral to the Tribunal (SA large mergers) — deeper economic analysis on the flagged theory.
+- **Burden:** agency makes a **prima facie** case (often via the structural presumption); the parties then **rebut**.
+- **Standard:** US Clayton §7 "substantially lessen competition"; EU **SIEC** (significant impediment to effective competition); SA §12A + the §12A(3) public-interest overlay.
+- **Outcome menu:** clear unconditionally / clear with **conditions** (structural or behavioural) / **prohibit**.
+
 ## Efficiencies and entry — the rebuttal
 
 - Efficiencies can offset price pressure, but must be **merger-specific, verifiable, and passed through** — burden on the parties.
-- Marginal-cost savings discipline price; fixed-cost savings usually don't.
-- Entry rebuts harm only if **timely, likely, and sufficient**.
+- **Marginal-cost** savings discipline price; **fixed-cost** savings usually do not (they don't change the pricing incentive).
+- Entry rebuts harm only if **timely, likely, and sufficient** to deter or counteract the price rise.
+- The **failing-firm** defence is narrow: the firm must be failing, with no less-anticompetitive buyer and assets otherwise exiting.
 - In SA, efficiencies and entry sit alongside — and can be outweighed by — the **public-interest** assessment.
 
-## Case — Walmart / Massmart (SA)
+## Deep dive — the Staples / Office Depot model (US)
 
-- Acquisition (2011, case **73/LM/Nov10**) raised few horizontal concerns.
-- The battle was **public interest**: local suppliers and jobs. Approved with conditions — a supplier-development fund, honouring labour agreements, limits on merger-specific retrenchments (with some reinstatements).
-- Conditions litigated to the CAC, which refined how public-interest conditions are framed and supervised.
+- The FTC's challenge rested on a **large-scale price regression**: ~400+ stores × ~18 months, regressing prices on the **number of office-superstore competitors** in each local market.
+- Result: prices were materially higher where Staples faced no superstore rival — the model predicted roughly an **~8.49% price increase** going from three superstore firms to one (effective monopoly).
+- An **event study** on the merger announcement / FTC challenge dates corroborated the direction: stock-price moves were consistent with the market expecting the merger to *raise* prices.
+- The court enjoined the merger — an early, influential case of an **econometric model carrying the day** on unilateral effects.
+- **Why it matters:** a transparent, replicable price regression on real transaction data can beat a market-definition argument — example-led merger economics at its strongest.
 
-**Why it matters:** a merger can pass the competition test and still be reshaped — or saved — by public-interest conditions.
+## SA public interest deep dive — Walmart / Massmart
 
-## Case — Burger King / Grand Parade (SA)
+- Acquisition (2011, case **73/LM/Nov10**) raised few horizontal competition concerns.
+- The battle was **public interest**: local suppliers and jobs. Approved with conditions — a **supplier-development fund**, honouring labour agreements, and **limits on merger-specific retrenchments** (with some reinstatements).
+- The conditions were litigated up to the **CAC**, which refined how public-interest conditions are framed and supervised over time.
+- **Why it matters:** a merger can pass the competition test and still be reshaped — or saved — by public-interest conditions.
+
+## SA public interest deep dive — Burger King / Grand Parade
 
 - A foreign private-equity buyer sought the SA Burger King franchise from Grand Parade.
-- Commission **prohibited it (2021)** because it cut shareholding by **historically disadvantaged persons** toward zero — the first SA merger blocked solely on the spread-of-ownership limb of public interest.
-- Later **approved** once the parties offered an employee/HDP ownership and worker commitment.
+- The Commission **prohibited it (2021)** because it cut shareholding by **historically disadvantaged persons** from a high level toward zero — the first SA merger blocked **solely** on the spread-of-ownership limb of public interest.
+- Later **approved** once the parties offered an **employee/HDP ownership and worker commitment**.
+- **Why it matters:** public interest is not a tie-breaker bolted on — in SA it can be the whole case.
 
-**Why it matters:** public interest is not a tie-breaker bolted on — in SA it can be the whole case.
+## Case — Bayer / Monsanto: an innovation merger (EU/US)
 
-# Module 3.2 — Remedies and regulation
+A **$63bn** agribusiness deal (2018) cleared in **30+ jurisdictions** with a coordinated remedy.
+
+- **Theory of harm:** not just horizontal overlap in seeds/traits/herbicides but **innovation competition** — fewer independent R&D pipelines, overlapping development projects, concentrated patent portfolios. Plus **vertical** integration across the seeds-to-chemicals chain and the new **digital-agriculture** layer.
+- **Remedy:** a **~$9bn divestiture package to BASF** (vegetable seeds, glufosinate herbicide, Liberty traits) — BASF pre-cleared as a capable, independent buyer with no new overlaps.
+- **Method:** the agencies coordinated across borders, defined narrow seed/trait markets, and weighed **R&D-pipeline overlap** as a distinct harm.
+
+**Why it matters:** in concentrated, R&D-heavy industries the binding concern is **lost innovation**, and the remedy must rebuild an *independent* competitor — early buyer identification is half the battle.
+
+# Module 3.2 — Merger retrospectives and natural experiments
+
+## Why look back at cleared mergers
+
+- Merger review is prediction; **retrospectives** check the predictions against what actually happened — the only feedback loop the system has.
+- The point is institutional learning: were the agency's price-effect forecasts right, were efficiencies realised, did remedies work?
+- Methods: **difference-in-differences**, **event studies**, **synthetic controls**, and re-estimated **structural models** on post-merger data.
+- The credible designs lean on a clean **control** — an unaffected product, region, or comparable transaction that did not experience the merger.
+- Retrospectives are also a litigation asset: an expert who pre-commits a retrospective design looks far more credible than one who reverse-engineers a result.
+
+## What the retrospective literature finds
+
+- **Efficiency claims are often overstated** and frequently **not passed through** to consumers — the rebuttal that wins approval often does not materialise.
+- **Behavioural remedies often underperform** structural ones — conduct rules get gamed, monitoring lapses, and the fix expires.
+- **Some cleared mergers raised prices** — evidence that enforcement was, in places, **too lenient** at the margin.
+- The asymmetry: blocked mergers can't be studied counterfactually, so the literature is built mostly from **cleared** deals — a selection caveat to state out loud.
+- Practitioner upshot: discount unverified efficiency promises and favour structural relief where it is feasible.
+
+## Natural experiments in competition policy
+
+- **Deregulation episodes** are policy's natural experiments: **airline deregulation (1978)**, the **AT&T breakup (1984)**, banking-branching liberalisation, and **electricity restructuring**.
+- **Antitrust-law changes** also serve: the **US corporate leniency program (1993)** revision sharply changed cartel-detection incentives — a clean before/after.
+- Each gives a sharp, often discontinuous, change in the competitive environment that is **plausibly exogenous** to the firms studied.
+- Design discipline: identify the treated and control groups, check pre-trends, and worry about confounding shocks that coincide with the policy date.
+- These episodes are the empirical backbone of much of what we *know* about how concentration maps to prices.
+
+## Worked example — Liebersohn (2017), banking
+
+- Setting: US merger rules require **divestiture** where a merger pushes a market's HHI **up by ≥ 200 to above 1,800** — a sharp, rule-based threshold.
+- Design: **difference-in-differences** comparing markets just inside vs. just outside a **500-point band around the 1,800 cutoff** — markets similar in everything but whether the rule bound.
+- Result: where the rule forced more competition, banks did **more lending to larger, safer borrowers** — concentration had been constraining credit supply.
+- Clean-design check: **no bunching** of mergers just below the cutoff — firms were not gaming the threshold, so the running variable is credible.
+- **Why it matters:** a regulatory threshold is a gift to the empiricist — it manufactures the discontinuity a credible causal design needs.
+
+## Worked example — Whirlpool / Maytag appliances
+
+- Post-merger evaluation using **scanner (point-of-sale) data** across appliance categories after the Whirlpool–Maytag combination.
+- Design: use **freezers as a control** category (little affected by the merger) against the treated categories to net out common shocks.
+- Finding: prices for **dishwashers and dryers rose** post-merger, while the control category did not move the same way — consistent with exercised market power.
+- A model retrospective: real transaction data, a defensible control, and a transparent before/after that anyone can replicate.
+- **Why it matters:** ex-post evidence like this is exactly what should discipline the *next* appliance-merger prediction.
+
+## Worked example — MillerCoors: coordinated effects, confirmed (US)
+
+The 2008 **MillerCoors** joint venture (SABMiller + Molson Coors, ~29% combined) took US brewing from **3 major players to 2** alongside Anheuser-Busch (~48%). DOJ cleared it without conditions.
+
+- **Design:** Nielsen **retail scanner data**, **difference-in-differences** exploiting regional variation in market structure, with robustness across specifications.
+- **Findings (2008–2011):** **~6–8%** price increase, **~17–18%** rise in price-cost margins, larger in premium/light segments and in more concentrated regions — and **Anheuser-Busch raised prices in parallel**. Estimated consumer-welfare loss **~$300m/yr**.
+- **Mechanism:** with 3→2 and transparent industry pricing, **coordinated** (not just unilateral) effects materialised despite the efficiency claims.
+
+**Why it matters:** a clean retrospective **validated the coordinated-effects theory** and showed efficiency defences can be overstated — partial mergers / JVs deserve the same scrutiny.
+
+# Module 3.3 — Remedies and regulation
 
 ## Structural vs. behavioural remedies
 
@@ -74,9 +178,9 @@ run_logit_sim(products, merging_firms = c("A","B"))
 **Structural**
 
 - Divestiture of a business / assets
-- Clean break; little monitoring
+- Clean break; little ongoing monitoring
 - Preferred where feasible (US/EU default)
-- Risk: package too weak to compete
+- Risk: divestiture package too weak to compete
 :::
 ::: {.column width="50%"}
 **Behavioural**
@@ -88,72 +192,236 @@ run_logit_sim(products, merging_firms = c("A","B"))
 :::
 ::::
 
+## Remedy design principles
+
+- A remedy must be **effective** (it actually cures the identified harm) **and administrable** (the Tribunal can monitor and enforce it).
+- Match the remedy to the **theory of harm**: structural for horizontal overlap; access/firewall conduct rules for vertical foreclosure.
+- Prefer remedies with **clear, measurable** compliance triggers over open-ended "behave well" obligations.
+- Build in **monitoring**: reporting duties, a compliance trustee/monitor, and a sunset or review date.
+- Recall the retrospective lesson: **behavioural remedies underperform** — use them where structure is impractical, and supervise hard.
+
 ## Access pricing: ECPR and the revenue requirement
 
 > - **ECPR access price = direct cost + opportunity cost**
 > - **Revenue requirement = opex + depreciation + (return × rate base)**
 
-- ECPR lets an efficient entrant in while compensating the incumbent — the benchmark in margin-squeeze remedies.
-- Rate regulation builds allowed revenue from costs + a fair return; the contested number is the allowed return.
-- **Benchmarking / yardstick:** compare the regulated firm to comparable firms/regions to discipline cost claims.
+- **ECPR** (efficient component pricing rule) lets an efficient entrant in while compensating the incumbent — the benchmark in margin-squeeze remedies.
+- Rate regulation builds **allowed revenue** from costs plus a fair **return on capital**; the contested number is almost always the allowed return.
+- **Rate base** = the regulated asset value on which the return is earned; gold-plating it is the classic incumbent strategy.
+- **Benchmarking / yardstick:** compare the regulated firm to comparable firms or regions to discipline its cost claims.
+
+## Benchmarking and yardstick regulation
+
+- Yardstick regulation ties a firm's allowed prices/costs to the **performance of comparators**, breaking the regulator's information dependence on the firm.
+- Works best with **many comparable units** (regional utilities, water boards, port terminals) facing similar conditions.
+- Methods range from simple peer **ratio benchmarks** to frontier techniques (DEA, stochastic frontier analysis) that estimate an efficient cost frontier.
+- The trap: comparators must be **genuinely comparable** — adjust for scale, density, and input prices or the firm will (rightly) attack the benchmark.
+- In SA, sector regulators (energy, ports/rail, telecoms) increasingly lean on benchmarking to test cost claims.
 
 ## Case — Evanston Northwestern (US)
 
 - A consummated hospital merger found to have raised prices.
 - Rather than unwind it (structural), the FTC imposed a **behavioural** remedy: **separate, independent negotiating teams** for the two hospitals when bargaining with insurers.
-- The canonical behavioural hospital-merger remedy.
+- The canonical behavioural hospital-merger remedy — an effective conduct fix where divestiture of an integrated hospital was impractical, at the cost of ongoing supervision.
+- **Why it matters:** when structural relief is impractical, a well-designed conduct remedy can restore competition — if someone watches it.
 
-**Why it matters:** when structural relief is impractical, a well-designed conduct remedy can restore competition — if someone watches it.
+## Tying it to SA — Tribunal-supervised conditions
 
-# Module 3.3 — Innovation, IP, and antitrust
+- Behavioural and public-interest **conditions are the SA norm**, not the exception — the Tribunal routinely supervises conditions over years.
+- Typical machinery: reporting obligations, a **compliance monitor/trustee**, defined remedies for breach, and periodic review by the Tribunal.
+- The CAC's refinements (Walmart/Massmart) shape how conditions are drafted so they are enforceable, not aspirational.
+- The design lesson and the SA institutional reality coincide: **a remedy is only as good as the body that can supervise it.**
 
-## SEPs: hold-up and royalty stacking
+# Module 3.4 — Innovation, IP, and antitrust
+
+## SEPs and FRAND: hold-up vs hold-out
 
 Once a standard is set, an SEP holder can hold up implementers; FRAND commitments are the check.
 
 > **Cumulative royalty = Σ (royalty rate_i)**
 
-- **Hold-up:** threaten an injunction post-adoption to extract supra-FRAND rates. **Hold-out:** implementers delay/underpay.
-- **Royalty stacking:** 10 holders each asking 5% = 50% of the device price — manufacturing becomes unprofitable.
-- Key law: *Huawei v. ZTE* (EU 2015 negotiation framework); *Unwired Planet* (UK 2017, courts will set a global FRAND rate).
+- **Hold-up:** threaten an injunction post-adoption to extract supra-FRAND rates. **Hold-out:** implementers delay/underpay, free-riding on the standard.
+- FRAND ("fair, reasonable and non-discriminatory") is the licensing promise made to the standard body — the legal hinge of every SEP dispute.
+- *Huawei v. ZTE* (EU 2015): a **negotiation framework** — the SEP holder must offer FRAND terms before seeking an injunction; the implementer must respond in good faith.
+- *Unwired Planet* (UK 2017): courts will set a **global FRAND rate**, not just a national one — a major jurisdictional escalation.
 
-## Pay-for-delay and killer acquisitions
+## Royalty stacking — the arithmetic
 
-- **Reverse-payment settlements.** A brand pays a generic to stay out. *FTC v. Actavis* (US 2013): no "scope of the patent" shield — rule of reason, and a **large unexplained payment** is itself evidence of anticompetitive intent.
-- **Killer acquisitions.** An incumbent buys a nascent rival to shut its pipeline (Cunningham et al. 2021: ~5–7% of pharma deals). Test: compare project discontinuation rates, acquired vs. independent.
-- Watch the appellate record: *FTC v. Qualcomm* reversed (9th Cir. 2021); the EU Qualcomm exclusivity fine (€997m) annulled (GC 2022). Cite outcomes, not headlines.
+> **Cumulative royalty = Σ (royalty rate_i)**
 
-## Case — ARV / pharmaceutical access (SA)
+- The problem: many SEP holders each charging a "reasonable" rate that **stacks** to an unviable total.
+- Worked figure: **10 holders × 5% each = 50%** of the device price in royalties — manufacturing becomes unprofitable on any normal margin.
+- Each individual demand can look defensible; the **aggregate** is what kills the product. FRAND and ND ("non-discriminatory") exist to contain the stack.
+- Remedy logic: aggregate royalty caps, top-down rate-setting from a total reasonable royalty, and patent-pool licensing.
 
-- SA competition complaints over **antiretroviral** pricing pushed originators toward voluntary licences expanding generic supply.
-- Method mix: medicine price data, the patent landscape, SAHPRA registration timelines to estimate harm from delayed generic entry.
-- Sits at the intersection of §8 abuse, IP rights, and a pressing public-health interest.
+## Pay-for-delay — FTC v. Actavis
 
-**Why it matters:** in SA the IP-vs-competition question has been about access to life-saving medicines.
+- **Reverse-payment ("pay-for-delay") settlements:** a brand pays a generic to **stay out** of the market — the brand keeps the monopoly, both split the rents.
+- *FTC v. Actavis* (US 2013): **no "scope of the patent" shield.** Even within the patent's nominal scope, a reverse payment is judged under the **rule of reason**.
+- The key signal: a **large, unexplained reverse payment** is itself evidence of anticompetitive intent — its size proxies the value of the avoided competition.
+- Damages logic: harm ≈ (P_brand − P_generic) × volume × delay — the consumer overcharge from postponed generic entry.
+- **Why it matters:** the payment's *size*, not the patent's nominal validity, became the analytical centre of gravity.
 
-# Module 3.4 — Litigation practice and expert evidence
+## Killer acquisitions
 
-## Getting expert evidence admitted and believed
+- **Killer acquisition:** an incumbent buys a **nascent rival to shut its pipeline**, not for synergies — pre-emptive elimination of future competition.
+- Cunningham, Ederer & Ma (2021) estimate roughly **5–7% of pharma deals** are killer acquisitions — small in count, large in lost innovation.
+- The test: compare **project discontinuation rates**, acquired vs. independent — acquired overlapping projects are dropped more often.
+- The enforcement gap: many such deals fall **below notification thresholds** (the target has little revenue) — hence the move toward share-of-supply and call-in powers.
+- Live in digital and pharma policy debates (the "**string of nascent-rival acquisitions**" theory in platform cases).
 
-- **US — the Daubert gate.** Four factors: testability/falsifiability, known error rate, peer review, general acceptance.
-- **Class certification.** *Wal-Mart v. Dukes* (commonality: a common question that drives the answer); *Comcast v. Behrend* (the damages model must match the theory of liability and be common to the class).
-- **SA & UK/Australia — concurrent expert evidence ("hot tubbing").** Experts sworn together, answer in turn; a joint statement lists agreement/disagreement before the hearing. The SA Tribunal's flexible procedure favours this over rigid Daubert gatekeeping.
+## Appellate caution — Qualcomm, both sides
+
+- *FTC v. Qualcomm*: the district court found liability, but the **9th Circuit reversed (2021)** — no duty to deal, and the licensing practices were not shown to harm competition under §2. **Cite the reversal, not the headline.**
+- EU: the Commission's **€997m exclusivity-payment fine on Qualcomm was annulled** by the General Court **(2022)** on procedural and substantive grounds.
+- Lesson: the most-cited "abuse" stories were **undone on appeal** in both jurisdictions — carry the outcome, not the press release.
+- This is the IP-and-dominance counterpart to the Day-1/Day-2 habit: **cite outcomes, not headlines** (Sasol, Media24, Intel, Qualcomm).
+
+## Case — Questcor / Synacthen: a killer acquisition (US)
+
+- **Setup:** Questcor (later Mallinckrodt) held a US monopoly in ACTH therapy with **Acthar**, whose price rose from **~$40 to $38,000+ per vial**.
+- **The acquisition:** in **2013** Questcor bought the **US rights to Synacthen** — a synthetic, lower-cost rival in development — and then **discontinued it**, removing the only nascent competitive threat.
+- **The economics:** an incumbent monopolist has a *stronger* incentive to **buy and shelve** a nascent rival than to compete, because competition would erode monopoly rents (the killer-acquisition logic).
+- **Outcome:** the **FTC sued (2017)**; settled with divestiture of Synacthen rights to a new licensee.
+
+**Why it matters:** the harm is a **discontinued pipeline**, not a price-fixing agreement — proving it needs the counterfactual (what Synacthen would have become), the test from the killer-acquisitions slide.
+
+## Case — Bell Labs and the 1956 AT&T consent decree (US)
+
+- **The matter:** DOJ alleged AT&T was foreclosing the telecoms-equipment market by **refusing to license** its patents — **7,820 patents** (~1.3% of all US patents at the time), including the **transistor** (1947).
+- **The remedy (1956):** **compulsory, royalty-free licensing** of all existing patents + technical know-how, and AT&T confined to telecommunications — **no structural breakup** (defence-sector concerns).
+- **The effect:** the transistor and related advances diffused rapidly; Gordon Moore called it *"one of the most important developments for the commercial semiconductor industry."*
+
+**Why it matters:** a **licensing remedy** can unlock innovation as powerfully as a divestiture — the IP-access counterpart to the structural-vs-behavioural debate in Module 3.3.
+
+## Case — ARV / antiretroviral access (SA)
+
+- SA competition complaints over **antiretroviral** pricing pushed originators toward **voluntary licences** expanding generic supply.
+- Method mix: **medicine price data**, the **patent landscape**, and **SAHPRA registration timelines** to estimate the harm from delayed generic entry.
+- Sits at the intersection of **§8 abuse, IP rights, and a pressing public-health interest** — excessive pricing and refusal-to-licence theories under SA dominance law.
+- **Why it matters:** in SA the IP-vs-competition question has been about **access to life-saving medicines**, not abstract royalty rates.
+
+# Module 3.5 — Research integrity and credibility
+
+## The research-credibility crisis
+
+- A wave of evidence shows much published empirical work does **not replicate** — directly threatening expert testimony built on it.
+- Four interacting culprits: **publication bias** (only significant results get out), **specification searching** (p-hacking), **low statistical power**, and outright **replication failures**.
+- For an expert, this is not academic hygiene — it is **cross-examination risk**: opposing counsel will probe every degree of freedom you took.
+- The defence is **transparency**: pre-commit the design, disclose the specification space, and make the work reproducible end to end.
+- This module is the methodological conscience of the whole course — it governs *how much to believe* any number, including your own.
+
+## The Ioannidis PPV model
+
+> **PPV = (1 − β) R / [ (1 − β) R + α ]**
+
+- PPV = **positive predictive value**: the probability a "significant" finding is **true**. β = false-negative rate (so 1 − β = power); R = prior odds a tested hypothesis is true; α = significance level.
+- Plug in good practice — high power, plausible prior — and an ideal field can hit **~89%** true positives.
+- Plug in a **hot field** — many teams testing many long-shot hypotheses, low power — and PPV can collapse toward **~20%**: most "discoveries" are false.
+- The drivers are exactly the credibility crisis: **low power + bias + a crowded field** drive PPV down.
+- Practitioner reading: a single significant result from a low-powered study in a hot literature is **weak evidence**, statistics notwithstanding.
+
+## Publication bias and the file drawer
+
+- The **file-drawer problem:** null results sit unpublished in drawers; significant results get out — so the **published** literature over-represents positives.
+- Consequence: published **effect sizes are inflated**, because only the larger, "significant" estimates clear the journal filter.
+- Diagnostic: the **funnel plot** — plot effect size vs. precision; symmetry suggests no bias, a missing corner (small studies with null results) signals it.
+- Tools: trim-and-fill, p-curve, and (best) **pre-registration** so the result exists regardless of significance.
+- For experts: a literature that *looks* unanimous may be an artefact of the filter — weight it accordingly.
+
+## Multiple testing — the garden of forking paths
+
+> **P(≥1 false positive) = 1 − (1 − α)ⁿ**
+
+- Run enough tests and a "significant" result is guaranteed by chance: at α = 0.05, **10 tests → ~40%** chance of at least one false positive; **20 tests → ~64%**.
+- The **garden of forking paths**: even without formal multiple testing, flexible choices (controls, subsamples, transformations) implicitly search the space.
+- Corrections: **Bonferroni** (divide α by n — conservative), Holm, or FDR control for many tests.
+- The real fix: a **pre-analysis plan** that fixes the hypotheses and specifications *before* seeing outcomes, converting exploratory work into confirmatory.
+- On the stand, "how many specifications did you run?" is a standard, deadly question — have the honest answer ready.
+
+## The replication crisis in economics
+
+- Replication efforts in economics find roughly **half** of studies fail to reproduce the original result — comparable to the better-known psychology numbers.
+- Causes mirror the rest of the module: small samples, researcher degrees of freedom, weak data, and selective reporting.
+- Distinguish **reproducibility** (same data + code → same numbers) from **replicability** (new data → same finding) — experts owe at least the first.
+- The journals' response: mandatory **data-and-code archives** and replication packages — increasingly expected of expert reports too.
+- The lesson for advocacy: build your analysis so a hostile third party can **re-run it and get your numbers** — that is the strongest credibility signal there is.
+
+## The FTC's nine characteristics of useful analysis
+
+- A practical checklist for credible econometric work: (1) addresses a **relevant** issue; (2) **consistent with economic theory**; (3) reflects **institutional facts**; (4) uses **appropriate data**; (5) uses **suitable techniques**; ...
+- ... (6) **realistic about its limits**; (7) tests **robustness**; (8) is **replicable**; (9) **communicates clearly** to a non-technical decision-maker.
+- The most common **deficiencies** in practice: **institutional disconnect** (the model ignores how the industry actually works), **data-quality** problems, and **poor communication**.
+- Use it as a self-audit before filing — and as a cross-examination map of the *other* side's report.
+- It rhymes with the credibility module: relevance, robustness, and replicability are the recurring themes.
+
+## Pre-analysis plans and open science
+
+- **Pre-analysis plans (PAPs):** register hypotheses, specifications, and the analysis path *before* seeing the data — the antidote to forking paths and p-hacking.
+- **Open data and code:** post the cleaning and analysis scripts (GitHub) and the data (Dataverse) so the result is independently checkable.
+- **Registration**: clinical-trial-style registries (AEA RCT Registry, OSF) timestamp the design and deter selective reporting.
+- A reproducible **lockfile** (renv / packages pinned) means the analysis runs identically years later — when the matter is finally heard.
+- These practices are slowly migrating from journals into **agency and tribunal** expectations of expert work.
+
+## Reproducibility IS advocacy
+
+- A clean **/data /scripts /reports** bundle with a **lockfile** is not just good science — it is your **cross-examination defence**.
+- If the whole pipeline runs from raw data to final exhibit with one command, you can answer "did you cherry-pick?" with a demonstration, not a denial.
+- **Run the sensitivity analysis before opposing counsel does** — disclose the specifications that don't change the answer, and explain the ones that do.
+- A reproducible report lets you **update fast** when new data arrives mid-matter — re-run, don't rebuild.
+- The single highest-leverage habit in expert work: make your conclusion **mechanically reproducible** from the inputs.
+
+# Module 3.6 — Litigation practice and expert evidence
+
+## Getting expert evidence admitted — Daubert
+
+- **US — the Daubert gate.** The judge is a gatekeeper; four (non-exclusive) factors: **testability/falsifiability**, known/potential **error rate**, **peer review/publication**, and **general acceptance** in the field.
+- Build the report to satisfy each: state the method's error properties, cite the peer-reviewed basis, and use accepted techniques.
+- *Kumho Tire* extended Daubert beyond "scientific" to **all expert** testimony, including economics.
+- The gate excludes **ipse dixit** — "trust me, I'm an expert" — so every step from data to conclusion must be defensible on its own.
+- Contrast with the more flexible **weight-not-admissibility** approach of the SA Tribunal and UK/Australian courts (next slide).
+
+## Class certification — Dukes and Comcast
+
+- *Wal-Mart v. Dukes* (2011): **commonality** requires a common *question* whose answer **drives the resolution** of the class's claims — not just a shared characteristic.
+- *Comcast v. Behrend* (2013): the **damages model must match the theory of liability** and be capable of measurement on a **class-wide** basis.
+- Implication for experts: a **common-impact** regression must show the violation affected the class **in common**, and the damages methodology must be **common** to the class — not a patchwork of individual inquiries.
+- A mismatch between the liability theory and the damages model is now a **certification-killer** — align them from the start.
+- This is where statistics meets procedure: certification can decide a case before merits are ever reached.
+
+## SA & concurrent expert evidence ("hot-tubbing")
+
+- **Concurrent expert evidence** ("hot-tubbing", from Australia, used in the UK and SA): opposing experts are **sworn together** and questioned side by side.
+- Before the hearing they file a **joint statement** itemising points of **agreement and disagreement** — narrowing the real dispute for the tribunal.
+- The **SA Tribunal's flexible procedure** favours this over a rigid Daubert-style admissibility gate: weight, not exclusion, and direct expert-to-expert testing.
+- Advantage: the tribunal hears the genuine disagreement in real time, not filtered through advocates — and experts are disciplined by a peer in the box.
+- Prepare differently: you must be able to **defend every choice live**, against a knowledgeable opponent, on the record.
 
 ## Three damages models — and how to defend them
 
-- **Before/after:** compare the violation period to a clean benchmark window (validate the break).
-- **Yardstick:** compare the affected market to an unaffected comparator.
-- **Difference-in-differences:** changes over time, treated vs. untreated — the workhorse, with clustered SEs (or randomisation inference for few clusters).
-- **Reproducibility IS advocacy:** a clean `/data /scripts /reports` bundle with a lockfile is both best practice and your cross-examination defence — run the sensitivity analysis *before* opposing counsel does.
+- **Before/after:** compare the violation period to a clean **benchmark window** for the same market — validate that the break is the violation, not a shock.
+- **Yardstick:** compare the affected market to an **unaffected comparator** market — defend the comparability of the yardstick.
+- **Difference-in-differences:** changes over time, treated vs. untreated — the **workhorse**, with **clustered SEs** (or randomisation inference for few clusters).
+- Each needs an explicit **counterfactual** ("but-for" world); the fight is always over which benchmark is clean.
+- Pair the point estimate with its **confidence interval** — the tribunal is buying the uncertainty, not just the number.
+
+## The expert report — structure walkthrough
+
+- Real reports follow a stable spine (cf. **Farber** in *Moussouris v. Microsoft*; **Card** in the Harvard admissions case):
+- **Qualifications → Assignment → Executive summary → Institutional background & data → Methodology & variable selection → Analyses → Damages → Rebuttal.**
+- **Variable selection** is where reports live or die: avoid **"tainted" controls** — variables that are themselves products of the challenged conduct (don't control away your own effect).
+- The **executive summary** must be readable by a generalist judge; the **methodology** must be replicable by a hostile economist — write to both audiences.
+- The **rebuttal** section pre-empts the other side: address the obvious robustness attacks before they are made.
 
 ## Significance and treble damages — the checkable close
 
 > - **t = coefficient / standard error**
 > - **US exposure = 3 × (overcharge rate × commerce)**
 
-- t = 2.5 / 0.5 = **5.0** → beyond the 1% critical value (~2.58) → common impact is significant.
-- Commerce $200m at 15% → $30m single → **$90m trebled** (US). In SA, follow-on damages without the multiplier.
-- Always pair the point estimate with its uncertainty — the tribunal is buying the confidence interval.
+- t = 2.5 / 0.5 = **5.0** → beyond the 1% critical value (~2.58) → common impact is statistically significant.
+- Commerce $200m at a 15% overcharge → $30m single → **$90m trebled** (US, automatic treble for Sherman Act violations).
+- In **SA**, follow-on civil damages recover actual loss (≈ single damages) **without** the US multiplier — so the same overcharge implies very different exposure by forum.
+- Always pair the point estimate with its uncertainty — the tribunal is buying the **confidence interval**, not just the number.
 
 # Capstone — a hospital merger, end to end
 
@@ -188,21 +456,34 @@ Diversion: A→B = 0.32, A→C = 0.30, B→A = 0.45. Total = 100,000. **A and B 
 
 - ΔHHI = 2 × 30 × 20 = 1,200; post-HHI well above 1,800 → structural presumption (either guidelines vintage).
 - Both GUPPIs exceed the ~5% screen; B's is larger because A is the bigger, higher-margin recapture target.
-- Step 7 has no single right answer — graded on whether the numbers are tied correctly to the chosen legal standard.
+- Share-proportional diversion A→B = 20/70 = 0.286 < supplied 0.32 → A and B are **closer** substitutes than shares imply.
+
+## Capstone — verify the HHI in R
+
+```{r}
+source("program/R/helpers.R")
+hosp <- data.frame(
+  firm  = c("A","B","C","D","E","F"),
+  share = c(.30,.20,.25,.15,.06,.04))
+calc_hhi_change(hosp, merging_firms = c("A","B"))
+#> pre_hhi 2202 ; post_hhi 3402 ; delta_hhi 1200
+```
+
+**Point at:** the helper reproduces the hand arithmetic exactly — pre 2,202, post 3,402, Δ 1,200. **Always tie the code back to the checkable number.**
+
+## Capstone deliverable — the memo
+
+- Write a **2–3 page recommendation memo** on the A/B hospital merger.
+- **Required computations:** HHI / ΔHHI, both GUPPIs (show the arithmetic).
+- **Required reasoning:** define the market, classify the unilateral-effects concern, address one efficiency/entry rebuttal.
+- **Required framing:** choose ONE jurisdiction; state its legal test; recommend **clear / condition / prohibit**. For SA, address **§12A(3)** explicitly.
+- *Worked answers and grading guide in `teaching/exercises/day3_exercises.md`.*
 
 ## Course close — the habits to keep
 
 1. **Institutions first:** know the forum's test before you pick a method.
-2. **The evidence triad:** never rest a conclusion on one leg.
+2. **The evidence triad:** never rest a conclusion on one leg — empirics, documents, judgment together.
 3. **Screen cheap, quantify dear:** GUPPI before simulation, a variance screen before a full damages model.
 4. **Cite outcomes, not headlines:** carry the SA and EU appellate history (Sasol, Media24, Intel, Qualcomm).
-5. In South Africa, **public interest can be the whole case** — and a remedy is only as good as the body that can supervise it.
-
-## Capstone deliverable
-
-- Write a **2–3 page recommendation memo** on the A/B hospital merger.
-- Required computations: HHI / ΔHHI, both GUPPIs (show the arithmetic).
-- Required reasoning: define the market, classify the unilateral-effects concern, address one efficiency/entry rebuttal.
-- Required framing: choose ONE jurisdiction; state its legal test; recommend clear / condition / prohibit — for SA, address §12A(3) explicitly.
-
-*Worked answers and grading guide in `teaching/exercises/day3_exercises.md`.*
+5. **Reproducibility is advocacy** — a one-command pipeline from raw data to exhibit is your best cross-examination defence.
+6. In South Africa, **public interest can be the whole case** — and a remedy is only as good as the body that can supervise it.
